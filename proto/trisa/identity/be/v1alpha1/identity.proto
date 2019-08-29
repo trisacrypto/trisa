@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package trisa.identity.be.v1alpha1;
+
+option go_package = "github.com/trisacrypto/trisa/proto/trisa/identity/be/v1alpha1";
+
+message Identity {
+    string first_name = 1;
+    string last_name = 2;
+    string national_number = 3;
+    string city_of_birth = 4;
+}

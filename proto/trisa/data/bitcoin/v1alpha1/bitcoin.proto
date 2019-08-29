@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package trisa.data.bitcoin.v1alpha1;
+
+option go_package = "github.com/trisacrypto/trisa/proto/trisa/data/bitcoin/v1alpha1";
+
+message Data {
+    string source = 1;
+    string destination = 2;
+    int32 amount = 3;
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package trisa.tvca.discovery;
+
+option go_package = "github.com/trisacrypto/trisa/proto/tvca/discovery";
+
+message Trisa {
+    // URL where the /.well-known/trisa endpoint is located.
+    string ca = 1;
+
+    // URL to the root certificate store.
+    string x509_root_store = 2;
+
+    // URL to the intermediate/issuer certificate store.
+    string x509_issuer_store = 3;
+
+    // URL to the active VASP certificate store.
+    string x509_vasp_store = 4;
+
+    // URL to the CRL store.
+    string crl_store = 5;
+}
+
+message X509Store {
+    repeated X509 store = 1;
+}
+
+message X509 {
+    string id = 1;
+    string pem = 2;
+}
+
+message CRLStore {
+    repeated string revoked = 1;
+}

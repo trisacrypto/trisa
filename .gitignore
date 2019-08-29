@@ -1,0 +1,7 @@
+.vscode/
+/bazel-bin
+/bazel-genfiles
+/bazel-out
+/bazel-testlogs
+/bazel-trisa
+/artifacts

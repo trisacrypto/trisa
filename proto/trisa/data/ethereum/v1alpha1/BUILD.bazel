@@ -1,0 +1,22 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+go_library(
+    name = "go_default_library",
+    embed = [":v1alpha1_go_proto"],
+    importpath = "github.com/trisacrypto/trisa/proto/trisa/data/ethereum/v1alpha1",
+    visibility = ["//visibility:public"],
+)
+
+proto_library(
+    name = "v1alpha1_proto",
+    srcs = ["ethereum.proto"],
+    visibility = ["//visibility:public"],
+)
+
+go_proto_library(
+    name = "v1alpha1_go_proto",
+    importpath = "github.com/trisacrypto/trisa/proto/trisa/data/ethereum/v1alpha1",
+    proto = ":v1alpha1_proto",
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,31 @@
+# gazelle:ignore
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "config.go",
+        "root.go",
+        "server.go",
+    ],
+    importpath = "github.com/trisacrypto/trisa/cmd/trisa/app/cmd",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/ca:go_default_library",
+        "//pkg/trisa/config:go_default_library",
+        "//pkg/trisa/handler:go_default_library",
+        "//pkg/trisa/server:go_default_library",
+        "//pkg/trisa/trust:go_default_library",
+        "//proto/trisa/data/bitcoin/v1alpha1:go_default_library",
+        "//proto/trisa/identity/us/v1alpha1:go_default_library",
+        "//proto/trisa/protocol/v1alpha1:go_default_library",
+        "//vendor/github.com/google/uuid:go_default_library",
+        "//vendor/github.com/gorilla/mux:go_default_library",
+        "//vendor/github.com/jinzhu/copier:go_default_library",
+        "//vendor/github.com/sirupsen/logrus:go_default_library",
+        "//vendor/github.com/spf13/cobra:go_default_library",
+        "@org_golang_google_grpc//credentials:go_default_library",
+        "@com_github_golang_protobuf//ptypes:go_default_library_gen",
+        "@org_golang_google_grpc//:go_default_library",
+    ],
+)

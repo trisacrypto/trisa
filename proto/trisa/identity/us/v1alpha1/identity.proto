@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package trisa.identity.us.v1alpha1;
+
+option go_package = "github.com/trisacrypto/trisa/proto/trisa/identity/us/v1alpha1";
+
+message Identity {
+    string first_name = 1;
+    string last_name = 2;
+    string ssn = 3;
+    string state = 4;
+    string driver_license = 5;
+}

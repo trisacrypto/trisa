@@ -1,0 +1,28 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_docker//go:image.bzl", "go_image")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["trisa.go"],
+    importpath = "github.com/trisacrypto/trisa/cmd/trisa",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//cmd/trisa/app:go_default_library",
+        "//vendor/github.com/sirupsen/logrus:go_default_library",
+    ],
+)
+
+go_image(
+    name = "docker",
+    embed = [":go_default_library"],
+    goarch = "amd64",
+    goos = "linux",
+    pure = "on",
+    visibility = ["//visibility:public"],
+)
+
+go_binary(
+    name = "trisa",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)
