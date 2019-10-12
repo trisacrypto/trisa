@@ -42,4 +42,15 @@ enableMissingTranslationPlaceholders = false
 [[menu.main]]
     name = "Home"
     url = "/"
-    weight = 1
+    weight = 5
+
+[[menu.main]]
+    name = "White Paper"
+    url = "/white-papers/white-paper-trisa-v4.pdf"
+    weight = 5
+
+[[menu.main]]
+    name = "Architecture"
+    url = "/architecture"
+    weight = 10
+
