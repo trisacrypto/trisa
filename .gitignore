@@ -1,5 +1,6 @@
 .vscode/
 .bazel/
+.DS_Store
 bazel-workspace
 /bazel-bin
 /bazel-genfiles
@@ -7,3 +8,4 @@ bazel-workspace
 /bazel-testlogs
 /bazel-trisa
 /artifacts
+/docs/public

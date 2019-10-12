@@ -1,6 +1,14 @@
 services:
   - docker
 
+language: go
+
+git:
+  submodules: false
+
+before_install:
+  - git submodule update --init --recursive
+
 jobs:
   include:
     - stage: Publish docs
