@@ -3,8 +3,7 @@ title: Home
 draft: false
 ---
 
-# TRISA
-
+# TRISA [![Build Status](https://travis-ci.com/trisacrypto/trisa.svg?branch=master)](https://travis-ci.com/trisacrypto/trisa)
 
 The goal of the Travel Rule Information Sharing Architecture (TRISA) is to enable
 compliance with the FATF and FinCEN Travel Rules for cryptocurrency transaction
