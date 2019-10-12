@@ -1,5 +1,3 @@
-SHELL := /bin/bash
-
 .PHONY: all
 all: build test
 
@@ -18,3 +16,11 @@ gazelle:
 .PHONY: dependencies
 dependencies:
 	hack/exec/dependencies.sh
+
+.PHONY: docs-dev
+docs-dev:
+	hack/exec/docs-dev.sh
+
+.PHONY: docs-generate
+docs-generate:
+	hack/exec/docs-generate.sh

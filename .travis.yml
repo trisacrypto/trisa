@@ -1,0 +1,26 @@
+services:
+  - docker
+
+jobs:
+  include:
+    - stage: Publish docs
+      script:
+        - make docs-generate
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN_DOCS
+        local_dir: docs/public
+        repo: trisacrypto/trisacrypto.github.io
+        target_branch: master
+        keep_history: false
+        committer_from_gh: true
+        on:
+          branch: master
+
+notifications:
+  email: false
+
+branches:
+  only:
+    - master

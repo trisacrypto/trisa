@@ -1,4 +1,6 @@
 .vscode/
+.bazel/
+bazel-workspace
 /bazel-bin
 /bazel-genfiles
 /bazel-out
