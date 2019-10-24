@@ -13,7 +13,7 @@ transaction flows.
 
 {{% button icon="fas fa-download" url="/white-papers/white-paper-trisa-v4.pdf" %}}Download TRISA White Paper v4{{% /button %}}
 
-## About the FAFT
+## About the Financial Action Task Force (FATF)
 
 The Financial Action Task Force was founded to address concerns about money laundering
 and the threat it poses to the world financial system. The inter-governmental body
@@ -21,6 +21,6 @@ advises 36 member countries and two regional organizations, and is one of the mo
 influential voices globally on combating financial crimes. The FATF’s mandate was expanded
 in 2001 to include efforts to combat terrorist financing (CFT). Its influence also extends
 beyond its member countries, as a number of regional Financial Action Task Forces around
-the world provide guidance to regulators in the Caribbean Latin America, the Middle East,
+the world provide guidance to regulators in the Caribbean, Latin America, the Middle East,
 and North Africa. Its MoneyVal associate provides guidance to countries of Europe outside
 the EU, including Malta.
