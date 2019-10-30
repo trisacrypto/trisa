@@ -27,9 +27,9 @@ enableMissingTranslationPlaceholders = false
     github_doc_repository = "https://github.com/trisacrypto/trisa"
 
     # Analytic section
-    google_analytics_id = "" # Your Google Analytics tracking id
+    google_analytics_id = "UA-151235008-1" # Your Google Analytics tracking id
     tag_manager_container_id = "" # Your Google Tag Manager container id
-    google_site_verification = "" # Your Google Site Verification for Search Console
+    google_site_verification = "Uq_WB2I4Iq5X-NDnR3rdosrdqgp0TabzVtuDxAKTBRE" # Your Google Site Verification for Search Console
 
     # Theme settings section
     dateformat = "" # default "2 Jan 2006"
