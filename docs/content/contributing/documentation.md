@@ -36,6 +36,8 @@ git clone git@github.com:<YOUR-USERNAME>/trisa.git/trisa
 cd trisa
 git remote add upstream git@github.com:trisacrypto/trisa.git
 git fetch upstream
+git submodule init
+git submodule update
 ```
 
 ## Running the doc website
