@@ -28,3 +28,8 @@ docs-dev:
 .PHONY: docs-generate
 docs-generate:
 	hack/exec/docs-generate.sh
+
+.PHONY: pki-dev-init
+pki-dev-init:
+	hack/exec/pki-dev-init.sh
+	ls -l hack/etc/pki/dev/out
