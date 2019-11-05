@@ -1,0 +1,12 @@
+{
+    "CN": "TRISA Dev %%NAME%%",
+    "key": {
+      "algo": "rsa",
+      "size": 2048
+    },
+    "names": [
+       {
+         "O": "TRISA Dev"
+       }
+    ]
+  }

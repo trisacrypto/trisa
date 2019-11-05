@@ -5,6 +5,10 @@ all: build test
 build:
 	hack/exec/build.sh
 
+.PHONY: bake-tooling
+bake-tooling:
+	hack/exec/bake-tooling.sh
+
 .PHONY: test
 test:
 	hack/exec/test.sh
