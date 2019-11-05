@@ -1,0 +1,20 @@
+{
+    "signing": {
+        "default": {
+            "expiry": "8760h",
+            "usages": [
+                "cert sign",
+                "crl sign"
+            ],
+            "ca_constraint": {
+                "is_ca": true
+            }
+        }
+    },
+    "auth_keys": {
+        "default": {
+            "key": "%%KEY%%",
+            "type": "standard"
+        }
+    }
+}

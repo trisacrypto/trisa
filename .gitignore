@@ -2,6 +2,7 @@
 .bazel/
 .DS_Store
 bazel-workspace
+out
 /bazel-bin
 /bazel-genfiles
 /bazel-out

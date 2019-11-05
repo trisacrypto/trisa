@@ -1,0 +1,19 @@
+{
+  "signing": {
+    "default": {
+      "auth_remote": {
+        "remote": "dev",
+        "auth_key": "default"
+      }
+    }
+  },
+  "remotes": {
+    "dev": "127.0.0.1:8765"
+  },
+  "auth_keys": {
+    "default": {
+      "key": "%%KEY%%",
+      "type": "standard"
+    }
+  }
+}

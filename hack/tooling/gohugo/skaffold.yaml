@@ -1,0 +1,25 @@
+apiVersion: skaffold/v1beta15
+kind: Config
+metadata:
+  name: gohugo
+build:
+  artifacts:
+    - image: trisacrypto/tooling
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          GOHUGO_RELEASE: 0.59.1
+  local:
+    push: false
+  tagPolicy:
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:gohugo"
+deploy: {}
+profiles:
+  - name: ci
+    activation:
+      - env: CI=true
+    build:
+      local:
+        push: true

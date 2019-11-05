@@ -1,0 +1,25 @@
+apiVersion: skaffold/v1beta15
+kind: Config
+metadata:
+  name: cfssl
+build:
+  artifacts:
+    - image: trisacrypto/tooling
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          CFSSL_RELEASE: 1.4.0
+  local:
+    push: false
+  tagPolicy:
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:cfssl"
+deploy: {}
+profiles:
+  - name: ci
+    activation:
+      - env: CI=true
+    build:
+      local:
+        push: true
