@@ -15,9 +15,9 @@ type Config struct {
 }
 
 type TLS struct {
-	PrivateKeyFile  string   `yaml:"privateKeyFile,omitempty"`
-	CertificateFile string   `yaml:"certificateFile,omitempty"`
-	TrustedRootCAs  []string `yaml:"trustedRootCAs,omitempty"`
+	PrivateKeyFile  string `yaml:"privateKeyFile,omitempty"`
+	CertificateFile string `yaml:"certificateFile,omitempty"`
+	TrustChainFile  string `yaml:"trustChain,omitempty"`
 }
 
 type Server struct {

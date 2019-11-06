@@ -5,5 +5,4 @@ go_library(
     srcs = ["provider.go"],
     importpath = "github.com/trisacrypto/trisa/pkg/trisa/trust",
     visibility = ["//visibility:public"],
-    deps = ["//pkg/trisa/discovery:go_default_library"],
 )

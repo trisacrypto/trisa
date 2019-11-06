@@ -1,59 +1,42 @@
 package trust
 
 import (
-	"context"
+	"crypto/tls"
 	"crypto/x509"
-	"time"
-
-	"github.com/trisacrypto/trisa/pkg/trisa/discovery"
+	"encoding/pem"
 )
 
 type Provider struct {
-	caDisco   []*discovery.Trisa
-	rootCAs   []*x509.Certificate
-	issuerCAs []*x509.Certificate
+	chain tls.Certificate
 }
 
-// This needs improvement for refresh/reloads. Doing full init for now.
-func NewProvider(caURLs []string) (*Provider, error) {
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
+func NewProvider(chain []byte) *Provider {
 	p := &Provider{}
+	p.AddChain(chain)
+	return p
+}
 
-	for _, url := range caURLs {
-
-		// Load disco client per trusted CA
-		disco, err := discovery.New(url)
-		if err != nil {
-			return nil, err
+func (p *Provider) AddChain(in []byte) {
+	var block *pem.Block
+	for {
+		block, in = pem.Decode(in)
+		if block == nil {
+			break
 		}
-		if err := disco.Init(ctx); err != nil {
-			return nil, err
+		if block.Type == "CERTIFICATE" {
+			p.chain.Certificate = append(p.chain.Certificate, block.Bytes)
 		}
-		if err := disco.LoadAll(ctx); err != nil {
-			return nil, err
-		}
-
-		// Store disco client for later refresh ...
-		p.caDisco = append(p.caDisco, disco)
-
-		// Load it all for ourselves for now
-		p.rootCAs = append(p.rootCAs, disco.RootCAs...)
-		p.issuerCAs = append(p.issuerCAs, disco.IssuerCAs...)
 	}
-
-	return p, nil
 }
 
 func (p *Provider) GetCertPool() *x509.CertPool {
 	pool := x509.NewCertPool()
-	for _, crt := range p.rootCAs {
-		pool.AddCert(crt)
-	}
-	for _, crt := range p.issuerCAs {
-		pool.AddCert(crt)
+	for _, c := range p.chain.Certificate {
+		x509Cert, err := x509.ParseCertificate(c)
+		if err != nil {
+			panic(err)
+		}
+		pool.AddCert(x509Cert)
 	}
 	return pool
 }

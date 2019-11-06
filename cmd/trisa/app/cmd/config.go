@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"crypto/x509/pkix"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -13,14 +12,11 @@ import (
 )
 
 var (
-	csrPath = "/etc/trisa"
-	keyFile = "server.key"
-	csrFile = "server.csr"
-	crtFile = "server.crt"
+	csrPath   = "/etc/trisa"
+	keyFile   = "server.key"
+	crtFile   = "server.crt"
+	trustFile = "trust.chain"
 
-	initHostname    string
-	initOrg         string
-	trustedRootCA   string
 	listenAddr      string
 	listenAddrAdmin string
 )
@@ -42,56 +38,12 @@ func NewConfigCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		NewConfigCSRCmd(),
 		NewConfigGenerateCmd(),
 	)
 
 	cmd.PersistentFlags().StringVar(&csrPath, "path", csrPath, "Path where private key and CSR is created")
 
 	return cmd
-}
-
-func NewConfigCSRCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "csr",
-		Short: "Create Certificate Signing Request",
-		RunE:  runConfigCSRCmd,
-	}
-
-	cmd.Flags().StringVar(&initHostname, "hostname", "", "Hostname where the server will be running")
-	cmd.Flags().StringVar(&initOrg, "org", "", "Organization")
-
-	cmd.MarkFlagRequired("hostname")
-	cmd.MarkFlagRequired("org")
-
-	return cmd
-}
-
-func runConfigCSRCmd(cmd *cobra.Command, args []string) error {
-	key, err := ca.GenerateRSAPrivateKey(4096)
-	if err != nil {
-		return err
-	}
-
-	csr, err := ca.CreateCSR(pkix.Name{
-		CommonName:   initHostname,
-		Organization: []string{initOrg},
-	}, key)
-
-	if err != nil {
-		return err
-	}
-
-	keyPEM, err := ca.PEMEncodePrivateKey(key)
-	if err != nil {
-		return err
-	}
-
-	if err := ioutil.WriteFile(filepath.Join(csrPath, keyFile), keyPEM, os.ModePerm); err != nil {
-		return err
-	}
-
-	return ioutil.WriteFile(filepath.Join(csrPath, csrFile), csr, os.ModePerm)
 }
 
 func NewConfigGenerateCmd() *cobra.Command {
@@ -103,9 +55,6 @@ func NewConfigGenerateCmd() *cobra.Command {
 
 	cmd.Flags().StringVar(&listenAddr, "listen", listenAddr, "Listen address")
 	cmd.Flags().StringVar(&listenAddrAdmin, "listen-admin", listenAddrAdmin, "Listen address admin")
-	cmd.Flags().StringVar(&trustedRootCA, "trust", "", "Trusted root CA URL")
-
-	cmd.MarkFlagRequired("trust")
 
 	return cmd
 }
@@ -127,7 +76,7 @@ func runConfigGenerateCmd(cmd *cobra.Command, args []string) error {
 		TLS: &config.TLS{
 			CertificateFile: filepath.Join(csrPath, crtFile),
 			PrivateKeyFile:  filepath.Join(csrPath, keyFile),
-			TrustedRootCAs:  []string{trustedRootCA},
+			TrustChainFile:  filepath.Join(csrPath, trustFile),
 		},
 		Server: &config.Server{
 			ListenAddress:      listenAddr,

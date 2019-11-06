@@ -46,10 +46,11 @@ func runServerCmd(cmd *cobra.Command, args []string) {
 		log.Fatalf("load config: %v", err)
 	}
 
-	tp, err := trust.NewProvider(c.TLS.TrustedRootCAs)
+	chain, err := ioutil.ReadFile(c.TLS.TrustChainFile)
 	if err != nil {
-		log.Fatalf("load trust provider: %v", err)
+		log.Fatalf("load trust chain: %v", err)
 	}
+	tp := trust.NewProvider(chain)
 
 	crt, err := tls.LoadX509KeyPair(c.TLS.CertificateFile, c.TLS.PrivateKeyFile)
 	if err != nil {
