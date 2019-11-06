@@ -1,0 +1,31 @@
+apiVersion: skaffold/v1beta15
+kind: Config
+metadata:
+  name: trisa
+build:
+  artifacts:
+    - image: trisacrypto/trisa
+      bazel:
+        target: //cmd/trisa:docker.tar
+        args:
+          - --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
+  tagPolicy:
+    gitCommit: {}
+  local:
+    push: false
+deploy: {}
+profiles:
+  - name: latest
+    activation:
+      - env: CI=true
+    build:
+      tagPolicy:
+        sha256: {}
+      local:
+        push: true
+  - name: dev
+    build:
+      tagPolicy:
+        gitCommit: {}
+      local:
+        push: true

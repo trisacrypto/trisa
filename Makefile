@@ -1,9 +1,13 @@
 .PHONY: all
-all: build test
+all: build build-docker test
 
 .PHONY: build
 build:
 	hack/exec/build.sh
+
+.PHONY: build-docker
+build-docker:
+	hack/exec/build-docker.sh
 
 .PHONY: bake-tooling
 bake-tooling:
@@ -33,3 +37,11 @@ docs-generate:
 pki-dev-init:
 	hack/exec/pki-dev-init.sh
 	ls -l hack/etc/pki/dev/out
+
+.PHONY: docker-run
+docker-run:
+	docker run -it --rm bazel/cmd/trisa:docker
+
+.PHONY: docker-release
+docker-release:
+	skaffold build -p latest
