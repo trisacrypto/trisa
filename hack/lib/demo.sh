@@ -56,9 +56,11 @@ trisa::demo::vasp::config-gen() {
 
 trisa::demo::start::vasps() {
     trisa::demo::stop::vasps
-    ${ARTIFACTS}/bin/trisa server --config ${ARTIFACTS}/demo/vasp1/config.yaml &> ${DEMO_LOGS}/vasp1.log &
-    ${ARTIFACTS}/bin/trisa server --config ${ARTIFACTS}/demo/vasp2/config.yaml &> ${DEMO_LOGS}/vasp2.log &
-    ${ARTIFACTS}/bin/trisa server --config ${ARTIFACTS}/demo/vasp3/config.yaml &> ${DEMO_LOGS}/vasp3.log &
+    cd ${ARTIFACTS}/demo/vasp1 && ../../bin/trisa server --config config.yaml &> ${DEMO_LOGS}/vasp1.log &
+    cd ${ARTIFACTS}/demo/vasp2 && ../../bin/trisa server --config config.yaml &> ${DEMO_LOGS}/vasp2.log &
+    cd ${ARTIFACTS}/demo/vasp3 && ../../bin/trisa server --config config.yaml &> ${DEMO_LOGS}/vasp3.log &
+    echo "VASP servers started. Log output can be found under ${ARTIFACTS}/demo/logs"
+    ls -l ${ARTIFACTS}/demo/logs
 }
 
 trisa::demo::stop::vasps() {

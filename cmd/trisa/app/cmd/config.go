@@ -74,9 +74,9 @@ func runConfigGenerateCmd(cmd *cobra.Command, args []string) error {
 
 	c := &config.Config{
 		TLS: &config.TLS{
-			CertificateFile: filepath.Join(csrPath, crtFile),
-			PrivateKeyFile:  filepath.Join(csrPath, keyFile),
-			TrustChainFile:  filepath.Join(csrPath, trustFile),
+			CertificateFile: crtFile,
+			PrivateKeyFile:  keyFile,
+			TrustChainFile:  trustFile,
 		},
 		Server: &config.Server{
 			ListenAddress:      listenAddr,
