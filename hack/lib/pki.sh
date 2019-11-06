@@ -42,6 +42,10 @@ pki::issue::subca() {
         -v ${PKI_DIR}:/ca -w /ca/out \
         ${TOOLING_CFSSL} /bin/bash -c "cfssl sign -ca root.pem -ca-key root-key.pem --config subca${number}-config.json subca${number}.csr | cfssljson -bare subca${number}"
 
+    # Certificate chain
+    cat ${PKI_OUT}/subca${number}.pem > ${PKI_OUT}/subca${number}-chain.pem
+    cat ${PKI_OUT}/root.pem >> ${PKI_OUT}/subca${number}-chain.pem
+
     # Attach profle to server
     cat << EOF >> ${PKI_OUT}/server.ini
 [subca${number}]

@@ -1,0 +1,19 @@
+{
+  "CN": "vasp2.example.com",
+  "hosts": [
+    "vasp2.example.com",
+    "localhost",
+    "127.0.01"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "BE",
+      "L": "Brussels",
+      "O": "VASP 2"
+    }
+  ]
+}
