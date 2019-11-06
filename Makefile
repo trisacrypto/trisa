@@ -80,3 +80,41 @@ demo-rebuild:
 .PHONY: demo-stop
 demo-stop:
 	hack/exec/demo-stop.sh
+
+# Demo using docker and docker-compose only. This does not require setting up any
+# build system and solely relies the dockerized tooling and published trisa image.
+#
+# This target should not be used for development as it will blow away the PKI dev
+# setup, regenerate the configs and will not rely on any locally made code changes.
+#
+# Once the VASP containers are up and running, message exchanges can be triggered
+# by hitting the admin port on each VASP server. The admin ports for each VASP are
+# follows:
+#
+#	vasp1 --> 8591
+#	vasp2 --> 8592
+#	vasp3 --> 8593
+#
+# The TRISA mesh ports are as follows:
+#
+#	vasp1 --> 8091
+#	vasp2 --> 8092
+#	vasp3 --> 8093
+#
+# To trigger a transaction exchange from VASP1 to VASP2:
+# 	curl -ks "https://127.0.0.1:8591/send?target=vasp3:8093" > /dev/null
+#
+# Replace the ?target parameter with any of the following:
+#
+#	vasp1:8591
+#	vasp2:8592
+#	vasp3:8593
+#
+.PHONY: demo-docker
+demo-docker:
+	hack/exec/demo-docker.sh
+
+# Cleanup running VASP containers.
+.PHONY: demo-docker-cleanup
+demo-docker-cleanup:
+	hack/exec/demo-docker-cleanup.sh

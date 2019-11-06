@@ -54,6 +54,12 @@ trisa::demo::vasp::config-gen() {
     ${ARTIFACTS}/bin/trisa config generate --path=${ARTIFACTS}/demo/vasp3 --config ${ARTIFACTS}/demo/vasp3/config.yaml --listen=":8093" --listen-admin=":8593"
 }
 
+trisa::demo::vasp::config-gen-docker() {
+    docker run -it --rm -v ${ARTIFACTS}/demo/vasp1:/etc/trisa trisacrypto/trisa:latest config generate --listen=":8091" --listen-admin=":8591"
+    docker run -it --rm -v ${ARTIFACTS}/demo/vasp2:/etc/trisa trisacrypto/trisa:latest config generate --listen=":8092" --listen-admin=":8592"
+    docker run -it --rm -v ${ARTIFACTS}/demo/vasp3:/etc/trisa trisacrypto/trisa:latest config generate --listen=":8093" --listen-admin=":8593"
+}
+
 trisa::demo::start::vasps() {
     trisa::demo::stop::vasps
     cd ${ARTIFACTS}/demo/vasp1 && ../../bin/trisa server --config config.yaml &> ${DEMO_LOGS}/vasp1.log &
@@ -65,4 +71,12 @@ trisa::demo::start::vasps() {
 
 trisa::demo::stop::vasps() {
     killall trisa &> /dev/null || true
+}
+
+trisa::demo::docker::up() {
+    docker-compose --project-directory . -f hack/etc/demo/docker-compose.yml up
+}
+
+trisa::demo::docker::down() {
+    docker-compose --project-directory . -f hack/etc/demo/docker-compose.yml down
 }

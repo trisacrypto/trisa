@@ -1,0 +1,29 @@
+version: "3"
+services:
+  vasp1:
+    image: trisacrypto/trisa:latest
+    command: server
+    working_dir: /etc/trisa
+    ports:
+      - "8091:8091"
+      - "8591:8591"
+    volumes:
+      - ./artifacts/demo/vasp1:/etc/trisa
+  vasp2:
+    image: trisacrypto/trisa:latest
+    command: server
+    working_dir: /etc/trisa
+    ports:
+      - "8092:8092"
+      - "8592:8592"
+    volumes:
+      - ./artifacts/demo/vasp2:/etc/trisa
+  vasp3:
+    image: trisacrypto/trisa:latest
+    command: server
+    working_dir: /etc/trisa
+    ports:
+      - "8093:8093"
+      - "8593:8593"
+    volumes:
+      - ./artifacts/demo/vasp3:/etc/trisa
