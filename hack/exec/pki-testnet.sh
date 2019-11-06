@@ -15,3 +15,7 @@ pki::issue::subca 1
 pki::issue::subca 2
 
 pki::issue::end-entity::local server ../server-csr.json subca1
+
+pki::issue::end-entity::local vasp1 ../vasp1-csr.json subca1
+pki::issue::end-entity::local vasp2 ../vasp2-csr.json subca1
+pki::issue::end-entity::local vasp3 ../vasp3-csr.json subca2

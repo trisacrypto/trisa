@@ -1,0 +1,17 @@
+{
+  "CN": "vasp1.trisa.ciphertrace.com",
+  "hosts": [
+    "vasp1.trisa.ciphertrace.com"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "San Francisco",
+      "O": "VASP 1"
+    }
+  ]
+}

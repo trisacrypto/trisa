@@ -1,0 +1,17 @@
+{
+  "CN": "vasp2.trisa.ciphertrace.com",
+  "hosts": [
+    "vasp2.trisa.ciphertrace.com"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "BE",
+      "L": "Brussels",
+      "O": "VASP 2"
+    }
+  ]
+}
