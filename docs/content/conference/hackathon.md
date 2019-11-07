@@ -6,14 +6,71 @@ weight: 30
 
 {{% button icon="fas fa-download" url="/conference-2019/trisa-conference-hackathon-2019.pdf" %}}Hackathon Slide Deck{{% /button %}}
 
-## Projects
+## Projects & Slide Decks
+
+* [VASP Adress Resolution](/conference-2019/trisa_vasp_address_resolution.pdf)
+* [Enhancement of PII privacy for TRISA transactions](/conference-2019/trisa_pii_enhancement.pdf)
+* [Red Flagging](/conference-2019/trisa_redflagging.pdf)
+* [Travel Rule Extension TrisaScan](/conference-2019/trisa_travel_rule_extension_trisascan.pdf)
+* [Zero Knowledge TRISA](/conference-2019/trisa_zk.pdf)
+
+### VASP Adress Resolution
+
+VASPs need to transfer some required data when sending value to another VASP.
+One problem that the current implementation of TRISA does not address is recognizing or 
+identifying an address as belonging to a VASP. This proposal complements the TRISA protocol.
+
+### Enhancement of PII privacy for TRISA transactions
+
+TRISA suggests a VASP to expose the PII of any account holder listed in a proposed transaction.
+This runs directly contrary to one of the key benefits of digital currency which is the ability
+execute low-value transactions with low friction.
+
+### Red Flagging
+
+Proposal to red flag transactions:
+* Time-based “look back” for a set of transactions that breaks the spirit of TRISA.
+* Detection of Fan-out-Fan-In pattern for UTXO’s sent to a VASP.
+* Detection of simple “man-in-the-middle” between VASP1 and VASP2
+
+### Travel Rule Extension TrisaScan
+
+We want to make Travel Rule benefit to user, make it more simple for user to see
+VASP, individual information in etherscan. This solution integrates with TRISA library.
+
+### Zero Knowledge TRISA
+
+Our constraints:
+
+* We want all VASPs to use TRISA
+* Travel Rule: Counterparty PII recorded before a Tx is sent
+* All ICOs accepting Fiat etc. are VASPs
+* … How many ICOs in 2018 were Scams...
+
+So we’s have to bottleneck access to TRISA, but
+* this limits adoption of TRISA
+* This delegates trust to the TRISA gatekeepers
+* who may have different incentives than users & VASPs
+* Small Exchanges can be sold...
 
 ## Results
+
+
+ Judging Area | Team 1 | Team 2 | Team 3 | Team 4 | Team 5
+--------------|--------|--------|--------|--------|---------
+     Industry |    4   |    5   |    5   |    3   |    5
+   Innovation |    4   |    5   |    4   |    3   |    5
+    Technical |    3   |    4   |    3   |    3   |    4
+ Presentation |    3   |    4   |    5   |    4   |    5
+       &nbsp; |        |        |        |        |
+ <b>Total</b> | <b>14</b> | <b>18</b> | <b>17</b> | <b>13</b> | <b>19</b>
+
 
 ## Follow-up
 
 * Monthly online meetup
 * Elect board members
 * Bylaws proposal
+* Setup trisacrypto organization
 * Workout production PKI
 * Formalize design (issue tracking)
