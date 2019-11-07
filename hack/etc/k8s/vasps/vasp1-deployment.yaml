@@ -47,6 +47,6 @@ spec:
             memory: "256Mi"
       volumes:
         - name: config
-          configMap:
-            name: vasp1
+          secret:
+            secretName: vasp1
 

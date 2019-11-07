@@ -11,7 +11,7 @@ resources:
   - vasp3-deployment.yaml
   - vasp3-service.yaml
 
-configMapGenerator:
+secretGenerator:
 
   - name: vasp1
     files:
