@@ -29,3 +29,12 @@ profiles:
         gitCommit: {}
       local:
         push: true
+  - name: kind
+    build:
+      tagPolicy:
+        gitCommit: {}
+      local:
+        push: true
+    deploy:
+      kustomize:
+        path: hack/etc/k8s/vasps

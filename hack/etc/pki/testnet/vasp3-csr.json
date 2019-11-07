@@ -1,7 +1,7 @@
 {
   "CN": "vasp3.trisa.ciphertrace.com",
   "hosts": [
-    "vasp1.trisa.ciphertrace.com"
+    "vasp3.trisa.ciphertrace.com"
   ],
   "key": {
     "algo": "rsa",

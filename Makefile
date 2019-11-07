@@ -118,3 +118,24 @@ demo-docker:
 .PHONY: demo-docker-cleanup
 demo-docker-cleanup:
 	hack/exec/demo-docker-cleanup.sh
+
+# Start local k8s cluster. To make use of (local) Kubernetes deployments the following
+# binaries are required to be available: kubectl, skaffold and kind.
+.PHONY: k8s-cluster-start
+k8s-cluster-start:
+	hack/exec/k8s-cluster-start.sh
+
+# Destroy local k8s cluster.
+.PHONY: k8s-cluster-destroy
+k8s-cluster-destroy:
+	hack/exec/k8s-cluster-destroy.sh
+
+# Startup the VASPs in k8s.
+.PHONY: k8s-vasps-run
+k8s-vasps-run:
+	hack/exec/k8s-vasps-run.sh
+
+# Stop the VASPs in k8s.
+.PHONY: k8s-vasps-delete
+k8s-vasps-delete:
+	hack/exec/k8s-vasps-delete.sh

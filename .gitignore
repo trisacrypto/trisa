@@ -10,3 +10,6 @@ out
 /bazel-trisa
 /artifacts
 /docs/public
+server.crt
+server.key
+trust.chain
