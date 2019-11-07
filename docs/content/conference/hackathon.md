@@ -56,14 +56,13 @@ So we’s have to bottleneck access to TRISA, but
 ## Results
 
 
- Judging Area | Team 1 | Team 2 | Team 3 | Team 4 | Team 5
---------------|--------|--------|--------|--------|---------
-     Industry |    4   |    5   |    5   |    3   |    5
-   Innovation |    4   |    5   |    4   |    3   |    5
-    Technical |    3   |    4   |    3   |    3   |    4
- Presentation |    3   |    4   |    5   |    4   |    5
-       &nbsp; |        |        |        |        |
- <b>Total</b> | <b>14</b> | <b>18</b> | <b>17</b> | <b>13</b> | <b>19</b>
+Team | Score 
+------|-----
+VASP Adress Resolution | 45.5
+Enhancement of PII privacy for TRISA transactions | 52
+Red Flagging | 48
+Travel Rule Extension TrisaScan | 45
+Zero Knowledge TRISA | 49.5
 
 
 ## Follow-up
