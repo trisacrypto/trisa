@@ -28,10 +28,7 @@ execute low-value transactions with low friction.
 
 ### Red Flagging
 
-Proposal to red flag transactions:
-* Time-based “look back” for a set of transactions that breaks the spirit of TRISA.
-* Detection of Fan-out-Fan-In pattern for UTXO’s sent to a VASP.
-* Detection of simple “man-in-the-middle” between VASP1 and VASP2
+Determine and return transactions (incl participants) where the use of mixers or other obfuscation techniques (e.g. transaction segmentation, 'hawallah', etc.) are detected - which we refere to as "red flagged" transactions.
 
 ### Travel Rule Extension TrisaScan
 
