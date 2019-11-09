@@ -4,10 +4,7 @@ services:
 language: go
 
 git:
-  submodules: false
-
-before_install:
-  - git submodule update --init --recursive
+  submodules: true
 
 jobs:
   include:
