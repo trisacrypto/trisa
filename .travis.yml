@@ -5,10 +5,23 @@ language: go
 
 git:
   submodules: true
+  quiet: true
+
+install:
+  - curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+  - chmod +x skaffold
+  - sudo mv skaffold /usr/local/bin
 
 jobs:
   include:
-    - stage: Publish docs
+    - stage: Pre-build
+      if: fork = false # We can only use encrypted ENV vars from trusted source (non-forks)
+      name: Bake dockerized tooling
+      script:
+        - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
+        - make bake-tooling
+    - stage: Build
+      name: Documentation generation
       script:
         - make docs-generate
       deploy:
@@ -22,6 +35,9 @@ jobs:
         committer_from_gh: true
         on:
           branch: master
+    - name: Development certificate generation
+      script:
+        - make pki-dev-init
 
 notifications:
   email: false

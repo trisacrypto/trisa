@@ -15,7 +15,7 @@ pki::init::ca() {
     mkdir -p ${PKI_OUT}
     rm -rf ${PKI_OUT}/*
 
-    docker run -it --rm \
+    docker run -it --rm --user $(id -u) \
         -v ${PKI_DIR}:/ca -w /ca/out \
         ${TOOLING_CFSSL} /bin/bash -c "cfssl gencert -initca ../root-csr.json | cfssljson -bare root"
 }
@@ -33,12 +33,12 @@ pki::issue::subca() {
     sed -e "s/%%KEY%%/${key}/" ${PKI_DIR}/subca-config.json > ${PKI_OUT}/subca${number}-config.json
 
     # Generate private key and CSR
-    docker run -it --rm \
+    docker run -it --rm --user $(id -u) \
         -v ${PKI_DIR}:/ca -w /ca/out \
         ${TOOLING_CFSSL} /bin/bash -c "cfssl genkey subca${number}-csr.json | cfssljson -bare subca${number}"
 
     # Sign CSR from root CA
-    docker run -it --rm \
+    docker run -it --rm --user $(id -u) \
         -v ${PKI_DIR}:/ca -w /ca/out \
         ${TOOLING_CFSSL} /bin/bash -c "cfssl sign -ca root.pem -ca-key root-key.pem --config subca${number}-config.json subca${number}.csr | cfssljson -bare subca${number}"
 
@@ -59,11 +59,11 @@ EOF
 pki::issue::server() {
     local subca=${1}
 
-    docker run -it --rm \
+    docker run -it --rm --user $(id -u) \
         -v ${PKI_DIR}:/ca -w /ca/out \
         ${TOOLING_CFSSL} /bin/bash -c "cfssl genkey ../server-csr.json | cfssljson -bare server"
     
-    docker run -it --rm \
+    docker run -it --rm --user $(id -u) \
         -v ${PKI_DIR}:/ca -w /ca/out \
         ${TOOLING_CFSSL} /bin/bash -c "cfssl sign -ca ${subca}.pem -ca-key ${subca}-key.pem --config ../end-entity-config.json server.csr | cfssljson -bare server"
 }
@@ -74,11 +74,11 @@ pki::issue::end-entity::local() {
     local csr=${2}
     local subca=${3}
 
-    docker run -it --rm \
+    docker run -it --rm --user $(id -u) \
         -v ${PKI_DIR}:/ca -w /ca/out \
         ${TOOLING_CFSSL} /bin/bash -c "cfssl genkey ${csr} | cfssljson -bare ${name}"
     
-    docker run -it --rm \
+    docker run -it --rm --user $(id -u) \
         -v ${PKI_DIR}:/ca -w /ca/out \
         ${TOOLING_CFSSL} /bin/bash -c "cfssl sign -ca ${subca}.pem -ca-key ${subca}-key.pem --config ../end-entity-config.json ${name}.csr | cfssljson -bare ${name}"
 }
@@ -89,7 +89,7 @@ pki::issue::end-entity::remote() {
 
 # Run a local cfssl server using multirootca config. This requires the server keys to be generated to secure the key exchange.
 pki::server() {
-    docker run --rm --name cfssl-server \
+    docker run --rm --user $(id -u) --name cfssl-server \
         -v ${PKI_DIR}:/ca -w /ca/out -p 8765:8765 \
         ${TOOLING_CFSSL} multirootca -a 0.0.0.0:8765 -roots server.ini -tls-cert server.pem -tls-key server-key.pem 
 }
