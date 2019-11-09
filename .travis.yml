@@ -20,7 +20,7 @@ jobs:
       script:
         - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
         - make bake-tooling
-    - stage: Build
+    - stage: Build and testing
       name: Documentation generation
       script:
         - make docs-generate
@@ -35,9 +35,11 @@ jobs:
         committer_from_gh: true
         on:
           branch: master
-    - name: Development certificate generation
+    - name: Build and testing
       script:
-        - make pki-dev-init
+        - make build
+        - make test
+        - make build-docker
 
 notifications:
   email: false
