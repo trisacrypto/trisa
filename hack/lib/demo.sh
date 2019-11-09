@@ -44,8 +44,7 @@ trisa::demo::init() {
 
 trisa::demo::build() {
     trisa::bazel::exec build //cmd/trisa
-    # TODO: linux support, darwin harded for now
-    cp -f $(trisa::bazel::info::bazel-bin)/cmd/trisa/darwin_amd64_stripped/trisa ${ARTIFACTS}/bin
+    cp -f $(trisa::bazel::info::bazel-bin)/cmd/trisa/${PLATFORM}_amd64_stripped/trisa ${ARTIFACTS}/bin
 }
 
 trisa::demo::vasp::config-gen() {

@@ -16,8 +16,6 @@ build:
 deploy: {}
 profiles:
   - name: latest
-    activation:
-      - env: CI=true
     build:
       tagPolicy:
         sha256: {}

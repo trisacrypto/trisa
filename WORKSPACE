@@ -30,7 +30,7 @@ bazel_skylib_workspace()
 
 load("@bazel_skylib//lib:versions.bzl", "versions")
 
-versions.check(minimum_bazel_version = "1.1.0")
+versions.check(minimum_bazel_version = "1.0.1")
 
 http_archive(
     name = "io_bazel_rules_go",
