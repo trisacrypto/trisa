@@ -1,0 +1,8 @@
+# Some Travis specific tuning
+startup --host_jvm_args=-Xmx2500m
+startup --host_jvm_args=-Xms2500m
+test --ram_utilization_factor=10
+
+# Remote cache
+build --remote_http_cache=https://storage.googleapis.com/trisa-bazel-cache/travis --google_credentials=/workspace/.remote-cache-sa.json --experimental_guard_against_concurrent_changes
+test --remote_http_cache=https://storage.googleapis.com/trisa-bazel-cache/travis --google_credentials=/workspace/.remote-cache-sa.json --experimental_guard_against_concurrent_changes

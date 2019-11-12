@@ -1,3 +1,4 @@
+# Some Travis specific tuning
 startup --host_jvm_args=-Xmx2500m
 startup --host_jvm_args=-Xms2500m
 test --ram_utilization_factor=10

@@ -17,12 +17,24 @@ deploy: {}
 profiles:
   - name: latest
     build:
+      artifacts:
+        - image: trisacrypto/trisa
+          bazel:
+            target: //cmd/trisa:docker.tar
+            args:
+              - --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
       tagPolicy:
         sha256: {}
       local:
         push: true
   - name: dev
     build:
+      artifacts:
+        - image: trisacrypto/trisa
+          bazel:
+            target: //cmd/trisa:docker.tar
+            args:
+              - --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
       tagPolicy:
         gitCommit: {}
       local:
