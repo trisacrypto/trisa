@@ -1,0 +1,38 @@
+apiVersion: skaffold/v1
+kind: Config
+metadata:
+  name: bazel
+build:
+  artifacts:
+  - image: trisacrypto/tooling
+    context: .
+    docker:
+      dockerfile: Dockerfile
+      buildArgs:
+        BAZEL_RELEASE: 1.1.0
+        SKAFFOLD_RELEASE: latest
+  tagPolicy:
+    envTemplate:
+      template: '{{.IMAGE_NAME}}:bazel-dev'
+  local:
+    push: false
+profiles:
+- name: travis-pr
+  activation:
+    - env: TRAVIS_EVENT_TYPE=pull_request
+  build:
+    tagPolicy:
+      envTemplate:
+        template: '{{.IMAGE_NAME}}:bazel-pr-{{.TRAVIS_PULL_REQUEST}}'
+    local:
+      push: true
+- name: travis-push
+  activation:
+    - env: TRAVIS_EVENT_TYPE=push
+    - env: TRAVIS_EVENT_TYPE=cron
+  build:
+    tagPolicy:
+      envTemplate:
+        template: '{{.IMAGE_NAME}}:bazel'
+    local:
+      push: true

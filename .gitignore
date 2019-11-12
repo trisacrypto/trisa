@@ -13,3 +13,4 @@ out
 server.crt
 server.key
 trust.chain
+.remote-cache-sa.json

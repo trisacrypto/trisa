@@ -37,9 +37,18 @@ jobs:
           branch: master
     - name: Build and testing
       script:
-        - make build
-        - make test
-        - make build-docker
+        - hack/exec/travis-build-bootstrap.sh
+    - stage: Bakery
+      name: Publish PR image
+      if: fork = false AND type = pull_request
+      script:
+        - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
+        - hack/exec/travis-publish.sh dev
+    - name: Publish master image
+      if: type IN (push, cron) AND branch = master
+      script:
+        - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
+        - hack/exec/travis-publish.sh latest
 
 notifications:
   email: false
