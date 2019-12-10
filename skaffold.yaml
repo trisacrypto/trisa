@@ -14,7 +14,25 @@ build:
   local:
     push: false
 profiles:
-- name: latest
+- name: travis-pr
+  activation:
+    - env: TRAVIS_EVENT_TYPE=pull_request
+  build:
+    artifacts:
+    - image: trisacrypto/trisa
+      bazel:
+        target: //cmd/trisa:docker.tar
+        args:
+        - --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
+    tagPolicy:
+      envTemplate:
+        template: '{{.IMAGE_NAME}}:pr-{{.TRAVIS_PULL_REQUEST}}'
+    local:
+      push: true
+- name: travis-push
+  activation:
+    - env: TRAVIS_EVENT_TYPE=push
+    - env: TRAVIS_EVENT_TYPE=cron
   build:
     artifacts:
     - image: trisacrypto/trisa
@@ -24,18 +42,6 @@ profiles:
         - --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
     tagPolicy:
       sha256: {}
-    local:
-      push: true
-- name: dev
-  build:
-    artifacts:
-    - image: trisacrypto/trisa
-      bazel:
-        target: //cmd/trisa:docker.tar
-        args:
-        - --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
-    tagPolicy:
-      gitCommit: {}
     local:
       push: true
 - name: kind

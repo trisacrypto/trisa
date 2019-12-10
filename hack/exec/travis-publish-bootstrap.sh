@@ -9,9 +9,4 @@ set -o pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
 source "${REPO_ROOT}/hack/lib/init.sh"
 
-trisa::bazel::exec info
-
-# Same as `make all`
-hack/exec/build.sh
-hack/exec/test.sh
-hack/exec/build-docker.sh
+tooling::travis::run hack/exec/travis-publish.sh

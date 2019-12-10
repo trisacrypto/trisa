@@ -55,11 +55,15 @@ tooling::travis::run() {
         bazelrc=".bazelrc-travis-cache"
     fi
 
+    # Pass TRAVIS_ env vars to container.
+    env | grep TRAVIS_ > travis.env
+
     docker run --rm -it ${args} \
-        --env BAZEL_RC_FILE=${bazelrc} \
         -w /workspace \
         -v $(pwd):/workspace \
+        -v $(pwd)/${bazelrc}:/home/bazel/.bazelrc \
         -v /var/run/docker.sock:/var/run/docker.sock \
+        --env-file travis.env \
         ${TOOLING_BAZEL} -c "${*}"
 
     # Cleanup remote cache secret if any

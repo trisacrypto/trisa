@@ -1,5 +1,5 @@
 .PHONY: all
-all: build build-docker test
+all: build test build-docker
 
 # Build TRISA server.
 .PHONY: build
