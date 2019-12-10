@@ -4,10 +4,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-BAZEL_RC_FILE=${BAZEL_RC_FILE:-".bazelrc"}
-
 trisa::bazel::exec() {
-    bazel --bazelrc=${BAZEL_RC_FILE} ${*}
+    bazel ${*}
 }
 
 trisa::bazel::info::workspace() {

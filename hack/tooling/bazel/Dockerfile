@@ -31,7 +31,7 @@ RUN curl -Lso /usr/local/bin/skaffold https://storage.googleapis.com/skaffold/re
     && chmod +x /usr/local/bin/skaffold
 
 # Setup bazel user
-RUN useradd -m -g docker -s /bin/bash bazel
+RUN useradd -u 2000 -m -g docker -s /bin/bash bazel
 USER bazel
 
 WORKDIR /workspace
