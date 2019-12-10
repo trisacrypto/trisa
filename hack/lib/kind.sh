@@ -5,6 +5,7 @@ set -o nounset
 set -o pipefail
 
 KIND_CLUSTER=kind
+KIND_CTX="kind-${KIND_CLUSTER}@kind"
 KIND_IMAGE=kindest/node:v1.14.6
 KIND_CONFIG=trisa-cluster-one-worker.yaml
 
@@ -15,16 +16,12 @@ kind::cluster::start() {
         --image ${KIND_IMAGE} \
         --config ${REPO_ROOT}/hack/etc/kind/${KIND_CONFIG}
 
-    kind::cluster::config::merge
+    # Workaround until skaffold supports newer kind 0.6.0 ctx. When available, we can
+    # also rename our `kind` cluster to `trisa` as KIND_CLUSTER name.
+    kubectl config unset contexts.${KIND_CTX}
+    kubectl config rename-context kind-${KIND_CLUSTER} ${KIND_CTX}
 
-    echo
-    echo "***** Please ignore the message above to set KUBECONFIG *****"
-    echo
-    echo "Your configuration is already in place and the kubectl context"
-    echo "has been set to 'kubernetes-admin@kind' for you."
-    echo
-
-    kubectl config use-context kubernetes-admin@kind
+    kubectl config use-context ${KIND_CTX}
     kubectl cluster-info
 }
 
@@ -33,21 +30,16 @@ kind::cluster::destroy() {
     kind delete cluster --name ${KIND_CLUSTER}
 }
 
-# Some trickery to merge our local cluster config into the users existing kube config.
-# This will cause issues if there are overlaps on the context configuration. Users
-# are on their own if that's the case (which mostly means they know what they are doing).
-kind::cluster::config::merge() {
+# Ensure kubectl context is pointing to kind cluster
+kind::ensure-ctx() {
+    local current=$(kubectl config view -o template --template='{{ index . "current-context" }}')
 
-    # Some housekeeping
-    mkdir -p ${HOME}/.kube
-    touch ${HOME}/.kube/config
+    if [ "${KIND_CTX}" != "${current}" ]; then
+        echo "Incorrect kubectl context: '${current}', expecting '${KIND_CTX}'"
+        exit 1
+    fi
 
-    # Make a backup of current config
-    cp ${HOME}/.kube/config ${HOME}/.kube/config-hack
-
-    # Use KUBECONFIG to merge config-hack and our new one together
-    export KUBECONFIG="$(kind get kubeconfig-path --name=${KIND_CLUSTER}):${HOME}/.kube/config-hack"
-    kubectl config view --raw > ${HOME}/.kube/config
+    echo "Detected correct kubectl context '${KIND_CTX}'"
 }
 
 # Setup VASP configs collecting the server certificates and private keys and create the trust
