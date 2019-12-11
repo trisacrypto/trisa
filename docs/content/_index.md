@@ -11,7 +11,7 @@ identity information without modifying the core blockchain protocols, and withou
 incurring increased transaction costs or modifying virtual currency peer-to-peer
 transaction flows.
 
-{{% button icon="fas fa-download" url="/white-papers/white-paper-trisa-v4.pdf" %}}Download TRISA White Paper v4{{% /button %}}
+{{% button icon="fas fa-download" url="/white-papers/white-paper-trisa-v5.pdf" %}}Download TRISA White Paper v5{{% /button %}}
 
 ## About the Financial Action Task Force (FATF)
 

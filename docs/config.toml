@@ -55,7 +55,7 @@ enableMissingTranslationPlaceholders = false
 
 [[menu.main]]
     name = "White Paper"
-    url = "/white-papers/white-paper-trisa-v4.pdf"
+    url = "/white-papers/white-paper-trisa-v5.pdf"
     weight = 5
 
 [[menu.main]]
