@@ -9,7 +9,7 @@ build:
     docker:
       dockerfile: Dockerfile
       buildArgs:
-        GOHUGO_RELEASE: 0.59.1
+        GOHUGO_RELEASE: 0.61.0
   tagPolicy:
     envTemplate:
       template: '{{.IMAGE_NAME}}:gohugo-dev'
