@@ -9,7 +9,7 @@ build:
     docker:
       dockerfile: Dockerfile
       buildArgs:
-        CFSSL_RELEASE: 1.4.0
+        CFSSL_RELEASE: 1.4.1
   tagPolicy:
     envTemplate:
       template: '{{.IMAGE_NAME}}:cfssl-dev'
