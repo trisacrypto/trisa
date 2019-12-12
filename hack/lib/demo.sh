@@ -15,10 +15,6 @@ trisa::demo::init() {
         exit 1
     fi
 
-    trisa::artifacts::clear
-
-    mkdir -p ${ARTIFACTS}/bin
-    
     mkdir -p ${ARTIFACTS}/demo/vasp1
     mkdir -p ${ARTIFACTS}/demo/vasp2
     mkdir -p ${ARTIFACTS}/demo/vasp3
@@ -44,6 +40,7 @@ trisa::demo::init() {
 
 trisa::demo::build() {
     trisa::bazel::exec build //cmd/trisa
+    mkdir -p ${ARTIFACTS}/bin
     cp -f $(trisa::bazel::info::bazel-bin)/cmd/trisa/${PLATFORM}_amd64_stripped/trisa ${ARTIFACTS}/bin
 }
 
@@ -64,6 +61,7 @@ trisa::demo::start::vasps() {
     cd ${ARTIFACTS}/demo/vasp1 && ../../bin/trisa server --config config.yaml &> ${DEMO_LOGS}/vasp1.log &
     cd ${ARTIFACTS}/demo/vasp2 && ../../bin/trisa server --config config.yaml &> ${DEMO_LOGS}/vasp2.log &
     cd ${ARTIFACTS}/demo/vasp3 && ../../bin/trisa server --config config.yaml &> ${DEMO_LOGS}/vasp3.log &
+    sleep 5
     echo "VASP servers started. Log output can be found under ${ARTIFACTS}/demo/logs"
     ls -l ${ARTIFACTS}/demo/logs
 }
