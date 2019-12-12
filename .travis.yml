@@ -7,6 +7,13 @@ git:
   submodules: true
   quiet: true
 
+addons:
+  # Required for demo testing
+  hosts:
+    - vasp1
+    - vasp2
+    - vasp3
+
 jobs:
   include:
     - stage: Pre-build
@@ -15,7 +22,7 @@ jobs:
       script:
         - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
         - hack/exec/travis-tooling-bootstrap.sh
-    - stage: Build, test and bake
+    - stage: Build
       name: Documentation generation
       script:
         - hack/exec/docs-generate.sh
