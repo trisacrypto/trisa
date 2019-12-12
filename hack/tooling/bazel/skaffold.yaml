@@ -9,7 +9,7 @@ build:
     docker:
       dockerfile: Dockerfile
       buildArgs:
-        BAZEL_RELEASE: 1.1.0
+        BAZEL_RELEASE: 1.2.1
         SKAFFOLD_RELEASE: latest
   tagPolicy:
     envTemplate:
