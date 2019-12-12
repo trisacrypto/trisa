@@ -28,10 +28,10 @@ tooling::bake() {
 
 # Some testing to make sure our tooling containers work.
 tooling::test() {
-    echo "gohugo --> $(docker run -it --rm trisacrypto/tooling:gohugo version)"
-    echo "cfssl -> $(docker run -it --rm trisacrypto/tooling:cfssl cfssl version)"
-    echo "skaffold --> $(docker run -it --rm --entrypoint skaffold trisacrypto/tooling:bazel version)"
-    docker run -it --rm --entrypoint bazel ${TOOLING_BAZEL} info
+    echo "gohugo   --> $(docker run -it --rm ${TOOLING_GOHUGO} version)"
+    echo "cfssl    --> $(docker run -it --rm ${TOOLING_CFSSL} cfssl version)"
+    echo "skaffold --> $(tooling::travis::run skaffold version)"
+    tooling::travis::run bazel info
 }
 
 # Build image using skaffold
@@ -64,7 +64,7 @@ tooling::travis::run() {
     fi
 
     # Pass TRAVIS_ env vars to container.
-    env | grep TRAVIS_ > travis.env
+    env | grep TRAVIS_ > travis.env || cat /dev/null > travis.env
 
     docker run --rm -it ${args} \
         -w /workspace \
@@ -78,4 +78,17 @@ tooling::travis::run() {
     if [ -f ".remote-cache-sa.json" ]; then
         rm -f .remote-cache-sa.json
     fi
+
+    # Cleanup travis.env file
+    if [ -f "travis.env" ]; then
+        rm -f travis.env
+    fi
+}
+
+# Runs latest travis tooling context regardless of TRAVIS PR overrides.
+tooling::travis::run-latest() {
+    local restore=${TOOLING_BAZEL}
+    TOOLING_BAZEL=trisacrypto/tooling:bazel
+    tooling::travis::run ${*}
+    TOOLING_BAZEL=${restore}
 }

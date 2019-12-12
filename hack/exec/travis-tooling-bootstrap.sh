@@ -10,7 +10,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
 source "${REPO_ROOT}/hack/lib/init.sh"
 
 # Build tooling in bazel container context as skaffold is available there.
-tooling::travis::run hack/exec/bake-tooling.sh
+tooling::travis::run-latest hack/exec/bake-tooling.sh
 
 # Quick test on the resulting containers.
 tooling::test
