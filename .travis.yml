@@ -7,11 +7,6 @@ git:
   submodules: true
   quiet: true
 
-install:
-  - curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
-  - chmod +x skaffold
-  - sudo mv skaffold /usr/local/bin
-
 jobs:
   include:
     - stage: Pre-build
@@ -19,11 +14,11 @@ jobs:
       name: Bake dockerized tooling
       script:
         - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
-        - make bake-tooling
-    - stage: Build and testing
+        - hack/exec/travis-tooling-bootstrap.sh
+    - stage: Build, test and bake
       name: Documentation generation
       script:
-        - make docs-generate
+        - hack/exec/docs-generate.sh
       deploy:
         provider: pages
         skip_cleanup: true
@@ -38,13 +33,12 @@ jobs:
     - name: Build and testing
       script:
         - hack/exec/travis-build-bootstrap.sh
-    - stage: Bakery
-      name: Publish PR image
+    - name: Build and publish PR image
       if: fork = false AND type = pull_request
       script:
         - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
         - hack/exec/travis-publish-bootstrap.sh
-    - name: Publish master images
+    - name: Build and publish latest image
       if: fork = false AND type = push AND branch = master
       script:
         - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin

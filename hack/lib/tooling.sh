@@ -26,6 +26,14 @@ tooling::bake() {
     done
 }
 
+# Some testing to make sure our tooling containers work.
+tooling::test() {
+    echo "gohugo --> $(docker run -it --rm trisacrypto/tooling:gohugo version)"
+    echo "cfssl -> $(docker run -it --rm trisacrypto/tooling:cfssl cfssl version)"
+    echo "skaffold --> $(docker run -it --rm --entrypoint skaffold trisacrypto/tooling:bazel version)"
+    docker run -it --rm --entrypoint bazel ${TOOLING_BAZEL} info
+}
+
 # Build image using skaffold
 tooling::skaffold() {
     local dir=${1}

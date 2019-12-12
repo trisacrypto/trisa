@@ -9,7 +9,8 @@ set -o pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
 source "${REPO_ROOT}/hack/lib/init.sh"
 
-# Same as `make all`
-hack/exec/build.sh
-hack/exec/test.sh
-hack/exec/build-docker.sh
+# Build tooling in bazel container context as skaffold is available there.
+tooling::travis::run hack/exec/bake-tooling.sh
+
+# Quick test on the resulting containers.
+tooling::test
