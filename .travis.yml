@@ -45,7 +45,7 @@ jobs:
         - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
         - hack/exec/travis-publish-bootstrap.sh
     - name: Publish master images
-      if: fork = false AND type IN (push, cron) AND branch = master
+      if: fork = false AND type = push AND branch = master
       script:
         - echo "$DOCKER_ACCESS_TOKEN" | docker login --username "$DOCKER_USERNAME" --password-stdin
         - hack/exec/travis-publish-bootstrap.sh
