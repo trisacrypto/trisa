@@ -5,7 +5,12 @@ set -o nounset
 set -o pipefail
 
 trisa::bazel::exec() {
-    bazel ${*}
+    local bin=bazel
+    if hash bazelisk 2> /dev/null; then
+        echo "Using bazelisk launcher"
+        bin=bazelisk
+    fi
+    ${bin} ${*}
 }
 
 trisa::bazel::info::workspace() {
