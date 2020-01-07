@@ -12,10 +12,15 @@ build:
 build-docker:
 	hack/exec/build-docker.sh
 
-# Bake dokerized tooling (cfssl, gohugo).
+# Bake dokerized tooling.
 .PHONY: bake-tooling
 bake-tooling:
 	hack/exec/bake-tooling.sh
+
+# Pull dokerized tooling.
+.PHONY: pull-tooling
+pull-tooling:
+	hack/exec/pull-tooling.sh
 
 # Run test suites.
 .PHONY: test
