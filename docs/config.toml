@@ -63,3 +63,5 @@ enableMissingTranslationPlaceholders = false
     url = "/architecture"
     weight = 10
 
+[markup.goldmark.renderer]
+    unsafe = true
