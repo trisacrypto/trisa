@@ -12,9 +12,22 @@ install all the necessary tooling and dependencies completely sandboxed on your 
 need to install Go, protobuf or any other requirements. As everything is sandboxed, Bazel will not disturb
 any existing tooling on your local machine either.
 
-### Bazel
+### Bazelisk
 
-On OSX Bazel can be installed as follows:
+The TRISA repository is compatible to use `bazelisk`, which is a Bazel launcher. The usage of `bazelisk` is
+recommended as it will take care of using the proper Bazel version regardless if Bazel is already installed
+on your system.
+
+Grab the latest release binary from the [bazelisk repository](https://github.com/bazelbuild/bazelisk/releases)
+and put it in your `$PATH`. Once the binary is available, the TRISA build system will automatically use the
+`bazelisk` launcher for all your build tasks. The launcher will always use the correct Bazel version which
+is current for the TRISA build system.
+
+#### Bazel
+
+You can skip this step when using `bazelisk` as described above. If you choose to maintain your own bazel
+installation, you can install Bazel on OSX as follows. Mind that you will need to ensure your Bazel version
+is compatible with the TRISA repository.
 
 1. Make sure you don't have bazel intalled using core brew: `brew uninstall bazel`
 2. Install bazel using `brew tap bazelbuild/tap` followed by `brew install bazelbuild/tap/bazel`
