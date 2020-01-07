@@ -26,6 +26,14 @@ tooling::bake() {
     done
 }
 
+# Force a docker pull for all tooling.
+# TODO: We should use explicit version tags instead and track the state in hack/etc.
+tooling::pull() {
+    docker pull ${TOOLING_GOHUGO}
+    docker pull ${TOOLING_CFSSL}
+    docker pull ${TOOLING_BAZEL}
+}
+
 # Some testing to make sure our tooling containers work.
 tooling::test() {
     echo "gohugo   --> $(docker run -it --rm ${TOOLING_GOHUGO} version)"
