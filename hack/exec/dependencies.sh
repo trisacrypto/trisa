@@ -7,9 +7,7 @@ set -o pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
 source "${REPO_ROOT}/hack/lib/init.sh"
 
-export GO111MODULE=on
-
 go mod tidy
-go mod vendor
 
 trisa::bazel::exec run //:gazelle -- fix
+trisa::bazel::exec run //:gazelle -- update-repos -from_file=go.mod

@@ -16,6 +16,7 @@ go_proto_library(
 
 go_library(
     name = "go_default_library",
+    srcs = ["dummy.go"],
     embed = [":identity_go_proto"],
     importpath = "github.com/trisacrypto/trisa/proto/trisa/identity/us/v1alpha1",
     visibility = ["//visibility:public"],
