@@ -54,6 +54,13 @@ pki-dev-init:
 	hack/exec/pki-dev-init.sh
 	ls -l hack/etc/pki/dev/out
 
+
+.PHONY: pki-prod-init
+pki-prod-init:
+	hack/exec/pki-prod.sh
+	ls -l hack/etc/pki/prod/out
+
+
 # Execute TRISA server in docker container. Requires the "build-docker" target to
 # be execute first to produce the docker image.
 .PHONY: docker-run

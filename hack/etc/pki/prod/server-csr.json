@@ -1,0 +1,15 @@
+{
+  "CN": "trisa.cipheruse.com",
+  "hosts": [
+    "127.0.0.1"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 4096
+  },
+  "names": [
+    {
+      "O": "TRISA Prod"
+    }
+  ]
+}

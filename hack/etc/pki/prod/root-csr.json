@@ -1,0 +1,15 @@
+{
+  "CN": "TRISA Root CA",
+    "key": {
+      "algo": "rsa",
+      "size": 4096
+    },
+    "names": [
+       {
+         "O": "TRISA Prod"
+       }
+    ],
+    "ca": {
+      "expiry": "87600h"
+    }
+}
