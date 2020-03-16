@@ -1,5 +1,5 @@
 ---
-title: "Testnet"
+title: "TRISA TESTNET"
 draft: false
 weight: 40
 ---
@@ -10,8 +10,8 @@ For testing purposes to develop new clients and integrations, we have a test PKI
 running the latest version of TRISA server. This allows for full integration testing without disturbing the
 production TRISA network mesh.
 
-Note that the Testnet PKI is currently in flux, so the root and issuing CA's may still change. To retrieve your
-test certificacte and private key, visit our [Testnet Portal Page](http://testnet.trisa.ciphertrace.com). You
+Note that the TESTNET PKI is currently in flux, so the root and issuing CA's may still change. To retrieve your
+test certificate and private key, visit our [TESTNET Portal Page](http://testnet.trisa.ciphertrace.com). You
 will need to login using your Github account. You can generate as many test certificates as you want, there
 are currently no rate limits implemented.
 
