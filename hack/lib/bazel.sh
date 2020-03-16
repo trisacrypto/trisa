@@ -7,10 +7,9 @@ set -o pipefail
 trisa::bazel::exec() {
     local bin=bazel
     if hash bazelisk 2> /dev/null; then
-        echo "Using bazelisk launcher"
         bin=bazelisk
     fi
-    ${bin} ${*}
+    ${bin} "${@}"
 }
 
 trisa::bazel::info::workspace() {
