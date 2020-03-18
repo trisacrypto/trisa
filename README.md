@@ -3,4 +3,4 @@
 
 [![Build Status](https://travis-ci.com/trisacrypto/trisa.svg?branch=master)](https://travis-ci.com/trisacrypto/trisa)
 
-For more information, visit [TRISA documentation](https://trisacrypto.github.io/).
+Please visit [TRISA documentation](https://trisacrypto.github.io/) for more information.
