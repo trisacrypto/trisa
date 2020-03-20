@@ -60,6 +60,11 @@ pki-prod-init:
 	hack/exec/pki-prod.sh
 	ls -l hack/etc/pki/prod/out
 
+.PHONY: pki-testnet-init
+pki-testnet-init:
+	hack/exec/pki-testnet.trisa.io.sh
+	ls -l hack/etc/pki/testnet.trisa.io/out
+
 
 # Execute TRISA server in docker container. Requires the "build-docker" target to
 # be execute first to produce the docker image.

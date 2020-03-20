@@ -1,0 +1,17 @@
+{
+  "CN": "vasp1.testnet.trisa.io",
+  "hosts": [
+    "vasp1.testnet.trisa.io"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "San Francisco",
+      "O": "VASP 1"
+    }
+  ]
+}
