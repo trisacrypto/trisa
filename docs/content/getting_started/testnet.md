@@ -11,7 +11,7 @@ running the latest version of TRISA server. This allows for full integration tes
 production TRISA network mesh.
 
 Note that the TESTNET PKI is currently in flux, so the root and issuing CA's may still change. To retrieve your
-test certificate and private key, visit our [TESTNET Portal Page](http://testnet.trisa.ciphertrace.com). You
+test certificate and private key, visit our [TESTNET Portal Page](http://testnet.trisa.io). You
 will need to login using your Github account. You can generate as many test certificates as you want, there
 are currently no rate limits implemented.
 
