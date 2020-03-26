@@ -19,8 +19,8 @@ are currently no rate limits implemented.
 
 The following VASP nodes are available for testing:
 
-* vasp1.trisa.ciphertrace.com
-* vasp2.trisa.ciphertrace.com
-* vasp3.trisa.ciphertrace.com
+* vasp1.testnet.trisa.io
+* vasp2.testnet.trisa.io
+* vasp3.testnet.trisa.io
 
 Each VASP uses port 8888 for the gRPC peer-to-peer communication and port 9999 for its admin endpoints.
