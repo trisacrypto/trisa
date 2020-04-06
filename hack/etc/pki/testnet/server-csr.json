@@ -1,5 +1,5 @@
 {
-  "CN": "localhost",
+  "CN": "testnet.trisa.io",
   "hosts": [
     "127.0.0.1"
   ],
@@ -9,7 +9,7 @@
   },
   "names": [
     {
-      "O": "TRISA Testnet"
+      "O": "TRISA Testnet Portal"
     }
   ]
 }
