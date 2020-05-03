@@ -9,6 +9,8 @@ build:
       target: //cmd/trisa:docker.tar
       args:
       - --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64
+      - -c
+      - dbg
   tagPolicy:
     gitCommit: {}
   local:
