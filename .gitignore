@@ -15,3 +15,5 @@ server.key
 trust.chain
 .remote-cache-sa.json
 .idea/
+*.code-workspace
+!docs/static/**

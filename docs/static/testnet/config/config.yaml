@@ -1,0 +1,8 @@
+tls:
+  privateKeyFile: server.key
+  certificateFile: server.crt
+  trustChain: trust.chain
+server:
+  listenAddress: :8888
+  listenAddressAdmin: :9999
+  hostname: myOwnVasp
