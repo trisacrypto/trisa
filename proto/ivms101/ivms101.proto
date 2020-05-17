@@ -73,15 +73,20 @@ message NaturalPerson {
     // Optional
     NationalIdentification national_identification = 3;
 
+    // Definition: a distinct identifier that uniquely identifies the person to the institution in context.
+    // Datatype: “Max50Text”
+    // Optional
+    string customer_identification = 4;
+
     // Definition: date and place of birth of a person.
     // Optional
-    DateAndPlaceOfBirth date_and_place_of_birth = 4;
+    DateAndPlaceOfBirth date_and_place_of_birth = 5;
 
     // Definition: country in which a person resides (the place of a person's home).
     // The value used for the field country must be present on the ISO-3166-1 alpha-2 codes or the value XX.
     // Datatype: “CountryCode”
     // Optional
-    string country_of_residence = 5;
+    string country_of_residence = 6;
 }
 
 message NaturalPersonName {
@@ -309,7 +314,7 @@ message LegalPerson {
     // while the table in 5.2.9.1 calls that element "customerIdentification"
     // Datatype: “Max50Text”
     // Optional
-    string customerNumber = 3;
+    string customer_number = 3;
 
     // Definition: A distinct identifier used by governments of countries to uniquely identify a natural or legal person.
     // Optional
@@ -595,7 +600,7 @@ message BeneficiaryVasp {
     // Definition: the VASP which receives the transfer of a virtual asset from the originating VASP
     // directly or through an intermediary VASP and makes the funds available to the beneficiary.
     // Optional
-    Person originating_vasp = 1;
+    Person beneficiary_vasp = 1;
 }
 
 message TransferPath {
@@ -612,4 +617,17 @@ message PayloadMetadata {
     // Definition: the method used to map from a national system of writing to Latin script. 
     // Zero or More
     repeated TransliterationMethodCode transliteration_method = 1;
+}
+
+/***************************************************************************
+ * Top Level Model (not formally described in IVMS101, only examples)
+ ***************************************************************************/
+
+message IdentityPayload {
+    Originator originator = 1;
+    Beneficiary beneficiary = 2;
+    OriginatingVasp originating_vasp =3;
+    BeneficiaryVasp beneficiary_vasp = 4;
+    TransferPath transfer_path = 5;
+    PayloadMetadata payload_metadata = 6;
 }
