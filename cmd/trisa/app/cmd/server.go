@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/proto"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/copier"
@@ -25,6 +26,7 @@ import (
 	bitcoin "github.com/trisacrypto/trisa/proto/trisa/data/bitcoin/v1alpha1"
 	us "github.com/trisacrypto/trisa/proto/trisa/identity/us/v1alpha1"
 	pb "github.com/trisacrypto/trisa/proto/trisa/protocol/v1alpha1"
+	ivms101 "github.com/trisacrypto/trisa/proto/ivms101"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
@@ -106,21 +108,26 @@ func runServerCmd(cmd *cobra.Command, args []string) {
 
 		r.HandleFunc("/send", func(w http.ResponseWriter, r *http.Request) {
 
-			identity, _ := ptypes.MarshalAny(&us.Identity{
-				FirstName:     "John",
-				LastName:      "Doe",
-				Ssn:           "001-0434-4983",
-				DriverLicense: "FA-387463",
-				State:         "CA",
-			})
+			var identity proto.Message
+			switch r.URL.Query().Get("example") {
+			case "ivms101_1":
+				identity = ivms101Example1()
+			case "ivms101_2":
+				identity = ivms101Example2()
+			case "trisa":
+				fallthrough
+			default:
+				identity = trisaExample()
+			}
 
+			identity2, _ := ptypes.MarshalAny(identity)
 			data, _ := ptypes.MarshalAny(&bitcoin.Data{
 				Source:      uuid.New().String(),
 				Destination: uuid.New().String(),
 			})
 
 			tData := &pb.TransactionData{
-				Identity: identity,
+				Identity: identity2,
 				Data:     data,
 			}
 
@@ -212,6 +219,179 @@ func runServerCmd(cmd *cobra.Command, args []string) {
 	}()
 
 	log.Fatalf("terminated %v", <-errs)
+}
+
+func trisaExample() *us.Identity {
+	return &us.Identity{
+		FirstName:     "Jane",
+		LastName:      "Crock",
+		Ssn:           "001-0434-4983",
+		DriverLicense: "FA-387463",
+		State:         "CA",
+	}
+}
+
+func ivms101Example1() *ivms101.IdentityPayload {
+	return &ivms101.IdentityPayload{
+		Originator: &ivms101.Originator{
+			OriginatorPersons: []*ivms101.Person{
+				&ivms101.Person{
+					Person: &ivms101.Person_NaturalPerson{
+						&ivms101.NaturalPerson{
+							Name: &ivms101.NaturalPersonName{
+								NameIdentifiers: []*ivms101.NaturalPersonNameId{
+									&ivms101.NaturalPersonNameId{
+										PrimaryIdentifier: "Smith",
+										SecondaryIdentifier: "Dr Alice",
+										NameIdentifierType: ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_LEGL,
+									},
+								},
+							},
+							GeographicAddresses: []*ivms101.Address{
+								&ivms101.Address{
+									AddressType: ivms101.AddressTypeCode_ADDRESS_TYPE_CODE_GEOG,
+									StreetName: "Potential Street",
+									BuildingNumber: "24",
+									BuildingName: "Weathering Views",
+									PostCode: "91765",
+									TownName: "Walnut",
+									CountrySubDivision: "California",
+									Country: "US",
+								},
+							},
+							CustomerIdentification: "1002390",
+						},
+					},
+				},
+			},
+			AccountNumbers: []string{"10023909"},
+		},
+		Beneficiary:     &ivms101.Beneficiary{
+			BeneficiaryPersons: []*ivms101.Person{
+				&ivms101.Person{
+					Person: &ivms101.Person_NaturalPerson{
+						&ivms101.NaturalPerson{
+							Name: &ivms101.NaturalPersonName{
+								NameIdentifiers: []*ivms101.NaturalPersonNameId{
+									&ivms101.NaturalPersonNameId{
+										PrimaryIdentifier: "Barnes",
+										SecondaryIdentifier: "Robert",
+										NameIdentifierType: ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_LEGL,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			AccountNumbers: []string{"1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2"},
+		},
+		OriginatingVasp: &ivms101.OriginatingVasp{
+			OriginatingVasp: &ivms101.Person{
+				Person: &ivms101.Person_LegalPerson{
+					&ivms101.LegalPerson{
+						Name: &ivms101.LegalPersonName{
+							NameIdentifiers: []*ivms101.LegalPersonNameId{
+								&ivms101.LegalPersonNameId{
+									LegalPersonName: "VASP A",
+									LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL,
+								},
+							},
+						},
+						NationalIdentification: &ivms101.NationalIdentification{
+							NationalIdentifier: "3M5E1GQKGL17HI8CPN20",
+							NationalIdentifierType: ivms101.NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_LEIX,
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func ivms101Example2() *ivms101.IdentityPayload {
+	return &ivms101.IdentityPayload{
+		Originator: &ivms101.Originator{
+			OriginatorPersons: []*ivms101.Person{
+				&ivms101.Person{
+					Person: &ivms101.Person_NaturalPerson{
+						&ivms101.NaturalPerson{
+							Name: &ivms101.NaturalPersonName{
+								NameIdentifiers: []*ivms101.NaturalPersonNameId{
+									&ivms101.NaturalPersonNameId{
+										PrimaryIdentifier: "Wu",
+										SecondaryIdentifier: "Xinli",
+										NameIdentifierType: ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_LEGL,
+									},
+								},
+								LocalNameIdentifiers: []*ivms101.LocalNaturalPersonNameId{
+									&ivms101.LocalNaturalPersonNameId{
+										PrimaryIdentifier: "吴",
+										SecondaryIdentifier: "信利",
+										NameIdentifierType: ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_LEGL,
+									},
+								},
+							},
+							NationalIdentification: &ivms101.NationalIdentification{
+								NationalIdentifier: "446005",
+								NationalIdentifierType: ivms101.NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_RAID,
+								RegistrationAuthority: "RA000553",
+							},
+							CountryOfResidence: "TZ",
+						},
+					},
+				},
+			},
+		},
+		Beneficiary: &ivms101.Beneficiary{
+			BeneficiaryPersons: []*ivms101.Person{
+				&ivms101.Person{
+					Person: &ivms101.Person_LegalPerson{
+						&ivms101.LegalPerson{
+							Name: &ivms101.LegalPersonName{
+								NameIdentifiers: []*ivms101.LegalPersonNameId{
+									&ivms101.LegalPersonNameId{
+										LegalPersonName: "ABC Limited",
+										LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL,
+									},
+									&ivms101.LegalPersonNameId{
+										LegalPersonName: "CBA Trading",
+										LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_TRAD,
+									},
+								},
+							},
+						},
+					},	
+				},
+			},
+			AccountNumbers: []string{"00010190CBATRAD"},
+		},
+		PayloadMetadata:  &ivms101.PayloadMetadata{
+			TransliterationMethod: []ivms101.TransliterationMethodCode{
+				ivms101.TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_HANI,
+			},
+		},
+		TransferPath: &ivms101.TransferPath{
+			TransferPath: []*ivms101.IntermediaryVasp{
+				&ivms101.IntermediaryVasp{
+					IntermediaryVasp: &ivms101.Person{
+						Person: &ivms101.Person_LegalPerson{
+							&ivms101.LegalPerson{
+								Name: &ivms101.LegalPersonName{
+									NameIdentifiers: []*ivms101.LegalPersonNameId{
+										&ivms101.LegalPersonNameId{
+											LegalPersonName: "VASP E",
+											LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
 }
 
 type PingResponse struct {

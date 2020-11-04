@@ -1,0 +1,633 @@
+// Specification Copyright (c) 2020 Joint Working Group on interVASP Messaging Standards https://intervasp.org/
+// https://intervasp.org/wp-content/uploads/2020/05/IVMS101-interVASP-data-model-standard-issue-1-FINAL.pdf
+
+// Protocol Buffer Specification Copyright (c) 2020 CipherTrace, Inc. https://ciphertrace.com
+
+// Licensed under MIT License
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+// NOTE ON THE SPECIFICATION MAPPING
+// This protocol buffers specification has applied the Protocol Buffers style guide
+// https://developers.google.com/protocol-buffers/docs/style to the ISVM101 specification
+// to be consistent with other Protocol Buffers specifications and to avoid common
+// pitfalls when generating language specific classes. 
+
+syntax = "proto3";
+
+package ivms101;
+
+option go_package = "github.com/trisacrypto/trisa/proto/ivms101";
+
+
+
+/***************************************************
+ * Data Types Components
+ ***************************************************/
+
+message Person {
+
+    oneof person {
+
+        // Definition: refers to a uniquely distinguishable individual; one single person.
+        NaturalPerson natural_person = 1;
+
+        // Definition: refers to any entity other than a natural person that can establish 
+        // a permanent customer relationship with an affected entity or otherwise own property.
+        // This can include companies, bodies corporate, foundations, anstalt, partnerships,
+        // or associations and other relevantly similar entities.
+        LegalPerson legal_person = 2;
+    }
+
+}
+
+// Definition: refers to a uniquely distinguishable individual; one single person
+message NaturalPerson {
+
+    // Definition: the distinct words used as identification for an individual.
+    // Required
+    NaturalPersonName name = 1;
+
+    // Definition: the particulars of a location at which a person may be communicated with.
+    // Zero or More
+    repeated Address geographic_addresses  = 2;
+
+    // Definition: a distinct identifier used by governments of countries to uniquely identify a
+    // natural or legal person.
+    // Optional
+    NationalIdentification national_identification = 3;
+
+    // Definition: a distinct identifier that uniquely identifies the person to the institution in context.
+    // Datatype: “Max50Text”
+    // Optional
+    string customer_identification = 4;
+
+    // Definition: date and place of birth of a person.
+    // Optional
+    DateAndPlaceOfBirth date_and_place_of_birth = 5;
+
+    // Definition: country in which a person resides (the place of a person's home).
+    // The value used for the field country must be present on the ISO-3166-1 alpha-2 codes or the value XX.
+    // Datatype: “CountryCode”
+    // Optional
+    string country_of_residence = 6;
+}
+
+message NaturalPersonName {
+
+    // At least one occurrence of naturalPersonNameID must have the value ‘LEGL’ specified in the element
+    // naturalPersonNameIdentifierType.
+    // Definition: full name separated into primary and secondary identifier.
+    // One or more
+    repeated NaturalPersonNameId name_identifiers = 1;
+
+    // Definition: full name separated into primary and secondary identifier using local characters.
+    // Zero or more
+    repeated LocalNaturalPersonNameId local_name_identifiers = 2;
+
+    // Definition: Alternate representation of a name that corresponds to the manner the name is pronounced.
+    // Zero or more
+    repeated LocalNaturalPersonNameId phonetic_name_identifiers = 3;
+}
+
+message NaturalPersonNameId {
+
+    // Definition: This may be the family name, the maiden name or the married name, the main name, the surname,
+    // and in some cases, the entire name where the natural person’s name cannot be divided into two parts, or
+    // where the sender is unable to divide the natural person’s name into two parts.
+    // Datatype: “Max100Text”
+    // Required
+    string primary_identifier = 1;
+
+    // Definition: These may be the forenames, familiar names, given names, initials, prefixes, suffixes or
+    // Roman numerals (where considered to be legally part of the name) or any other secondary names. 
+    // Datatype: “Max100Text”
+    // Optional
+    string secondary_identifier = 2;
+
+    // Definition: The nature of the name specified.
+    // Required
+    NaturalPersonNameTypeCode name_identifier_type = 3;
+}
+
+message LocalNaturalPersonNameId {
+
+    // Definition: This may be the family name, the maiden name or the married name, the main name, the surname,
+    // and in some cases, the entire name where the natural person’s name cannot be divided into two parts, or
+    // where the sender is unable to divide the natural person’s name into two parts.
+    // Datatype: “LocalMax100Text”
+    // Required
+    string primary_identifier = 1;
+
+    // Definition: These may be the forenames, familiar names, given names, initials, prefixes, suffixes or
+    // Roman numerals (where considered to be legally part of the name) or any other secondary names. 
+    // Datatype: “LocalMax100Text”
+    // Optional
+    string secondary_identifier = 2;
+
+    // Definition: The nature of the name specified.
+    // Required
+    NaturalPersonNameTypeCode name_identifier_type = 3;
+}
+
+// Constraint: ValidAddress
+// There must be at least one occurrence of the element addressLine or (streetName and buildingName
+// and/or buildingNumber).
+message Address {
+
+    // Definition: Identifies the nature of the address.
+    // Required
+    AddressTypeCode address_type = 1;
+
+    // Definition: Identification of a division of a large organisation or building.
+    // Datatype: “Max50Text”
+    // Optional
+    string department = 2;
+    
+    // Definition: Identification of a sub-division of a large organisation or building.
+    // Datatype: “Max70Text”
+    // Optional
+    string sub_department = 3;
+    
+    // Definition: Name of a street or thoroughfare.
+    // Datatype: “Max70Text”
+    // Optional
+    string street_name = 4;
+    
+    // Definition: Number that identifies the position of a building on a street.
+    // Datatype: “Max16Text”
+    // Optional
+    string building_number = 5;
+    
+    // Definition: Name of the building or house.
+    // Datatype: “Max35Text”
+    // Optional
+    string building_name = 6;
+    
+    // Definition: Floor or storey within a building.
+    // Datatype: “Max70Text”
+    // Optional
+    string floor = 7;
+    
+    // Definition: Numbered box in a post office, assigned to a person or organisation, where
+    // letters are kept until called for.
+    // Datatype: “Max16Text”
+    // Optional
+    string post_box = 8;
+
+    // Definition: Building room number.
+    // Datatype: “Max70Text”
+    // Optional
+    string room = 9;    
+
+    // Definition: Identifier consisting of a group of letters and/or numbers that is added to a
+    // postal address to assist the sorting of mail.
+    // Datatype: “Max16Text”
+    // Optional
+    string post_code = 10;
+
+    // Definition: Name of a built-up area, with defined boundaries, and a local government.
+    // Datatype: “Max35Text”
+    // Optional
+    string town_name = 11;
+    
+    // Definition: Specific location name within the town.
+    // Datatype: “Max35Text”
+    // Optional
+    string town_location_name = 12;
+    
+    // Definition: Identifies a subdivision within a country subdivision.
+    // Datatype: “Max35Text”
+    // Optional
+    string district_name = 13;
+    
+    // Definition: Identifies a subdivision of a country for example, state, region, province,
+    // départment or county.
+    // Datatype: “Max35Text”
+    // Optional
+    string country_sub_division = 14;
+    
+    // Definition: Information that locates and identifies a specific address, as defined by
+    // postal services, presented in free format text.
+    // Datatype: “Max70Text”
+    // Zero to Seven
+    repeated string address_line = 15;
+
+    // Constraint: The value used for the field country must be present on the ISO-3166-1 alpha-2 codes or the value XX.
+    // Datatype: “CountryCode”
+    // Required
+    string country = 16;
+}
+
+// Constraint: DateInPast
+// If dateOfBirth is specified, the date specified must be a historic date (i.e. a date prior to the current date)
+message DateAndPlaceOfBirth {
+
+    // Definition: Date on which a person is born.
+    // Definition: A point in time, represented as a day within the calendar year. Compliant with ISO 8601.
+    // Type: Text
+    // Format: 
+    // YYYY-MM-DD 
+    // Regex:
+    // ^([0-9]{4})-([0-9]{2})-([0-9]{2})$
+    // Required
+    string date_of_birth = 1;
+    
+    // Definition: The town and/or the city and/or the suburb and/or the country subdivision and/or the
+    // country where the person was born.
+    // Datatype: “Max70Text”
+    // Required
+    string place_of_birth = 2;
+}
+
+
+// Constraint: ValidNationalIdentifierLegalPerson
+// A legal person must have a value for nationalIdentifierType of either ‘RAID’ or ‘MISC’ or ‘LEIX’ or ‘TXID’.
+// Constraint: CompleteNationalIdentifierLegalPerson
+// A LegalPerson must not have a value for countryOfIssue and (must have a value for the element RegistrationAuthority
+// if the value for nationalIdentifierType is not ‘LEIX’ and must not have a value
+// Constraint: ValidLEI
+// A LegalPerson with a nationalIdentifierType of ‘LEIX’ must have a value for the element nationalIdentifier that
+// adheres to the convention as stated in datatype ‘LEIText’.
+message NationalIdentification {
+
+    // Definition: An identifier issued by an appropriate issuing authority.
+    // Constraint: ValidLEI
+    // Datatype: “Max35Text”
+    // Required
+    string national_identifier = 1;
+
+    // Definition: Specifies the type of identifier specified.
+    // Required
+    NationalIdentifierTypeCode national_identifier_type = 2;
+
+    // Definition: Country of the issuing authority.
+    // Datatype: “CountryCode”
+    // Optional
+    string country_of_issue = 3;
+
+    // Definition: A code specifying the registration authority.
+    // Constraint: The value used for the applicable element must be present on the GLEIF Registration Authorities List.
+    // Datatype: “RegistrationAuthority”
+    // Optional
+    string registration_authority = 4;
+}
+
+// Definition:
+//  refers to any entity other than a natural person that can establish a permanent
+//  customer relationship with an affected entity or otherwise own property. This can include
+//  companies, bodies corporate, foundations, anstalt, partnerships, or associations and other
+//  relevantly similar entities.
+// Constraint: OriginatorInformationLegalPerson
+// If the originator is a LegalPerson either (geographicAddress with an addressType value of ‘GEOG’)
+// and/or nationalIdentification and/or customerNumber is required.
+message LegalPerson {
+
+    // Definition: The name of the legal person.
+    // Constraint: LegalNamePresentLegalPerson
+    // At least one occurrence of legalPersonNameIdentifier must have the value ‘LEGL’ specified in the element
+    // legalPersonNameIdentifierType.
+    LegalPersonName name = 1;
+
+    // Definition: The address of the legal person.
+    // Zero or more
+    repeated Address geographic_addresses  = 2;
+
+    // Definition: The unique identification number applied by the VASP to customer.
+    // NOTE The specification has a descrepency in that 5.2.9.3.3 specifies an element name as "customerNumber",
+    // while the table in 5.2.9.1 calls that element "customerIdentification"
+    // Datatype: “Max50Text”
+    // Optional
+    string customer_number = 3;
+
+    // Definition: A distinct identifier used by governments of countries to uniquely identify a natural or legal person.
+    // Optional
+    NationalIdentification national_identification = 4;
+
+    // Definition: The country in which the legal person is registered. 
+    // Constraint: The value used for the field country must be present on the ISO-3166-1 alpha-2 codes or the value XX.
+    // Datatype: “CountryCode”
+    // Optional
+    string country_of_registration = 5;
+}
+
+message LegalPersonName {
+
+    // Definition: The name and type of name by which the legal person is known.
+    // Constraint: LegalNamePresent
+    // At least one occurrence of legalPersonNameIdentifier must have the value ‘LEGL’ specified in the
+    // element legalPersonNameIdentifierType.
+    // One or more
+    repeated LegalPersonNameId name_identifiers = 1;
+
+    // Definition: The name and type of name by which the legal person is known using local characters.
+    // Zero or more
+    repeated LocalLegalPersonNameId local_name_identifiers = 2;
+
+    // Definition: The name and type of name by which the legal person is known using local characters.
+    // Zero or more
+    repeated LocalLegalPersonNameId phonetic_name_identifiers = 3;
+}
+
+message LegalPersonNameId {
+
+    // Definition: Name by which the legal person is known.
+    // Datatype: “Max100Text”
+    // Required
+    string legal_person_name = 1;
+
+    // Definition: The nature of the name specified.
+    // Required
+    LegalPersonNameTypeCode legal_person_name_identifier_type = 2;
+}
+
+message LocalLegalPersonNameId {
+
+    // Definition: Name by which the legal person is known.
+    // Datatype: "LocalMax100Text"
+    // Required
+    string legal_person_name = 1;
+
+    // Definition: The nature of the name specified.
+    // Required
+    LegalPersonNameTypeCode legal_person_name_identifier_type = 2;
+}
+
+message IntermediaryVasp {
+
+    // Definition: the VASP in a serial chain that receives and retransmits a VA transfer on behalf of the originating VASP
+    // and the beneficiary VASP, or another intermediary VASP.
+    // Required
+    Person intermediary_vasp = 1;
+
+    // Definition: the sequence in a serial chain at which the corresponding intermediary VASP participates in the transfer.
+    // Constraints: totalDigits: 18; fractionDigits: 0
+    // Required
+    uint64 sequence = 2;
+}
+
+
+
+/***************************************************
+ * Data Types ENUMS
+ ***************************************************/
+
+ // Definition: A single value corresponding to the nature of name being adopted.
+ enum NaturalPersonNameTypeCode {
+
+    // Alias name
+    // A name other than the legal name by which a natural person is also known.
+    NATURAL_PERSON_NAME_TYPE_CODE_ALIA = 0;
+
+    // Name at birth
+    // The name given to a natural person at birth.
+    NATURAL_PERSON_NAME_TYPE_CODE_BIRT = 1;
+
+    // Maiden name
+    // The original name of a natural person who has changed their name after marriage.
+    NATURAL_PERSON_NAME_TYPE_CODE_MAID = 2;
+
+    // Legal name
+    // The name that identifies a natural person for legal, official or administrative purposes.
+    NATURAL_PERSON_NAME_TYPE_CODE_LEGL = 3;
+
+    // Unspecified
+    // A name by which a natural person may be known but which cannot otherwise be categorized
+    // or the category of which the sender is unable to determine.
+    NATURAL_PERSON_NAME_TYPE_CODE_MISC = 4;
+ }
+
+//  Definition: A single value corresponding to the nature of name being specified for the legal person.
+enum LegalPersonNameTypeCode {
+    // Legal name
+    // Official name under which an organisation is registered.
+    LEGAL_PERSON_NAME_TYPE_CODE_LEGL = 0;
+
+    // Short name
+    // Specifies the short name of the organisation.
+    LEGAL_PERSON_NAME_TYPE_CODE_SHRT = 1;
+
+    // Trading name
+    // Name used by a business for commercial purposes, although its registered legal name, used for
+    // contracts and other formal situations, may be another.
+    LEGAL_PERSON_NAME_TYPE_CODE_TRAD = 2;
+}
+
+// Definition: Identifies the nature of the address.
+enum AddressTypeCode {
+
+    // Residential
+    // Address is the home address.
+    ADDRESS_TYPE_CODE__HOME = 0;
+
+    // Business
+    // Address is the business address.
+    ADDRESS_TYPE_CODE_BIZZ = 1;
+
+    // Geographic
+    // Address is the unspecified physical (geographical) address suitable for identification of the
+    // natural or legal person.
+    ADDRESS_TYPE_CODE_GEOG = 2;
+}
+
+// Definition: Identifies the national identification type.
+// NationalIdentifierTypeCode applies a restriction over the codes present in ISO20022 datatype ‘TypeOfIdentification4Code’.
+enum NationalIdentifierTypeCode {
+
+    // Alien registration number
+    // Number assigned by a government agency to identify foreign nationals.
+    NATIONAL_IDENTIFIER_TYPE_CODE_ARNU = 0;
+
+    // Passport number
+    // Number assigned by a passport authority.
+    NATIONAL_IDENTIFIER_TYPE_CODE_CCPT = 1;
+
+    // Registration authority identifier
+    // Identifier of a legal entity as maintained by a registration authority.
+    NATIONAL_IDENTIFIER_TYPE_CODE_RAID = 2;
+
+    // Driver license number
+    // Number assigned to a driver's license.
+    NATIONAL_IDENTIFIER_TYPE_CODE_DRLC = 3;
+
+    // Foreign investment identity number
+    // Number assigned to a foreign investor (other than the alien number).
+    NATIONAL_IDENTIFIER_TYPE_CODE_FIIN = 4;
+
+    // Tax identification number
+    // Number assigned by a tax authority to an entity.
+    NATIONAL_IDENTIFIER_TYPE_CODE_TXID = 5;
+
+    // Social security number
+    // Number assigned by a social security agency.
+    NATIONAL_IDENTIFIER_TYPE_CODE_SOCS = 6;
+
+    // Identity card number
+    // Number assigned by a national authority to an identity card.
+    NATIONAL_IDENTIFIER_TYPE_CODE_IDCD = 7;
+
+    // Legal Entity Identifier
+    // Legal Entity Identifier (LEI) assigned in accordance with ISO 17442.
+    // The LEI is a 20-character, alpha-numeric code that enables clear and unique identification of legal entities
+    // participating in financial transactions.
+    NATIONAL_IDENTIFIER_TYPE_CODE_LEIX = 8;
+
+    // Unspecified
+    // A national identifier which may be known but which cannot otherwise be categorized or the category of which
+    // the sender is unable to determine.
+    NATIONAL_IDENTIFIER_TYPE_CODE_MISC = 9;
+}
+
+// Definition: Identifies the national script from which transliteration to Latin script is applied.
+enum TransliterationMethodCode {
+
+    // Arabic (Arabic language)
+    // ISO 233-2:1993
+    TRANSLITERATION_METHOD_CODE_ARAB = 0;
+
+    // Arabic (Persian language)
+    // ISO 233-3:1999
+    TRANSLITERATION_METHOD_CODE_ARAN = 1;
+
+    // Armenian
+    // ISO 9985:1996
+    TRANSLITERATION_METHOD_CODE_ARMN = 2;
+
+    // Cyrillic
+    // ISO 9:1995
+    TRANSLITERATION_METHOD_CODE_CYRL = 3;
+
+    // Devanagari & related Indic
+    // ISO 15919:2001
+    TRANSLITERATION_METHOD_CODE_DEVA = 4;
+
+    // Georgian
+    // ISO 9984:1996
+    TRANSLITERATION_METHOD_CODE_GEOR = 5;
+
+    // Greek
+    // ISO 843:1997
+    TRANSLITERATION_METHOD_CODE_GREK = 6;
+
+    // Han (Hanzi, Kanji, Hanja)
+    // ISO 7098:2015
+    TRANSLITERATION_METHOD_CODE_HANI = 7;
+
+    // Hebrew
+    // ISO 259-2:1994
+    TRANSLITERATION_METHOD_CODE_HEBR = 8;
+
+    // Kana
+    // ISO 3602:1989
+    TRANSLITERATION_METHOD_CODE_KANA = 10;
+
+    // Korean
+    // Revised Romanization of Korean
+    TRANSLITERATION_METHOD_CODE_KORE = 11;
+
+    // Thai
+    // ISO 11940-2:2007
+    TRANSLITERATION_METHOD_CODE_THAI = 12;
+
+    // Script other than those listed above
+    // Unspecified Standard
+    TRANSLITERATION_METHOD_CODE_OTHR = 13;
+}
+
+
+
+
+
+/***************************************************
+ * Data Model
+ ***************************************************/
+
+message Originator {
+
+    // Definition: the account holder who allows the VA transfer from that account or, where there
+    // is no account, the natural or legal person that places the order with the originating VASP
+    // to perform the VA transfer.
+    // One or More
+    repeated Person originator_persons = 1;
+
+    // Definition: Identifier of an account that is used to process the transaction. The value
+    // for this element is case-sensitive.
+    // Datatype: “Max100Text”
+    // Zero or More
+    repeated string account_numbers = 2;
+}
+
+message Beneficiary {
+
+    // Definition: the natural or legal person or legal arrangement who is identified by the originator
+    // as the receiver of the requested VA transfer.
+    // One or More
+    repeated Person beneficiary_persons = 1;
+
+    // Definition: Identifier of an account that is used to process the transaction. The value
+    // for this element is case-sensitive.
+    // Datatype: “Max100Text”
+    // Zero or More
+    repeated string account_numbers = 2;
+}
+
+message OriginatingVasp {
+
+    // Definition: refers to the VASP which initiates the VA transfer, and transfers the VA
+    // upon receiving the request for a VA transfer on behalf of the originator.
+    // Optional
+    Person originating_vasp = 1;
+}
+
+message BeneficiaryVasp {
+
+    // Definition: the VASP which receives the transfer of a virtual asset from the originating VASP
+    // directly or through an intermediary VASP and makes the funds available to the beneficiary.
+    // Optional
+    Person beneficiary_vasp = 1;
+}
+
+message TransferPath {
+
+    // Definition: the intermediary VASP(s) participating in a serial chain that receive and
+    // retransmit a VA transfer on behalf of the originating VASP and the beneficiary VASP, or
+    // another intermediary VASP, together with their corresponding sequence number.
+    // Zero or More
+    repeated IntermediaryVasp transfer_path = 1;
+}
+
+message PayloadMetadata {
+
+    // Definition: the method used to map from a national system of writing to Latin script. 
+    // Zero or More
+    repeated TransliterationMethodCode transliteration_method = 1;
+}
+
+/***************************************************************************
+ * Top Level Model (not formally described in IVMS101, only examples)
+ ***************************************************************************/
+
+message IdentityPayload {
+    Originator originator = 1;
+    Beneficiary beneficiary = 2;
+    OriginatingVasp originating_vasp =3;
+    BeneficiaryVasp beneficiary_vasp = 4;
+    TransferPath transfer_path = 5;
+    PayloadMetadata payload_metadata = 6;
+}
