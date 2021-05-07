@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package trisa.api.v1beta1;
+option go_package = "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1;api";
+
+import "google/protobuf/any.proto";
+
+
+message Error {
+    enum Code {
+        option allow_alias = true;
+        // Errors 0-49 are reserved for service-specific errors
+        // Default error - something very bad happened.
+        UNHANDLED = 0;
+
+        // Generic error - could not handle request, retry later.
+        UNAVAILABLE = 1;
+        SERVICE_DOWN_TIME = 1;   // Alias: Sygna BVRC Rejected Type
+        BVRC002 = 1;             // Alias: Sygna BVRC Rejected Code
+
+        // The service is currently in maintenance mode and cannot respond.
+        MAINTENANCE = 2;
+
+        // The RPC is not currently implemented by the TRISA node.
+        UNIMPLEMENTED = 3;
+
+        // Request could not be processed by recipient.
+        INTERNAL_ERROR = 49;
+        BVRC999 = 49;             // Alias: Sygna BVRC Rejected Code
+
+        // Errors 50-99 are reserved for transaction rejections.
+        // Default rejection - no specified reason for rejecting the transaction.
+        REJECTED = 50;
+
+        // VASP does not control the specified wallet address.
+        UNKNOWN_WALLET_ADDRESS = 51;
+
+        // VASP does not have KYC information for the specified wallet address.
+        UNKOWN_IDENTITY = 52;
+
+        // Specifically, the Originator account cannot be identified.
+        UNKNOWN_ORIGINATOR = 53;
+
+        // Specifically, the Beneficiary account cannot be identified.
+        UNKOWN_BENEFICIARY = 54;
+        BENEFICIARY_NAME_UNMATCHED = 54;  // Alias: Sygna BVRC Rejected Type
+        BVRC007 = 54;                     // Alias: Sygna BVRC Rejected Code
+
+        // VASP cannot support the fiat currency or coin described in the transaction.
+        UNSUPPORTED_CURRENCY = 60;
+        BVRC001 = 60;   // Alias: Sygna BVRC Rejected Code
+
+        // No longer able to receive more transaction inflows
+        EXCEEDED_TRADING_VOLUME = 61;
+        BVRC003 = 61;   // Alias: Sygna BVRC Rejected Code
+
+        // An internal compliance check has failed or black listing has occurred
+        COMPLIANCE_CHECK_FAIL = 90;
+        BVRC004 = 90;   // Alias: Sygna BVRC Rejected Code
+
+        // VASP not able to implement travel rule compliance.
+        NO_COMPLIANCE = 91;
+
+        // VASP unwilling to conduct the transaction because of a risk assessment.
+        HIGH_RISK = 92;
+
+        // Wallet address or transaction is not available on this network.
+        OUT_OF_NETWORK = 99;
+
+        // Errors 100-149 are reserved for authentication or cryptography failures.
+        // Default access denied - no specified reason for forbidding the transaction.
+        FORBIDDEN = 100;
+
+        // Could not sign transaction because no signing key is available.
+        NO_SIGNING_KEY = 101;
+
+        // Could not sign transaction because keys have been revoked.
+        CERTIFICATE_REVOKED = 102;
+
+        // Could not verify certificates with any certificate authority.
+        UNVERIFIED = 103;
+
+        // A trusted connection could not be established.
+        UNTRUSTED = 104;
+
+        // An HMAC signature could not be verified
+        INVALID_SIGNATURE = 105;
+
+        // The transaction bundle cannot be decrypted with the specified key
+        INVALID_KEY = 106;
+
+        // Could not decode or decrypt private transaction data
+        ENVELOPE_DECODE_FAIL = 107;
+        PRIVATE_INFO_DECODE_FAIL = 107;  // Alias: Sygna BVRC Rejected Type
+        BVRC005 = 107;                   // Alias: Sygna BVRC Rejected Code
+
+        // The algorithm specified by the encryption or signature is not implemented
+        UNHANDLED_ALGORITHM = 108;
+
+        // Errors 150-199 are reserved for repairing exchange information.
+        // Generic bad request - usually implies retry when reuqest is fixed.
+        BAD_REQUEST = 150;
+
+        // Could not parse the identity record; specify the type in extra
+        UNPARSEABLE_IDENTITY = 151;
+        PRIVATE_INFO_WRONG_FORMAT = 151;  // Alias: Sygna BVRC Rejected Type
+        BVRC006 = 151;                    // Alias: Sygna BVRC Rejected Code
+
+        // Could not parse the transaction data record; specify the type in extra
+        UNPARSEABLE_TRANSACTION = 152;
+
+        // There are missing required fields in the transaction data, a list of these
+        // fields is specified in extra.
+        MISSING_FIELDS = 153;
+
+        // The identity record is not complete enough for compliance purposes of the
+        // receiving VASPs. Required fields or format specified in extra.
+        INCOMPLETE_IDENTITY = 154;
+
+        // There was an error validating a field in the transaction data (specified in extra)
+        VALIDATION_ERROR = 155;
+    }
+
+    // Error codes are standardized in the TRISA network to prevent confusion and to
+    // allow easy identification of rejections or other problems so that the repair of
+    // the connection or information exchange can be expedited.
+    Code code = 1;
+
+    // Human readable message stating the reason for the error, should be loggable and
+    // actionable. Both standardized and unique/detail messages are acceptable.
+    string message = 2;
+
+    // If the message that caused the error should be retried with a fix; otherwise the
+    // rejection is permenant and the request should not be retried.
+    bool retry = 3;
+
+    // Any additional data or reasons for the rejection, e.g. a parent error, a diff,
+    // a location for redirect, etc. The payload of the additional data should be
+    // described by the error code.
+    google.protobuf.Any details = 4;
+}
+

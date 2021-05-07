@@ -1,0 +1,206 @@
+// Specification Copyright (c) 2020 Joint Working Group on interVASP Messaging Standards
+// https://intervasp.org/
+// https://intervasp.org/wp-content/uploads/2020/05/IVMS101-interVASP-data-model-standard-issue-1-FINAL.pdf
+
+// Protocol Buffer Specification Copyright (c) 2020 CipherTrace, Inc. https://ciphertrace.com
+
+// Licensed under MIT License
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+// NOTE ON THE SPECIFICATION MAPPING
+// This protocol buffers specification has applied the Protocol Buffers style guide
+// https://developers.google.com/protocol-buffers/docs/style to the ISVM101
+// specification to be consistent with other Protocol Buffers specifications and to
+// avoid common pitfalls when generating language specific classes.
+
+syntax = "proto3";
+
+package ivms101;
+option go_package = "github.com/trisacrypto/testnet/pkg/ivms101";
+
+
+/***************************************************
+ * Data Types ENUMS
+ ***************************************************/
+
+ // Definition: A single value corresponding to the nature of name being adopted.
+ enum NaturalPersonNameTypeCode {
+
+    // Alias name
+    // A name other than the legal name by which a natural person is also known.
+    NATURAL_PERSON_NAME_TYPE_CODE_ALIA = 0;
+
+    // Name at birth
+    // The name given to a natural person at birth.
+    NATURAL_PERSON_NAME_TYPE_CODE_BIRT = 1;
+
+    // Maiden name
+    // The original name of a natural person who has changed their name after marriage.
+    NATURAL_PERSON_NAME_TYPE_CODE_MAID = 2;
+
+    // Legal name
+    // Identifies a natural person for legal, official or administrative purposes.
+    NATURAL_PERSON_NAME_TYPE_CODE_LEGL = 3;
+
+    // Unspecified
+    // A name by which a natural person may be known but which cannot otherwise be
+    // categorized or the category of which the sender is unable to determine.
+    NATURAL_PERSON_NAME_TYPE_CODE_MISC = 4;
+ }
+
+//  Definition: A single value corresponding to the nature of name being specified
+// for the legal person.
+enum LegalPersonNameTypeCode {
+    // Legal name
+    // Official name under which an organisation is registered.
+    LEGAL_PERSON_NAME_TYPE_CODE_LEGL = 0;
+
+    // Short name
+    // Specifies the short name of the organisation.
+    LEGAL_PERSON_NAME_TYPE_CODE_SHRT = 1;
+
+    // Trading name
+    // Name used by a business for commercial purposes, although its registered legal
+    // name, used for contracts and other formal situations, may be another.
+    LEGAL_PERSON_NAME_TYPE_CODE_TRAD = 2;
+}
+
+// Definition: Identifies the nature of the address.
+enum AddressTypeCode {
+
+    // Residential
+    // Address is the home address.
+    ADDRESS_TYPE_CODE_HOME = 0;
+
+    // Business
+    // Address is the business address.
+    ADDRESS_TYPE_CODE_BIZZ = 1;
+
+    // Geographic
+    // Address is the unspecified physical (geographical) address suitable for
+    // identification of the natural or legal person.
+    ADDRESS_TYPE_CODE_GEOG = 2;
+}
+
+// Definition: Identifies the national identification type.
+// NationalIdentifierTypeCode applies a restriction over the codes present in ISO20022
+// datatype ‘TypeOfIdentification4Code’.
+enum NationalIdentifierTypeCode {
+
+    // Alien registration number
+    // Number assigned by a government agency to identify foreign nationals.
+    NATIONAL_IDENTIFIER_TYPE_CODE_ARNU = 0;
+
+    // Passport number
+    // Number assigned by a passport authority.
+    NATIONAL_IDENTIFIER_TYPE_CODE_CCPT = 1;
+
+    // Registration authority identifier
+    // Identifier of a legal entity as maintained by a registration authority.
+    NATIONAL_IDENTIFIER_TYPE_CODE_RAID = 2;
+
+    // Driver license number
+    // Number assigned to a driver's license.
+    NATIONAL_IDENTIFIER_TYPE_CODE_DRLC = 3;
+
+    // Foreign investment identity number
+    // Number assigned to a foreign investor (other than the alien number).
+    NATIONAL_IDENTIFIER_TYPE_CODE_FIIN = 4;
+
+    // Tax identification number
+    // Number assigned by a tax authority to an entity.
+    NATIONAL_IDENTIFIER_TYPE_CODE_TXID = 5;
+
+    // Social security number
+    // Number assigned by a social security agency.
+    NATIONAL_IDENTIFIER_TYPE_CODE_SOCS = 6;
+
+    // Identity card number
+    // Number assigned by a national authority to an identity card.
+    NATIONAL_IDENTIFIER_TYPE_CODE_IDCD = 7;
+
+    // Legal Entity Identifier
+    // Legal Entity Identifier (LEI) assigned in accordance with ISO 17442.
+    // The LEI is a 20-character, alpha-numeric code that enables clear and unique
+    // identification of legal entities participating in financial transactions.
+    NATIONAL_IDENTIFIER_TYPE_CODE_LEIX = 8;
+
+    // Unspecified
+    // A national identifier which may be known but which cannot otherwise be
+    // categorized or the category of which the sender is unable to determine.
+    NATIONAL_IDENTIFIER_TYPE_CODE_MISC = 9;
+}
+
+// Definition: Identifies the national script from which transliteration to Latin
+// script is applied.
+enum TransliterationMethodCode {
+
+    // Arabic (Arabic language)
+    // ISO 233-2:1993
+    TRANSLITERATION_METHOD_CODE_ARAB = 0;
+
+    // Arabic (Persian language)
+    // ISO 233-3:1999
+    TRANSLITERATION_METHOD_CODE_ARAN = 1;
+
+    // Armenian
+    // ISO 9985:1996
+    TRANSLITERATION_METHOD_CODE_ARMN = 2;
+
+    // Cyrillic
+    // ISO 9:1995
+    TRANSLITERATION_METHOD_CODE_CYRL = 3;
+
+    // Devanagari & related Indic
+    // ISO 15919:2001
+    TRANSLITERATION_METHOD_CODE_DEVA = 4;
+
+    // Georgian
+    // ISO 9984:1996
+    TRANSLITERATION_METHOD_CODE_GEOR = 5;
+
+    // Greek
+    // ISO 843:1997
+    TRANSLITERATION_METHOD_CODE_GREK = 6;
+
+    // Han (Hanzi, Kanji, Hanja)
+    // ISO 7098:2015
+    TRANSLITERATION_METHOD_CODE_HANI = 7;
+
+    // Hebrew
+    // ISO 259-2:1994
+    TRANSLITERATION_METHOD_CODE_HEBR = 8;
+
+    // Kana
+    // ISO 3602:1989
+    TRANSLITERATION_METHOD_CODE_KANA = 10;
+
+    // Korean
+    // Revised Romanization of Korean
+    TRANSLITERATION_METHOD_CODE_KORE = 11;
+
+    // Thai
+    // ISO 11940-2:2007
+    TRANSLITERATION_METHOD_CODE_THAI = 12;
+
+    // Script other than those listed above
+    // Unspecified Standard
+    TRANSLITERATION_METHOD_CODE_OTHR = 13;
+}

@@ -1,0 +1,99 @@
+syntax="proto3";
+
+package trisads.models.v1beta1;
+option go_package = "github.com/trisacrypto/directory/pkg/trisads/models/v1beta1;models";
+
+
+// Certificate requests are maintained separately from the VASP record since they should
+// not be replicated. E.g. every directory process is responsible for certificate
+// issuance and only public keys and certificate metadata should be exchanged between
+// directories.
+message CertificateRequest {
+    // ID only needs to be unique with the requesting directory service.
+    string id = 1;
+
+    // VASP information for the request
+    string vasp = 2;
+    string common_name = 3;
+
+    // Request pipeline status
+    CertificateRequestState status = 4;
+
+    // Sectigo create single certificate batch metadata
+    int64 authority_id = 5;
+    int64 batch_id = 6;
+    string batch_name = 7;
+    string batch_status = 8;
+    int64 order_number = 9;
+    string creation_date = 10;
+    string profile = 11;
+    string reject_reason = 12;
+
+    // Currently there is no choice but to store the PKCS12 password on the server
+    // because the certificate issuance command is separated in time by human review,
+    // which means it cannot be ephemerally kept in memory during the certificate
+    // generation request handoff. Moreover, the value cannot be hashed since it must
+    // be sent in plaintext via the Sectigo API and used to decrypt the downloaded
+    // packet in order to retrieve the public key material. To mitigate issues with the
+    // storage of this data, it is encrypted so that only a directory service with the
+    // correct secret key (e.g. the directory service process that created the request)
+    // can read the original value. Because this value should not be replicated it is
+    // stored in the certificate request which is maintained by independent replicas.
+    bytes pkcs12password = 13;
+    bytes pkcs12signature = 14;
+
+    // Logging information timestamps
+    string created = 15;
+    string modified = 16;
+}
+
+
+message Certificate {
+    // x.509 metadata information for ease of reference
+    // note that the serial number as a hex string can be used with the Sectigo API
+    int64 version = 1;
+    bytes serial_number = 2;
+    bytes signature = 3;
+    string signature_algorithm = 4;
+    string public_key_algorithm = 5;
+
+    // Issuer and subject information from Sectigo
+    Name subject = 6;
+    Name issuer = 7;
+
+    // Validity information
+    string not_before = 8;
+    string not_after = 9;
+    bool revoked = 10;
+
+    // The ASN1 encoded full certificate without the trust chain
+    bytes data = 11;
+
+    // The complete trust chain including the leaf certificate as a gzip compressed
+    // PEM encoded file. This field can be deserialized into a trust.Provider.
+    bytes chain = 12;
+}
+
+// An X.509 distinguished name with the common elements of a DN.
+message Name {
+    string common_name = 1;
+    string serial_number = 2;
+    repeated string organization = 3;
+    repeated string organizational_unit = 4;
+    repeated string street_address = 5;
+    repeated string locality = 6;
+    repeated string province = 7;
+    repeated string postal_code = 8;
+    repeated string country = 9;
+}
+
+enum CertificateRequestState {
+    INITIALIZED = 0;
+    READY_TO_SUBMIT = 1;
+    PROCESSING = 2;
+    DOWNLOADING = 3;
+    DOWNLOADED = 4;
+    COMPLETED = 5;
+    CR_REJECTED = 6;
+    CR_ERRORED = 7;
+}

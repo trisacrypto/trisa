@@ -1,0 +1,132 @@
+// Specification Copyright (c) 2020 Joint Working Group on interVASP Messaging Standards
+// https://intervasp.org/
+// https://intervasp.org/wp-content/uploads/2020/05/IVMS101-interVASP-data-model-standard-issue-1-FINAL.pdf
+
+// Protocol Buffer Specification Copyright (c) 2020 CipherTrace, Inc. https://ciphertrace.com
+
+// Licensed under MIT License
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+// NOTE ON THE SPECIFICATION MAPPING
+// This protocol buffers specification has applied the Protocol Buffers style guide
+// https://developers.google.com/protocol-buffers/docs/style to the ISVM101
+// specification to be consistent with other Protocol Buffers specifications and to
+// avoid common pitfalls when generating language specific classes.
+
+syntax = "proto3";
+
+package ivms101;
+option go_package = "github.com/trisacrypto/testnet/pkg/ivms101";
+
+import "ivms101/ivms101.proto";
+import "ivms101/enum.proto";
+
+
+/***************************************************************************
+ * Top Level Model (not formally described in IVMS101, only examples)
+ ***************************************************************************/
+
+message IdentityPayload {
+    Originator originator = 1;
+    Beneficiary beneficiary = 2;
+    OriginatingVasp originating_vasp = 3;
+    BeneficiaryVasp beneficiary_vasp = 4;
+    TransferPath transfer_path = 5;
+    PayloadMetadata payload_metadata = 6;
+}
+
+
+message Originator {
+
+    // Definition: the account holder who allows the VA transfer from that account or,
+    // where there is no account, the natural or legal person that places the order with
+    // the originating VASP to perform the VA transfer.
+    // One or More
+    repeated Person originator_persons = 1;
+
+    // Definition: Identifier of an account that is used to process the transaction.
+    // The value for this element is case-sensitive.
+    // Datatype: “Max100Text”
+    // Zero or More
+    repeated string account_numbers = 2;
+}
+
+message Beneficiary {
+
+    // Definition: the natural or legal person or legal arrangement who is identified
+    // by the originator as the receiver of the requested VA transfer.
+    // One or More
+    repeated Person beneficiary_persons = 1;
+
+    // Definition: Identifier of an account that is used to process the transaction.
+    // The value for this element is case-sensitive.
+    // Datatype: “Max100Text”
+    // Zero or More
+    repeated string account_numbers = 2;
+}
+
+message OriginatingVasp {
+
+    // Definition: refers to the VASP which initiates the VA transfer, and transfers
+    // the VA upon receiving the request for a VA transfer on behalf of the originator.
+    // Optional
+    Person originating_vasp = 1;
+}
+
+message BeneficiaryVasp {
+
+    // Definition: the VASP which receives the transfer of a virtual asset from the
+    // originating VASP directly or through an intermediary VASP and makes the funds
+    // available to the beneficiary.
+    // Optional
+    Person beneficiary_vasp = 1;
+}
+
+message IntermediaryVasp {
+
+    // Definition: the VASP in a serial chain that receives and retransmits a VA
+    // transfer on behalf of the originating VASP and the beneficiary VASP, or another
+    // intermediary VASP.
+    // Required
+    Person intermediary_vasp = 1;
+
+    // Definition: the sequence in a serial chain at which the corresponding
+    // intermediary VASP participates in the transfer.
+    // Constraints: totalDigits: 18; fractionDigits: 0
+    // Required
+    uint64 sequence = 2;
+}
+
+message TransferPath {
+
+    // Definition: the intermediary VASP(s) participating in a serial chain that
+    // receive and retransmit a VA transfer on behalf of the originating VASP and the
+    // beneficiary VASP, or another intermediary VASP, together with their
+    // corresponding sequence number.
+    // Zero or More
+    repeated IntermediaryVasp transfer_path = 1;
+}
+
+message PayloadMetadata {
+
+    // Definition: the method used to map from a national system of writing to Latin script.
+    // Zero or More
+    repeated TransliterationMethodCode transliteration_method = 1;
+}
