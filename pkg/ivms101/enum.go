@@ -1,0 +1,38 @@
+package ivms101
+
+// Short form natural person name type codes.
+const (
+	NaturalPersonAlias  = NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_ALIA
+	NaturalPersonBirth  = NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_BIRT
+	NaturalPersonMaiden = NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_MAID
+	NaturalPersonLegal  = NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_LEGL
+	NaturalPersonMisc   = NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_MISC
+)
+
+// Short form legal person name type codes.
+const (
+	LegalPersonLegal   = LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL
+	LegalPersonShort   = LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_SHRT
+	LegalPersonTrading = LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_TRAD
+)
+
+// Short form address type codes.
+const (
+	AddressTypeHome       = AddressTypeCode_ADDRESS_TYPE_CODE_HOME
+	AddressTypeBusiness   = AddressTypeCode_ADDRESS_TYPE_CODE_BIZZ
+	AddressTypeGeographic = AddressTypeCode_ADDRESS_TYPE_CODE_GEOG
+)
+
+// Short form national identifier type codes.
+const (
+	NationalIdentifierARNU = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_ARNU
+	NationalIdentifierCCPT = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_CCPT
+	NationalIdentifierRAID = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_RAID
+	NationalIdentifierDRLC = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_DRLC
+	NationalIdentifierFIIN = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_FIIN
+	NationalIdentifierTXID = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_TXID
+	NationalIdentifierSOCS = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_SOCS
+	NationalIdentifierIDCD = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_IDCD
+	NationalIdentifierLEIX = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_LEIX
+	NationalIdentifierMISC = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_MISC
+)

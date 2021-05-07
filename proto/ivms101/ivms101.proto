@@ -33,7 +33,7 @@
 syntax = "proto3";
 
 package ivms101;
-option go_package = "github.com/trisacrypto/testnet/pkg/ivms101";
+option go_package = "github.com/trisacrypto/trisa/pkg/ivms101";
 
 import "ivms101/enum.proto";
 

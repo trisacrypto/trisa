@@ -1,7 +1,7 @@
 syntax="proto3";
 
-package trisads.models.v1beta1;
-option go_package = "github.com/trisacrypto/directory/pkg/trisads/models/v1beta1;models";
+package trisa.gds.models.v1beta1;
+option go_package = "github.com/trisacrypto/trisa/pkg/trisa/gds/models/v1beta1;models";
 
 
 // Certificate requests are maintained separately from the VASP record since they should

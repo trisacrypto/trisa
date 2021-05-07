@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package trisads.models.v1beta1;
-option go_package = "github.com/trisacrypto/directory/pkg/trisads/models/v1beta1;models";
+package trisa.gds.models.v1beta1;
+option go_package = "github.com/trisacrypto/trisa/pkg/trisa/gds/models/v1beta1;models";
 
 import "ivms101/ivms101.proto";
-import "trisads/models/v1beta1/ca.proto";
+import "trisa/gds/models/v1beta1/ca.proto";
 
 // VASP represents the top-level directory entry for certificate public key exchange.
 // The TRISA Directory service allows search and lookup of VASP entries and returns

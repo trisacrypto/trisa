@@ -1,0 +1,32 @@
+{
+    "name": {
+        "name_identifiers": [
+            {
+                "legal_person_name": "Bob's Discount VASP, PLC",
+                "legal_person_name_identifier_type": 0
+            },
+            {
+                "legal_person_name": "Bob VASP",
+                "legal_person_name_identifier_type": 1
+            }
+        ]
+    },
+    "geographic_addresses": [
+        {
+            "address_type": 1,
+            "building_number": "762",
+            "street_name": "Grimsby Road",
+            "town_name": "Oxford",
+            "post_code": "OX8 U89",
+            "country": "GB"
+        }
+    ],
+    "customer_number": "",
+    "national_identification": {
+        "national_identifier": "213800AQUAUP6I215N33",
+        "national_identifier_type": 8,
+        "country_of_issue": "GB",
+        "registration_authority": "RA000589"
+    },
+    "country_of_registration": "GB"
+}

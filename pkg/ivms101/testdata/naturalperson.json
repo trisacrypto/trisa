@@ -1,0 +1,34 @@
+{
+    "name": {
+        "name_identifiers": [
+            {
+                "primary_identifier": "Sanders",
+                "secondary_identifier": "Alice",
+                "name_identifier_type": 3
+            }
+        ]
+    },
+    "geographic_addresses": [
+        {
+            "address_type": 0,
+            "street_name": "Thorne Road",
+            "building_number": "78",
+            "post_code": "11801",
+            "town": "Hicksville",
+            "country_sub_division": "NY",
+            "country": "US"
+        }
+    ],
+    "national_identification": {
+        "national_identifier": "864 118 996",
+        "national_identifier_type": 3,
+        "country_of_issue": "US",
+        "registration_authority": "RA000628"
+    },
+    "customer_identification": "",
+    "date_and_place_of_birth": {
+        "date_of_birth": "1975-02-18",
+        "place_of_birth": "Defiance, OH"
+    },
+    "country_of_residence": "US"
+}

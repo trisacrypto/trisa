@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package trisads.api.v1alpha1;
-option go_package = "github.com/trisacrypto/testnet/pkg/trisads/pb/api/v1alpha1;api";
+package trisa.gds.api.v1beta1;
+option go_package = "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1;api";
 
 import "ivms101/ivms101.proto";
-import "trisads/models/v1alpha1/models.proto";
-import "trisads/models/v1alpha1/ca.proto";
+import "trisa/gds/models/v1beta1/models.proto";
+import "trisa/gds/models/v1beta1/ca.proto";
 
 
 service TRISACompliance {
@@ -39,7 +39,7 @@ message RegisterRequest {
     ivms101.LegalPerson entity = 1;
 
     // Technical, legal, billing, and administrative contacts for the VASP.
-    trisads.models.v1alpha1.Contacts contacts = 2;
+    trisa.gds.models.v1beta1.Contacts contacts = 2;
 
     // Travel Rule Implementation Endpoint - where other TRISA peers should connect.
     // This should be an addr:port combination, e.g. trisa.vaspbot.net:443
@@ -52,12 +52,12 @@ message RegisterRequest {
 
     // Business Information
     string website = 5;
-    trisads.models.v1alpha1.BusinessCategory business_category = 6;
-    trisads.models.v1alpha1.VASPCategory vasp_category = 7;
+    trisa.gds.models.v1beta1.BusinessCategory business_category = 6;
+    trisa.gds.models.v1beta1.VASPCategory vasp_category = 7;
     string established_on = 8; // Should be a date in YYYY-MM-DD format
 
     // TRIXO Questionnaire
-    trisads.models.v1alpha1.TRIXOQuestionnaire trixo = 9;
+    trisa.gds.models.v1beta1.TRIXOQuestionnaire trixo = 9;
 }
 
 message RegisterReply {
@@ -71,7 +71,7 @@ message RegisterReply {
     string common_name = 4;
 
     // The verification status of the VASP entity.
-    trisads.models.v1alpha1.VerificationState status = 5;
+    trisa.gds.models.v1beta1.VerificationState status = 5;
     string message = 6;
 }
 
@@ -109,8 +109,8 @@ message LookupReply {
     // Certificate information if the VASP is available and verified. The identity
     // certificate is used to establish mTLS connections, the signing certificate is
     // used on a per-transaction basis.
-    trisads.models.v1alpha1.Certificate identity_certificate = 6;
-    trisads.models.v1alpha1.Certificate signing_certificate = 7;
+    trisa.gds.models.v1beta1.Certificate identity_certificate = 6;
+    trisa.gds.models.v1beta1.Certificate signing_certificate = 7;
 
     // Other VASP information that faciliates P2P exchanges
     string name = 8;
@@ -132,8 +132,8 @@ message SearchRequest {
     // Search filters to condition the search on. Only VASPs that are in the
     // country(ies) or category(ies) specified are returned.
     repeated string country = 7;
-    repeated trisads.models.v1alpha1.BusinessCategory business_category = 8;
-    repeated trisads.models.v1alpha1.VASPCategory vasp_category = 9;
+    repeated trisa.gds.models.v1beta1.BusinessCategory business_category = 8;
+    repeated trisa.gds.models.v1beta1.VASPCategory vasp_category = 9;
 }
 
 message SearchReply {
@@ -174,8 +174,8 @@ message StatusReply {
     Error error = 1;
 
     // Status information
-    trisads.models.v1alpha1.VerificationState verification_status = 2;
-    trisads.models.v1alpha1.ServiceState service_status = 3;
+    trisa.gds.models.v1beta1.VerificationState verification_status = 2;
+    trisa.gds.models.v1beta1.ServiceState service_status = 3;
     string verified_on = 4;  // Should be an RFC 3339 Timestamp
     string first_listed = 5; // Should be an RFC 3339 Timestamp
     string last_updated = 6; // Should be an RFC 3339 Timestamp
@@ -191,7 +191,7 @@ message VerifyEmailReply {
     Error error = 1;
 
     // The verification status of the VASP entity.
-    trisads.models.v1alpha1.VerificationState status = 2;
+    trisa.gds.models.v1beta1.VerificationState status = 2;
     string message = 3;
 
     // Used to decrypt the emailed certificates in PKCS 12 format
