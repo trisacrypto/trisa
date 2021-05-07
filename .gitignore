@@ -1,19 +1,25 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Environment configuration
+.env
+tmp/
+
+# Code droppings
 .vscode/
-.bazel/
+
+# OS Droppings
 .DS_Store
-bazel-workspace
-out
-/bazel-bin
-/bazel-genfiles
-/bazel-out
-/bazel-testlogs
-/bazel-trisa
-/artifacts
-/docs/public
-server.crt
-server.key
-trust.chain
-.remote-cache-sa.json
-.idea/
-*.code-workspace
-!docs/static/**

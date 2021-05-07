@@ -1,6 +1,4 @@
 
-# Travel Rule Information Sharing Architecture for Virtual Asset Service Providers (TRISA)
+# Travel Rule Information Sharing Architecture (TRISA) for Virtual Asset Service Providers
 
-[![Build Status](https://travis-ci.com/trisacrypto/trisa.svg?branch=master)](https://travis-ci.com/trisacrypto/trisa)
-
-Please visit [TRISA documentation](https://trisacrypto.github.io/) for more information.
+Please visit the [TRISA website](https://trisa.io) for more information and the [TRISA documentation](https://trisatest.net) for developer docs and integration.

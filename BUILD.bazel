@@ -1,8 +1,0 @@
-package(default_visibility = ["//visibility:public"])
-
-load("@bazel_gazelle//:def.bzl", "gazelle")
-
-# gazelle:prefix github.com/trisacrypto/trisa
-# gazelle:build_file_name BUILD.bazel
-# gazelle:proto disable
-gazelle(name = "gazelle")
