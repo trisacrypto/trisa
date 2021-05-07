@@ -8,12 +8,6 @@ import "trisa/gds/models/v1beta1/models.proto";
 import "trisa/gds/models/v1beta1/ca.proto";
 
 
-service TRISACompliance {
-    // Interactions with the GDS during a TRISA transfer
-    rpc Lookup(LookupRequest) returns (LookupReply) {}
-    rpc Search(SearchRequest) returns (SearchReply) {}
-}
-
 service TRISADirectory {
     // Registration
     rpc Register(RegisterRequest) returns (RegisterReply) {}
@@ -21,6 +15,10 @@ service TRISADirectory {
 
     // TODO: change to Info/Registration Status
     rpc Status(StatusRequest) returns (StatusReply) {}
+
+    // Interactions with the GDS during a TRISA transfer
+    rpc Lookup(LookupRequest) returns (LookupReply) {}
+    rpc Search(SearchRequest) returns (SearchReply) {}
 }
 
 

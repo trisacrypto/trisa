@@ -13,127 +13,6 @@ import (
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion7
 
-// TRISAComplianceClient is the client API for TRISACompliance service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type TRISAComplianceClient interface {
-	// Interactions with the GDS during a TRISA transfer
-	Lookup(ctx context.Context, in *LookupRequest, opts ...grpc.CallOption) (*LookupReply, error)
-	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchReply, error)
-}
-
-type tRISAComplianceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewTRISAComplianceClient(cc grpc.ClientConnInterface) TRISAComplianceClient {
-	return &tRISAComplianceClient{cc}
-}
-
-func (c *tRISAComplianceClient) Lookup(ctx context.Context, in *LookupRequest, opts ...grpc.CallOption) (*LookupReply, error) {
-	out := new(LookupReply)
-	err := c.cc.Invoke(ctx, "/trisa.gds.api.v1beta1.TRISACompliance/Lookup", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *tRISAComplianceClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchReply, error) {
-	out := new(SearchReply)
-	err := c.cc.Invoke(ctx, "/trisa.gds.api.v1beta1.TRISACompliance/Search", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// TRISAComplianceServer is the server API for TRISACompliance service.
-// All implementations must embed UnimplementedTRISAComplianceServer
-// for forward compatibility
-type TRISAComplianceServer interface {
-	// Interactions with the GDS during a TRISA transfer
-	Lookup(context.Context, *LookupRequest) (*LookupReply, error)
-	Search(context.Context, *SearchRequest) (*SearchReply, error)
-	mustEmbedUnimplementedTRISAComplianceServer()
-}
-
-// UnimplementedTRISAComplianceServer must be embedded to have forward compatible implementations.
-type UnimplementedTRISAComplianceServer struct {
-}
-
-func (UnimplementedTRISAComplianceServer) Lookup(context.Context, *LookupRequest) (*LookupReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Lookup not implemented")
-}
-func (UnimplementedTRISAComplianceServer) Search(context.Context, *SearchRequest) (*SearchReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (UnimplementedTRISAComplianceServer) mustEmbedUnimplementedTRISAComplianceServer() {}
-
-// UnsafeTRISAComplianceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TRISAComplianceServer will
-// result in compilation errors.
-type UnsafeTRISAComplianceServer interface {
-	mustEmbedUnimplementedTRISAComplianceServer()
-}
-
-func RegisterTRISAComplianceServer(s grpc.ServiceRegistrar, srv TRISAComplianceServer) {
-	s.RegisterService(&_TRISACompliance_serviceDesc, srv)
-}
-
-func _TRISACompliance_Lookup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LookupRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TRISAComplianceServer).Lookup(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/trisa.gds.api.v1beta1.TRISACompliance/Lookup",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TRISAComplianceServer).Lookup(ctx, req.(*LookupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _TRISACompliance_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SearchRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TRISAComplianceServer).Search(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/trisa.gds.api.v1beta1.TRISACompliance/Search",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TRISAComplianceServer).Search(ctx, req.(*SearchRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _TRISACompliance_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "trisa.gds.api.v1beta1.TRISACompliance",
-	HandlerType: (*TRISAComplianceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Lookup",
-			Handler:    _TRISACompliance_Lookup_Handler,
-		},
-		{
-			MethodName: "Search",
-			Handler:    _TRISACompliance_Search_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "trisa/gds/api/v1beta1/api.proto",
-}
-
 // TRISADirectoryClient is the client API for TRISADirectory service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
@@ -143,6 +22,9 @@ type TRISADirectoryClient interface {
 	VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailReply, error)
 	// TODO: change to Info/Registration Status
 	Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusReply, error)
+	// Interactions with the GDS during a TRISA transfer
+	Lookup(ctx context.Context, in *LookupRequest, opts ...grpc.CallOption) (*LookupReply, error)
+	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchReply, error)
 }
 
 type tRISADirectoryClient struct {
@@ -180,6 +62,24 @@ func (c *tRISADirectoryClient) Status(ctx context.Context, in *StatusRequest, op
 	return out, nil
 }
 
+func (c *tRISADirectoryClient) Lookup(ctx context.Context, in *LookupRequest, opts ...grpc.CallOption) (*LookupReply, error) {
+	out := new(LookupReply)
+	err := c.cc.Invoke(ctx, "/trisa.gds.api.v1beta1.TRISADirectory/Lookup", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tRISADirectoryClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchReply, error) {
+	out := new(SearchReply)
+	err := c.cc.Invoke(ctx, "/trisa.gds.api.v1beta1.TRISADirectory/Search", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TRISADirectoryServer is the server API for TRISADirectory service.
 // All implementations must embed UnimplementedTRISADirectoryServer
 // for forward compatibility
@@ -189,6 +89,9 @@ type TRISADirectoryServer interface {
 	VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailReply, error)
 	// TODO: change to Info/Registration Status
 	Status(context.Context, *StatusRequest) (*StatusReply, error)
+	// Interactions with the GDS during a TRISA transfer
+	Lookup(context.Context, *LookupRequest) (*LookupReply, error)
+	Search(context.Context, *SearchRequest) (*SearchReply, error)
 	mustEmbedUnimplementedTRISADirectoryServer()
 }
 
@@ -204,6 +107,12 @@ func (UnimplementedTRISADirectoryServer) VerifyEmail(context.Context, *VerifyEma
 }
 func (UnimplementedTRISADirectoryServer) Status(context.Context, *StatusRequest) (*StatusReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
+}
+func (UnimplementedTRISADirectoryServer) Lookup(context.Context, *LookupRequest) (*LookupReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Lookup not implemented")
+}
+func (UnimplementedTRISADirectoryServer) Search(context.Context, *SearchRequest) (*SearchReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedTRISADirectoryServer) mustEmbedUnimplementedTRISADirectoryServer() {}
 
@@ -272,6 +181,42 @@ func _TRISADirectory_Status_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TRISADirectory_Lookup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LookupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TRISADirectoryServer).Lookup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/trisa.gds.api.v1beta1.TRISADirectory/Lookup",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TRISADirectoryServer).Lookup(ctx, req.(*LookupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TRISADirectory_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TRISADirectoryServer).Search(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/trisa.gds.api.v1beta1.TRISADirectory/Search",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TRISADirectoryServer).Search(ctx, req.(*SearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _TRISADirectory_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "trisa.gds.api.v1beta1.TRISADirectory",
 	HandlerType: (*TRISADirectoryServer)(nil),
@@ -287,6 +232,14 @@ var _TRISADirectory_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Status",
 			Handler:    _TRISADirectory_Status_Handler,
+		},
+		{
+			MethodName: "Lookup",
+			Handler:    _TRISADirectory_Lookup_Handler,
+		},
+		{
+			MethodName: "Search",
+			Handler:    _TRISADirectory_Search_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	trisads "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
+	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trust"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -24,7 +24,7 @@ type Peers struct {
 	pool         trust.ProviderPool
 	peers        map[string]*Peer
 	directoryURL string
-	directory    trisads.TRISADirectoryClient
+	directory    gds.TRISADirectoryClient
 }
 
 // New creates a new Peers cache to look up peers from context or by endpoint.
@@ -135,8 +135,8 @@ func (p *Peers) Lookup(commonName string) (peer *Peer, err error) {
 		return nil, err
 	}
 
-	var rep *trisads.LookupReply
-	req := &trisads.LookupRequest{
+	var rep *gds.LookupReply
+	req := &gds.LookupRequest{
 		CommonName: commonName,
 	}
 
@@ -182,8 +182,8 @@ func (p *Peers) Search(name string) (_ *Peer, err error) {
 		return nil, err
 	}
 
-	var rep *trisads.SearchReply
-	req := &trisads.SearchRequest{
+	var rep *gds.SearchReply
+	req := &gds.SearchRequest{
 		Name: []string{name},
 	}
 
@@ -249,6 +249,6 @@ func (p *Peers) connect() (err error) {
 		return err
 	}
 
-	p.directory = trisads.NewTRISADirectoryClient(cc)
+	p.directory = gds.NewTRISADirectoryClient(cc)
 	return nil
 }
