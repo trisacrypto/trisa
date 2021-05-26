@@ -1,0 +1,91 @@
+{
+  "entity": {
+    "name": {
+      "name_identifiers": [
+        {
+          "legal_person_name": "AliceCoin, Inc.",
+          "legal_person_name_identifier_type": 0
+        },
+        {
+          "legal_person_name": "Alice VASP",
+          "legal_person_name_identifier_type": 2
+        },
+        {
+          "legal_person_name": "Alice",
+          "legal_person_name_identifier_type": 1
+        }
+      ],
+      "local_name_identifiers": [],
+      "phonetic_name_identifiers": []
+    },
+    "geographic_addresses": [
+      {
+        "address_type": 1,
+        "address_line": [
+          "23 Roosevelt Place",
+          "",
+          "Boston, MA 02151"
+        ],
+        "country": "USA"
+      }
+    ],
+    "customer_number": "",
+    "national_identification": {
+      "national_identifier": "5493004YBI24IF4TIP92",
+      "national_identifier_type": 8,
+      "country_of_issue": "USA",
+      "registration_authority": "RA000744"
+    },
+    "country_of_registration": "USA"
+  },
+  "contacts": {
+    "technical": {
+      "name": "Benjamin Bengfort",
+      "email": "benjamin@trisa.io",
+      "phone": "+1-701-456-5555"
+    },
+    "legal": {
+      "name": "John Jefferies",
+      "email": "jj@trisa.io",
+      "phone": "+1-202-789-5555"
+    },
+    "administrative": {
+      "name": "Laura Montoya",
+      "email": "laura@trisa.io",
+      "phone": "+1-310-123-5555"
+    },
+    "billing": {
+      "name": "Godfried Moneybags",
+      "email": "godfreid@example.com",
+      "phone": "+1-555-555-5555"
+    }
+  },
+  "trisa_endpoint": "api.alice.vaspbot.net:443",
+  "common_name": "api.alice.vaspbot.net",
+  "website": "https://alice.vaspbot.net/",
+  "business_category": 3,
+  "vasp_categories": [
+    "Exchange",
+    "Individual",
+    "Other"
+  ],
+  "established_on": "2021-01-21",
+  "trixo": {
+    "primary_national_jurisdiction": "USA",
+    "primary_regulator": "FinCEN",
+    "other_jurisdictions": [],
+    "financial_transfers_permitted": "no",
+    "has_required_regulatory_program": "yes",
+    "conducts_customer_kyc": true,
+    "kyc_threshold": "1.00",
+    "kyc_threshold_currency": "USD",
+    "must_comply_travel_rule": true,
+    "applicable_regulations": [
+      "FATF Recommendation 16"
+    ],
+    "compliance_threshold": "3000.00",
+    "compliance_threshold_currency": "USD",
+    "must_safeguard_pii": true,
+    "safeguards_pii": true
+  }
+}

@@ -394,7 +394,7 @@ func (x *NaturalPersonNameId) GetNameIdentifierType() NaturalPersonNameTypeCode 
 	if x != nil {
 		return x.NameIdentifierType
 	}
-	return NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_ALIA
+	return NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_MISC
 }
 
 type LocalNaturalPersonNameId struct {
@@ -470,7 +470,7 @@ func (x *LocalNaturalPersonNameId) GetNameIdentifierType() NaturalPersonNameType
 	if x != nil {
 		return x.NameIdentifierType
 	}
-	return NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_ALIA
+	return NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_MISC
 }
 
 // Constraint: ValidAddress
@@ -587,7 +587,7 @@ func (x *Address) GetAddressType() AddressTypeCode {
 	if x != nil {
 		return x.AddressType
 	}
-	return AddressTypeCode_ADDRESS_TYPE_CODE_HOME
+	return AddressTypeCode_ADDRESS_TYPE_CODE_MISC
 }
 
 func (x *Address) GetDepartment() string {
@@ -842,7 +842,7 @@ func (x *NationalIdentification) GetNationalIdentifierType() NationalIdentifierT
 	if x != nil {
 		return x.NationalIdentifierType
 	}
-	return NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_ARNU
+	return NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_MISC
 }
 
 func (x *NationalIdentification) GetCountryOfIssue() string {
@@ -1096,7 +1096,7 @@ func (x *LegalPersonNameId) GetLegalPersonNameIdentifierType() LegalPersonNameTy
 	if x != nil {
 		return x.LegalPersonNameIdentifierType
 	}
-	return LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL
+	return LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_MISC
 }
 
 type LocalLegalPersonNameId struct {
@@ -1156,7 +1156,7 @@ func (x *LocalLegalPersonNameId) GetLegalPersonNameIdentifierType() LegalPersonN
 	if x != nil {
 		return x.LegalPersonNameIdentifierType
 	}
-	return LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL
+	return LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_MISC
 }
 
 var File_ivms101_ivms101_proto protoreflect.FileDescriptor

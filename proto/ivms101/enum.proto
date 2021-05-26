@@ -42,151 +42,163 @@ option go_package = "github.com/trisacrypto/trisa/pkg/ivms101";
 
  // Definition: A single value corresponding to the nature of name being adopted.
  enum NaturalPersonNameTypeCode {
+     // Unspecified
+    // A name by which a natural person may be known but which cannot otherwise be
+    // categorized or the category of which the sender is unable to determine.
+    NATURAL_PERSON_NAME_TYPE_CODE_MISC = 0;
 
     // Alias name
     // A name other than the legal name by which a natural person is also known.
-    NATURAL_PERSON_NAME_TYPE_CODE_ALIA = 0;
+    NATURAL_PERSON_NAME_TYPE_CODE_ALIA = 1;
 
     // Name at birth
     // The name given to a natural person at birth.
-    NATURAL_PERSON_NAME_TYPE_CODE_BIRT = 1;
+    NATURAL_PERSON_NAME_TYPE_CODE_BIRT = 2;
 
     // Maiden name
     // The original name of a natural person who has changed their name after marriage.
-    NATURAL_PERSON_NAME_TYPE_CODE_MAID = 2;
+    NATURAL_PERSON_NAME_TYPE_CODE_MAID = 3;
 
     // Legal name
     // Identifies a natural person for legal, official or administrative purposes.
-    NATURAL_PERSON_NAME_TYPE_CODE_LEGL = 3;
-
-    // Unspecified
-    // A name by which a natural person may be known but which cannot otherwise be
-    // categorized or the category of which the sender is unable to determine.
-    NATURAL_PERSON_NAME_TYPE_CODE_MISC = 4;
+    NATURAL_PERSON_NAME_TYPE_CODE_LEGL = 4;
  }
 
 //  Definition: A single value corresponding to the nature of name being specified
 // for the legal person.
 enum LegalPersonNameTypeCode {
+    // Unspecified
+    // A name by which a legal person may be known but which cannot otherwise be
+    // categorized or the category of which the sender is unable to determine.
+    // Not an official part of the IVMS 101 Standard
+    LEGAL_PERSON_NAME_TYPE_CODE_MISC = 0;
+
     // Legal name
     // Official name under which an organisation is registered.
-    LEGAL_PERSON_NAME_TYPE_CODE_LEGL = 0;
+    LEGAL_PERSON_NAME_TYPE_CODE_LEGL = 1;
 
     // Short name
     // Specifies the short name of the organisation.
-    LEGAL_PERSON_NAME_TYPE_CODE_SHRT = 1;
+    LEGAL_PERSON_NAME_TYPE_CODE_SHRT = 2;
 
     // Trading name
     // Name used by a business for commercial purposes, although its registered legal
     // name, used for contracts and other formal situations, may be another.
-    LEGAL_PERSON_NAME_TYPE_CODE_TRAD = 2;
+    LEGAL_PERSON_NAME_TYPE_CODE_TRAD = 3;
 }
 
 // Definition: Identifies the nature of the address.
 enum AddressTypeCode {
+    // Unspecified
+    // An address the category of which the sender is unable to determine.
+    // Use GEOG instead of this code in general use.
+    // Not an official part of the IVMS 101 Standard
+    ADDRESS_TYPE_CODE_MISC = 0;
 
     // Residential
     // Address is the home address.
-    ADDRESS_TYPE_CODE_HOME = 0;
+    ADDRESS_TYPE_CODE_HOME = 1;
 
     // Business
     // Address is the business address.
-    ADDRESS_TYPE_CODE_BIZZ = 1;
+    ADDRESS_TYPE_CODE_BIZZ = 2;
 
     // Geographic
     // Address is the unspecified physical (geographical) address suitable for
     // identification of the natural or legal person.
-    ADDRESS_TYPE_CODE_GEOG = 2;
+    ADDRESS_TYPE_CODE_GEOG = 3;
 }
 
 // Definition: Identifies the national identification type.
 // NationalIdentifierTypeCode applies a restriction over the codes present in ISO20022
 // datatype ‘TypeOfIdentification4Code’.
 enum NationalIdentifierTypeCode {
+    // Unspecified
+    // A national identifier which may be known but which cannot otherwise be
+    // categorized or the category of which the sender is unable to determine.
+    NATIONAL_IDENTIFIER_TYPE_CODE_MISC = 0;
 
     // Alien registration number
     // Number assigned by a government agency to identify foreign nationals.
-    NATIONAL_IDENTIFIER_TYPE_CODE_ARNU = 0;
+    NATIONAL_IDENTIFIER_TYPE_CODE_ARNU = 1;
 
     // Passport number
     // Number assigned by a passport authority.
-    NATIONAL_IDENTIFIER_TYPE_CODE_CCPT = 1;
+    NATIONAL_IDENTIFIER_TYPE_CODE_CCPT = 2;
 
     // Registration authority identifier
     // Identifier of a legal entity as maintained by a registration authority.
-    NATIONAL_IDENTIFIER_TYPE_CODE_RAID = 2;
+    NATIONAL_IDENTIFIER_TYPE_CODE_RAID = 3;
 
     // Driver license number
     // Number assigned to a driver's license.
-    NATIONAL_IDENTIFIER_TYPE_CODE_DRLC = 3;
+    NATIONAL_IDENTIFIER_TYPE_CODE_DRLC = 4;
 
     // Foreign investment identity number
     // Number assigned to a foreign investor (other than the alien number).
-    NATIONAL_IDENTIFIER_TYPE_CODE_FIIN = 4;
+    NATIONAL_IDENTIFIER_TYPE_CODE_FIIN = 5;
 
     // Tax identification number
     // Number assigned by a tax authority to an entity.
-    NATIONAL_IDENTIFIER_TYPE_CODE_TXID = 5;
+    NATIONAL_IDENTIFIER_TYPE_CODE_TXID = 6;
 
     // Social security number
     // Number assigned by a social security agency.
-    NATIONAL_IDENTIFIER_TYPE_CODE_SOCS = 6;
+    NATIONAL_IDENTIFIER_TYPE_CODE_SOCS = 7;
 
     // Identity card number
     // Number assigned by a national authority to an identity card.
-    NATIONAL_IDENTIFIER_TYPE_CODE_IDCD = 7;
+    NATIONAL_IDENTIFIER_TYPE_CODE_IDCD = 8;
 
     // Legal Entity Identifier
     // Legal Entity Identifier (LEI) assigned in accordance with ISO 17442.
     // The LEI is a 20-character, alpha-numeric code that enables clear and unique
     // identification of legal entities participating in financial transactions.
-    NATIONAL_IDENTIFIER_TYPE_CODE_LEIX = 8;
-
-    // Unspecified
-    // A national identifier which may be known but which cannot otherwise be
-    // categorized or the category of which the sender is unable to determine.
-    NATIONAL_IDENTIFIER_TYPE_CODE_MISC = 9;
+    NATIONAL_IDENTIFIER_TYPE_CODE_LEIX = 9;
 }
 
 // Definition: Identifies the national script from which transliteration to Latin
 // script is applied.
 enum TransliterationMethodCode {
+    // Script other than those listed below
+    // Unspecified Standard
+    TRANSLITERATION_METHOD_CODE_OTHR = 0;
 
     // Arabic (Arabic language)
     // ISO 233-2:1993
-    TRANSLITERATION_METHOD_CODE_ARAB = 0;
+    TRANSLITERATION_METHOD_CODE_ARAB = 1;
 
     // Arabic (Persian language)
     // ISO 233-3:1999
-    TRANSLITERATION_METHOD_CODE_ARAN = 1;
+    TRANSLITERATION_METHOD_CODE_ARAN = 2;
 
     // Armenian
     // ISO 9985:1996
-    TRANSLITERATION_METHOD_CODE_ARMN = 2;
+    TRANSLITERATION_METHOD_CODE_ARMN = 3;
 
     // Cyrillic
     // ISO 9:1995
-    TRANSLITERATION_METHOD_CODE_CYRL = 3;
+    TRANSLITERATION_METHOD_CODE_CYRL = 4;
 
     // Devanagari & related Indic
     // ISO 15919:2001
-    TRANSLITERATION_METHOD_CODE_DEVA = 4;
+    TRANSLITERATION_METHOD_CODE_DEVA = 5;
 
     // Georgian
     // ISO 9984:1996
-    TRANSLITERATION_METHOD_CODE_GEOR = 5;
+    TRANSLITERATION_METHOD_CODE_GEOR = 6;
 
     // Greek
     // ISO 843:1997
-    TRANSLITERATION_METHOD_CODE_GREK = 6;
+    TRANSLITERATION_METHOD_CODE_GREK = 7;
 
     // Han (Hanzi, Kanji, Hanja)
     // ISO 7098:2015
-    TRANSLITERATION_METHOD_CODE_HANI = 7;
+    TRANSLITERATION_METHOD_CODE_HANI = 8;
 
     // Hebrew
     // ISO 259-2:1994
-    TRANSLITERATION_METHOD_CODE_HEBR = 8;
+    TRANSLITERATION_METHOD_CODE_HEBR = 9;
 
     // Kana
     // ISO 3602:1989
@@ -199,8 +211,4 @@ enum TransliterationMethodCode {
     // Thai
     // ISO 11940-2:2007
     TRANSLITERATION_METHOD_CODE_THAI = 12;
-
-    // Script other than those listed above
-    // Unspecified Standard
-    TRANSLITERATION_METHOD_CODE_OTHR = 13;
 }
