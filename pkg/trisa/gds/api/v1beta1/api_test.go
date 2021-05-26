@@ -2,6 +2,7 @@ package api_test
 
 import (
 	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -17,10 +18,13 @@ func TestRegistrationForm(t *testing.T) {
 	err = protojson.Unmarshal(data, form)
 	require.NoError(t, err)
 
-	// Compare JSON
-	opts := protojson.MarshalOptions{Multiline: true, Indent: "  ", UseProtoNames: true, UseEnumNumbers: true, EmitUnpopulated: false}
-	out, err := opts.Marshal(form)
-	require.NoError(t, err)
+	// Compare JSON manually if required
+	path := os.Getenv("TRISA_TEST_COMPARE_REGISTRATION_FORM")
+	if path != "" {
+		opts := protojson.MarshalOptions{Multiline: true, Indent: "  ", UseProtoNames: true, UseEnumNumbers: true, EmitUnpopulated: false}
+		out, err := opts.Marshal(form)
+		require.NoError(t, err)
 
-	ioutil.WriteFile("testdata/alice-trixo-parsed.json", out, 0644)
+		ioutil.WriteFile(path, out, 0644)
+	}
 }
