@@ -190,17 +190,17 @@ enum TransliterationMethodCode {
 
     // Kana
     // ISO 3602:1989
-    TRANSLITERATION_METHOD_CODE_KANA = 10;
+    TRANSLITERATION_METHOD_CODE_KANA = 9;
 
     // Korean
     // Revised Romanization of Korean
-    TRANSLITERATION_METHOD_CODE_KORE = 11;
+    TRANSLITERATION_METHOD_CODE_KORE = 10;
 
     // Thai
     // ISO 11940-2:2007
-    TRANSLITERATION_METHOD_CODE_THAI = 12;
+    TRANSLITERATION_METHOD_CODE_THAI = 11;
 
     // Script other than those listed above
     // Unspecified Standard
-    TRANSLITERATION_METHOD_CODE_OTHR = 13;
+    TRANSLITERATION_METHOD_CODE_OTHR = 12;
 }

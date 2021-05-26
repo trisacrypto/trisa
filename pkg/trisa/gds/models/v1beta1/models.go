@@ -20,21 +20,21 @@ const (
 
 // VASP Category Enumeration Helpers
 const (
-	VASPCategoryUnknown          = VASPCategory_UNKNOWN_VASP
-	VASPCategoryATM              = VASPCategory_ATM
-	VASPCategoryExchange         = VASPCategory_EXCHANGE
-	VASPCategoryHighRiskExchange = VASPCategory_HIGH_RISK_EXCHANGE
+	VASPCategoryUnknown    = "Unknown"
+	VASPCategoryExchange   = "Exchange"
+	VASPCategoryDEX        = "DEX"
+	VASPCategoryP2P        = "P2P"
+	VASPCategoryKiosk      = "Kiosk"
+	VASPCategoryCustodian  = "Custodian"
+	VASPCategoryOTC        = "OTC"
+	VASPCategoryFund       = "Fund"
+	VASPCategoryProject    = "Project"
+	VASPCategoryGambling   = "Gambling"
+	VASPCategoryMiner      = "Miner"
+	VASPCategoryMixer      = "Mixer"
+	VASPCategoryIndividual = "Individual"
+	VASPCategoryOther      = "Other"
 )
-
-// ParseVASPCategory from text representation.
-func ParseVASPCategory(s string) (VASPCategory, error) {
-	s = strings.ToUpper(strings.ReplaceAll(s, " ", "_"))
-	code, ok := VASPCategory_value[s]
-	if ok {
-		return VASPCategory(code), nil
-	}
-	return VASPCategoryUnknown, fmt.Errorf("could not parse %q into a VASP category", s)
-}
 
 // ParseBusinessCategory from text representation.
 func ParseBusinessCategory(s string) (BusinessCategory, error) {

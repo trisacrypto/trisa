@@ -41,7 +41,7 @@ service TRISANetwork {
 
 // The TRISAHealth service is optional but highly recommended for VASP members to
 // implement. The Status endpoint allows the TRISA Directory Service to perform health
-// checks with VASP's TrISA Node and report the service conditions of the TRISA network.
+// checks with VASP's TRISA Node and report the service conditions of the TRISA network.
 // Because a down TRISA node will prevent travel rule compliant virtual asset
 // transactions, the health service is intended to quickly identify network problems and
 // notify members as quickly as possible.

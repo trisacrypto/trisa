@@ -8,25 +8,6 @@ import (
 )
 
 func TestParseEnums(t *testing.T) {
-	vcat, err := pb.ParseVASPCategory("unknown vasp")
-	require.NoError(t, err)
-	require.Equal(t, pb.VASPCategoryUnknown, vcat)
-
-	vcat, err = pb.ParseVASPCategory("ATM")
-	require.NoError(t, err)
-	require.Equal(t, pb.VASPCategoryATM, vcat)
-
-	vcat, err = pb.ParseVASPCategory("Exchange")
-	require.NoError(t, err)
-	require.Equal(t, pb.VASPCategoryExchange, vcat)
-
-	vcat, err = pb.ParseVASPCategory("HIGH_RISK_EXCHANGE")
-	require.NoError(t, err)
-	require.Equal(t, pb.VASPCategoryHighRiskExchange, vcat)
-
-	_, err = pb.ParseVASPCategory("foo bar")
-	require.Error(t, err)
-
 	bcat, err := pb.ParseBusinessCategory("unknown entity")
 	require.NoError(t, err)
 	require.Equal(t, pb.BusinessCategoryUnknown, bcat)

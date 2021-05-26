@@ -7,70 +7,23 @@ import "ivms101/ivms101.proto";
 import "trisa/gds/models/v1beta1/models.proto";
 import "trisa/gds/models/v1beta1/ca.proto";
 
-
+// The TRISADirectory service specifies how TRISA clients should interact with a
+// directory service to facilitate P2P transfers.
 service TRISADirectory {
-    // Registration
-    rpc Register(RegisterRequest) returns (RegisterReply) {}
-    rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailReply) {}
-
-    // TODO: change to Info/Registration Status
-    rpc Status(StatusRequest) returns (StatusReply) {}
-
-    // Interactions with the GDS during a TRISA transfer
+    // Interactions with the Directory Service during a TRISA transfer
+    // These are the primary Directory Service interactions.
     rpc Lookup(LookupRequest) returns (LookupReply) {}
     rpc Search(SearchRequest) returns (SearchReply) {}
-}
 
+    // Registration workflow and contact verification.
+    rpc Register(RegisterRequest) returns (RegisterReply) {}
+    rpc VerifyContact(VerifyContactRequest) returns (VerifyContactReply) {}
 
-message Error {
-    int32 code = 1;
-    string message = 2;
-}
+    // Supplies the entity review and TRISA verification status of a VASP
+    rpc Verification(VerificationRequest) returns (VerificationReply) {}
 
-// Registration requests are validated that they contain correct information and then
-// are sent through the verification process, creating or updating a VASP as needed.
-message RegisterRequest {
-    // The legal entity IVMS 101 data for VASP KYC information exchange. This is the
-    // IVMS 101 data that should be exchanged in the TRISA P2P protocol as the
-    // Originator, Intermediate, or Beneficiary VASP fields. A complete and valid
-    // identity record with country of registration is required.
-    ivms101.LegalPerson entity = 1;
-
-    // Technical, legal, billing, and administrative contacts for the VASP.
-    trisa.gds.models.v1beta1.Contacts contacts = 2;
-
-    // Travel Rule Implementation Endpoint - where other TRISA peers should connect.
-    // This should be an addr:port combination, e.g. trisa.vaspbot.net:443
-    string trisa_endpoint = 3;
-
-    // Common name should be the VASP domain name to issue certificates for, which
-    // should match the domain in the trisa_endpoint. If this field is omitted, the
-    // common name is inferred from the trisa_endpoint.
-    string common_name = 4;
-
-    // Business Information
-    string website = 5;
-    trisa.gds.models.v1beta1.BusinessCategory business_category = 6;
-    trisa.gds.models.v1beta1.VASPCategory vasp_category = 7;
-    string established_on = 8; // Should be a date in YYYY-MM-DD format
-
-    // TRIXO Questionnaire
-    trisa.gds.models.v1beta1.TRIXOQuestionnaire trixo = 9;
-}
-
-message RegisterReply {
-    // If the registration was successful, no error will be returned
-    Error error = 1;
-
-    // Unique identifiers for the VASP created by the registration.
-    // Use these identifiers for status lookup requests and any follow-on interactions.
-    string id = 2;
-    string registered_directory = 3;
-    string common_name = 4;
-
-    // The verification status of the VASP entity.
-    trisa.gds.models.v1beta1.VerificationState status = 5;
-    string message = 6;
+    // Health check and status request that mirrors the TRISAHealth service
+    rpc Status(HealthCheck) returns (ServiceState) {}
 }
 
 // Lookup VASP certification information either by their unique ID or by the domain of
@@ -131,7 +84,7 @@ message SearchRequest {
     // country(ies) or category(ies) specified are returned.
     repeated string country = 7;
     repeated trisa.gds.models.v1beta1.BusinessCategory business_category = 8;
-    repeated trisa.gds.models.v1beta1.VASPCategory vasp_category = 9;
+    repeated string vasp_category = 9;
 }
 
 message SearchReply {
@@ -150,11 +103,74 @@ message SearchReply {
     repeated Result results = 2;
 }
 
+// Registration requests are validated that they contain correct information and then
+// are sent through the verification process, creating or updating a VASP as needed.
+message RegisterRequest {
+    // The legal entity IVMS 101 data for VASP KYC information exchange. This is the
+    // IVMS 101 data that should be exchanged in the TRISA P2P protocol as the
+    // Originator, Intermediate, or Beneficiary VASP fields. A complete and valid
+    // identity record with country of registration is required.
+    ivms101.LegalPerson entity = 1;
+
+    // Technical, legal, billing, and administrative contacts for the VASP.
+    trisa.gds.models.v1beta1.Contacts contacts = 2;
+
+    // Travel Rule Implementation Endpoint - where other TRISA peers should connect.
+    // This should be an addr:port combination, e.g. trisa.vaspbot.net:443
+    string trisa_endpoint = 3;
+
+    // Common name should be the VASP domain name to issue certificates for, which
+    // should match the domain in the trisa_endpoint. If this field is omitted, the
+    // common name is inferred from the trisa_endpoint.
+    string common_name = 4;
+
+    // Business Information
+    string website = 5;
+    trisa.gds.models.v1beta1.BusinessCategory business_category = 6;
+    repeated string vasp_categories = 7;
+    string established_on = 8; // Should be a date in YYYY-MM-DD format
+
+    // TRIXO Questionnaire
+    trisa.gds.models.v1beta1.TRIXOQuestionnaire trixo = 9;
+}
+
+message RegisterReply {
+     // If the registration was successful, no error will be returned
+    Error error = 1;
+
+    // Unique identifiers for the VASP created by the registration.
+    // Use these identifiers for status lookup requests and any follow-on interactions.
+    string id = 2;
+    string registered_directory = 3;
+    string common_name = 4;
+
+    // The verification status of the VASP entity.
+    trisa.gds.models.v1beta1.VerificationState status = 5;
+    string message = 6;
+
+    // Used to decrypt the emailed certificates in PKCS 12 format
+    string pkcs12password = 7;
+}
+
+message VerifyContactRequest {
+    string id = 1;
+    string token = 2;
+}
+
+message VerifyContactReply {
+    // If no error is specified, the verification request was successful.
+    Error error = 1;
+
+    // The verification status of the VASP entity.
+    trisa.gds.models.v1beta1.VerificationState status = 2;
+    string message = 3;
+}
+
 // Check on the status of a VASP including its verification status and the service
 // status if the TRISA directory service performs health check monitoring. The same
 // parameters as the Lookup RPC are sent, but note that a TRISA directory service may
 // refuse to return all or part of the status request.
-message StatusRequest {
+message VerificationRequest {
     // Unique identifier generated by the directory service, most common lookup field.
     string id = 1;
 
@@ -167,31 +183,46 @@ message StatusRequest {
     string common_name = 3;
 }
 
-message StatusReply {
-    // If no error is specified, the status request was successful.
-    Error error = 1;
-
+message VerificationReply {
     // Status information
-    trisa.gds.models.v1beta1.VerificationState verification_status = 2;
-    trisa.gds.models.v1beta1.ServiceState service_status = 3;
-    string verified_on = 4;  // Should be an RFC 3339 Timestamp
-    string first_listed = 5; // Should be an RFC 3339 Timestamp
-    string last_updated = 6; // Should be an RFC 3339 Timestamp
+    trisa.gds.models.v1beta1.VerificationState verification_status = 1;
+    trisa.gds.models.v1beta1.ServiceState service_status = 2;
+    string verified_on = 3;  // Should be an RFC 3339 Timestamp
+    string first_listed = 4; // Should be an RFC 3339 Timestamp
+    string last_updated = 5; // Should be an RFC 3339 Timestamp
+    string revoked_on = 6; // Should be an RFC 3339 Timestamp
 }
 
-message VerifyEmailRequest {
-    string id = 1;
-    string token = 2;
+message HealthCheck {
+    // The number of failed health checks that proceeded the current check.
+    uint32 attempts = 1;
+
+    // The timestamp of the last health check, successful or otherwise.
+    string last_checked_at = 2;
 }
 
-message VerifyEmailReply {
-    // If no error is specified, the verify email request was successful
-    Error error = 1;
+message ServiceState {
+    enum Status {
+        UNKNOWN = 0;
+        HEALTHY = 1;
+        UNHEALTHY = 2;
+        DANGER = 3;
+        OFFLINE = 4;
+        MAINTENANCE = 5;
+    }
 
-    // The verification status of the VASP entity.
-    trisa.gds.models.v1beta1.VerificationState status = 2;
-    string message = 3;
+    // Current service status as defined by the recieving system. The system is obliged
+    // to respond with the closest matching status in a best-effort fashion. Alerts will
+    // be triggered on service status changes if the system does not respond and the
+    // previous system state was not unknown.
+    Status status = 1;
 
-    // Used to decrypt the emailed certificates in PKCS 12 format
-    string pkcs12password = 4;
+    // Suggest to the directory service when to check the health status again.
+    string not_before = 2;
+    string not_after = 3;
+}
+
+message Error {
+    int32 code = 1;
+    string message = 2;
 }
