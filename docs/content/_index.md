@@ -6,7 +6,7 @@ description: "Directory Service interactions with the Sectigo CA API"
 weight: 10
 ---
 
-# TRISA TestNet
+# TRISA
 
 The goal of the Travel Rule Information Sharing Architecture (TRISA) is to enable
 compliance with the FATF and FinCEN Travel Rules for cryptocurrency transaction
