@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package trisa.data.generic.v1beta1;
+option go_package = "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1;generic";
+
+
+// Generic Transaction message for TRISA transaction payloads. The goal of this payload
+// is to provide enough information to link Travel Rule Compliance information in the
+// identity payload with a transaction on the blockchain or network. All fields are
+// optional, this message serves as a convienience for parsing transaction payloads.
+message Transaction {
+    string txid = 1;              // a transaction ID unique to the chain/network
+    string originator = 2;        // crypto address of the originator
+    string beneficiary = 3;       // crypto address of the beneficiary
+    double amount = 4;            // amount of the transaction
+    string network = 5;           // the chain/network of the transaction
+    string timestamp = 6;         // RFC 3339 timestamp of the transaction
+    string extra_json = 7;        // any extra data as a JSON formatted object
+}
+
+// A confirmation receipt is a generic reply to a TRISA transfer that may not have a
+// beneficiary response, e.g. in the case where the originator collects all the KYC
+// information. This is a convienience message for sending generic responses.
+message ConfirmationReceipt {
+    string envelope_id = 1;       // the TRISA envelope ID for reference
+    string received_by = 2;       // name of the recipient or recipient VASP
+    string received_at = 3;       // RFC 3339 timestamp of the receipt of request
+    string message = 4;           // A generic message to respond with
+}
