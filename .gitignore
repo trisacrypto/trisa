@@ -23,3 +23,6 @@ tmp/
 
 # OS Droppings
 .DS_Store
+
+# Hugo build
+docs/public
