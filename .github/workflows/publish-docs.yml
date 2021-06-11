@@ -29,3 +29,4 @@ jobs:
           external_repository: trisacrypto/trisacrypto.github.io
           publish_branch: main
           publish_dir: ./docs/public
+          cname: trisa.dev
