@@ -2,7 +2,7 @@ baseURL = "https://trisa.dev/"
 
 languageCode = "en-us"
 DefaultContentLanguage = "en"
-title = "TRISA"
+title = "TRISA Documentation"
 theme = "hugo-theme-techdoc"
 
 hasCJKLanguage = true
@@ -18,16 +18,16 @@ enableMissingTranslationPlaceholders = false
 [Params]
 
     # Source Code repository section
-    description = "Source code for TRISA implementation"
+    description = ""
     github_repository = "https://github.com/trisacrypto/trisa"
-    version = ""
+    version = "v1beta1"
 
     # Documentation repository section
     # documentation repository (set edit link to documentation repository)
     github_doc_repository = "https://github.com/trisacrypto/trisa"
 
     # Analytic section
-    google_analytics_id = "" # Your Google Analytics tracking id
+    google_analytics_id = ""      # Your Google Analytics tracking id
     tag_manager_container_id = "" # Your Google Tag Manager container id
     google_site_verification = "" # Your Google Site Verification for Search Console
 
@@ -49,7 +49,7 @@ enableMissingTranslationPlaceholders = false
 
 # Global menu section
 [[menu.main]]
-    name = "Home"
+    name = "Documentation"
     url = "/"
     weight = 5
 
@@ -57,6 +57,17 @@ enableMissingTranslationPlaceholders = false
     name = "White Paper"
     url = "https://trisa.io/trisa-whitepaper/"
     weight = 5
+
+[[menu.main]]
+    name = "Directory"
+    url = "https://vaspdirectory.net/"
+    weight = 7
+
+[[menu.main]]
+    name = "Demo"
+    url = "https://vaspbot.net/"
+    weight = 10
+
 
 [markup.goldmark.renderer]
     unsafe = true

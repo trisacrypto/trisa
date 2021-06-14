@@ -1,8 +1,9 @@
 ---
-title: "VASP Integration"
+title: Integration Overview
 date: 2021-04-23T01:35:35-04:00
+lastmod: 2021-04-23T01:35:35-04:00
 description: "Describes how to integrate the TRISA protocol in the TestNet"
-weight: 10
+weight: 20
 ---
 
 # TRISA Integration Overview

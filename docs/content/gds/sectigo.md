@@ -3,7 +3,7 @@ title: "Sectigo"
 date: 2020-12-24T07:58:37-05:00
 lastmod: 2020-12-24T07:58:37-05:00
 description: "Directory Service interactions with the Sectigo CA API"
-weight: 10
+weight: 50
 ---
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/testnet/pkg/sectigo.svg)](https://pkg.go.dev/github.com/trisacrypto/testnet/pkg/sectigo)
