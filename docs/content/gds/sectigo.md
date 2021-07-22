@@ -6,23 +6,22 @@ description: "Directory Service interactions with the Sectigo CA API"
 weight: 50
 ---
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/testnet/pkg/sectigo.svg)](https://pkg.go.dev/github.com/trisacrypto/testnet/pkg/sectigo)
+[![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/directory/pkg/sectigo.svg)](https://pkg.go.dev/github.com/trisacrypto/directory/pkg/sectigo)
 
-
-The TRISA Directory Service issues certificates using the Sectigo Certificate Authority via its IoT Portal. Because the directory service must collect public key material in order to facilitate an initial trusted handshake for mTLS, it uses the Sectigo IoT Manager API as part of the VASP registration and verification process. The `github.com/trisacrypto/testnet/pkg/sectigo` package is a Go library for interacting with the API, implementing the endpoints and methods required by the directory service. The TestNet also provides a command line utility for interacting with the API for administrative and debugging purposes. This documentation describes the command line utility, which also gives an overview of how to use the API directly to issue and revoke certificates.
+The TRISA Directory Service issues certificates using the Sectigo Certificate Authority via its IoT Portal. Because the directory service must collect public key material in order to facilitate an initial trusted handshake for mTLS, it uses the Sectigo IoT Manager API as part of the VASP registration and verification process. The `github.com/trisacrypto/directory/pkg/sectigo` package is a Go library for interacting with the API, implementing the endpoints and methods required by the directory service. The TestNet also provides a command line utility for interacting with the API for administrative and debugging purposes. This documentation describes the command line utility, which also gives an overview of how to use the API directly to issue and revoke certificates.
 
 Reference material:
 
-- [Package Documentation](https://pkg.go.dev/github.com/trisacrypto/testnet/pkg/sectigo)
+- [Package Documentation](https://pkg.go.dev/github.com/trisacrypto/directory/pkg/sectigo)
 - [IoT Manager API Documentation](https://support.sectigo.com/Com_KnowledgeDetailPage?Id=kA01N000000bvCJ)
 - [IoT Manager Portal](https://iot.sectigo.com)
 
 ## Getting Started
 
-To install the `sectigo` CLI utility, either download a pre-compiled binary from the [releases on GitHub](https://github.com/trisacrypto/testnet/releases) or install locally using:
+To install the `sectigo` CLI utility, either download a pre-compiled binary from the [releases on GitHub](https://github.com/trisacrypto/directory/releases) or install locally using:
 
 ```
-$ go get github.com/trisacrypto/testnet/cmd/sectigo
+$ go get github.com/trisacrypto/directory/cmd/sectigo
 ```
 
 This will add the `sectigo` command to your `$PATH`.
@@ -138,6 +137,65 @@ $ openssl pkcs12 -in certs/example.com.p12 -out certs/example.com.pem -nodes
 ```
 
 For more on working with the PKCS12 file, see [Export Certificates and Private Key from a PKCS#12 File with OpenSSL](https://www.ssl.com/how-to/export-certificates-private-key-from-pkcs12-file-with-openssl/).
+
+## Uploading a CSR
+
+An alternative to certificate creation is to upload a certificate signing request (CSR). This mechanism is often preferable because it means that no private key material has to be transmitted accross the network and the private key can remain on secure hardware.
+
+To generate a CSR using `openssl` on the command line, first create a configuration file named `trisa.conf` in your current working directory, replacing `example.com` with the domain you plan to host your TRISA endpoint on:
+
+```conf
+[req]
+distinguished_name = dn_req
+req_extensions = v3ext_req
+prompt = no
+default_bits = 4096
+[dn_req]
+CN = example.com
+O = [Organization]
+L = [City]
+ST = [State or Province (fully spelled out, no abbreviations)]
+C = [2 digit country code]
+[v3ext_req]
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, keyEncipherment, nonRepudiation
+extendedKeyUsage = clientAuth, serverAuth
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = example.com
+```
+
+Please carefully fill out the configuration for your certificate, this information must be correct and cannot be changed without reissuing the certificate. Also make sure that there are no spaces after the entries in the configuration!
+
+Then run the following command, replacing `example.com` with the domain name you will be using as your TRISA endpoint:
+
+```
+$ openssl req -new -newkey rsa:4096 -nodes -sha384 -config trisa.conf \
+  -keyout example.com.key -out example.com.csr
+```
+
+You can then upload the CSR using the CLI program as follows:
+
+```
+$ sectigo upload -p 42 <common_name>.csr
+{
+  "batchId": 24,
+  "orderNumber": 1024,
+  "creationDate": "2020-12-10T16:35:32.805+0000",
+  "profile": "TRISA Profile",
+  "size": 1,
+  "status": "CREATED",
+  "active": false,
+  "batchName": "example.com certs",
+  "rejectReason": "",
+  "generatorParametersValues": null,
+  "userId": 10,
+  "downloadable": true,
+  "rejectable": true
+}
+```
+
+The `-p` flag specifies the profile to use the CSR batch request with and must be a valid profileId. The uploaded CSRs can be a single text file with multiple CSRs in PEM form using standard BEGIN/END separators.
 
 ## Managing Certificates
 
