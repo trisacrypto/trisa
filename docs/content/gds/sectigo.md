@@ -142,13 +142,37 @@ For more on working with the PKCS12 file, see [Export Certificates and Private K
 
 An alternative to certificate creation is to upload a certificate signing request (CSR). This mechanism is often preferable because it means that no private key material has to be transmitted accross the network and the private key can remain on secure hardware.
 
-To generate a CSR run the following command:
+To generate a CSR using `openssl` on the command line, first create a configuration file named `trisa.conf` in your current working directory, replacing `example.com` with the domain you plan to host your TRISA endpoint on:
+
+```conf
+[req]
+distinguished_name = dn_req
+req_extensions = v3ext_req
+prompt = no
+default_bits = 4096
+[dn_req]
+CN = example.com
+O = [Organization]
+L = [City]
+ST = [State or Province (fully spelled out, no abbreviations)]
+C = [2 digit country code]
+[v3ext_req]
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, keyEncipherment, nonRepudiation
+extendedKeyUsage = clientAuth, serverAuth
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = example.com
+```
+
+Please carefully fill out the configuration for your certificate, this information must be correct and cannot be changed without reissuing the certificate. Also make sure that there are no spaces after the entries in the configuration!
+
+Then run the following command, replacing `example.com` with the domain name you will be using as your TRISA endpoint:
 
 ```
-$ openssl req -nodes -newkey rsa:4096 -keyout <common_name>.key -out <common_name>.csr
+$ openssl req -new -newkey rsa:4096 -nodes -sha384 -config trisa.conf \
+  -keyout example.com.key -out example.com.csr
 ```
-
-Please carefully fill out the prompts for your certificate, this information must be correct and cannot be changed without reissuing the certificate. For more on generating CSRs, see [Manually Generate a Certificate Signing Request (CSR) Using OpenSSL](https://www.ssl.com/how-to/manually-generate-a-certificate-signing-request-csr-using-openssl/)
 
 You can then upload the CSR using the CLI program as follows:
 
