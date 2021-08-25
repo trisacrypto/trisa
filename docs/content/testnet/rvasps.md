@@ -30,14 +30,19 @@ The following table of "customers" for Alice, Bob, and Evil can be used as a ref
 | api.bob.vaspbot.net   | 18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh | robert@bobvasp.co.uk  |
 | api.bob.vaspbot.net   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  |
 | api.bob.vaspbot.net   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   |
+| api.bob.vaspbot.net   | **1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9** | fred@bobvasp.co.uk    |
+| api.alice.vaspbot.net | **19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ** | sarah@alicevasp.us    |
 | api.alice.vaspbot.net | 1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX | mary@alicevasp.us     |
 | api.alice.vaspbot.net | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    |
 | api.alice.vaspbot.net | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     |
+| api.evil.vaspbot.net  | **1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz** | gambler@evilvasp.gg   |
 | api.evil.vaspbot.net  | 1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF | voldemort@evilvasp.gg |
 | api.evil.vaspbot.net  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg |
 | api.evil.vaspbot.net  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   |
 
 Note that all rVASP data was generated using a Faker tool to produce realistic/consistent test data and fixtures and is completely fictional. For example, the records for Alice VASP (a fake US company) are primarily in North America, etc.
+
+If you're a Traveler customer, the bold addresses above have some attribution data associated with them, and they're a good candidate for Traveler-based rVASP interactions.
 
 ### Preliminaries
 
@@ -58,10 +63,16 @@ To use the [rVASP protocol buffers](https://github.com/trisacrypto/testnet/tree/
 
 ### Triggering an rVASP to send a message
 
+The rVASP admin endpoints are used to interact with the rVASP directly for development and integration purposes. Note that this endpoint is different than the TRISA endpoint, which was described above.
+
+- Alice: `admin.alice.vaspbot.net:443`
+- Bob: `admin.bob.vaspbot.net:443`
+- Evil: `admin.evil.vaspbot.net:443`
+
 To use the command line tool to trigger a message, run the following command:
 
 ```
-$ rvasp -e api.alice.vaspbot.net:443 \
+$ rvasp transfer -e admin.alice.vaspbot.net:443 \
         -a mary@alicevasp.us \
         -d 0.3 \
         -B trisa.example.com \
