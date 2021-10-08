@@ -1,9 +1,5 @@
 baseURL = "https://trisa.dev/"
-
-languageCode = "en-us"
-DefaultContentLanguage = "en"
-title = "TRISA Documentation"
-theme = "hugo-theme-techdoc"
+theme = "hugo-theme-relearn"
 
 hasCJKLanguage = true
 metaDataFormat = "yaml"
@@ -31,8 +27,12 @@ enableMissingTranslationPlaceholders = false
     tag_manager_container_id = "" # Your Google Tag Manager container id
     google_site_verification = "" # Your Google Site Verification for Search Console
 
+    # When using multilingual website, disable the switch language button.
+    disableLanguageSwitchingButton = false
+
     # Theme settings section
     # Theme color
+    themeVariant = "blue"
     custom_font_color = ""
     custom_background_color = ""
 
@@ -47,27 +47,23 @@ enableMissingTranslationPlaceholders = false
     # path name excluded from documentation menu
     menu_exclusion = []
 
-# Global menu section
-[[menu.main]]
-    name = "Documentation"
-    url = "/"
-    weight = 5
+    disableInlineCopyToClipBoard = true
 
-[[menu.main]]
-    name = "White Paper"
-    url = "https://trisa.io/trisa-whitepaper/"
-    weight = 5
+[Languages]
+[Languages.en]
+title = "TRISA Documentation"
+weight = 1
+languageName = "English"
+landingPageName = "<i class='fas fa-home'></i> Home"
 
-[[menu.main]]
-    name = "Directory"
-    url = "https://vaspdirectory.net/"
-    weight = 7
+[Languages.de]
+title = "TRISA Dokumentation"
+weight = 2
+languageName = "Deutsch"
+landingPageName = "<i class='fas fa-home'></i> Startseite"
 
-[[menu.main]]
-    name = "Demo"
-    url = "https://vaspbot.net/"
-    weight = 10
-
-
+[markup]
+[markup.goldmark]
 [markup.goldmark.renderer]
-    unsafe = true
+unsafe = false
+
