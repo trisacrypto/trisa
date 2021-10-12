@@ -8,13 +8,13 @@ pygmentsCodeFences = true
 pygmentsUseClasses = true
 
 defaultContentLanguage = "en"
-defaultContentLanguageInSubdir= false
+defaultContentLanguageInSubdir = false
 enableMissingTranslationPlaceholders = false
 
 [Params]
 
     # Source Code repository section
-    description = ""
+    description = "TRISA Documentation"
     github_repository = "https://github.com/trisacrypto/trisa"
     version = "v1beta1"
 
@@ -49,18 +49,33 @@ enableMissingTranslationPlaceholders = false
 
     disableInlineCopyToClipBoard = true
 
-[Languages]
-[Languages.en]
-title = "TRISA Documentation"
-weight = 1
-languageName = "English"
-landingPageName = "<i class='fas fa-home'></i> Home"
+    disableShortcutsTitle = true
 
-[Languages.de]
-title = "TRISA Dokumentation"
-weight = 2
-languageName = "Deutsch"
-landingPageName = "<i class='fas fa-home'></i> Startseite"
+[Languages]
+  [Languages.en]
+    title = "TRISA Documentation"
+    weight = 1
+    languageName = "English"
+    landingPageName = "<i class='fas fa-home'></i> Home"
+
+  [[Languages.en.menu.shortcuts]]
+    name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
+    identifier = "ds"
+    url = "https://github.com/trisacrypto/trisa"
+    weight = 10
+
+  [Languages.de]
+    title = "TRISA Dokumentation"
+    weight = 2
+    languageName = "Deutsch"
+    landingPageName = "<i class='fas fa-home'></i> Startseite"
+
+  [[Languages.de.menu.shortcuts]]
+    name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
+    identifier = "ds"
+    url = "https://github.com/trisacrypto/trisa"
+    weight = 12
+
 
 [markup]
 [markup.goldmark]
