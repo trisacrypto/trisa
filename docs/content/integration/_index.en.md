@@ -6,7 +6,7 @@ description: "Describes how to integrate the TRISA protocol in the TestNet"
 weight: 20
 ---
 
-# TRISA Integration Overview
+## TRISA Integration Overview
 
 1. Register with a TRISA Directory Service
 2. Implement the TRISA Network protocol
