@@ -51,6 +51,8 @@ enableMissingTranslationPlaceholders = false
 
     disableShortcutsTitle = true
 
+    favicon = "/images/favicon.png"
+
 [Languages]
   [Languages.en]
     title = "TRISA Documentation"
