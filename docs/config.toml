@@ -78,6 +78,18 @@ enableMissingTranslationPlaceholders = false
     url = "https://github.com/trisacrypto/trisa"
     weight = 12
 
+  [Languages.fr]
+    title = "Documentation de TRISA"
+    weight = 3
+    languageName = "Français"
+    landingPageName = "<i class='fas fa-home'></i> Accueil"
+
+  [[Languages.fr.menu.shortcuts]]
+    name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
+    identifier = "ds"
+    url = "https://github.com/trisacrypto/trisa"
+    weight = 13
+
 
 [markup]
 [markup.goldmark]
