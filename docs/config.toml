@@ -90,6 +90,17 @@ enableMissingTranslationPlaceholders = false
     url = "https://github.com/trisacrypto/trisa"
     weight = 13
 
+  [Languages.zh]
+    title = "TRISA 文档"
+    weight = 4
+    languageName = "中文"
+    landingPageName = "<i class='fas fa-home'></i> 主页"
+
+  [[Languages.zh.menu.shortcuts]]
+    name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
+    identifier = "ds"
+    url = "https://github.com/trisacrypto/trisa"
+    weight = 14
 
 [markup]
 [markup.goldmark]
