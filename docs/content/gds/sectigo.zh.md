@@ -12,9 +12,9 @@ TRISA目录服务通过IoT门户使用Sectigo证书颁发机构颁发证书。�
 
 参考资料:
 
-- [Package Documentation](https://pkg.go.dev/github.com/trisacrypto/directory/pkg/sectigo)
-- [IoT Manager API Documentation](https://support.sectigo.com/Com_KnowledgeDetailPage?Id=kA01N000000bvCJ)
-- [IoT Manager Portal](https://iot.sectigo.com)
+- [软件包文档](https://pkg.go.dev/github.com/trisacrypto/directory/pkg/sectigo)
+- [IoT Manager API 文档](https://support.sectigo.com/Com_KnowledgeDetailPage?Id=kA01N000000bvCJ)
+- [IoT Manager 门户网站](https://iot.sectigo.com)
 
 ## 开始
 

@@ -93,7 +93,7 @@ enableMissingTranslationPlaceholders = false
   [Languages.zh]
     title = "TRISA 文档"
     weight = 4
-    languageName = "中国人"
+    languageName = "中文"
     landingPageName = "<i class='fas fa-home'></i> 主页"
 
   [[Languages.zh.menu.shortcuts]]
