@@ -23,6 +23,7 @@ func TestRSA(t *testing.T) {
 	// Encrypt using a new cipher with just the public key
 	var cipher crypto.Cipher
 	cipher, err = rsaoeap.New(&priv.PublicKey)
+	require.NoError(t, err)
 
 	ciphertext, err := cipher.Encrypt(plaintext)
 	require.NoError(t, err)

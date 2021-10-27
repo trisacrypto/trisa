@@ -22,7 +22,6 @@ type Peer struct {
 	parent *Peers    // Contains common configuration for all peers
 	info   *PeerInfo // NOTE: common name cannot be modified after init, see String()
 	client api.TRISANetworkClient
-	stream api.TRISANetwork_TransferStreamClient // NOTE: currently unused
 }
 
 // PeerInfo contains directory service information that uniquely identifies the peer.

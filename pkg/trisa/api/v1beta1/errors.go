@@ -3,10 +3,9 @@ package api
 import (
 	"fmt"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	anypb "google.golang.org/protobuf/types/known/anypb"
 )
 
@@ -114,7 +113,7 @@ func (e *Error) WithRetry() *Error {
 // WithDetails returns the new error with the details as a pb.Any struct.
 func (e *Error) WithDetails(details proto.Message) (_ *Error, err error) {
 	var any *anypb.Any
-	if any, err = ptypes.MarshalAny(details); err != nil {
+	if any, err = anypb.New(details); err != nil {
 		return nil, err
 	}
 	return &Error{
