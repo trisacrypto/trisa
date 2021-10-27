@@ -71,6 +71,7 @@ func TestSeralizer(t *testing.T) {
 
 	// Compress public provider to gzip file
 	serializer, err = trust.NewSerializer(false)
+	require.NoError(t, err)
 	err = serializer.WriteFile(provider.Public(), path)
 	require.NoError(t, err)
 
