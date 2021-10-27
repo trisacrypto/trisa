@@ -1,0 +1,88 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+      - 'v*'
+    tags:
+      - 'v*'
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Install Staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Lint Go Code
+        run: staticcheck ./...
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.x'
+
+      - name: Install Dependencies
+        run: |
+          go version
+          go get -u github.com/kevinburke/go-bindata/...
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+
+      - name: Code Generation
+        run: go generate ./...
+
+      - name: Run Unit Tests
+        run: go test -v -coverprofile=coverage.txt -covermode=atomic --race ./...
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.x'
+
+      - name: Install Dependencies
+        run: |
+          go version
+          go get -u github.com/kevinburke/go-bindata/...
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+
+      - name: Code Generation
+        run: go generate ./...
+
+      - name: Build
+        run: go build ./cmd/...
