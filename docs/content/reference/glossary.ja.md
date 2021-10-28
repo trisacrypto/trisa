@@ -1,8 +1,8 @@
 ---
-title: Glossary
+title: 用語集
 date: 2021-06-14T15:59:09-05:00
 lastmod: 2021-10-22T12:41:05-05:00
-description: "TRISA Glossary and Terminology"
+description: "TRISA 用語集 and 専門語"
 weight: 20
 ---
 

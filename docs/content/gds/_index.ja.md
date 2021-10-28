@@ -1,8 +1,8 @@
 ---
-title: "Directory Service"
+title: "ディレクトリサービス"
 date: 2021-06-14T11:21:42-05:00
 lastmod: 2021-10-22T12:31:23-05:00
-description: "The Global TRISA Directory Service (GDS)"
+description: "グローバル TRISA ディレクトリサービス (GDS)"
 weight: 50
 ---
 
