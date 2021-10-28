@@ -102,6 +102,18 @@ enableMissingTranslationPlaceholders = false
     url = "https://github.com/trisacrypto/trisa"
     weight = 14
 
+  [Languages.ja]
+    title = "TRISAのドキュメント"
+    weight = 5
+    languageName = "日本語"
+    landingPageName = "<i class='fas fa-home'></i> ホームページ"
+
+  [[Languages.ja.menu.shortcuts]]
+    name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
+    identifier = "ds"
+    url = "https://github.com/trisacrypto/trisa"
+    weight = 15
+
 [markup]
 [markup.goldmark]
 [markup.goldmark.renderer]
