@@ -80,6 +80,7 @@ func TestSerializer(t *testing.T) {
 	serializer, err = trust.NewSerializer(false)
 	require.NoError(t, err)
 	provData, err := serializer.Compress(provider.Public())
+	require.NoError(t, err)
 	require.Equal(t, len(provData), 4402)
 
 	// Write public provider to gzip file
@@ -104,6 +105,7 @@ func TestSerializer(t *testing.T) {
 	// Compress provider pool
 	pool := trust.NewPool(provider.Public())
 	poolData, err := serializer.CompressPool(pool)
+	require.NoError(t, err)
 	require.Equal(t, len(poolData), 4402)
 
 	// Write provider pool to gzip file
