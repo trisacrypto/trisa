@@ -52,12 +52,12 @@ func (p *NaturalPerson) Validate() (err error) {
 		}
 	}
 
-	// Constraint: optioanl Max50Text
+	// Constraint: optional Max50Text
 	if len(p.CustomerIdentification) > 50 {
 		return ErrInvalidCustomerIdentification
 	}
 
-	// Contstraint: Optional Valid DateAndPlaceOfBirth
+	// Constraint: Optional Valid DateAndPlaceOfBirth
 	if p.DateAndPlaceOfBirth != nil {
 		if err = p.DateAndPlaceOfBirth.Validate(); err != nil {
 			return err
@@ -285,7 +285,7 @@ func (n *LocalLegalPersonNameId) Validate() (err error) {
 	return nil
 }
 
-// Validate the IVMS101 constraints for a geograpic address
+// Validate the IVMS101 constraints for a geographic address
 func (a *Address) Validate() (err error) {
 	// Constraint: valid required address type code
 	typeCode := int32(a.AddressType)

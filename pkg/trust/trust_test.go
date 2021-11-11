@@ -77,6 +77,10 @@ func TestPublicProvider(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, pool.Subjects(), 3)
 
+	provPool := trust.NewPool(o)
+	require.Equal(t, provPool[o.String()], o)
+	require.False(t, o.IsPrivate())
+
 	_, err = p.GetKeyPair()
 	require.Error(t, err)
 

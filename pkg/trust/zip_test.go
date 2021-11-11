@@ -47,7 +47,7 @@ func TestNewSerializer(t *testing.T) {
 	require.Error(t, err)
 }
 
-func TestSeralizer(t *testing.T) {
+func TestSerializer(t *testing.T) {
 	// Test Serializer on Sectigo data, e.g. a client can read a private Provider from
 	// a PCKS12 encrypted file and that the Directory service can extract the Public
 	// keys and write them in a gzip format that can then be decrompressed and loaded by
