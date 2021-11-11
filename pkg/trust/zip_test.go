@@ -61,6 +61,13 @@ func TestSerializer(t *testing.T) {
 	require.NoError(t, err)
 	require.True(t, provider.IsPrivate())
 
+	// Decode as a pool to test pool file reader
+	providerPool, err := serializer.ReadPoolFile("testdata/128106.zip")
+	require.NoError(t, err)
+	for _, v := range providerPool {
+		require.False(t, v.IsPrivate())
+	}
+
 	// Create temporary file for reading and writing
 	f, err := ioutil.TempFile("", "128106*.gz")
 	require.NoError(t, err)
@@ -69,9 +76,13 @@ func TestSerializer(t *testing.T) {
 	defer os.Remove(path)
 	t.Logf("created temporary file at %s", path)
 
-	// Compress public provider to gzip file
+	// Compress public provider
 	serializer, err = trust.NewSerializer(false)
 	require.NoError(t, err)
+	provData, err := serializer.Compress(provider.Public())
+	require.Equal(t, len(provData), 4402)
+
+	// Write public provider to gzip file
 	err = serializer.WriteFile(provider.Public(), path)
 	require.NoError(t, err)
 
@@ -89,4 +100,13 @@ func TestSerializer(t *testing.T) {
 	require.NoError(t, err)
 
 	require.True(t, bytes.Equal(pb, ob))
+
+	// Compress provider pool
+	pool := trust.NewPool(provider.Public())
+	poolData, err := serializer.CompressPool(pool)
+	require.Equal(t, len(poolData), 4402)
+
+	// Write provider pool to gzip file
+	err = serializer.WritePoolFile(pool, path)
+	require.NoError(t, err)
 }
