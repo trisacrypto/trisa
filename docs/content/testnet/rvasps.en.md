@@ -80,7 +80,7 @@ $ rvasp transfer -e admin.alice.vaspbot.net:443 \
         -E
 ```
 
-This message sends the Alice rVASP a message using the `-e` or `--endpoint` flag, and specifies that the originating account should be "mary@alicevasp.us" using the `-a` or `--account` flag. The originating account is used to determine what IVMS101 data to send to the beneficiary. The `-d` or `--amount` flag specifies the amount of "AliceCoin" to send. Finally, the `-b` or `--beneficiary` flag specifies the crypto wallet address of the beneficiary you'd like to receive.
+This message sends the Alice rVASP a message using the `-e` or `--endpoint` flag, and specifies that the originating account should be "mary@alicevasp.us" using the `-a` or `--account` flag. The originating account is used to determine what IVMS101 data to send to the beneficiary. The `-d` or `--amount` flag specifies the amount of "AliceCoin" to send. Finally, the `-b` or `--beneficiary` flag specifies the crypto wallet address of the beneficiary you intend as the recipient.
 
 The next two parts are critical. The `-E` or `--external-demo` flag tells the rVASP to trigger a request to your service rather than to perform a demo exchange with another rVASP. This flag is required! Finally, the `-B` or `--beneficiary-vasp` flag specifies where the rVASP will send the request. This field should be able to be looked up in the TRISA TestNet directory service; e.g. it should be your common name or the name of your VASP if it is searchable.
 
