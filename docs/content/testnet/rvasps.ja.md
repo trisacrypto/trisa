@@ -76,6 +76,7 @@ $ rvasp transfer -e admin.alice.vaspbot.net:443 \
         -a mary@alicevasp.us \
         -d 0.3 \
         -B trisa.example.com \
+        -b cryptowalletaddress \
         -E
 ```
 
@@ -91,6 +92,7 @@ $ rvasp transfer -e admin.alice.vaspbot.net:443 \
 {
     "account": "mary@alicevasp.us",
     "amount": 0.3,
+    "beneficiary": "cryptowalletaddress",
     "beneficiary_vasp": "trisa.example.com",
     "check_beneficiary": false,
     "external_demo": true
