@@ -64,5 +64,5 @@ func TestNormalizedSearch(t *testing.T) {
 
 func TestList(t *testing.T) {
 	codes := iso3166.List()
-	require.Equal(t, len(codes), 249)
+	require.Equal(t, 249, len(codes))
 }
