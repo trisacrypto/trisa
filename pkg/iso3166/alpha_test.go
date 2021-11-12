@@ -39,6 +39,9 @@ func TestFind(t *testing.T) {
 
 	_, err = iso3166.Find("Foo")
 	require.Error(t, err)
+
+	_, err = iso3166.Find("turk")
+	require.Contains(t, err.Error(), "ambiguous, multiple countries matched")
 }
 
 func TestNormalizedSearch(t *testing.T) {
@@ -57,4 +60,9 @@ func TestNormalizedSearch(t *testing.T) {
 			require.Equal(t, code.Alpha3, found.Alpha3)
 		}
 	}
+}
+
+func TestList(t *testing.T) {
+	codes := iso3166.List()
+	require.Equal(t, 249, len(codes))
 }
