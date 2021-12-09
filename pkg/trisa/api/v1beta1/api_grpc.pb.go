@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // TRISANetworkClient is the client API for TRISANetwork service.
@@ -56,7 +57,7 @@ func (c *tRISANetworkClient) Transfer(ctx context.Context, in *SecureEnvelope, o
 }
 
 func (c *tRISANetworkClient) TransferStream(ctx context.Context, opts ...grpc.CallOption) (TRISANetwork_TransferStreamClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_TRISANetwork_serviceDesc.Streams[0], "/trisa.api.v1beta1.TRISANetwork/TransferStream", opts...)
+	stream, err := c.cc.NewStream(ctx, &TRISANetwork_ServiceDesc.Streams[0], "/trisa.api.v1beta1.TRISANetwork/TransferStream", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +157,7 @@ type UnsafeTRISANetworkServer interface {
 }
 
 func RegisterTRISANetworkServer(s grpc.ServiceRegistrar, srv TRISANetworkServer) {
-	s.RegisterService(&_TRISANetwork_serviceDesc, srv)
+	s.RegisterService(&TRISANetwork_ServiceDesc, srv)
 }
 
 func _TRISANetwork_Transfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -239,7 +240,10 @@ func _TRISANetwork_KeyExchange_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-var _TRISANetwork_serviceDesc = grpc.ServiceDesc{
+// TRISANetwork_ServiceDesc is the grpc.ServiceDesc for TRISANetwork service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var TRISANetwork_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "trisa.api.v1beta1.TRISANetwork",
 	HandlerType: (*TRISANetworkServer)(nil),
 	Methods: []grpc.MethodDesc{
@@ -316,7 +320,7 @@ type UnsafeTRISAHealthServer interface {
 }
 
 func RegisterTRISAHealthServer(s grpc.ServiceRegistrar, srv TRISAHealthServer) {
-	s.RegisterService(&_TRISAHealth_serviceDesc, srv)
+	s.RegisterService(&TRISAHealth_ServiceDesc, srv)
 }
 
 func _TRISAHealth_Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -337,7 +341,10 @@ func _TRISAHealth_Status_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-var _TRISAHealth_serviceDesc = grpc.ServiceDesc{
+// TRISAHealth_ServiceDesc is the grpc.ServiceDesc for TRISAHealth service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var TRISAHealth_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "trisa.api.v1beta1.TRISAHealth",
 	HandlerType: (*TRISAHealthServer)(nil),
 	Methods: []grpc.MethodDesc{
