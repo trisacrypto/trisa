@@ -16,6 +16,7 @@ message Transaction {
     string network = 5;           // the chain/network of the transaction
     string timestamp = 6;         // RFC 3339 timestamp of the transaction
     string extra_json = 7;        // any extra data as a JSON formatted object
+    string asset_type = 8;        // the type of virtual asset for mult-asset chains
 }
 
 // A confirmation receipt is a generic reply to a TRISA transfer that may not have a
@@ -26,4 +27,5 @@ message ConfirmationReceipt {
     string received_by = 2;       // name of the recipient or recipient VASP
     string received_at = 3;       // RFC 3339 timestamp of the receipt of request
     string message = 4;           // A generic message to respond with
+    bool response_required = 5;   // If the message requires an additional transfer message
 }

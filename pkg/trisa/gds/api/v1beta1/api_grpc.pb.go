@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // TRISADirectoryClient is the client API for TRISADirectory service.
@@ -142,7 +143,7 @@ type UnsafeTRISADirectoryServer interface {
 }
 
 func RegisterTRISADirectoryServer(s grpc.ServiceRegistrar, srv TRISADirectoryServer) {
-	s.RegisterService(&_TRISADirectory_serviceDesc, srv)
+	s.RegisterService(&TRISADirectory_ServiceDesc, srv)
 }
 
 func _TRISADirectory_Lookup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -253,7 +254,10 @@ func _TRISADirectory_Status_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-var _TRISADirectory_serviceDesc = grpc.ServiceDesc{
+// TRISADirectory_ServiceDesc is the grpc.ServiceDesc for TRISADirectory service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var TRISADirectory_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "trisa.gds.api.v1beta1.TRISADirectory",
 	HandlerType: (*TRISADirectoryServer)(nil),
 	Methods: []grpc.MethodDesc{
