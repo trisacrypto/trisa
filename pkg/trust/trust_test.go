@@ -104,6 +104,7 @@ var (
 	initCAonce     sync.Once
 	rootCA         tls.Certificate
 	intermediateCA tls.Certificate
+	icaPrivKey     *rsa.PrivateKey
 )
 
 // Create a chain with a leaf node, an intermediate, and root ca + private key.
@@ -134,7 +135,7 @@ func chain() (data []byte, err error) {
 	}
 
 	var signed []byte
-	if signed, err = x509.CreateCertificate(rand.Reader, tmpl, ca, pub, priv); err != nil {
+	if signed, err = x509.CreateCertificate(rand.Reader, tmpl, ca, pub, icaPrivKey); err != nil {
 		return nil, err
 	}
 
@@ -168,13 +169,13 @@ func initCA() {
 		BasicConstraintsValid: true,
 	}
 
-	priv, _ := rsa.GenerateKey(rand.Reader, 4096)
-	data, err := x509.CreateCertificate(rand.Reader, rootCAtmpl, rootCAtmpl, &priv.PublicKey, priv)
+	caPrivKey, _ := rsa.GenerateKey(rand.Reader, 4096)
+	data, err := x509.CreateCertificate(rand.Reader, rootCAtmpl, rootCAtmpl, &caPrivKey.PublicKey, caPrivKey)
 	if err != nil {
 		panic(err)
 	}
 
-	if rootCA, err = parseCertificate(data, priv); err != nil {
+	if rootCA, err = parseCertificate(data, caPrivKey); err != nil {
 		panic(err)
 	}
 
@@ -199,12 +200,12 @@ func initCA() {
 		panic(err)
 	}
 
-	priv, _ = rsa.GenerateKey(rand.Reader, 4096)
-	if data, err = x509.CreateCertificate(rand.Reader, interCAtmpl, ca, &priv.PublicKey, priv); err != nil {
+	icaPrivKey, _ = rsa.GenerateKey(rand.Reader, 4096)
+	if data, err = x509.CreateCertificate(rand.Reader, interCAtmpl, ca, &icaPrivKey.PublicKey, caPrivKey); err != nil {
 		panic(err)
 	}
 
-	if intermediateCA, err = parseCertificate(data, priv); err != nil {
+	if intermediateCA, err = parseCertificate(data, icaPrivKey); err != nil {
 		panic(err)
 	}
 
