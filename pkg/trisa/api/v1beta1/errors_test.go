@@ -39,14 +39,15 @@ func TestErrors(t *testing.T) {
 	require.True(t, errWithRetry.Retry)
 	require.Nil(t, errWithRetry.Details)
 
-	errWithDetails, parseErr := err.WithDetails(nil)
+	_, parseErr := err.WithDetails(nil)
 	require.Error(t, parseErr)
 
 	// WithDetails should add an arbitrary proto.Message to the error details
 	details := &api.Error{
 		Code: api.UnknownIdentity,
 	}
-	errWithDetails, parseErr = err.WithDetails(details)
+	errWithDetails, parseErr := err.WithDetails(details)
+	require.NoError(t, parseErr)
 	require.Equal(t, err.Code, errWithDetails.Code)
 	require.Equal(t, err.Message, errWithDetails.Message)
 	require.Equal(t, err.Retry, errWithDetails.Retry)
