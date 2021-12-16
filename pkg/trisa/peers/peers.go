@@ -11,11 +11,14 @@ import (
 	"time"
 
 	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
+	"github.com/trisacrypto/trisa/pkg/trisa/peers/mock"
 	"github.com/trisacrypto/trisa/pkg/trust"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/peer"
 )
+
+const PeersTesting = "testing"
 
 // Peers manages TRISA network connections to send requests to other TRISA nodes.
 type Peers struct {
@@ -29,12 +32,16 @@ type Peers struct {
 
 // New creates a new Peers cache to look up peers from context or by endpoint.
 func New(certs *trust.Provider, pool trust.ProviderPool, directoryURL string) *Peers {
-	return &Peers{
+	p := &Peers{
 		certs:        certs,
 		pool:         pool,
 		peers:        make(map[string]*Peer),
 		directoryURL: directoryURL,
 	}
+	if directoryURL == PeersTesting {
+		p.directory = &mock.MockDirectoryClient{}
+	}
+	return p
 }
 
 // Add creates or updates a peer in the peers cache with the specified info.
@@ -172,7 +179,8 @@ func (p *Peers) Lookup(commonName string) (peer *Peer, err error) {
 	if err = p.Add(info); err != nil {
 		return nil, err
 	}
-	return nil, nil
+
+	return peer, nil
 }
 
 // Search uses the directory service to find a remote peer by name
