@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/mock"
 	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
-	"github.com/trisacrypto/trisa/pkg/trisa/peers/mock"
 	"github.com/trisacrypto/trisa/pkg/trust"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -40,6 +40,15 @@ func New(certs *trust.Provider, pool trust.ProviderPool, directoryURL string) *P
 	}
 	if directoryURL == PeersTesting {
 		p.directory = &mock.MockDirectoryClient{}
+		networkPeer := &Peer{
+			parent: p,
+			info: &PeerInfo{
+				CommonName: "test-peer",
+				SigningKey: &rsa.PublicKey{},
+			},
+			client: &mock.MockNetworkClient{},
+		}
+		p.peers["test-peer"] = networkPeer
 	}
 	return p
 }

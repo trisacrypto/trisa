@@ -8,6 +8,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"fmt"
+	"strings"
 
 	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
 	models "github.com/trisacrypto/trisa/pkg/trisa/gds/models/v1beta1"
@@ -37,6 +38,12 @@ var RemotePeers = map[string]*lookupInfo{
 		RegisteredDirectory: "testdirectory.org",
 		CommonName:          "donatello",
 		Endpoint:            "https://donatello.trisatest.net:443",
+	},
+	"leonardo da vinci": {
+		ID:                  "3",
+		RegisteredDirectory: "testdirectory.org",
+		CommonName:          "leonardo da vinci",
+		Endpoint:            "https://leonardodavinci.trisatest.net:443",
 	},
 }
 
@@ -81,7 +88,21 @@ func (m *MockDirectoryClient) Lookup(ctx context.Context, in *gds.LookupRequest,
 }
 
 func (m *MockDirectoryClient) Search(ctx context.Context, in *gds.SearchRequest, opts ...grpc.CallOption) (*gds.SearchReply, error) {
-	return nil, nil
+	var results []*gds.SearchReply_Result
+	results = make([]*gds.SearchReply_Result, 0)
+	for _, peer := range RemotePeers {
+		if strings.Contains(peer.CommonName, in.Name[0]) {
+			results = append(results, &gds.SearchReply_Result{
+				Id:                  peer.ID,
+				RegisteredDirectory: peer.RegisteredDirectory,
+				CommonName:          peer.CommonName,
+				Endpoint:            peer.Endpoint,
+			})
+		}
+	}
+	return &gds.SearchReply{
+		Results: results,
+	}, nil
 }
 
 func (m *MockDirectoryClient) Register(ctx context.Context, in *gds.RegisterRequest, opts ...grpc.CallOption) (*gds.RegisterReply, error) {

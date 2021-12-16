@@ -10,8 +10,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	apimock "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/mock"
 	"github.com/trisacrypto/trisa/pkg/trisa/peers"
-	peersmock "github.com/trisacrypto/trisa/pkg/trisa/peers/mock"
 	"github.com/trisacrypto/trisa/pkg/trust"
 	"github.com/trisacrypto/trisa/pkg/trust/mock"
 	"google.golang.org/grpc/credentials"
@@ -21,12 +21,7 @@ import (
 
 // Test that Add correctly adds peers to the Peers cache.
 func TestAdd(t *testing.T) {
-	// Create peers cache using the mock certificate chain
-	pfxData, err := mock.Chain()
-	require.NoError(t, err)
-	private, err := trust.Decrypt(pfxData, pkcs12.DefaultPassword)
-	require.NoError(t, err)
-	cache := peers.New(private, trust.NewPool(), "testdirectory.org")
+	cache := makePeersCache(t)
 
 	// Common name is required
 	require.Error(t, cache.Add(&peers.PeerInfo{}))
@@ -91,12 +86,7 @@ func TestAdd(t *testing.T) {
 
 // Test that FromContext returns the correct Peer given the connection context.
 func TestFromContext(t *testing.T) {
-	// Create peers cache using the mock certificate chain
-	pfxData, err := mock.Chain()
-	require.NoError(t, err)
-	private, err := trust.Decrypt(pfxData, pkcs12.DefaultPassword)
-	require.NoError(t, err)
-	cache := peers.New(private, trust.NewPool(), "testdirectory.org")
+	cache := makePeersCache(t)
 
 	// Add a peer to the cache
 	require.NoError(t, cache.Add(&peers.PeerInfo{
@@ -106,7 +96,7 @@ func TestFromContext(t *testing.T) {
 
 	// Context does not contain a peer
 	ctx := context.Background()
-	_, err = cache.FromContext(ctx)
+	_, err := cache.FromContext(ctx)
 	require.Error(t, err)
 
 	// Peer has badly formatted credentials
@@ -215,17 +205,12 @@ func TestFromContext(t *testing.T) {
 	require.Equal(t, "donatello", donatello.Info().CommonName)
 }
 
-// Test that the Lookup function returns the correct peer given the common name.
+// Test that the Lookup function returns the correct remote peer given the common name.
 func TestLookup(t *testing.T) {
-	// Create peers cache using the mock certificate chain
-	pfxData, err := mock.Chain()
-	require.NoError(t, err)
-	private, err := trust.Decrypt(pfxData, pkcs12.DefaultPassword)
-	require.NoError(t, err)
-	cache := peers.New(private, trust.NewPool(), peers.PeersTesting)
+	cache := makePeersCache(t)
 
 	// Remote peer does not exist in the directory
-	_, err = cache.Lookup("missing")
+	_, err := cache.Lookup("missing")
 	require.Error(t, err)
 
 	// Test concurrent Lookup calls
@@ -246,7 +231,7 @@ func TestLookup(t *testing.T) {
 				p, err := cache.Lookup(tt.peer)
 				require.NoError(t, err)
 				require.NotNil(t, p)
-				require.Equal(t, peersmock.RemotePeers[tt.peer].ID, p.Info().ID)
+				require.Equal(t, apimock.RemotePeers[tt.peer].ID, p.Info().ID)
 			})
 		}
 	})
@@ -254,7 +239,7 @@ func TestLookup(t *testing.T) {
 	// Cache should contain the two peers
 	leonardo, err := cache.Get("leonardo")
 	require.NoError(t, err)
-	expected := peersmock.RemotePeers["leonardo"]
+	expected := apimock.RemotePeers["leonardo"]
 	require.Equal(t, expected.ID, leonardo.Info().ID)
 	require.Equal(t, expected.RegisteredDirectory, leonardo.Info().RegisteredDirectory)
 	require.Equal(t, expected.CommonName, leonardo.Info().CommonName)
@@ -263,10 +248,73 @@ func TestLookup(t *testing.T) {
 
 	donatello, err := cache.Get("donatello")
 	require.NoError(t, err)
-	expected = peersmock.RemotePeers["donatello"]
+	expected = apimock.RemotePeers["donatello"]
 	require.Equal(t, expected.ID, donatello.Info().ID)
 	require.Equal(t, expected.RegisteredDirectory, donatello.Info().RegisteredDirectory)
 	require.Equal(t, expected.CommonName, donatello.Info().CommonName)
 	require.Equal(t, expected.Endpoint, donatello.Info().Endpoint)
 	require.Nil(t, donatello.Info().SigningKey)
+}
+
+// Test that the Search function returns the matching remote peer given the name.
+func TestSearch(t *testing.T) {
+	cache := makePeersCache(t)
+
+	// Remote peer does not exist in the directory
+	_, err := cache.Search("missing")
+	require.Error(t, err)
+
+	// Ambiguous search results
+	_, err = cache.Search("leonardo")
+	require.Error(t, err)
+
+	// Test concurrent Search calls
+	t.Run("search", func(t *testing.T) {
+		tests := []struct {
+			name string
+			peer string
+		}{
+			{"leonardo", "leonardo da vinci"},
+			{"leonardo2", "leonardo da vinci"},
+			{"donatello", "donatello"},
+			{"donatello2", "donatello"},
+		}
+		for _, tt := range tests {
+			tt := tt
+			t.Run(tt.name, func(t *testing.T) {
+				t.Parallel()
+				p, err := cache.Search(tt.peer)
+				require.NoError(t, err)
+				require.NotNil(t, p)
+				require.Equal(t, apimock.RemotePeers[tt.peer].ID, p.Info().ID)
+			})
+		}
+	})
+
+	// Cache should contain the two peers
+	leonardo, err := cache.Get("leonardo da vinci")
+	require.NoError(t, err)
+	expected := apimock.RemotePeers["leonardo da vinci"]
+	require.Equal(t, expected.ID, leonardo.Info().ID)
+	require.Equal(t, expected.RegisteredDirectory, leonardo.Info().RegisteredDirectory)
+	require.Equal(t, expected.CommonName, leonardo.Info().CommonName)
+	require.Equal(t, expected.Endpoint, leonardo.Info().Endpoint)
+
+	donatello, err := cache.Get("donatello")
+	require.NoError(t, err)
+	expected = apimock.RemotePeers["donatello"]
+	require.Equal(t, expected.ID, donatello.Info().ID)
+	require.Equal(t, expected.RegisteredDirectory, donatello.Info().RegisteredDirectory)
+	require.Equal(t, expected.CommonName, donatello.Info().CommonName)
+	require.Equal(t, expected.Endpoint, donatello.Info().Endpoint)
+}
+
+// Helper function to create a new peer cache based on the mock certificate chain.
+func makePeersCache(t *testing.T) *peers.Peers {
+	pfxData, err := mock.Chain()
+	require.NoError(t, err)
+	private, err := trust.Decrypt(pfxData, pkcs12.DefaultPassword)
+	require.NoError(t, err)
+	cache := peers.New(private, trust.NewPool(), peers.PeersTesting)
+	return cache
 }
