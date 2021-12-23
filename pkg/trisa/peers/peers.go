@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/mock"
 	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trust"
 	"google.golang.org/grpc"
@@ -29,12 +30,39 @@ type Peers struct {
 
 // New creates a new Peers cache to look up peers from context or by endpoint.
 func New(certs *trust.Provider, pool trust.ProviderPool, directoryURL string) *Peers {
-	return &Peers{
+	p := &Peers{
 		certs:        certs,
 		pool:         pool,
 		peers:        make(map[string]*Peer),
 		directoryURL: directoryURL,
 	}
+	return p
+}
+
+// NewMock creates a mocked Peers cache that should only be used by tests. The mock
+// cache contains a single peer with the common name "test-peer" and a mocked
+// TRISANetworkClient which returns canned responses for the peer-to-peer network
+// requests, to avoid having to run a test server. Similarly, the mock cache contains a
+// mocked TRISADirectoryClient which returns canned responses for the Peers directory
+// service requests.
+func NewMock(certs *trust.Provider, pool trust.ProviderPool, directoryURL string) *Peers {
+	const peerName = "test-peer"
+	p := &Peers{
+		certs:        certs,
+		pool:         pool,
+		peers:        make(map[string]*Peer),
+		directoryURL: directoryURL,
+		directory:    &mock.MockDirectoryClient{},
+	}
+	p.peers[peerName] = &Peer{
+		parent: p,
+		info: &PeerInfo{
+			CommonName: peerName,
+			SigningKey: &rsa.PublicKey{},
+		},
+		client: &mock.MockNetworkClient{},
+	}
+	return p
 }
 
 // Add creates or updates a peer in the peers cache with the specified info.
@@ -172,7 +200,8 @@ func (p *Peers) Lookup(commonName string) (peer *Peer, err error) {
 	if err = p.Add(info); err != nil {
 		return nil, err
 	}
-	return nil, nil
+
+	return peer, nil
 }
 
 // Search uses the directory service to find a remote peer by name
