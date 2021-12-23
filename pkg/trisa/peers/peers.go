@@ -18,8 +18,6 @@ import (
 	"google.golang.org/grpc/peer"
 )
 
-const PeersTesting = "testing"
-
 // Peers manages TRISA network connections to send requests to other TRISA nodes.
 type Peers struct {
 	sync.RWMutex
@@ -38,17 +36,31 @@ func New(certs *trust.Provider, pool trust.ProviderPool, directoryURL string) *P
 		peers:        make(map[string]*Peer),
 		directoryURL: directoryURL,
 	}
-	if directoryURL == PeersTesting {
-		p.directory = &mock.MockDirectoryClient{}
-		networkPeer := &Peer{
-			parent: p,
-			info: &PeerInfo{
-				CommonName: "test-peer",
-				SigningKey: &rsa.PublicKey{},
-			},
-			client: &mock.MockNetworkClient{},
-		}
-		p.peers["test-peer"] = networkPeer
+	return p
+}
+
+// NewMock creates a mocked Peers cache that should only be used by tests. The mock
+// cache contains a single peer with the common name "test-peer" and a mocked
+// TRISANetworkClient which returns canned responses for the peer-to-peer network
+// requests, to avoid having to run a test server. Similarly, the mock cache contains a
+// mocked TRISADirectoryClient which returns canned responses for the Peers directory
+// service requests.
+func NewMock(certs *trust.Provider, pool trust.ProviderPool, directoryURL string) *Peers {
+	const peerName = "test-peer"
+	p := &Peers{
+		certs:        certs,
+		pool:         pool,
+		peers:        make(map[string]*Peer),
+		directoryURL: directoryURL,
+		directory:    &mock.MockDirectoryClient{},
+	}
+	p.peers[peerName] = &Peer{
+		parent: p,
+		info: &PeerInfo{
+			CommonName: peerName,
+			SigningKey: &rsa.PublicKey{},
+		},
+		client: &mock.MockNetworkClient{},
 	}
 	return p
 }

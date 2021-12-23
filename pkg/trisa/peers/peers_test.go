@@ -315,6 +315,6 @@ func makePeersCache(t *testing.T) *peers.Peers {
 	require.NoError(t, err)
 	private, err := trust.Decrypt(pfxData, pkcs12.DefaultPassword)
 	require.NoError(t, err)
-	cache := peers.New(private, trust.NewPool(), peers.PeersTesting)
+	cache := peers.NewMock(private, trust.NewPool(), "testdirectory.org")
 	return cache
 }
