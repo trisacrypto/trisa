@@ -50,6 +50,10 @@ func Open(in *protocol.SecureEnvelope, key interface{}) (_ *Envelope, err error)
 		payloadData   []byte
 	)
 
+	if in == nil {
+		return nil, protocol.Errorf(protocol.BadRequest, "missing secure envelope")
+	}
+
 	// Check the algorithms to make sure they're supported
 	// TODO: allow more algorithms than just AES256-GCM and HMAC-SHA256
 	if in.EncryptionAlgorithm != "AES256-GCM" {
