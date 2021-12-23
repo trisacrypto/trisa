@@ -73,16 +73,15 @@ func Errorp(err error) (e *Error, ok bool) {
 		return e, ok
 	}
 
-	// TODO: DANGER! This doesn't work for some reason, the tests just hang?
-	// var s *status.Status
-	// if s, ok = status.FromError(err); ok {
-	// 	es := s.Details()
-	// 	if len(es) == 1 {
-	// 		if e, ok = es[0].(*Error); ok {
-	// 			return e, ok
-	// 		}
-	// 	}
-	// }
+	var s *status.Status
+	if s, ok = status.FromError(err); ok {
+		es := s.Details()
+		if len(es) == 1 {
+			if e, ok = es[0].(*Error); ok {
+				return e, ok
+			}
+		}
+	}
 
 	return &Error{Code: Unhandled, Message: err.Error()}, false
 }
