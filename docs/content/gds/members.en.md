@@ -6,13 +6,13 @@ description: "Accessing Other TRISA Members"
 weight: 70
 ---
 
-The `TRISAMembers` service is an experimental service that provides extra access to the directory service for verified TRISA members. Only members of the TRISA network (e.g. members who have been issued valid identity certificates) can access other members of the network using this service. *Note: Once validated, this service will be moved into the official TRISA specification.*
+The `TRISAMembers` service is an experimental service that provides extra, secure access to the directory service for verified TRISA members. Only members of the TRISA network (e.g. members who have been issued valid identity certificates) can access detailed directory service data about the network using this service. *Note: Once validated, this service will be moved into the official TRISA specification.*
 
 ## The `TRISAMembers` Service
 
 This section describes the protocol buffers for the `TRISAMembers` endpoint, which can be found [here](https://github.com/trisacrypto/directory/blob/main/proto/gds/members/v1alpha1/members.proto). This file can be compiled into the language of your choice ([example for Go](https://github.com/trisacrypto/directory/tree/main/pkg/gds/members/v1alpha1)). *Note: You will need to download and install the protocol buffer compiler if you have not already.*
 
-The `TRISAMembers` service expects as input a `ListRequest` and returns a `ListReply`.
+Currently, the `TRISAMembers` service is comprised of only a single RPC &mdash; the `List` RPC. Other experimental, secure RPCs may be made available in the future.
 
 ```proto
 service TRISAMembers {
@@ -20,6 +20,10 @@ service TRISAMembers {
     rpc List(ListRequest) returns (ListReply) {};
 }
 ```
+
+## Listing Verified Members
+
+The `List` RPC returns a paginated list of all _verified_ TRISA members to facilitate TRISA peer lookups. The RPC expects as input a `ListRequest` and returns a `ListReply`.
 
 ### `ListRequest`
 
@@ -77,7 +81,7 @@ To use the `TRISAMembers` service, you must authenticate with [mTLS](https://grp
 
 The gRPC documentation on [authentication](https://grpc.io/docs/guides/auth) provides code samples for connecting using mTLS in a variety of languages, including [Java](https://grpc.io/docs/guides/auth/#java), [C++](https://grpc.io/docs/guides/auth/#c), [Golang](https://grpc.io/docs/guides/auth/#go), [Ruby](https://grpc.io/docs/guides/auth/#ruby), and [Python](https://grpc.io/docs/guides/auth/#python).
 
-For example, if you were using Golang to connect to the Global Directory Service, you would use the [`tls`](https://pkg.go.dev/crypto/tls), [`x509`](https://pkg.go.dev/crypto/x509), and [`credentials`](https://pkg.go.dev/google.golang.org/grpc/credentials) libraries to load your TRISA identity certificates from their secure location on your computer and construct TLS credentials to mutually validate the connection with the server. Finally you would use the compiled members protocol buffer code to create a members client; the protocol buffer definitions are described more fully earlier in this page.
+For example, if you were using Golang to connect to the Directory Service, you would use the [`tls`](https://pkg.go.dev/crypto/tls), [`x509`](https://pkg.go.dev/crypto/x509), and [`credentials`](https://pkg.go.dev/google.golang.org/grpc/credentials) libraries to load your TRISA identity certificates from their secure location on your computer and construct TLS credentials to mutually validate the connection with the server. Finally you would use the compiled members protocol buffer code to create a members client. *Note: the protocol buffer definitions are described more fully earlier in this page.*
 
 ```golang
 import (
@@ -90,7 +94,7 @@ import (
 
 func (m *MyProfile) Connect() (_ members.TRISAMembersClient, err error){
     config := &tls.Config{
-		Certificates: []tls.Certificate{m.Cert}, // m.Cert is your TRISA certificate
+		Certificates: []tls.Certificate{m.Cert}, // m.Cert is your TRISA certificate parsed into a *x509.Certificate
 		MinVersion:   tls.VersionTLS12,
 		CurvePreferences: []tls.CurveID{
 			tls.CurveP521,
@@ -105,7 +109,7 @@ func (m *MyProfile) Connect() (_ members.TRISAMembersClient, err error){
 			tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
 		},
 		ClientAuth: tls.RequireAndVerifyClientCert, // this will ensure an mTLS connection
-		ClientCAs:  m.Pool, // m.Pool is a *x509.CertPool
+		ClientCAs:  m.Pool, // m.Pool is a *x509.CertPool that must contain the RA and IA public certs from your TRISA certificate chain
 	}
 
     var creds *credentials.TransportCredentials
