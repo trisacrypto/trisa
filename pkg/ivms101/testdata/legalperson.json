@@ -24,9 +24,7 @@
     "customer_number": "",
     "national_identification": {
         "national_identifier": "213800AQUAUP6I215N33",
-        "national_identifier_type": 9,
-        "country_of_issue": "GB",
-        "registration_authority": "RA000589"
+        "national_identifier_type": 9
     },
     "country_of_registration": "GB"
 }
