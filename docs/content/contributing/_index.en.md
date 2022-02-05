@@ -1,7 +1,7 @@
 ---
 title: Contributing
 date: 2021-06-14T11:34:06-05:00
-lastmod: 2021-06-14T11:34:06-05:00
+lastmod: 2022-02-05T15:00:58-05:00
 description: "Contributing to the Open Source Project"
 weight: 110
 ---
@@ -18,7 +18,7 @@ The `proto` folder contains the core RPC definitions, including:
  - the interVASP Messaging Standard (IVMS) message definitions, which serve as the basis for how two VASP peers should mutually describe entities involved in cryptographic transfers, including names, locations, and government identifiers. This is the spec that will allow originators to identify themselves to beneficiaries and to request information from those beneficiaries to meet the legal requirements of their regulators.
  - the TRISA Network's service definitions, essentially how the different parts of the API work &mdash; from the exchange of keys (to ensure both peers have the requisite details to exchange information) to the transfer of "secure envelopes" (cryptographically sealed protocol buffer messages that can only be decrypted by the intended recipient). The `trisa` subfolder also contains generic message types for transactions that are intended to provide maximum flexibility for a wide range of TRISA use cases.
 
-The `pkg` folder contains the implementation code, including compiled code generated from the protocol buffer definitions in the `proto` folder[^1].
+The `pkg` folder contains the reference implementation code, including compiled code generated from the protocol buffer definitions in the `proto` folder[^1].
  - The `iso3166` folder contains language codes.
  - The `ivms101` folder extends the generated protobuf code with JSON loading utilities, validation helpers, short constants, etc.
  - The `trisa` folder contains structs and methods for a range of TRISA-related tasks, such as performing cryptography and making mTLS connections.
@@ -26,3 +26,11 @@ The `pkg` folder contains the implementation code, including compiled code gener
  The `lib` folder is intended to showcase utility code similar to that in the `pkg` folder, but for languages other than Go. If you work in a language other than go, this would be a great place to start your contribution!
 
 [^1]: Note that these compiled files are compiled for Golang; but this is certainly not the only option. Those interested in building implementation code in a different language should look to the `lib` folder, which currently contains placeholder folders but is intended to showcase such other implementations (including compiled protocol buffer code for these other languages).
+
+## The Global Directory Service
+
+Another integral part of the TRISA protocol is the Global Directory Service, which serves as a look-up tool for TRISA members to identify peers with which they wish to exchange information. For RPC definitions and implementation code related to the Global Directory Service, visit the companion [directory repository](https://github.com/trisacrypto/directory). To learn more about how to become a member of the directory, visit [vaspdirectory.net](https://vaspdirectory.net/).
+
+## Translations
+
+Translations of the documentation on trisa.dev are done periodically by human translators, and may become out-of-sync with the English text or reflect errors. If you notice an error, please open a [bug report](https://github.com/trisacrypto/trisa/issues/new) to notify us.
