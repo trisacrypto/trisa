@@ -117,12 +117,21 @@ func (p *LegalPerson) Validate() (err error) {
 		}
 
 		// Constraint: CompleteNationalIdentifierLegalPerson
+		// C9 means that Country of Issue must **only** be used for natural persons
+		if p.NationalIdentification.CountryOfIssue != "" {
+			return ErrCompleteNationalIdentifierLegalPerson
+		}
 		if p.NationalIdentification.NationalIdentifierType != NationalIdentifierLEIX {
-			if p.NationalIdentification.CountryOfIssue != "" || p.NationalIdentification.RegistrationAuthority == "" {
+			// if the ID is not LEIX, Registration Authority is mandatory
+			if p.NationalIdentification.RegistrationAuthority == "" {
+				return ErrCompleteNationalIdentifierLegalPerson
+			}
+		} else {
+			// if the ID is an LEIX, Registration Authority must be empty
+			if p.NationalIdentification.RegistrationAuthority != "" {
 				return ErrCompleteNationalIdentifierLegalPerson
 			}
 		}
-
 	}
 
 	// Constraint: Optional ISO-3166-1 alpha-2 codes or XX

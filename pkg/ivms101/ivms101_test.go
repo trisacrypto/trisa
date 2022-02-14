@@ -16,7 +16,25 @@ func TestLegalPerson(t *testing.T) {
 	// Should be able to load a valid legal person from JSON data
 	var person *ivms101.LegalPerson
 	require.NoError(t, json.Unmarshal(data, &person))
+
+	// Legal person can't have a Country of Issue
 	require.NoError(t, person.Validate())
+	person.NationalIdentification.CountryOfIssue = "GB"
+	require.Error(t, person.Validate())
+
+	// If the National Identifier is an LEI, Registration Authority must be empty
+	person.NationalIdentification.CountryOfIssue = ""
+	person.NationalIdentification.NationalIdentifierType = 9
+	person.NationalIdentification.RegistrationAuthority = ""
+	require.NoError(t, person.Validate())
+	person.NationalIdentification.RegistrationAuthority = "Chuck Norris"
+	require.Error(t, person.Validate())
+
+	// If the National Identifier is not an LEI, Registration Authority is mandatory
+	person.NationalIdentification.NationalIdentifierType = 3
+	require.NoError(t, person.Validate())
+	person.NationalIdentification.RegistrationAuthority = ""
+	require.Error(t, person.Validate())
 
 	// Correct name can be validated
 	require.NoError(t, person.Name.Validate())
