@@ -23,9 +23,7 @@ enableMissingTranslationPlaceholders = false
     github_doc_repository = "https://github.com/trisacrypto/trisa"
 
     # Analytic section
-    google_analytics_id = ""      # Your Google Analytics tracking id
-    tag_manager_container_id = "" # Your Google Tag Manager container id
-    google_site_verification = "" # Your Google Site Verification for Search Console
+    googleAnalytics = "G-F9T1H8EJJS"      # Your Google Analytics tracking id
 
     # When using multilingual website, disable the switch language button.
     disableLanguageSwitchingButton = false
