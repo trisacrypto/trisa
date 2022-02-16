@@ -17,6 +17,7 @@ message Transaction {
     string timestamp = 6;         // RFC 3339 timestamp of the transaction
     string extra_json = 7;        // any extra data as a JSON formatted object
     string asset_type = 8;        // the type of virtual asset for mult-asset chains
+    string tag = 9;               // optional memo/destination-tag required by some ledgers to identify transactions
 }
 
 // A confirmation receipt is a generic reply to a TRISA transfer that may not have a
