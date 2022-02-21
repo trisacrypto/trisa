@@ -128,5 +128,5 @@ func (m *MyProfile) Connect() (_ members.TRISAMembersClient, err error){
 }
 ```
 
-*注意，目前有2个TRISA目录；TRISA [TestNet](https://trisatest.net/)，允许用户对TRISA交互进行实验，以及[VASP Directory](https://vaspdirectory.net/)，是用于TRISA交易的生产网络。  如果您已经注册了TestNet并拥有TestNet证书，那么您将传递到拨号功能的端点将是`members.testnet:443`*
+*注意，目前有2个TRISA目录；TRISA [TestNet](https://trisatest.net/)，允许用户对TRISA交互进行实验，以及[VASP Directory](https://vaspdirectory.net/)，是用于TRISA交易的生产网络。  如果您已经注册了TestNet并拥有TestNet证书，那么您将传递到拨号功能的端点将是`members.testnet:443`。 或者，如果您想访问VASP会员目录，且已经是一位注册会员，您可以使用终端：`members.vaspdirectory.net:443`*
 

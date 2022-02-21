@@ -14,8 +14,7 @@ TRISA是一个开源项目，欢迎大家做出贡献。
 
 这个存储库包含了[白皮书](https://trisa.io/trisa-whitepaper/) 中描述的TRISA协议中gRPC的实现，它利用了[protocol buffers](https://grpc.io/) 和Golang。
 
-The `proto` folder contains the core RPC definitions, including:
-“proto”文件夹包含核心RPC定义，其中包括：
+`proto`文件夹包含核心RPC定义，其中包括：
  - interVASP消息标准（IVMS）消息定义，作为两个VASP双方如何相互描述加密传输中涉及的实体的基础  ，其中包括名称、位置和政府识别码。该规范将允许发起者向受益人表明自己的身份，并要求受益人提供信息来满足监管机构的法律要求。
  - TRISA网络的服务定义，本质上是API的不同部分是如何工作和 &mdash; 从密钥的交换（确保双方都有交换信息所需的详细信息）到“安全信封”的传输（加密密封的protocol buffer信息，只能由预定的接收者解密）。`trisa`子文件夹还包含用于交易的通用消息类型，旨在为广泛的TRISA用例提供最大的灵活性。
 
