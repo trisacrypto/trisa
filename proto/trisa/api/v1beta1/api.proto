@@ -144,7 +144,7 @@ message Payload {
     // digtially signed for auditing purposes.
     google.protobuf.Any transaction = 2;
 
-    // Timestamps the describe when the payload was originally sent and when it was
+    // Timestamps that describe when the payload was originally sent and when it was
     // accepted or received by the counterparty. These timestamps must be in the payload
     // so that they are digitally signed for non-repudiation. Both timestamps should be
     // RFC-3339 formatted strings with timezone information.
