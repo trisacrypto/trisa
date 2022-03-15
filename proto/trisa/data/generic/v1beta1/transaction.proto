@@ -20,9 +20,27 @@ message Transaction {
     string tag = 9;               // optional memo/destination-tag required by some ledgers to identify transactions
 }
 
-// A confirmation receipt is a generic reply to a TRISA transfer that may not have a
-// beneficiary response, e.g. in the case where the originator collects all the KYC
-// information. This is a convienience message for sending generic responses.
+// A control flow message to support asynchronous TRISA transfers. Pending messages can
+// be returned as an intermediate response during a compliance transfer if further
+// processing is required before a response can be sent. The Pending message should
+// provide information to the originator about when they can expect a response via the
+// reply_not_before and reply_not_after timestamps. The Pending message should also
+// provide collation information such as the envelope_id and original transaction so
+// that the response message can be matched to the original request.
+message Pending {
+    string envelope_id = 1;       // the TRISA envelope ID that refers to the compliance communication
+    string received_by = 2;       // the name of the recipient or recipient VASP
+    string received_at = 3;       // the RFC3339 formatted timestamp when the request was received
+    string message = 4;           // an optional message to respond with to the counterparty
+    string reply_not_after = 5;   // the RFC3339 formatted timestamp when the response will be returned by
+    string reply_not_before = 6;  // the RFC339 formatted timestamp that the response will not be sent before
+    string extra_json = 7;        // any extra data as a JSON formatted object
+    Transaction transaction = 15; // the original transaction for reference
+}
+
+// DEPRECATED: the ConfirmationReceipt message was deemed to cause confusion as it could
+// signal that the confirmation payload was received and the transfer is concluded. Use
+// the Pending message instead to signal that this is a control flow message.
 message ConfirmationReceipt {
     string envelope_id = 1;       // the TRISA envelope ID for reference
     string received_by = 2;       // name of the recipient or recipient VASP
