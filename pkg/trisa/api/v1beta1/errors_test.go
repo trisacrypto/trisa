@@ -15,15 +15,18 @@ import (
 func TestErrors(t *testing.T) {
 	err := api.Errorf(api.UnknownIdentity, "could not parse %q", "foo")
 	require.Error(t, err)
-	require.Equal(t, err.Error(), `trisa error [UNKOWN_IDENTITY]: could not parse "foo"`)
+	require.Equal(t, err.Error(), `trisa rejection [UNKOWN_IDENTITY]: could not parse "foo"`)
+	require.False(t, err.IsZero())
 
 	oerr, ok := api.Errorp(err)
 	require.True(t, ok)
 	require.Equal(t, err, oerr)
+	require.False(t, oerr.IsZero())
 
 	oerr, ok = api.Errorp(errors.New("unhandled error"))
 	require.False(t, ok)
-	require.Equal(t, oerr.Error(), "trisa error [UNHANDLED]: unhandled error")
+	require.Equal(t, oerr.Error(), "trisa rejection [UNHANDLED]: unhandled error")
+	require.False(t, oerr.IsZero())
 
 	sterr := err.Err()
 	require.Equal(t, sterr.Error(), `rpc error: code = Aborted desc = [UNKOWN_IDENTITY] could not parse "foo"`)
@@ -31,6 +34,7 @@ func TestErrors(t *testing.T) {
 	oerr, ok = api.Errorp(sterr)
 	require.True(t, ok)
 	require.True(t, proto.Equal(err, oerr), "unexpected return value from Errorp")
+	require.False(t, oerr.IsZero())
 
 	// WithRetry should return a new error with retry set to true
 	errWithRetry := err.WithRetry()
@@ -38,6 +42,7 @@ func TestErrors(t *testing.T) {
 	require.Equal(t, err.Message, errWithRetry.Message)
 	require.True(t, errWithRetry.Retry)
 	require.Nil(t, errWithRetry.Details)
+	require.False(t, errWithRetry.IsZero())
 
 	_, parseErr := err.WithDetails(nil)
 	require.Error(t, parseErr)
@@ -54,6 +59,35 @@ func TestErrors(t *testing.T) {
 	actualDetails := &api.Error{}
 	require.NoError(t, anypb.UnmarshalTo(errWithDetails.Details, actualDetails, proto.UnmarshalOptions{}))
 	require.True(t, proto.Equal(details, actualDetails), "unexpected details created by WithDetails")
+	require.False(t, errWithDetails.IsZero())
+}
+
+func TestIsZero(t *testing.T) {
+	err := &api.Error{}
+	require.True(t, err.IsZero(), "no code and no message should be zero valued")
+
+	err = &api.Error{Retry: true}
+	require.True(t, err.IsZero(), "non-zero retry is not sufficient")
+
+	details, _ := anypb.New(&api.Error{Code: api.ExceededTradingVolume, Message: "too fast"})
+	err = &api.Error{Details: details}
+	require.True(t, err.IsZero(), "non-zero details is not sufficient")
+
+	err = &api.Error{Code: api.OutOfNetwork}
+	require.False(t, err.IsZero(), "a code greater than zero should be sufficient")
+
+	err = &api.Error{Message: "unexpected content"}
+	require.False(t, err.IsZero(), "a message without a code should be sufficient")
+
+	err = &api.Error{Code: api.OutOfNetwork, Message: "unexpected content"}
+	require.False(t, err.IsZero(), "both a message and a code should be non-zero")
+
+	// After marshaling an empty protocol buffer message, it should still be zero
+	data, merr := proto.Marshal(&api.Error{})
+	require.NoError(t, merr, "could not marshal protocol buffer")
+	umerr := &api.Error{}
+	require.NoError(t, proto.Unmarshal(data, umerr), "could not unmarshal error pb")
+	require.True(t, umerr.IsZero(), "should be zero after marshal and unmarshal")
 }
 
 // Test that the Err function returns an error that includes the corresponding gRPC

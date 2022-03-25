@@ -125,11 +125,17 @@ func (e *Error) WithDetails(details proto.Message) (_ *Error, err error) {
 
 // Error implements the error interface for printing and logging.
 func (e *Error) Error() string {
-	return fmt.Sprintf("trisa error [%s]: %s", e.Code, e.Message)
+	return fmt.Sprintf("trisa rejection [%s]: %s", e.Code, e.Message)
+}
+
+// IsZero returns true if the error has a code == 0 and no message
+func (e *Error) IsZero() bool {
+	return e.Code == 0 && e.Message == ""
 }
 
 // Err returns a gRPC status error with appropriate gRPC status codes for returning
 // out of a gRPC server function. This should be returned where possible.
+// Deprecated: return an error inside of the envelope for a rejection.
 func (e *Error) Err() (err error) {
 	var code codes.Code
 	switch {
