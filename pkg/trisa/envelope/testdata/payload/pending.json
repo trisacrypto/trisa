@@ -1,0 +1,20 @@
+{
+    "envelope_id": "2b3b4c95-0a78-4f2a-a9fa-041970f97144",
+    "received_by": "BobVASP Compliance Review",
+    "received_at": "2022-01-27T08:21:43Z",
+    "message": "We have flagged this message as needing further review and will respond shortly.",
+    "reply_not_after": "2022-01-30T08:22:00Z",
+    "reply_not_before": "2022-01-27T20:22:00Z",
+    "extra_json": "",
+    "transaction": {
+        "txid": "",
+        "originator": "14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v",
+        "beneficiary": "14WU745djqecaJ1gmtWQGeMCFim1W5MNp3",
+        "amount": "0.00206412",
+        "network": "btc",
+        "timestamp": "",
+        "extra_json": "",
+        "asset_type": "BTC",
+        "tag": ""
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "2b3b4c95-0a78-4f2a-a9fa-041970f97144",
+  "payload": "",
+  "encryption_key": "",
+  "encryption_algorithm": "",
+  "hmac": "",
+  "hmac_secret": "",
+  "hmac_algorithm": "",
+  "error": {
+    "code": "COMPLIANCE_CHECK_FAIL",
+    "message": "specified account has been frozen temporarily",
+    "retry": false,
+    "details": null
+  },
+  "timestamp": "2022-01-27T08:21:43Z",
+  "sealed": false,
+  "public_key_signature": ""
+}

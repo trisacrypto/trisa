@@ -7,7 +7,7 @@ import (
 	"github.com/trisacrypto/trisa/pkg/trisa/envelope"
 )
 
-func TestState(t *testing.T) {
+func TestStateType(t *testing.T) {
 	require.Equal(t, "clear", envelope.Clear.String())
 	require.Equal(t, "unsealed", envelope.Unsealed.String())
 	require.Equal(t, "sealed", envelope.Sealed.String())
@@ -25,4 +25,10 @@ func TestState(t *testing.T) {
 	require.Equal(t, envelope.ClearError, envelope.Clear|envelope.Error)
 	require.Equal(t, envelope.UnsealedError, envelope.Unsealed|envelope.Error)
 	require.Equal(t, envelope.SealedError, envelope.Sealed|envelope.Error)
+}
+
+func TestEnvelopeState(t *testing.T) {
+	// No payload, no envelope should return an invalid state
+	env := &envelope.Envelope{}
+	require.Equal(t, envelope.Unknown, env.State())
 }

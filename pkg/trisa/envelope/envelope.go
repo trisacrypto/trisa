@@ -43,11 +43,14 @@ For more details about how to work with envelopes, see the example code.
 package envelope
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto"
+	"github.com/trisacrypto/trisa/pkg/trisa/crypto/aesgcm"
+	"google.golang.org/protobuf/proto"
 )
 
 // Envelope is a wrapper for a trisa.SecureEnvelope that adds cryptographic
@@ -65,12 +68,16 @@ type Envelope struct {
 	seal    crypto.Cipher
 }
 
+//===========================================================================
+// Envelope Constructors
+//===========================================================================
+
 // New creates a new Envelope from scratch with the associated payload and options.
 // New should be used to initialize a secure envelope to send to a recipient, usually
 // before the first transfer of an information exchange, Open is used thereafter.
-func New(payload *api.Payload) (_ *Envelope, err error) {
-	// TODO: handle options
-	return &Envelope{
+func New(payload *api.Payload, opts ...Option) (env *Envelope, err error) {
+	// Create a new empty secure envelope
+	env = &Envelope{
 		msg: &api.SecureEnvelope{
 			Id:                  uuid.NewString(),
 			Payload:             nil,
@@ -85,23 +92,47 @@ func New(payload *api.Payload) (_ *Envelope, err error) {
 			PublicKeySignature:  "",
 		},
 		payload: payload,
-	}, nil
+	}
+
+	// Apply the options
+	for _, opt := range opts {
+		if err = opt(env); err != nil {
+			return nil, err
+		}
+	}
+	return env, nil
 }
 
 // Open initializes an Envelope from an incoming secure envelope without modifying the
 // original envelope. The Envelope can then be inspected and managed using cryptographic
 // and accessor functions.
-func Open(msg *api.SecureEnvelope) (_ *Envelope, err error) {
-	// TODO: handle options
-	return &Envelope{
+func Wrap(msg *api.SecureEnvelope, opts ...Option) (env *Envelope, err error) {
+	if msg == nil {
+		return nil, ErrNoMessage
+	}
+
+	// Wrap the secure envelope with the envelope handler.
+	env = &Envelope{
 		msg: msg,
-	}, nil
+	}
+
+	// Apply the options
+	for _, opt := range opts {
+		if err = opt(env); err != nil {
+			return nil, err
+		}
+	}
+	return env, nil
 }
+
+//===========================================================================
+// Envelope State Transitions
+//===========================================================================
 
 // Reject returns a new secure envelope that contains a rejection error but no payload.
 // The original envelope is not modified, the secure envelope is cloned.
-func (e *Envelope) Reject(err *api.Error) (*Envelope, error) {
-	return &Envelope{
+func (e *Envelope) Reject(reject *api.Error, opts ...Option) (env *Envelope, err error) {
+	env = &Envelope{
 		msg: &api.SecureEnvelope{
 			Id:                  e.msg.Id,
 			Payload:             nil,
@@ -110,12 +141,202 @@ func (e *Envelope) Reject(err *api.Error) (*Envelope, error) {
 			Hmac:                nil,
 			HmacSecret:          nil,
 			HmacAlgorithm:       "",
-			Error:               err,
+			Error:               reject,
 			Timestamp:           time.Now().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
-	}, nil
+	}
+
+	// Apply the options
+	for _, opt := range opts {
+		if err = opt(env); err != nil {
+			return nil, err
+		}
+	}
+	return env, nil
+}
+
+// Encrypt the envelope by marshaling the payload, encrypting, and digitally signing it.
+// If the original envelope does not have a crypto method (either by the user supplying
+// one via options or from an incoming secure envelope) then a new AESGCM crypto is
+// created with a random encryption key and hmac secret. Encrypt returns a new unsealed
+// envelope that maintains the original crypto and cipher mechanisms. Two types of
+// errors may be returned: a rejection error is intended to be returned to the sender
+// due to some protocol-specific issue, otherwise an error is returned if the user has
+// made some error that requires rehandling of the envelope.
+// The original envelope is not modified, the secure envelope is cloned.
+func (e *Envelope) Encrypt(opts ...Option) (env *Envelope, reject *api.Error, err error) {
+	// The envelope may only be encrypted from the Clear state (e.g. it has a payload)
+	state := e.State()
+	if state != Clear && state != ClearError {
+		return nil, nil, fmt.Errorf("cannot encrypt envelope from %q state", state)
+	}
+
+	// Clone the envelope
+	env = &Envelope{
+		msg: &api.SecureEnvelope{
+			Id:                  e.msg.Id,
+			Payload:             nil,
+			EncryptionKey:       nil,
+			EncryptionAlgorithm: "",
+			Hmac:                nil,
+			HmacSecret:          nil,
+			HmacAlgorithm:       "",
+			Error:               e.msg.Error,
+			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Sealed:              false,
+			PublicKeySignature:  "",
+		},
+		crypto: e.crypto,
+		seal:   e.seal,
+	}
+
+	// Apply the options
+	for _, opt := range opts {
+		if err = opt(env); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	// Validate the payload before encrypting
+	if err = e.ValidatePayload(); err != nil {
+		return nil, nil, err
+	}
+
+	// Create a new AES-GCM crypto handler if one is not supplied on the envelope. This
+	// generates a random encryption key and hmac secret on a per-envelope basis,
+	// helping to prevent statistical cryptographic attacks.
+	if env.crypto == nil {
+		if env.crypto, err = aesgcm.New(nil, nil); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	// Encrypt the payload and fill in the details on the envelope.
+	if reject, err = env.encrypt(e.payload); err != nil {
+		return nil, nil, err
+	}
+	return env, reject, nil
+}
+
+// Internal encrypt method to update an envelope directly and for short-circuit methods.
+func (e *Envelope) encrypt(payload *api.Payload) (_ *api.Error, err error) {
+	if e.crypto == nil {
+		return nil, ErrCannotEncrypt
+	}
+
+	var cleartext []byte
+	if cleartext, err = proto.Marshal(e.payload); err != nil {
+		return nil, fmt.Errorf("could not marshal payload: %s", err)
+	}
+
+	if e.msg.Payload, err = e.crypto.Encrypt(cleartext); err != nil {
+		return nil, fmt.Errorf("could not encrypt payload data: %s", err)
+	}
+
+	if e.msg.Hmac, err = e.crypto.Sign(e.msg.Payload); err != nil {
+		return nil, fmt.Errorf("could not sign payload data: %s", err)
+	}
+
+	// Populate metadata on envelope
+	e.msg.EncryptionKey = e.crypto.EncryptionKey()
+	e.msg.HmacSecret = e.crypto.HMACSecret()
+	e.msg.EncryptionAlgorithm = e.crypto.EncryptionAlgorithm()
+	e.msg.HmacAlgorithm = e.crypto.SignatureAlgorithm()
+
+	// Validate the message before returning
+	if err = e.ValidateMessage(); err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
+// The original envelope is not modified, the secure envelope is cloned.
+func (e *Envelope) Decrypt(opts ...Option) (env *Envelope, reject *api.Error, err error) {
+	return nil, nil, nil
+}
+
+// Seal the envelope using public key cryptography so that the envelope can only be
+// decrypted by the recipient. This method encrypts the encryption key and hmac secret
+// using the supplied public key, marking the secure envelope as sealed and updates the
+// signature of the public key used to seal the secure envelope. Two types of errors may
+// be returned from this method: a rejection error used to communicate to the sender
+// that something went wrong and they should resend the envelope or an error that the
+// user should handle in their own code base.
+// The original envelope is not modified, the secure envelope is cloned.
+func (e *Envelope) Seal(opts ...Option) (env *Envelope, reject *api.Error, err error) {
+	// The envelope may only be encrypted from the Unsealed state (e.g. it has been encrypted)
+	state := e.State()
+	if state != Unsealed && state != UnsealedError {
+		return nil, nil, fmt.Errorf("cannot seal envelope from %q state", state)
+	}
+
+	// Clone the envelope
+	env = &Envelope{
+		msg: &api.SecureEnvelope{
+			Id:                  e.msg.Id,
+			Payload:             e.msg.Payload,
+			EncryptionKey:       e.msg.EncryptionKey,
+			EncryptionAlgorithm: e.msg.EncryptionAlgorithm,
+			Hmac:                e.msg.Hmac,
+			HmacSecret:          e.msg.HmacSecret,
+			HmacAlgorithm:       e.msg.HmacAlgorithm,
+			Error:               e.msg.Error,
+			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Sealed:              false,
+			PublicKeySignature:  "",
+		},
+		crypto: e.crypto,
+		seal:   e.seal,
+	}
+
+	// Apply the options
+	for _, opt := range opts {
+		if err = opt(env); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	// Seal the payload and fill in the details on the envelope.
+	if reject, err = env.sealEnvelope(); err != nil {
+		return nil, nil, err
+	}
+	return env, reject, nil
+}
+
+func (e *Envelope) sealEnvelope() (_ *api.Error, err error) {
+	if e.seal == nil {
+		return nil, ErrCannotSeal
+	}
+
+	if e.msg.EncryptionKey, err = e.seal.Encrypt(e.msg.EncryptionKey); err != nil {
+		return nil, fmt.Errorf("could not seal encryption key: %s", err)
+	}
+
+	if e.msg.HmacSecret, err = e.seal.Encrypt(e.msg.HmacSecret); err != nil {
+		return nil, fmt.Errorf("could not seal hmac secret: %s", err)
+	}
+
+	// Message is now sealed
+	// TODO: add public key signature to sealing workflow
+	e.msg.Sealed = true
+	e.msg.PublicKeySignature = ""
+	return nil, nil
+}
+
+// The original envelope is not modified, the secure envelope is cloned.
+func (e *Envelope) Unseal(opts ...Option) (env *Envelope, reject *api.Error, err error) {
+	return nil, nil, nil
+}
+
+//===========================================================================
+// Envelope Accessors
+//===========================================================================
+
+// ID returns the envelope ID
+func (e *Envelope) ID() string {
+	return e.msg.Id
 }
 
 // Proto returns the trisa.SecureEnvelope protocol buffer.
@@ -123,23 +344,18 @@ func (e *Envelope) Proto() *api.SecureEnvelope {
 	return e.msg
 }
 
-// Payload returns the parsed trisa.Payload protocol buffer if available.
-func (e *Envelope) Payload() *api.Payload {
-	return e.payload
+// Payload returns the parsed trisa.Payload protocol buffer if available. If the
+// envelope is not decrypted then an error is returned.
+func (e *Envelope) Payload() (_ *api.Payload, err error) {
+	state := e.State()
+	if state != Clear && state != ClearError {
+		err = fmt.Errorf("envelope is in state %q: payload may be invalid", state)
+	}
+	return e.payload, err
 }
 
-// Crypto returns the cryptographic method used to encrypt/decrypt the payload.
-func (e *Envelope) Crypto() crypto.Crypto {
-	return e.crypto
-}
-
-// Seal returns the cryptographic cipher method used to seal/unseal the envelope.
-func (e *Envelope) Seal() crypto.Cipher {
-	return e.seal
-}
-
-// Error returns the error on the envelope if it exists
-func (e *Envelope) Error() error {
+// Error returns the rejection error on the envelope if it exists
+func (e *Envelope) Error() *api.Error {
 	// Ensure a nil error is returned if the error is zero-valued
 	if e.msg.Error != nil && e.msg.Error.IsZero() {
 		return nil
@@ -164,6 +380,20 @@ func (e *Envelope) Timestamp() (ts time.Time, err error) {
 	return ts, err
 }
 
+// Crypto returns the cryptographic method used to encrypt/decrypt the payload.
+func (e *Envelope) Crypto() crypto.Crypto {
+	return e.crypto
+}
+
+// Sealer returns the cryptographic cipher method used to seal/unseal the envelope.
+func (e *Envelope) Sealer() crypto.Cipher {
+	return e.seal
+}
+
+//===========================================================================
+// Envelope Validation
+//===========================================================================
+
 // State returns the current state of the envelope.
 func (e *Envelope) State() State {
 	// If a payload exists on the envelope, then it is in the clear
@@ -180,7 +410,7 @@ func (e *Envelope) State() State {
 	}
 
 	// If there is a secure envelope, it should be valid
-	if err := e.ValidMessage(); err != nil {
+	if err := e.ValidateMessage(); err != nil {
 		return Corrupted
 	}
 
@@ -199,8 +429,8 @@ func (e *Envelope) State() State {
 	return UnsealedError
 }
 
-// Returns true if the secure envelope has required fields to send.
-func (e *Envelope) ValidMessage() error {
+// ValidateMessage returns an error if the secure envelope does not have the required fields to send.
+func (e *Envelope) ValidateMessage() error {
 	if e.msg == nil {
 		return ErrNoMessage
 	}
@@ -234,8 +464,9 @@ func (e *Envelope) ValidMessage() error {
 	return nil
 }
 
-// Returns true if the secure envelope has a valid payload
-func (e *Envelope) ValidPayload() error {
+// ValidatePayload returns an error if the payload is not ready to be encrypted.
+// TODO: should we parse the types of the payload to ensure they're TRISA types?
+func (e *Envelope) ValidatePayload() error {
 	if e.payload == nil {
 		return ErrNoPayload
 	}
