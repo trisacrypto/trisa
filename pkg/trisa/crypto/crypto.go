@@ -39,6 +39,11 @@ type KeyHandler interface {
 	HMACSecret() (secret []byte)
 }
 
+// KeyIdentifier can return a hash value or some other identifying material for a public key
+type KeyIdentifier interface {
+	PublicKeySignature() (string, error)
+}
+
 // Random generates a secure random sequence of bytes, this helper function is used to
 // easily create keys, salts, and secrets in the crypto subpackages.
 func Random(n int) (b []byte, err error) {

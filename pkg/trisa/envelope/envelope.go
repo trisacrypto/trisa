@@ -53,6 +53,82 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// Seal an envelope using the public signing key of the TRISA peer (must be supplied via
+// the WithSealingKey or WithRSAPublicKey options). A secure envelope is created by
+// marshaling the payload, encrypting it, then sealing the envelope by encrypting the
+// encryption key and hmac secret with the public key of the recipient. This method
+// returns two types of errors: a rejection error can be returned to the sender to
+// indicate that the TRISA protocol failed, otherwise an error is returned for the user
+// to handle. This method is a convenience one-liner, for more control of the sealing
+// process or to manage intermediate steps, use the Envelope wrapper directly.
+func Seal(payload *api.Payload, opts ...Option) (_ *api.SecureEnvelope, reject *api.Error, err error) {
+	var env *Envelope
+	if env, err = New(payload, opts...); err != nil {
+		return nil, nil, err
+	}
+
+	// Validate the payload before encrypting
+	if err = env.ValidatePayload(); err != nil {
+		return nil, nil, err
+	}
+
+	// Create a new AES-GCM crypto handler if one is not supplied on the envelope. This
+	// generates a random encryption key and hmac secret on a per-envelope basis,
+	// helping to prevent statistical cryptographic attacks.
+	if env.crypto == nil {
+		if env.crypto, err = aesgcm.New(nil, nil); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	if reject, err = env.encrypt(payload); reject != nil || err != nil {
+		if reject != nil {
+			msg, _ := env.Reject(reject)
+			return msg.Proto(), reject, err
+		}
+		return nil, nil, err
+	}
+
+	if reject, err = env.sealEnvelope(); reject != nil || err != nil {
+		if reject != nil {
+			msg, _ := env.Reject(reject)
+			return msg.Proto(), reject, err
+		}
+		return nil, nil, err
+	}
+
+	return env.Proto(), nil, nil
+}
+
+// Open a secure envelope using the private key that is paired with the public key that
+// was used to seal the envelope (must be supplied via the WithSealingKey or
+// WithRSAPrivateKey options). This method decrypts the encryption key and hmac secret,
+// decrypts and verifies the payload HMAC signature, then unmarshals the payload and
+// verifies its contents. This method returns two types of errors: a rejection error
+// that can be returned to the sender to indicate that the TRISA protocol failed,
+// otherwise an error is returned for the user to handle. This method is a convenience
+// one-liner, for more control of the open envelope process or to manage intermediate
+// steps, use the Envelope wrapper directly.
+func Open(msg *api.SecureEnvelope, opts ...Option) (payload *api.Payload, reject *api.Error, err error) {
+	var env *Envelope
+	if env, err = Wrap(msg, opts...); err != nil {
+		return nil, nil, err
+	}
+
+	if reject, err = env.unsealEnvelope(); reject != nil || err != nil {
+		return nil, reject, err
+	}
+
+	if reject, err = env.decrypt(); reject != nil || err != nil {
+		return nil, reject, err
+	}
+
+	if payload, err = env.Payload(); err != nil {
+		return nil, nil, err
+	}
+	return payload, nil, nil
+}
+
 // Envelope is a wrapper for a trisa.SecureEnvelope that adds cryptographic
 // functionality to the protocol buffer payload. An envelope can be in one of three
 // states: clear, unsealed, and sealed -- referring to the cryptographic status of the
@@ -103,7 +179,7 @@ func New(payload *api.Payload, opts ...Option) (env *Envelope, err error) {
 	return env, nil
 }
 
-// Open initializes an Envelope from an incoming secure envelope without modifying the
+// Wrap initializes an Envelope from an incoming secure envelope without modifying the
 // original envelope. The Envelope can then be inspected and managed using cryptographic
 // and accessor functions.
 func Wrap(msg *api.SecureEnvelope, opts ...Option) (env *Envelope, err error) {
@@ -257,6 +333,11 @@ func (e *Envelope) Decrypt(opts ...Option) (env *Envelope, reject *api.Error, er
 	return nil, nil, nil
 }
 
+// Internal decrypt method to update an envelope directly and for short-circuit methods.
+func (e *Envelope) decrypt() (_ *api.Error, err error) {
+	return nil, nil
+}
+
 // Seal the envelope using public key cryptography so that the envelope can only be
 // decrypted by the recipient. This method encrypts the encryption key and hmac secret
 // using the supplied public key, marking the secure envelope as sealed and updates the
@@ -266,7 +347,7 @@ func (e *Envelope) Decrypt(opts ...Option) (env *Envelope, reject *api.Error, er
 // user should handle in their own code base.
 // The original envelope is not modified, the secure envelope is cloned.
 func (e *Envelope) Seal(opts ...Option) (env *Envelope, reject *api.Error, err error) {
-	// The envelope may only be encrypted from the Unsealed state (e.g. it has been encrypted)
+	// The envelope may only be sealed from the Unsealed state (e.g. it has been encrypted)
 	state := e.State()
 	if state != Unsealed && state != UnsealedError {
 		return nil, nil, fmt.Errorf("cannot seal envelope from %q state", state)
@@ -305,6 +386,7 @@ func (e *Envelope) Seal(opts ...Option) (env *Envelope, reject *api.Error, err e
 	return env, reject, nil
 }
 
+// Internal seal envelope method to update an envelope directly and for short-circuit methods.
 func (e *Envelope) sealEnvelope() (_ *api.Error, err error) {
 	if e.seal == nil {
 		return nil, ErrCannotSeal
@@ -319,15 +401,79 @@ func (e *Envelope) sealEnvelope() (_ *api.Error, err error) {
 	}
 
 	// Message is now sealed
-	// TODO: add public key signature to sealing workflow
 	e.msg.Sealed = true
-	e.msg.PublicKeySignature = ""
+
+	// Add public key signature if the key supports it
+	if pks, ok := e.seal.(crypto.KeyIdentifier); ok {
+		if e.msg.PublicKeySignature, err = pks.PublicKeySignature(); err != nil {
+			return nil, fmt.Errorf("could not compute public key signature: %s", err)
+		}
+	}
 	return nil, nil
 }
 
+// Unseal the envelope using public key cryptography so that the envelope can be opened
+// and decrypted. This method requires a sealing private key and will return an error
+// if one is not available. If the envelope is not able to be opened because the secure
+// envelope contains an unknown or improper state a rejection error is returned to
+// communicate back to the sender that the envelope could not be unsealed.
 // The original envelope is not modified, the secure envelope is cloned.
 func (e *Envelope) Unseal(opts ...Option) (env *Envelope, reject *api.Error, err error) {
-	return nil, nil, nil
+	// The envelope may only be unsealed from the Sealed state (e.g. it is a valid incoming secure envelope)
+	state := e.State()
+	if state != Sealed && state != SealedError {
+		return nil, nil, fmt.Errorf("cannot seal envelope from %q state", state)
+	}
+
+	// Clone the envelope
+	env = &Envelope{
+		msg: &api.SecureEnvelope{
+			Id:                  e.msg.Id,
+			Payload:             e.msg.Payload,
+			EncryptionKey:       e.msg.EncryptionKey,
+			EncryptionAlgorithm: e.msg.EncryptionAlgorithm,
+			Hmac:                e.msg.Hmac,
+			HmacSecret:          e.msg.HmacSecret,
+			HmacAlgorithm:       e.msg.HmacAlgorithm,
+			Error:               e.msg.Error,
+			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Sealed:              e.msg.Sealed,
+			PublicKeySignature:  e.msg.PublicKeySignature,
+		},
+		crypto: e.crypto,
+		seal:   e.seal,
+	}
+
+	// Apply the options
+	for _, opt := range opts {
+		if err = opt(env); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	// Seal the payload and fill in the details on the envelope.
+	if reject, err = env.unsealEnvelope(); err != nil {
+		return nil, nil, err
+	}
+	return env, reject, nil
+}
+
+// Internal unseal envelope method to update envelope directly and for short-circuit methods.
+func (e *Envelope) unsealEnvelope() (reject *api.Error, err error) {
+	if e.seal == nil {
+		return nil, ErrCannotUnseal
+	}
+
+	if e.msg.EncryptionKey, err = e.seal.Decrypt(e.msg.EncryptionKey); err != nil {
+		return api.Errorf(api.InvalidKey, "could not unseal encryption key").WithRetry(), err
+	}
+
+	if e.msg.HmacSecret, err = e.seal.Decrypt(e.msg.HmacSecret); err != nil {
+		return api.Errorf(api.InvalidKey, "could not unseal HMAC secret").WithRetry(), err
+	}
+
+	e.msg.Sealed = false
+	return nil, nil
 }
 
 //===========================================================================

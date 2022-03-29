@@ -102,7 +102,6 @@ func Open(in *protocol.SecureEnvelope, key interface{}) (_ *Envelope, err error)
 	if err = proto.Unmarshal(payloadData, env.Payload); err != nil {
 		return nil, protocol.Errorf(protocol.EnvelopeDecodeFail, "could not unmarshal payload from decrypted data: %s", err)
 	}
-
 	return env, nil
 }
 

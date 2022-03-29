@@ -3,6 +3,8 @@ package envelope_test
 import (
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -30,8 +32,8 @@ func TestSendEnvelopeWorkflow(t *testing.T) {
 	payload, err := loadPayloadFixture("testdata/payload.json")
 	require.NoError(t, err, "could not load payload")
 
-	key, err := rsa.GenerateKey(rand.Reader, 4096)
-	require.NoError(t, err, "could not generate sealing key")
+	key, err := loadPrivateKey("testdata/sealing_key.pem")
+	require.NoError(t, err, "could not load sealing key")
 
 	env, err := envelope.New(payload, envelope.WithRSAPublicKey(&key.PublicKey))
 	require.NoError(t, err, "could not create envelope with no payload and no options")
@@ -62,6 +64,7 @@ func TestSendEnvelopeWorkflow(t *testing.T) {
 	require.NotEmpty(t, msg.Timestamp, "message is missing timestamp")
 	require.True(t, msg.Sealed, "message is not marked as sealed")
 	require.NotEmpty(t, msg.PublicKeySignature, "message is missing public key signature")
+	require.Equal(t, "SHA256:QhEspinUU51gK0dQGqLa56BA6xyRy5/7sN5/6GlaLZw", msg.PublicKeySignature, "unexpected public key signature")
 }
 
 func TestEnvelopeAccessors(t *testing.T) {
@@ -257,6 +260,36 @@ func generateFixtures() (err error) {
 	if err = dumpFixture("testdata/error_envelope.json", env); err != nil {
 		return fmt.Errorf("could not marshal error only envelope: %v", err)
 	}
+
+	// Create unsealed envelope
+	var handler *envelope.Envelope
+	if handler, err = envelope.New(payload); err != nil {
+		return err
+	}
+
+	if handler, _, err = handler.Encrypt(); err != nil {
+		return err
+	}
+
+	if err = dumpFixture("testdata/unsealed_envelope.json", handler.Proto()); err != nil {
+		return fmt.Errorf("could not marshal unsealed envelope: %v", err)
+	}
+
+	// Create RSA keys for sealed secure envelope fixtures
+	key, err := rsa.GenerateKey(rand.Reader, 4096)
+	if err != nil {
+		return fmt.Errorf("could not generate RSA key fixture")
+	}
+	if err = dumpPrivateKey("testdata/sealing_key.pem", key); err != nil {
+		return err
+	}
+
+	if env, _, err = envelope.Seal(pendingPayload, envelope.WithRSAPublicKey(&key.PublicKey)); err != nil {
+		return err
+	}
+	if err = dumpFixture("testdata/sealed_envelope.json", env); err != nil {
+		return fmt.Errorf("could not marshal sealed envelope: %v", err)
+	}
 	return nil
 }
 
@@ -266,4 +299,37 @@ func dumpFixture(path string, m proto.Message) (err error) {
 		return err
 	}
 	return ioutil.WriteFile(path, data, 0644)
+}
+
+func dumpPrivateKey(path string, key *rsa.PrivateKey) (err error) {
+	var data []byte
+	if data, err = x509.MarshalPKCS8PrivateKey(key); err != nil {
+		return err
+	}
+
+	block := pem.EncodeToMemory(&pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: data,
+	})
+
+	return ioutil.WriteFile(path, block, 0600)
+}
+
+func loadPrivateKey(path string) (key *rsa.PrivateKey, err error) {
+	var data []byte
+	if data, err = ioutil.ReadFile(path); err != nil {
+		return nil, err
+	}
+
+	block, _ := pem.Decode(data)
+	if block == nil {
+		return nil, fmt.Errorf("could not decode PEM data")
+	}
+
+	var keyt interface{}
+	if keyt, err = x509.ParsePKCS8PrivateKey(block.Bytes); err != nil {
+		return nil, err
+	}
+
+	return keyt.(*rsa.PrivateKey), nil
 }

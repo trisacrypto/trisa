@@ -17,4 +17,5 @@ var (
 	ErrInvalidReceivedatPayload = errors.New("invalid payload: could not parse received at timestamp in RFC3339 format")
 	ErrCannotEncrypt            = errors.New("cannot encrypt envelope: no cryptographic handler available")
 	ErrCannotSeal               = errors.New("cannot seal envelope: no public key cryptographic handler available")
+	ErrCannotUnseal             = errors.New("cannot unseal envelope: no private key cryptographic handler available")
 )
