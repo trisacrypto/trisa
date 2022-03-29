@@ -129,6 +129,22 @@ func Open(msg *api.SecureEnvelope, opts ...Option) (payload *api.Payload, reject
 	return payload, nil, nil
 }
 
+// Reject returns a new rejection error to send to the counterparty
+func Reject(reject *api.Error, opts ...Option) (_ *api.SecureEnvelope, err error) {
+	var env *Envelope
+	if env, err = New(nil, opts...); err != nil {
+		return nil, err
+	}
+
+	// Add the error to the envelope and validate
+	env.msg.Error = reject
+	if err = env.ValidateMessage(); err != nil {
+		return nil, err
+	}
+
+	return env.Proto(), nil
+}
+
 // Envelope is a wrapper for a trisa.SecureEnvelope that adds cryptographic
 // functionality to the protocol buffer payload. An envelope can be in one of three
 // states: clear, unsealed, and sealed -- referring to the cryptographic status of the

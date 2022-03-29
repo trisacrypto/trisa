@@ -7,6 +7,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"testing"
 	"time"
@@ -22,9 +23,148 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 )
 
-func Example_create() {
+func ExampleSeal() {
+	// Create compliance payload to send to counterparty. Use key exchange or GDS to
+	// fetch the public sealing key of the recipient. See the testdata fixtures for
+	// example data. Note: we're loading an RSA private key and extracting its public
+	// key for example and testing purposes.
 	payload, _ := loadPayloadFixture("testdata/payload.json")
-	fmt.Println(payload)
+	key, _ := loadPrivateKey("testdata/sealing_key.pem")
+
+	// Seal the payload: encrypting and digitally signing the marshaled protocol buffers
+	// with a randomly generated encryption key and HMAC secret, then encrypting those
+	// secrets with the public key of the recipient.
+	msg, reject, err := envelope.Seal(payload, envelope.WithRSAPublicKey(&key.PublicKey))
+
+	// Two types errors may be returned from envelope.Seal
+	if err != nil {
+		if reject != nil {
+			// If both err and reject are non-nil, then a TRISA protocol error occurred
+			// and the rejection error can be sent back to the recipient if you're
+			// sealing the envelope in response to a transfer request
+			log.Println(reject.String())
+		} else {
+			// Otherwise log the error and handle with user-specific code
+			log.Fatal(err)
+		}
+	}
+
+	// Otherwise send the secure envelope to the recipient
+	log.Printf("sending secure envelope with id %s", msg.Id)
+}
+
+func Example_create() {
+	// Create compliance payload to send to counterparty. Use key exchange or GDS to
+	// fetch the public sealing key of the recipient. See the testdata fixtures for
+	// example data. Note: we're loading an RSA private key and extracting its public
+	// key for example and testing purposes.
+	payload, _ := loadPayloadFixture("testdata/payload.json")
+	key, _ := loadPrivateKey("testdata/sealing_key.pem")
+
+	// Envelopes transition through the following states: clear --> unsealed --> sealed.
+	// First create a new envelope in the clear state with the public key of the
+	// recipient that will eventually be used to seal the envelope.
+	env, _ := envelope.New(payload, envelope.WithRSAPublicKey(&key.PublicKey))
+
+	// Marshal the payload, generate random encryption and hmac secrets, and encrypt
+	// the payload, creating a new envelope in the unsealed state.
+	env, reject, err := env.Encrypt()
+
+	// Two types of errors are returned from Encrypt and Seal
+	if err != nil {
+		if reject != nil {
+			// If both err and reject are non-nil, then a TRISA protocol error occurred
+			// and the rejection error can be sent back to the recipient if you're
+			// sealing the envelope in response to a transfer request
+			log.Println(reject.String())
+		} else {
+			// Otherwise log the error and handle with user-specific code
+			log.Fatal(err)
+		}
+	}
+
+	// Seal the envelope by encrypting the encryption key and hmac secret on the secure
+	// envelope with the public key of the recipient passed in at the first step.
+	// Handle the reject and err errors as above.
+	env, reject, err = env.Seal()
+
+	// Fetch the secure envelope and send it.
+	msg := env.Proto()
+	log.Printf("sending secure envelope with id %s", msg.Id)
+}
+
+func ExampleOpen() {
+	// Receive a sealed secure envelope from the counterparty. Ensure you have the
+	// private key paired with the public key identified by the public key signature on
+	// the secure envelope in order to unseal and decrypt the payload. See testdata
+	// fixtures for example data. Note: we're loading an RSA private key used in other
+	// examples for demonstration and testing purposes.
+	msg, _ := loadEnvelopeFixture("testdata/sealed_envelope.json")
+	key, _ := loadPrivateKey("testdata/sealing_key.pem")
+
+	// Open the secure envelope, unsealing the encryption key and hmac secret with the
+	// supplied private key, then decrypting, verifying, and unmarshaling the payload
+	// using those secrets.
+	payload, reject, err := envelope.Open(msg, envelope.WithRSAPrivateKey(key))
+
+	// Two types errors may be returned from envelope.Open
+	if err != nil {
+		if reject != nil {
+			// If both err and reject are non-nil, then a TRISA protocol error occurred
+			// and the rejection error can be sent back to the recipient if you're
+			// opening the envelope in response to a transfer request
+			out, _ := envelope.Reject(reject, envelope.WithEnvelopeID(msg.Id))
+			log.Printf("sending TRISA rejection for envelope %s: %s", out.Id, reject)
+		} else {
+			// Otherwise log the error and handle with user-specific code
+			log.Fatal(err)
+		}
+	}
+
+	// Handle the payload with your interal compliance processing mechanism.
+	log.Printf("received payload sent at %s", payload.SentAt)
+}
+
+func Example_parse() {
+	// Receive a sealed secure envelope from the counterparty. Ensure you have the
+	// private key paired with the public key identified by the public key signature on
+	// the secure envelope in order to unseal and decrypt the payload. See testdata
+	// fixtures for example data. Note: we're loading an RSA private key used in other
+	// examples for demonstration and testing purposes.
+	msg, _ := loadEnvelopeFixture("testdata/sealed_envelope.json")
+	key, _ := loadPrivateKey("testdata/sealing_key.pem")
+
+	// Envelopes transition through the following states: sealed --> unsealed --> clear.
+	// First wrap the incoming envelope in the sealed state.
+	env, _ := envelope.Wrap(msg)
+
+	// Unseal the envelope using the private key loaded above; this decrypts the
+	// encryption key and hmac secret using asymmetric encryption and returns a new
+	// unsealed envelope.
+	env, reject, err := env.Unseal(envelope.WithRSAPrivateKey(key))
+
+	// Two types of errors are returned from Unseal and Decrypt
+	if err != nil {
+		if reject != nil {
+			// If both err and reject are non-nil, then a TRISA protocol error occurred
+			// and the rejection error can be sent back to the recipient if you're
+			// unsealing the envelope in response to a transfer request.
+			out, _ := env.Reject(reject)
+			log.Printf("sending TRISA rejection for envelope %s: %s", out.ID(), reject)
+		} else {
+			// Otherwise log the error and handle with user-specific code
+			log.Fatal(err)
+		}
+	}
+
+	// Decrypt the envelope using the unsealed secrets, verify the HMAC signature, then
+	// unmarshal and verify the payload into new envelope in the clear state.
+	// Handle the reject and err errors as above.
+	env, reject, err = env.Decrypt()
+
+	// Handle the payload with your interal compliance processing mechanism.
+	payload, _ := env.Payload()
+	log.Printf("received payload sent at %s", payload.SentAt)
 }
 
 // Test the creation of an envelope from scratch, moving it through each state.
