@@ -67,6 +67,118 @@ func TestSendEnvelopeWorkflow(t *testing.T) {
 	require.Equal(t, "SHA256:QhEspinUU51gK0dQGqLa56BA6xyRy5/7sN5/6GlaLZw", msg.PublicKeySignature, "unexpected public key signature")
 }
 
+// Test the handling of a secure envelope fixture through to creating a response.
+func TestRecvEnvelopeWorkflow(t *testing.T) {
+	msg, err := loadEnvelopeFixture("testdata/sealed_envelope.json")
+	require.NoError(t, err, "could not load envelope")
+
+	key, err := loadPrivateKey("testdata/sealing_key.pem")
+	require.NoError(t, err, "could not load sealing key")
+
+	// Wrap the envelope ensuring it's in the sealed state
+	senv, err := envelope.Wrap(msg, envelope.WithRSAPrivateKey(key))
+	require.NoError(t, err, "could not wrap the envelope")
+	require.NoError(t, senv.ValidateMessage(), "secure envelope fixture is invalid")
+	require.Equal(t, envelope.Sealed, senv.State(), "expected sealed state not %q", senv.State())
+
+	// Unseal the envelope
+	eenv, reject, err := senv.Unseal()
+	require.NoError(t, err, "could not unseal the envelope")
+	require.Nil(t, reject, "a rejection error was unexpectedly returned")
+	require.NotSame(t, senv, eenv, "Unseal should return a clone of the original envelope")
+	require.Equal(t, envelope.Unsealed, eenv.State(), "expected unsealed state not %q", eenv.State())
+
+	// Decrypt the envelope
+	env, reject, err := eenv.Decrypt()
+	require.NoError(t, err, "could not decrypt envelope")
+	require.Nil(t, reject, "a rejection error was unexpectedly returned")
+	require.NotSame(t, eenv, env, "Decrypt should return a clone of the original envelope")
+	require.Equal(t, envelope.Clear, env.State(), "expected clear state not %q", eenv.State())
+	require.NotNil(t, env.Crypto(), "decrypted envelopes should maintain crytpo context")
+	require.NotNil(t, env.Sealer(), "decrypted envelopes should maintain sealer context")
+
+	// Get the payload from the envelope
+	payload, err := env.Payload()
+	require.NoError(t, err, "could not fetch decrypted payload from envelope")
+	require.NotNil(t, payload, "nil payload unexpectedly returned")
+
+	// Load the payload fixture for verification
+	expectedPayload, err := loadPayloadFixture("testdata/pending_payload.json")
+	require.NoError(t, err, "could not load payload fixture")
+	require.True(t, proto.Equal(payload, expectedPayload), "decrypted payload did not match payload fixture, did fixture change?")
+
+	// Update the payload with received at and reseal the envelope
+	// TODO: does this modify the payload of the original message?
+	payload.ReceivedAt = time.Now().Format(time.RFC3339)
+
+	oenv, err := envelope.New(payload, envelope.FromEnvelope(env), envelope.WithRSAPublicKey(&key.PublicKey))
+	require.NoError(t, err, "could not create new envelope from original envelope")
+
+	eoenv, reject, err := oenv.Encrypt()
+	require.NoError(t, err, "could not encrypt envelope")
+	require.Nil(t, reject, "a rejection error was unexpectedly returned")
+	require.NotSame(t, oenv, eoenv, "envelope unexpectedly not cloned")
+
+	soenv, reject, err := eoenv.Seal()
+	require.NoError(t, err, "could not encrypt envelope")
+	require.Nil(t, reject, "a rejection error was unexpectedly returned")
+	require.NotSame(t, eoenv, soenv, "envelope unexpectedly not cloned")
+
+	out := soenv.Proto()
+
+	// NOTE: cannot use proto.Equal since the timestamp at least will have changed
+	require.Equal(t, msg.Id, out.Id, "mismatched envelope ID")
+	require.NotEmpty(t, out.Payload, "missing updated, encrypted payload")
+	require.NotEmpty(t, out.EncryptionKey, "sealed envelope encryption key missing")
+	require.Equal(t, msg.EncryptionAlgorithm, out.EncryptionAlgorithm, "mismatched envelope encryption algorithm")
+	require.NotEmpty(t, out.Hmac, "missing updated HMAC signature")
+	require.NotEmpty(t, out.HmacSecret, "sealed envelope hmac secret missing")
+	require.Equal(t, msg.HmacAlgorithm, out.HmacAlgorithm, "mismatched envelope HMAC algorithm")
+	require.Equal(t, msg.Error, out.Error, "unexpected error on envelopes")
+	require.NotEmpty(t, out.Timestamp, "no timestamp on outgoing envelope")
+	require.True(t, out.Sealed, "out is not marked as sealed")
+	require.Equal(t, msg.PublicKeySignature, out.PublicKeySignature, "public key signature mismatch")
+}
+
+func TestOneLiners(t *testing.T) {
+	payload, err := loadPayloadFixture("testdata/pending_payload.json")
+	require.NoError(t, err, "could not load pending payload")
+
+	key, err := loadPrivateKey("testdata/sealing_key.pem")
+	require.NoError(t, err, "could not load sealing key")
+
+	// Create an envelope from the payload and the key
+	msg, reject, err := envelope.Seal(payload, envelope.WithRSAPublicKey(&key.PublicKey))
+	require.NoError(t, err, "could not seal envelope")
+	require.Nil(t, reject, "unexpected rejection error")
+
+	// Ensure the msg is valid
+	require.NotEmpty(t, msg.Id, "no envelope id on the message")
+	require.NotEmpty(t, msg.Payload, "no payload on the message")
+	require.NotEmpty(t, msg.EncryptionKey, "no encryption key on the message")
+	require.NotEmpty(t, msg.EncryptionAlgorithm, "no encryption algorithm on the message")
+	require.NotEmpty(t, msg.Hmac, "no hmac signature on the message")
+	require.NotEmpty(t, msg.HmacSecret, "no hmac secret on the message")
+	require.NotEmpty(t, msg.HmacAlgorithm, "no hmac algorithm on the message")
+	require.Empty(t, msg.Error, "unexpected error on the message")
+	require.NotEmpty(t, msg.Timestamp, "no timestamp on the message")
+	require.True(t, msg.Sealed, "message not marked as sealed")
+	require.NotEmpty(t, msg.PublicKeySignature, "no public key signature on the message")
+
+	// Serialize and Deserialize the message
+	data, err := proto.Marshal(msg)
+	require.NoError(t, err, "could not marshal outgoing message")
+
+	in := &api.SecureEnvelope{}
+	require.NoError(t, proto.Unmarshal(data, in), "could not unmarshal incoming message")
+
+	// Open the envelope with the private key
+	decryptedPayload, reject, err := envelope.Open(in, envelope.WithRSAPrivateKey(key))
+	require.NoError(t, err, "could not open envelope")
+	require.Nil(t, reject, "unexpected rejection error")
+	require.True(t, proto.Equal(payload, decryptedPayload), "payloads do not match")
+}
+
 func TestEnvelopeAccessors(t *testing.T) {
 	// Actual value for timestamp testing
 	ats := time.Now()

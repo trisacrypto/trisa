@@ -291,13 +291,14 @@ func (e *Envelope) Encrypt(opts ...Option) (env *Envelope, reject *api.Error, er
 
 	// Encrypt the payload and fill in the details on the envelope.
 	if reject, err = env.encrypt(e.payload); err != nil {
-		return nil, nil, err
+		return nil, reject, err
 	}
 	return env, reject, nil
 }
 
 // Internal encrypt method to update an envelope directly and for short-circuit methods.
 func (e *Envelope) encrypt(payload *api.Payload) (_ *api.Error, err error) {
+	// TODO: should we inspect the envelope for encryption metadata to create the cipher?
 	if e.crypto == nil {
 		return nil, ErrCannotEncrypt
 	}
@@ -330,11 +331,96 @@ func (e *Envelope) encrypt(payload *api.Payload) (_ *api.Error, err error) {
 
 // The original envelope is not modified, the secure envelope is cloned.
 func (e *Envelope) Decrypt(opts ...Option) (env *Envelope, reject *api.Error, err error) {
-	return nil, nil, nil
+	// The envelope may only be decrypted from the Unsealed state (e.g. the encryption key is in the clear)
+	state := e.State()
+	if state != Unsealed && state != UnsealedError {
+		return nil, nil, fmt.Errorf("cannot decrypt envelope from %q state", state)
+	}
+
+	// Clone the envelope
+	env = &Envelope{
+		msg: &api.SecureEnvelope{
+			Id:                  e.msg.Id,
+			Payload:             e.msg.Payload,
+			EncryptionKey:       e.msg.EncryptionKey,
+			EncryptionAlgorithm: e.msg.EncryptionAlgorithm,
+			Hmac:                e.msg.Hmac,
+			HmacSecret:          e.msg.HmacSecret,
+			HmacAlgorithm:       e.msg.HmacAlgorithm,
+			Error:               e.msg.Error,
+			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Sealed:              false,
+			PublicKeySignature:  "",
+		},
+		crypto: e.crypto,
+		seal:   e.seal,
+	}
+
+	// Apply the options
+	for _, opt := range opts {
+		if err = opt(env); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	// Decrypt the payload and update the details on the envelope
+	if reject, err = env.decrypt(); err != nil {
+		return nil, reject, err
+	}
+	return env, reject, nil
 }
 
 // Internal decrypt method to update an envelope directly and for short-circuit methods.
 func (e *Envelope) decrypt() (_ *api.Error, err error) {
+	// Validate the message contains the required data to decrypt
+	if err = e.ValidateMessage(); err != nil {
+		return nil, err
+	}
+
+	if e.crypto == nil {
+		// Create the cipher from the data on the envelope
+		// Check if the encryption algorithms are supported
+		// TODO: allow more algorithms by adding composition functionality to the crypto pacakge
+		if e.msg.EncryptionAlgorithm != "AES256-GCM" {
+			err = fmt.Errorf("unsupported encryption algorithm %q", e.msg.EncryptionAlgorithm)
+			return api.Errorf(api.UnhandledAlgorithm, err.Error()), err
+		}
+		if e.msg.HmacAlgorithm != "HMAC-SHA256" {
+			err = fmt.Errorf("unsupported digital signature algorithm %q", e.msg.HmacAlgorithm)
+			return api.Errorf(api.UnhandledAlgorithm, err.Error()), err
+		}
+
+		if e.crypto, err = aesgcm.New(e.msg.EncryptionKey, e.msg.HmacSecret); err != nil {
+			return nil, fmt.Errorf("could not create AES-GCM cipher for payload decryption: %v", err)
+		}
+	}
+
+	// Verify the HMAC signature of the envelope
+	if err = e.crypto.Verify(e.msg.Payload, e.msg.Hmac); err != nil {
+		return api.Errorf(api.InvalidSignature, "could not verify HMAC signature"), err
+	}
+
+	// Decrypt the payload data
+	var data []byte
+	if data, err = e.crypto.Decrypt(e.msg.Payload); err != nil {
+		return api.Errorf(api.InvalidKey, "could not decrypt payload with encryption key"), err
+	}
+
+	// Parse the payload
+	e.payload = &api.Payload{}
+	if err = proto.Unmarshal(data, e.payload); err != nil {
+		return api.Errorf(api.EnvelopeDecodeFail, "could not unmarshal payload from decrypted data"), err
+	}
+
+	// Validate the payload
+	// TODO: use more specific error such as UNPARSEABLE_TRANSACTION or INCOMPLETE_IDENTITY
+	if err = e.ValidatePayload(); err != nil {
+		return api.Errorf(api.ValidationError, err.Error()), err
+	}
+
+	// Set the payload and the signature to nil now that the message is in clear text
+	e.msg.Payload = nil
+	e.msg.Hmac = nil
 	return nil, nil
 }
 
@@ -381,7 +467,7 @@ func (e *Envelope) Seal(opts ...Option) (env *Envelope, reject *api.Error, err e
 
 	// Seal the payload and fill in the details on the envelope.
 	if reject, err = env.sealEnvelope(); err != nil {
-		return nil, nil, err
+		return nil, reject, err
 	}
 	return env, reject, nil
 }
@@ -453,7 +539,7 @@ func (e *Envelope) Unseal(opts ...Option) (env *Envelope, reject *api.Error, err
 
 	// Seal the payload and fill in the details on the envelope.
 	if reject, err = env.unsealEnvelope(); err != nil {
-		return nil, nil, err
+		return nil, reject, err
 	}
 	return env, reject, nil
 }
@@ -472,7 +558,9 @@ func (e *Envelope) unsealEnvelope() (reject *api.Error, err error) {
 		return api.Errorf(api.InvalidKey, "could not unseal HMAC secret").WithRetry(), err
 	}
 
+	// Mark the envelope as unsealed
 	e.msg.Sealed = false
+	e.msg.PublicKeySignature = ""
 	return nil, nil
 }
 

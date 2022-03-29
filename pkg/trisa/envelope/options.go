@@ -12,6 +12,14 @@ import (
 
 type Option func(e *Envelope) error
 
+func FromEnvelope(env *Envelope) Option {
+	return func(e *Envelope) error {
+		e.msg.Id = env.msg.Id
+		e.crypto = env.crypto
+		return nil
+	}
+}
+
 func WithEnvelopeID(id string) Option {
 	return func(e *Envelope) error {
 		e.msg.Id = id
