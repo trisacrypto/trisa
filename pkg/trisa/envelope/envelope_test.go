@@ -40,7 +40,7 @@ func ExampleSeal() {
 	if err != nil {
 		if reject != nil {
 			// If both err and reject are non-nil, then a TRISA protocol error occurred
-			// and the rejection error can be sent back to the recipient if you're
+			// and the rejection error can be sent back to the originator if you're
 			// sealing the envelope in response to a transfer request
 			log.Println(reject.String())
 		} else {
@@ -74,7 +74,7 @@ func Example_create() {
 	if err != nil {
 		if reject != nil {
 			// If both err and reject are non-nil, then a TRISA protocol error occurred
-			// and the rejection error can be sent back to the recipient if you're
+			// and the rejection error can be sent back to the originator if you're
 			// sealing the envelope in response to a transfer request
 			log.Println(reject.String())
 		} else {
@@ -111,7 +111,7 @@ func ExampleOpen() {
 	if err != nil {
 		if reject != nil {
 			// If both err and reject are non-nil, then a TRISA protocol error occurred
-			// and the rejection error can be sent back to the recipient if you're
+			// and the rejection error can be sent back to the originator if you're
 			// opening the envelope in response to a transfer request
 			out, _ := envelope.Reject(reject, envelope.WithEnvelopeID(msg.Id))
 			log.Printf("sending TRISA rejection for envelope %s: %s", out.Id, reject)
@@ -147,7 +147,7 @@ func Example_parse() {
 	if err != nil {
 		if reject != nil {
 			// If both err and reject are non-nil, then a TRISA protocol error occurred
-			// and the rejection error can be sent back to the recipient if you're
+			// and the rejection error can be sent back to the originator if you're
 			// unsealing the envelope in response to a transfer request.
 			out, _ := env.Reject(reject)
 			log.Printf("sending TRISA rejection for envelope %s: %s", out.ID(), reject)

@@ -15,7 +15,7 @@ import (
 func TestErrors(t *testing.T) {
 	err := api.Errorf(api.UnknownIdentity, "could not parse %q", "foo")
 	require.Error(t, err)
-	require.Equal(t, err.Error(), `trisa rejection [UNKOWN_IDENTITY]: could not parse "foo"`)
+	require.Equal(t, err.Error(), `trisa rejection [UNKNOWN_IDENTITY]: could not parse "foo"`)
 	require.False(t, err.IsZero())
 
 	oerr, ok := api.Errorp(err)
@@ -29,7 +29,7 @@ func TestErrors(t *testing.T) {
 	require.False(t, oerr.IsZero())
 
 	sterr := err.Err()
-	require.Equal(t, sterr.Error(), `rpc error: code = Aborted desc = [UNKOWN_IDENTITY] could not parse "foo"`)
+	require.Equal(t, sterr.Error(), `rpc error: code = Aborted desc = [UNKNOWN_IDENTITY] could not parse "foo"`)
 
 	oerr, ok = api.Errorp(sterr)
 	require.True(t, ok)

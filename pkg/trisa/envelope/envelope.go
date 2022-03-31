@@ -22,6 +22,7 @@ of the recipient.
 
 - Encrypt/Decrypt: in relation to a SecureEnvelope, this refers to the symmetric
 cryptography performed on the payload; these terms are used in contrast to Seal/Unseal.
+An envelope's payload is referred to as "clear" before encryption and after decryption.
 
 - Sign/Verify: in relation to a SecureEnvelope, this refers to the digital signature or
 HMAC of the encrypted payload. A digital signature ensures that the cryptographic
@@ -115,10 +116,12 @@ func Open(msg *api.SecureEnvelope, opts ...Option) (payload *api.Payload, reject
 		return nil, nil, err
 	}
 
+	// A rejection here would be related to a sealing key failure
 	if reject, err = env.unsealEnvelope(); reject != nil || err != nil {
 		return nil, reject, err
 	}
 
+	// A rejection here is related to the decryption, verification, and parsing the payload
 	if reject, err = env.decrypt(); reject != nil || err != nil {
 		return nil, reject, err
 	}
@@ -149,7 +152,7 @@ func Reject(reject *api.Error, opts ...Option) (_ *api.SecureEnvelope, err error
 // functionality to the protocol buffer payload. An envelope can be in one of three
 // states: clear, unsealed, and sealed -- referring to the cryptographic status of the
 // wrapped secure envelope. For example, a clear envelope can have its payload directly
-// read, but if the envelope is unsealed, then it must be decrypted before the payload
+// read, but if an envelope is unsealed, then it must be decrypted before the payload
 // can be parsed into specific data structures. Similarly, an unsealed envelope can be
 // sealed in preparation for sending to a recipient, or remain unsealed for secure long
 // term data storage.
@@ -221,8 +224,8 @@ func Wrap(msg *api.SecureEnvelope, opts ...Option) (env *Envelope, err error) {
 // Envelope State Transitions
 //===========================================================================
 
-// Reject returns a new secure envelope that contains a rejection error but no payload.
-// The original envelope is not modified, the secure envelope is cloned.
+// Reject returns a new secure envelope that contains a TRISA rejection error but no
+// payload. The original envelope is not modified, the secure envelope is cloned.
 func (e *Envelope) Reject(reject *api.Error, opts ...Option) (env *Envelope, err error) {
 	env = &Envelope{
 		msg: &api.SecureEnvelope{
@@ -337,6 +340,8 @@ func (e *Envelope) encrypt(payload *api.Payload) (_ *api.Error, err error) {
 	e.msg.HmacSecret = e.crypto.HMACSecret()
 	e.msg.EncryptionAlgorithm = e.crypto.EncryptionAlgorithm()
 	e.msg.HmacAlgorithm = e.crypto.SignatureAlgorithm()
+	e.msg.Sealed = false
+	e.msg.PublicKeySignature = ""
 
 	// Validate the message before returning
 	if err = e.ValidateMessage(); err != nil {
@@ -604,7 +609,7 @@ func (e *Envelope) Payload() (_ *api.Payload, err error) {
 	return e.payload, err
 }
 
-// Error returns the rejection error on the envelope if it exists
+// Error returns the TRISA rejection error on the envelope if it exists
 func (e *Envelope) Error() *api.Error {
 	// Ensure a nil error is returned if the error is zero-valued
 	if e.msg.Error != nil && e.msg.Error.IsZero() {

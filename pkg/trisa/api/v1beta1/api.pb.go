@@ -276,7 +276,7 @@ type Payload struct {
 	// facilitate multi-message compliance exchanges. These messages must all be
 	// digtially signed for auditing purposes.
 	Transaction *anypb.Any `protobuf:"bytes,2,opt,name=transaction,proto3" json:"transaction,omitempty"`
-	// Timestamps the describe when the payload was originally sent and when it was
+	// Timestamps that describe when the payload was originally sent and when it was
 	// accepted or received by the counterparty. These timestamps must be in the payload
 	// so that they are digitally signed for non-repudiation. Both timestamps should be
 	// RFC-3339 formatted strings with timezone information.
