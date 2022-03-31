@@ -36,7 +36,8 @@ message Error {
         UNKNOWN_WALLET_ADDRESS = 51;
 
         // VASP does not have KYC information for the specified wallet address.
-        UNKOWN_IDENTITY = 52;
+        UNKNOWN_IDENTITY = 52;
+        UNKOWN_IDENTITY = 52; // Typo left for backwards compatibility.
 
         // Specifically, the Originator account cannot be identified.
         UNKNOWN_ORIGINATOR = 53;

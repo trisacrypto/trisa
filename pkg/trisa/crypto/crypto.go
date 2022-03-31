@@ -14,6 +14,7 @@ import "crypto/rand"
 type Crypto interface {
 	Cipher
 	Signer
+	KeyHandler
 }
 
 // Cipher is a device that can perform encryption and decryption, This interface wraps
@@ -30,6 +31,17 @@ type Signer interface {
 	Sign(data []byte) (signature []byte, err error)
 	Verify(data, signature []byte) (err error)
 	SignatureAlgorithm() string
+}
+
+// KeyHandler can return its internal encryption key and hmac secret
+type KeyHandler interface {
+	EncryptionKey() (key []byte)
+	HMACSecret() (secret []byte)
+}
+
+// KeyIdentifier can return a hash value or some other identifying material for a public key
+type KeyIdentifier interface {
+	PublicKeySignature() (string, error)
 }
 
 // Random generates a secure random sequence of bytes, this helper function is used to

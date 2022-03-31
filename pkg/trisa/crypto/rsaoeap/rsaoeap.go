@@ -3,7 +3,10 @@ package rsaoeap
 import (
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/sha256"
 	"crypto/sha512"
+	"crypto/x509"
+	"encoding/base64"
 	"errors"
 	"fmt"
 )
@@ -59,4 +62,19 @@ func (c *RSA) Decrypt(ciphertext []byte) (plaintext []byte, err error) {
 // EncryptionAlgorithm returns the name of the algorithm for adding to the Transaction.
 func (c *RSA) EncryptionAlgorithm() string {
 	return "RSA-OAEP-SHA512"
+}
+
+// PublicKeySignature implements KeyIdentifier by computing a base64 encoded SHA-256
+// hash of the public key serialized as a PKIX public key without PEM encoding. This is
+// a prototype method of computing the public key signature and may not match other
+// external signature computation methods.
+// TODO: verify that this method matches openssl or GitHub public key identification.
+func (c *RSA) PublicKeySignature() (_ string, err error) {
+	var data []byte
+	if data, err = x509.MarshalPKIXPublicKey(c.pub); err != nil {
+		return "", err
+	}
+
+	sum := sha256.Sum256(data)
+	return fmt.Sprintf("SHA256:%s", base64.RawStdEncoding.EncodeToString(sum[:])), nil
 }
