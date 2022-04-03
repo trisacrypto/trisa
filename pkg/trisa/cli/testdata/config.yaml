@@ -1,0 +1,22 @@
+version: v1
+active: localhost
+profiles:
+  default:
+    endpoint: api.alice.vaspbot.net:443
+    certs: default/certs.pem
+    chain: default/chain.pem
+    sealing_key: default/keys.pem
+    last_updated: 2022-04-02T17:26:57-05:00
+    info:
+      id: 7a96ca2c-2818-4106-932e-1bcfd743b04c
+      name: AliceCoin
+      common_name: api.alice.vaspbot.net
+      RegisteredDirectory: trisatest.net
+      ResolvedAt: 2022-04-02T17:28:02-05:00
+  localhost:
+    endpoint: localhost:443
+    certs: localhost/certs.pem
+    chain: localhost/certs.pem
+    sealing_key: localhost/keys.pem
+    last_updated: 2022-04-02T17:28:41-05:00
+    info: null

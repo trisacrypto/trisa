@@ -10,7 +10,7 @@ The TRISA TestNet has been established to provide a demonstration of the TRISA p
 
 {{% figure src="/img/testnet_architecture.png" %}}
 
-The TRISA TestNEt is comprised of the following services:
+The TRISA TestNet is comprised of the following services:
 
 - [TRISA Directory Service](https://vaspdirectory.net) - a user interface to explore the TRISA Global Directory Service and register to become a TRISA member
 - [TestNet Demo](https://vaspbot.net) - a demo site to show TRISA interactions between “robot” VASPs that run in the TestNet
