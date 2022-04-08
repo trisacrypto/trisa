@@ -19,68 +19,42 @@ Stay tuned!
 
 ## Configuration
 
-Before you can start using the TRISA CLI, you must first install a profile that specifies the configuration details used by the command.
+Before you can start using the TRISA CLI, you must first configure your environment to ensure that you can successfully connect to a remote peer or the directory service.
 
 **Prerequisites**:
 
 1. The `trisa` command installed and on your `$PATH`
 2. Your [testnet certificates]({{< ref "/gds/registration" >}}) that include both the trust chain and private key.
 
-The TRISA CLI command is configured via a collection of _profiles_. A profile manages how the command connects to the remote TRISA peer including what certificates are used for mTLS authentication, what endpoint is used to connect, and how to store and manage public sealing keys exchanged with the remote peer. The TRISA CLI may manage multiple profiles if you're connecting to multiple TRISA nodes, but it requires at least one profile before the CLI can be used.
+The TRISA CLI command is configured via flags specified for each command or by setting environment variables in your shell with the configuration. The CLI also supports the use of [.env](https://platform.sh/blog/2021/we-need-to-talk-about-the-env/) files in the current working directory for configuration. To see what CLI flags should be specified use `trisa --help`. An example `.env` configuration file is as follows:
 
-### Installation
+```ini
+# The endpoint to the TRISA node that you'd like to connect to. The endpoint can be
+# found using the directory service lookup command.
+TRISA_ENDPOINT=example.com:443
 
-To create your first profile, execute the install command as follows:
+# Directory service you'd like to connect to. You can specify a short name such as
+# "testnet" or "mainnet" or the endpoint of the directory service to connect to. The
+# configured directory is trisatest.net by default.
+TRISA_DIRECTORY=testnet
 
-```
-$ trisa install
-```
+# Path to your TRISA identity certificates that include the private key. This can be the
+# original .zip file sent by Sectigo or the unzipped .p12 file; in which case the
+# PKCS12 password must also be supplied. If you've decrypted it manually it should be in
+# PEM encoded format with the .pem or .crt extension.
+TRISA_CERTS=path/to/certs.pem
 
-This command is essentially an alias for `trisa profile --create default`. It will take you through an interactive prompt to configure your first profile.
+# If you've split your certs into the public trust chain without private keys and a
+# private key file, then specify the path to the trust chain (optional).
+TRISA_TRUST_CHAIN=path/to/chain.pem
 
-### Managing Profiles
-
-The `trisa profiles` command allows you to manage the profiles you've created or installed. To view the configuration of the currently active profile, simply run:
-
-```
-$ trisa profile
-```
-
-To list the available profiles that have been created:
-
-```
-$ trisa profiles --list
-```
-
-{{% notice tip %}}
-The `trisa profile` and `trisa profiles` commands are aliases, you may use both interchangely.
-{{% /notice %}}
-
-To activate a different profile, use the activate command with the name of the profile you wish to use as follows:
-
-```
-$ trisa profile --activate [name]
+# If the certs are PKCS12 encrypted then specify the password for decryption (optional).
+TRISA_CERTS_PASSWORD=supersecret
 ```
 
-If you wish to create a new profile with a short name, use the create command:
+The simplest way to get started with TRISA is to copy and paste the above snippet into a `.env` file in your current directory, then modifying the values as necessary.
 
-```
-$ trisa profile --create [name]
-```
-
-This will run the interactive create profile script that you used when you installed your first profile.
-
-### Configuration Directory
-
-All profiles, certificates, and sealing keys are stored in an operating-specific configuration directory (e.g. `${HOME}/.config/trisa` for Linux/BSD operating systems). To view the configuration directory run:
-
-```
-$ trisa profile --path
-```
-
-The `trisa` CLI is configured by a single YAML file called `config.yaml` that holds all profiles, but expects that all related files (such as certificates or sealing keys) are in the same directory as the configuration file.
-
-If you would prefer to use a different directory for configuration, specify the `$TRISA_CONF_DIR` environment variable. If you'd prefer to specify a different configuration file, use the `$TRISA_CONF` environment variable.
+## Creating Secure Envelopes
 
 ## Interacting with TRISA Peers
 

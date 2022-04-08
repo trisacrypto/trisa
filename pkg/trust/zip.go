@@ -29,6 +29,12 @@ var validFormats = map[string]struct{}{
 	CompressionAuto: {},
 }
 
+var extensionAliases = map[string]string{
+	".crt":  CompressionNone,
+	".p12":  CompressionNone,
+	".gzip": CompressionGZIP,
+}
+
 // Serializer maintains options for compression, encoding, and pkcs12 encryption when
 // serializing and deserializing Provider and ProviderPool objects to and from disk.
 type Serializer struct {
@@ -416,6 +422,11 @@ func (s *Serializer) getFormat() (string, error) {
 	var ext string
 	if s.path != "" {
 		ext = filepath.Ext(s.path)
+	}
+
+	// Handle extension aliases
+	if alias, ok := extensionAliases[ext]; ok {
+		ext = alias
 	}
 
 	if s.Format == CompressionAuto {
