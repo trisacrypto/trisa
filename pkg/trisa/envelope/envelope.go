@@ -220,6 +220,16 @@ func Wrap(msg *api.SecureEnvelope, opts ...Option) (env *Envelope, err error) {
 	return env, nil
 }
 
+// Validate is a one-liner for Wrap(msg).ValidateMessage() and can be used to ensure
+// that a secure envelope has been correctly initialized and can be processed.
+func Validate(msg *api.SecureEnvelope) (err error) {
+	var env *Envelope
+	if env, err = Wrap(msg); err != nil {
+		return err
+	}
+	return env.ValidateMessage()
+}
+
 //===========================================================================
 // Envelope State Transitions
 //===========================================================================
@@ -241,6 +251,47 @@ func (e *Envelope) Reject(reject *api.Error, opts ...Option) (env *Envelope, err
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
+	}
+
+	// Apply the options
+	for _, opt := range opts {
+		if err = opt(env); err != nil {
+			return nil, err
+		}
+	}
+	return env, nil
+}
+
+// Update the envelope with a new payload maintaining the original crypto method. This
+// is useful to prepare a response to the user, for example updating the ReceivedAt
+// timestamp in the payload then re-encrypting the secure envelope to send back to the
+// originator. Most often, this method is also used with the WithSealingKey option so
+// that the envelope workflow for sealing an envelope can be applied completely.
+// The original envelope is not modified, the secure envelope is cloned.
+func (e *Envelope) Update(payload *api.Payload, opts ...Option) (env *Envelope, err error) {
+	state := e.State()
+	if state != Clear && state != ClearError {
+		return nil, fmt.Errorf("cannot update envelope from %q state", state)
+	}
+
+	// Clone the envelope
+	env = &Envelope{
+		msg: &api.SecureEnvelope{
+			Id:                  e.msg.Id,
+			Payload:             nil,
+			EncryptionKey:       e.msg.EncryptionKey,
+			EncryptionAlgorithm: e.msg.EncryptionAlgorithm,
+			Hmac:                nil,
+			HmacSecret:          e.msg.HmacSecret,
+			HmacAlgorithm:       e.msg.HmacAlgorithm,
+			Error:               e.msg.Error,
+			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Sealed:              false,
+			PublicKeySignature:  "",
+		},
+		crypto:  e.crypto,
+		seal:    e.seal,
+		payload: payload,
 	}
 
 	// Apply the options

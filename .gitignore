@@ -26,3 +26,4 @@ tmp/
 
 # Hugo build
 docs/public
+fixtures

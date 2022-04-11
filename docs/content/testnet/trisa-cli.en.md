@@ -56,13 +56,53 @@ The simplest way to get started with TRISA is to copy and paste the above snippe
 
 ## Creating Secure Envelopes
 
+## Sealing
+
+## Opening
+
 ## Interacting with TRISA Peers
 
-The primary use of the `trisa` CLI is to execute TRISA RPC requests to a TRISA node.
+The primary use of the `trisa` CLI is to execute TRISA RPC requests to a TRISA node. A general workflow is as follows:
+
+1. Identify the peer endpoint using the Directory Service lookup or search functionality.
+2. Create a secure envelope or payload template to prepare to send to the remote peer.
+3. Perform a key exchange with the remote peer and save the sealing keys.
+4. Seal the secure envelope or payload template with the remote peer's sealing keys.
+5. Execute a transfer and save the response envelope.
+
+This workflow generally mirrors the workflow of live TRISA compliance operations, though many of the steps are manual to facilitate integration and development.
 
 ### Transfers
 
-Send a secure envelope to the TRISA node.
+Send a secure envelope to the remote TRISA peer and receive a secure envelope in exchange. Transfers are the central compliance exchange mechanism in the TRISA protocol. If you have already created and sealed an envelope, saving it to `outgoing.json` you can transfer it as follows:
+
+```
+$ trisa transfer -i outgoing.json -o response.json
+```
+
+This will execute the TRISA transfer and save the response, including TRISA error envelopes, to disk at the specified path. If the extension of the output path is `.json` then the envelope is marshaled to `.json` format, if it is the `.pb` extension it will be saved as a raw protocol buffer. If the `-o` flag is not supplied, then the JSON response will be printed to the command line. If you would like the decrypted payload printed, then you must provide the private sealing key:
+
+```
+$ trisa transfer -i outgoing.json -k private.pem
+```
+
+If both an output path and the private key are provided then a JSON file is produced with the unsealed envelope that can be read using the `open` command or resent using the `seal` command. Note that the `.pb` extension is not allowed in this case.
+
+You can also use a secure envelope payload template to seal and transfer an envelope in one step instead of using the intermediate `seal` command:
+
+```
+$ trisa transfer -i outgoing.json -s public_sealing_key.pem
+```
+
+See [sealing secure envelopes]({{< relref "#sealing" >}}) for more information on the command line arguments that can be used to adapt secure envelopes before sending them.
+
+If you would like to send an error-only secure envelope to the recipient, then you must supply the envelope ID, error code, and error message as follows:
+
+```
+$ trisa transfer -I envelope-id-foo -C COMPLIANCE_CHECK_FAIL -E "something went wrong"
+```
+
+Note that sending an error-only secure envelope is usually a response to an incoming message. This mechanism is used primarily to test a server's handling of an asynchronous transfer workflow.
 
 {{% notice note %}}
 The TRISA CLI command currently does not implement the `TRISANetwork/TransferStream` birdirectional streaming RPC and does not have plans to implement this in the CLI. If you would like an implementation of streaming from the command line, please open an issue on our [GitHub repository](https://github.com/trisacrypto/trisa/issues).
@@ -70,7 +110,32 @@ The TRISA CLI command currently does not implement the `TRISANetwork/TransferStr
 
 ### Key Exchanges
 
-Send a key exchange request to get the public sealing key of the node. By default, this command stores the sealing key in the configuration directory and uses it to seal secure envelopes when making transfers.
+Send a key exchange request to get the public sealing key of the node. Key management is a somewhat complex topic, and the TRISA CLI attempts to do the simplest possible thing to enable testing and development. A key exchange requires you to send your public sealing keys to the remote node, and they will return keys to you. Prior to a transfer, a key exchange must be completed so that you have the sealing keys to create a secure envelope and so that the remote has your public keys to send a response.
+
+By default, the TRISA CLI will simply use your TRISA mTLS identity certificates as the keys for a key exchange. The simplest exchange is therefore:
+
+```
+$ trisa exchange -o peer_sealing_keys.pem
+```
+
+The `-o` flag saves the keys to disk at the specified path, so that you can use the keys later on to make secure envelopes or conduct transfers. If the `-o` flag is ommitted, the JSON data of the response, an `SigningKey` protocol buffer message will be printed to `stdout`. There are several formats that the keys can be saved in: a path with a `.json` or `.pb` extension will save the protocol buffer message to disk in the specified format; a path with a `.pem` or `.crt` extension will save the keys as PEM encoded public key.
+
+To send alternative keys to the remote peer in a key exchange, you may use the `-i` flag to specify the path of keys to send. If the input path ends in `.json` or `.pb` it is parsed as a `SigningKey` protocol buffer message in JSON format or raw protobuf format respectively. If the input path ends in `.pem` or `.crt` it is parsed as a PEM encoded public key or x.509 certificate. Note that the PEM encoded format, the first `PUBLIC KEY` or `CERTIFICATE` block that is found is used for parsing.
+
+To generate your own RSA keys to send to the remote server for key exchange, use the following commands:
+
+```
+$ openssl genrsa -out private.pem 4096
+$ openssl rsa -in private.pem -pubout -out public.pem
+```
+
+This will create two files, `private.pem` that contains your private keys and `public.pem` which contains your public keys. Send the public key to the remote TRISA peer as follows:
+
+```
+$ trisa exchange -i public.pem -o peer_sealing_keys.pem
+```
+
+Ensure that you keep the `private.pem` file so that you can decrypt transfers that follow; it is likely that the remote TRISA node will use the key you just exchanged in sending outgoing transfers and preparing responses to your transfers. The only way to decrypt that data is with the private key!
 
 ### Address Confirmation
 

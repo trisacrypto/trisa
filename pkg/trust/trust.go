@@ -19,17 +19,6 @@ import (
 	"software.sslmate.com/src/go-pkcs12"
 )
 
-// PEM Block types
-const (
-	BlockPublickKey         = "PUBLIC KEY"
-	BlockPrivateKey         = "PRIVATE KEY"
-	BlockRSAPublicKey       = "RSA PUBLIC KEY"
-	BlockRSAPrivateKey      = "RSA PRIVATE KEY"
-	BlockECPrivateKey       = "EC PRIVATE KEY"
-	BlockCertificate        = "CERTIFICATE"
-	BlockCertificateRequest = "CERTIFICATE REQUEST"
-)
-
 // Provider wraps a PEM-encoded certificate chain, which can optionally include private
 // keys. Providers with keys (private providers) are used to instantiate mTLS servers,
 // while public Providers are used in ProviderPools to facilitate mTLS clients.
