@@ -374,7 +374,7 @@ func (e *Envelope) encrypt(payload *api.Payload) (_ *api.Error, err error) {
 	}
 
 	var cleartext []byte
-	if cleartext, err = proto.Marshal(e.payload); err != nil {
+	if cleartext, err = proto.Marshal(payload); err != nil {
 		return nil, fmt.Errorf("could not marshal payload: %s", err)
 	}
 

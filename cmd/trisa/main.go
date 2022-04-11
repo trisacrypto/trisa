@@ -22,7 +22,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"github.com/trisacrypto/trisa/pkg"
+	"github.com/trisacrypto/trisa/pkg/ivms101"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	generic "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1"
 	env "github.com/trisacrypto/trisa/pkg/trisa/envelope"
 	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
 	models "github.com/trisacrypto/trisa/pkg/trisa/gds/models/v1beta1"
@@ -35,6 +37,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 )
 
 // Clients to connect to various services and make RPC requests.
@@ -104,9 +107,58 @@ func main() {
 		{
 			Name:    "make",
 			Aliases: []string{"envelope"},
-			Usage:   "create a secure envelope template from a payload",
+			Usage:   "create a secure envelope or payload template from a payload",
 			Action:  envelope,
-			Flags:   []cli.Flag{},
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:    "identity",
+					Aliases: []string{"i"},
+					Usage:   "path to identity payload JSON to load",
+				},
+				&cli.StringFlag{
+					Name:    "transaction",
+					Aliases: []string{"t"},
+					Usage:   "path to transaction payload JSON to load",
+				},
+				&cli.StringFlag{
+					Name:        "out",
+					Aliases:     []string{"o"},
+					Usage:       "path to save sealed secure envelope to disk",
+					DefaultText: "stdout",
+				},
+				&cli.StringFlag{
+					Name:    "sealing-key",
+					Aliases: []string{"s", "seal"},
+					Usage:   "path to recipient's public key to seal outgoing envelope with (optional)",
+				},
+				&cli.StringFlag{
+					Name:    "envelope-id",
+					Aliases: []string{"id", "I"},
+					Usage:   "specify the envelope ID for the outgoing secure envelope (optional)",
+				},
+				&cli.StringFlag{
+					Name:        "sent-at",
+					Aliases:     []string{"sent", "S"},
+					Usage:       "specify a sent at timestamp for the payload in RFC3339 format",
+					DefaultText: "now",
+				},
+				&cli.StringFlag{
+					Name:    "received-at",
+					Aliases: []string{"received", "R"},
+					Usage:   "specify a received at timestamp for the payload in RFC3339 format or the keyword \"now\" (optional)",
+				},
+				&cli.StringFlag{
+					Name:    "error-code",
+					Aliases: []string{"C"},
+					Usage:   "add an error with the specified code to the outgoing envelope",
+					Value:   "REJECTED",
+				},
+				&cli.StringFlag{
+					Name:    "error-message",
+					Aliases: []string{"error", "E"},
+					Usage:   "add an error message to the outgoing envelope",
+				},
+			},
 		},
 		{
 			Name:   "seal",
@@ -114,22 +166,20 @@ func main() {
 			Action: seal,
 			Flags: []cli.Flag{
 				&cli.StringFlag{
-					Name:     "in",
-					Aliases:  []string{"i"},
-					Usage:    "path to secure envelope or payload template to load",
-					Required: true,
+					Name:    "in",
+					Aliases: []string{"i"},
+					Usage:   "path to secure envelope or payload template to load",
 				},
 				&cli.StringFlag{
 					Name:        "out",
 					Aliases:     []string{"o"},
 					Usage:       "path to save sealed secure envelope to disk",
-					DefaultText: "envelope-{uuid}.json",
+					DefaultText: "stdout",
 				},
 				&cli.StringFlag{
-					Name:     "sealing-key",
-					Aliases:  []string{"s", "seal"},
-					Usage:    "path to recipient's public key to seal outgoing envelope with",
-					Required: true,
+					Name:    "sealing-key",
+					Aliases: []string{"s", "seal"},
+					Usage:   "path to recipient's public key to seal outgoing envelope with",
 				},
 				&cli.StringFlag{
 					Name:        "envelope-id",
@@ -184,6 +234,11 @@ func main() {
 					Aliases: []string{"p"},
 					Usage:   "extract payload when saving to disk (if -out is specified)",
 				},
+				&cli.BoolFlag{
+					Name:    "error",
+					Aliases: []string{"E"},
+					Usage:   "extract error from secure envelope",
+				},
 				&cli.StringFlag{
 					Name:    "unsealing-key",
 					Aliases: []string{"key", "k"},
@@ -217,7 +272,7 @@ func main() {
 				&cli.BoolFlag{
 					Name:    "payload",
 					Aliases: []string{"p"},
-					Usage:   "extract payload when saving to disk (if -out is specified)",
+					Usage:   "extract payload when saving to disk (if -out and -key are specified)",
 				},
 				&cli.StringFlag{
 					Name:    "sealing-key",
@@ -358,15 +413,239 @@ func main() {
 //====================================================================================
 
 func envelope(c *cli.Context) (err error) {
-	return nil
+	// Is this an error only envelope?
+	if c.String("error-message") != "" {
+		if c.String("envelope-id") == "" {
+			return cli.Exit("an envelope id is required to create an error only secure envelope", 1)
+		}
+
+		if c.String("identity") != "" || c.String("transaction") != "" {
+			return cli.Exit("this command does not create secure envelopes with both an error and a payload, specify either -error or -transaction and -identity", 1)
+		}
+
+		var msg *api.SecureEnvelope
+		if msg, err = errorMessage(c.String("envelope-id"), c.String("error-message"), c.String("error-code")); err != nil {
+			return cli.Exit(err, 1)
+		}
+
+		if out := c.String("out"); out != "" {
+			if err = dumpProto(msg, out); err != nil {
+				return cli.Exit(err, 1)
+			}
+			return nil
+		}
+		return printJSON(msg)
+	}
+
+	// Creating an envelope with a payload, identity and transaction are required
+	if c.String("identity") == "" || c.String("transaction") == "" {
+		return cli.Exit("a path to both the identity and transaction JSON is required", 1)
+	}
+
+	var sealingKey interface{}
+	if path := c.String("sealing-key"); path != "" {
+		if sealingKey, err = loadPublicKeys(path); err != nil {
+			return cli.Exit(err, 1)
+		}
+	}
+
+	// Create the payload
+	payload := &api.Payload{}
+	ts := c.String("sent-at")
+	if strings.ToLower(ts) == "now" || ts == "" {
+		ts = time.Now().Format(time.RFC3339)
+	}
+	payload.SentAt = ts
+
+	if ts := c.String("received-at"); ts != "" {
+		if strings.ToLower(ts) == "now" {
+			ts = time.Now().Format(time.RFC3339)
+		}
+		payload.ReceivedAt = ts
+	}
+
+	// Load the payloads from JSON
+	if payload.Identity, err = loadIdentity(c.String("identity")); err != nil {
+		return cli.Exit(err, 1)
+	}
+
+	if payload.Transaction, err = loadTransaction(c.String("transaction")); err != nil {
+		return cli.Exit(err, 1)
+	}
+
+	envelopeID := c.String("envelope-id")
+	if envelopeID == "" {
+		envelopeID = uuid.NewString()
+	}
+
+	// Create the envelope
+	var handler *env.Envelope
+	if handler, err = env.New(payload, env.WithEnvelopeID(envelopeID)); err != nil {
+		return cli.Exit(err, 1)
+	}
+
+	// Create the unsealed envelope
+	if handler, _, err = handler.Encrypt(); err != nil {
+		return cli.Exit(err, 1)
+	}
+
+	// Create the unsealed envelope if necessary
+	if sealingKey != nil {
+		if handler, _, err = handler.Seal(env.WithSealingKey(sealingKey)); err != nil {
+			return cli.Exit(err, 1)
+		}
+	}
+
+	// Save to disk
+	if out := c.String("out"); out != "" {
+		if err = dumpProto(handler.Proto(), out); err != nil {
+			return cli.Exit(err, 1)
+		}
+		return nil
+	}
+	return printJSON(handler.Proto())
 }
 
 func seal(c *cli.Context) (err error) {
-	return nil
+	var msg *api.SecureEnvelope
+	if in := c.String("in"); in != "" {
+		// Load the envelope or payload template
+		if msg, err = loadEnvelope(in); err != nil {
+			return cli.Exit(err, 1)
+		}
+
+		// If the sealing key is provided, use it to seal the envelope
+		var sealKey interface{}
+		if path := c.String("sealing-key"); path == "" {
+			if sealKey, err = loadPublicKeys(path); err != nil {
+				return cli.Exit(err, 1)
+			}
+		} else {
+			return cli.Exit("a path to the public sealing keys is required to seal envelope", 1)
+		}
+
+		if msg, err = updateEnvelope(msg, c); err != nil {
+			return cli.Exit(err, 1)
+		}
+
+		if msg, err = sealEnvelope(msg, sealKey); err != nil {
+			return cli.Exit(err, 1)
+		}
+	} else {
+		// Attempt to create an error-only envelope
+		if c.String("error-message") == "" || c.String("envelope-id") == "" {
+			return cli.Exit("specify an envelope to load or an error message and id", 1)
+		}
+
+		if msg, err = errorMessage(c.String("envelope-id"), c.String("error-message"), c.String("error-code")); err != nil {
+			return cli.Exit(err, 1)
+		}
+	}
+
+	// Always use the current timestamp for ordering purposes
+	msg.Timestamp = time.Now().Format(time.RFC3339Nano)
+
+	// Did we manage to load a valid secure envelope?
+	if err = env.Validate(msg); err != nil {
+		return cli.Exit(fmt.Errorf("could not load envelope to send: %s", err), 1)
+	}
+
+	if out := c.String("out"); out != "" {
+		if err = dumpProto(msg, out); err != nil {
+			return cli.Exit(err, 1)
+		}
+		return nil
+	}
+	return printJSON(msg)
 }
 
 func open(c *cli.Context) (err error) {
-	return nil
+	var msg *api.SecureEnvelope
+	if msg, err = loadEnvelope(c.String("in")); err != nil {
+		return cli.Exit(err, 1)
+	}
+
+	// Extract the error if requested - no cryptography required
+	if c.Bool("error") {
+		if msg.Error == nil || msg.Error.IsZero() {
+			return cli.Exit("there is no error on the secure envelope", 1)
+		}
+
+		if out := c.String("out"); out != "" {
+			if err = dumpProto(msg.Error, out); err != nil {
+				return cli.Exit(err, 1)
+			}
+		}
+		return printJSON(msg.Error)
+	}
+
+	var handler *env.Envelope
+	if handler, err = env.Wrap(msg); err != nil {
+		return cli.Exit(err, 1)
+	}
+
+	// Has the unsealing key been provided?
+	var unsealingKey interface{}
+	if path := c.String("unsealing-key"); path != "" {
+		if unsealingKey, err = loadPrivateKey(path); err != nil {
+			return cli.Exit(err, 1)
+		}
+	}
+
+	var (
+		payload          *api.Payload
+		unsealedEnvelope *api.SecureEnvelope
+	)
+
+	// Figure out if we can unseal the envelope
+	switch handler.State() {
+	case env.Sealed, env.SealedError:
+		if unsealingKey == nil {
+			return cli.Exit("must specify unsealing key to open sealed envelope", 1)
+		}
+
+		if handler, _, err = handler.Unseal(env.WithUnsealingKey(unsealingKey)); err != nil {
+			return cli.Exit(err, 1)
+		}
+
+		unsealedEnvelope = handler.Proto()
+		if handler, _, err = handler.Decrypt(); err != nil {
+			return cli.Exit(err, 1)
+		}
+
+		payload, _ = handler.Payload()
+
+	case env.Unsealed, env.UnsealedError:
+		unsealedEnvelope = handler.Proto()
+		if handler, _, err = handler.Decrypt(); err != nil {
+			return cli.Exit(err, 1)
+		}
+		payload, _ = handler.Payload()
+
+	case env.Clear, env.ClearError:
+		payload, _ = handler.Payload()
+	default:
+		return cli.Exit(fmt.Errorf("envelope in unhandled state %s", handler.State()), 1)
+	}
+
+	if out := c.String("out"); out != "" {
+		if c.Bool("payload") {
+			if err = dumpProto(payload, out); err != nil {
+				return cli.Exit(err, 1)
+			}
+			return nil
+		}
+
+		if err = dumpProto(unsealedEnvelope, out); err != nil {
+			return cli.Exit(err, 1)
+		}
+		return nil
+	}
+
+	if c.Bool("payload") {
+		return printJSON(payload)
+	}
+	return printJSON(unsealedEnvelope)
 }
 
 //====================================================================================
@@ -432,6 +711,55 @@ func transfer(c *cli.Context) (err error) {
 		return rpcerr(err)
 	}
 
+	// If a private key is provided, unseal the envelope
+	if unseal := c.String("unsealing-key"); unseal != "" {
+		var unsealKey interface{}
+		if unsealKey, err = loadPrivateKey(unseal); err != nil {
+			return cli.Exit(err, 1)
+		}
+
+		var handler *env.Envelope
+		if handler, err = env.Wrap(rep, env.WithUnsealingKey(unsealKey)); err != nil {
+			return cli.Exit(err, 1)
+		}
+
+		if handler, _, err = handler.Unseal(); err != nil {
+			return cli.Exit(err, 1)
+		}
+
+		// Are we saving to disk or printing JSON?
+		if out := c.String("out"); out != "" {
+			if extractPayload := c.Bool("payload"); extractPayload {
+				if handler, _, err = handler.Decrypt(); err != nil {
+					return cli.Exit(err, 1)
+				}
+				payload, _ := handler.Payload()
+				if err = dumpProto(payload, out); err != nil {
+					return cli.Exit(err, 1)
+				}
+				return nil
+			}
+
+			if err = dumpProto(handler.Proto(), out); err != nil {
+				return cli.Exit(err, 1)
+			}
+			return nil
+		}
+
+		// Print the decrypted envelope
+		if handler, _, err = handler.Decrypt(); err != nil {
+			return cli.Exit(err, 1)
+		}
+		payload, _ := handler.Payload()
+		return printJSON(payload)
+	}
+
+	if out := c.String("out"); out != "" {
+		if err = dumpProto(rep, out); err != nil {
+			return cli.Exit(err, 1)
+		}
+		return nil
+	}
 	return printJSON(rep)
 }
 
@@ -726,13 +1054,33 @@ func loadPublicKeys(path string) (key *api.SigningKey, err error) {
 				}
 				break pemblocks
 			}
-
 		}
 	default:
 		return nil, fmt.Errorf("unhandled extension %q use .json or .pem", filepath.Ext(path))
 	}
 
 	return key, nil
+}
+
+func loadPrivateKey(path string) (key interface{}, err error) {
+	var data []byte
+	if data, err = ioutil.ReadFile(path); err != nil {
+		return nil, fmt.Errorf("could not read key file: %s", err)
+	}
+
+	var block *pem.Block
+	for {
+		block, data = pem.Decode(data)
+		if block == nil {
+			break
+		}
+
+		switch block.Type {
+		case trust.BlockPrivateKey, trust.BlockRSAPrivateKey, trust.BlockECPrivateKey:
+			return trust.ParsePrivateKey(block)
+		}
+	}
+	return nil, fmt.Errorf("could not find private key in key file %s", path)
 }
 
 func dumpKeys(key *api.SigningKey, path string) (err error) {
@@ -770,7 +1118,65 @@ func dumpKeys(key *api.SigningKey, path string) (err error) {
 	if err = ioutil.WriteFile(path, data, 0644); err != nil {
 		return fmt.Errorf("could not write keys to disk: %s", err)
 	}
+	fmt.Printf("saved keys to %s\n", path)
 	return nil
+}
+
+func loadIdentity(path string) (_ *anypb.Any, err error) {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+
+	var data []byte
+	if data, err = ioutil.ReadFile(path); err != nil {
+		return nil, fmt.Errorf("could not read identity from %s", err)
+	}
+
+	// Attempt to unmarshal the data as IVMS 101
+	identity := &ivms101.IdentityPayload{}
+	if err = opts.Unmarshal(data, identity); err == nil {
+		return anypb.New(identity)
+	}
+
+	// Attempt to unmarshal the data as a serialized any
+	msg := &anypb.Any{}
+	if err = opts.Unmarshal(data, msg); err == nil {
+		return msg, nil
+	}
+	return nil, fmt.Errorf("could not unmarshal identity: unknown type or format")
+}
+
+func loadTransaction(path string) (_ *anypb.Any, err error) {
+	opts := protojson.UnmarshalOptions{
+		AllowPartial:   true,
+		DiscardUnknown: false,
+	}
+
+	var data []byte
+	if data, err = ioutil.ReadFile(path); err != nil {
+		return nil, fmt.Errorf("could not read transaction from %s", err)
+	}
+
+	// Attempt to unmarshal the data as a generic Transaction
+	transaction := &generic.Transaction{}
+	if err = opts.Unmarshal(data, transaction); err == nil {
+		return anypb.New(transaction)
+	}
+
+	// Attempt to unmarshal the data as a generic Pending
+	pending := &generic.Pending{}
+	if err = opts.Unmarshal(data, pending); err == nil {
+		return anypb.New(pending)
+	}
+
+	// Attempt to unmarshal the data as a serialized any
+	msg := &anypb.Any{}
+	if err = opts.Unmarshal(data, msg); err == nil {
+		return msg, nil
+	}
+
+	return nil, fmt.Errorf("could not unmarshal transaction: unknown type or format")
 }
 
 func loadEnvelope(path string) (msg *api.SecureEnvelope, err error) {
@@ -798,6 +1204,36 @@ func loadEnvelope(path string) (msg *api.SecureEnvelope, err error) {
 		return nil, fmt.Errorf("unhandled extension %q use .json or .pb", filepath.Ext(path))
 	}
 	return msg, nil
+}
+
+func dumpProto(msg proto.Message, path string) (err error) {
+	var data []byte
+	switch filepath.Ext(path) {
+	case ".json":
+		opts := protojson.MarshalOptions{
+			Multiline:       true,
+			Indent:          "  ",
+			AllowPartial:    true,
+			UseProtoNames:   true,
+			UseEnumNumbers:  false,
+			EmitUnpopulated: true,
+		}
+
+		if data, err = opts.Marshal(msg); err != nil {
+			return cli.Exit(err, 1)
+		}
+	case ".pb":
+		if data, err = proto.Marshal(msg); err != nil {
+			return cli.Exit(err, 1)
+		}
+	default:
+		return fmt.Errorf("unknown extension %q use .json or .pb", filepath.Ext(path))
+	}
+	if err = ioutil.WriteFile(path, data, 0644); err != nil {
+		return fmt.Errorf("could not write message to disk: %s", err)
+	}
+	fmt.Printf("message saved to %s\n", path)
+	return nil
 }
 
 //====================================================================================
@@ -871,6 +1307,9 @@ func updateEnvelope(in *api.SecureEnvelope, c *cli.Context) (out *api.SecureEnve
 	}
 
 	if ts := c.String("received-at"); ts != "" {
+		if strings.ToLower(ts) == "now" {
+			ts = time.Now().Format(time.RFC3339)
+		}
 		payload.ReceivedAt = ts
 	}
 

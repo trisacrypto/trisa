@@ -56,9 +56,45 @@ The simplest way to get started with TRISA is to copy and paste the above snippe
 
 ## Creating Secure Envelopes
 
+The first step when using the TRISA CLI is to create some payload data that can be sealed inside of secure envelopes for TRISA envelopes. At a minimum, there are two JSON files that you need to create or provide for the payload:
+
+1. An _identity_ payload containing [IVMS 101](https://github.com/trisacrypto/trisa/blob/347f88d55df4d4e0167ad4e005721b638991ecef/proto/ivms101/identity.proto#L46-L53) data.
+2. A _transaction_ payload containing a [Transaction](https://github.com/trisacrypto/trisa/blob/347f88d55df4d4e0167ad4e005721b638991ecef/proto/trisa/data/generic/v1beta1/transaction.proto#L11) or [Pending](https://github.com/trisacrypto/trisa/blob/347f88d55df4d4e0167ad4e005721b638991ecef/proto/trisa/data/generic/v1beta1/transaction.proto#L30) message.
+
+The identity payload is the compliance information required for the transfer and the transaction payload is used to identify the transaction on the chain and associate it with the identity information. For ease of data entry, these files may be specified as JSON files and the protocol buffer payload created using the `trisa make` command.
+
+```
+$ trisa make -i identity.json -t transaction.json -o envelope.json
+```
+
+With no other arguments, this command creates an unsealed envelope that does not have an envelope ID nor sent at and received at timestamps in the payload. The documentation refers to this kind of secure envelope as a "payload template" in the rest of the documentation because it can be loaded by the `trisa seal` or `trisa transfer` commands to update the envelope ID, timestamps, before sealing the envelope with the public keys of the recipient.
+
+To create a complete envelope or a fully sealed envelope
+
+
 ## Sealing
 
 ## Opening
+
+By default the `trisa open` command is used to unseal an envelope and save it as an unsealed envelope for further processing. This command can also be used to extract the payload or check if an incoming envelope has an error on it. To extract an unsealed envelope and save it to disk:
+
+```
+$ trisa open -in envelope.json -out unsealed_envelope.json -key private.pem
+```
+
+If you add the `-payload` flag, then the payload will be decrypted and saved to disk; adding the `-error` flag will extract an error and save it to disk. If the `envelope.json` is an unsealed envelope, then the `-key` flag can be omitted. If the `-out` flag is ommitted, the contents will be printed to disk. For example to simply view the payload of a sealed envelope:
+
+```
+$ trisa open -in envelope.json -key private.pem -payload
+```
+
+Or to view an error on the envelope:
+
+```
+$ trisa open -in envelope.json -error
+```
+
+Note that no private key is required for errors since errors are not encrypted.
 
 ## Interacting with TRISA Peers
 
@@ -86,7 +122,7 @@ This will execute the TRISA transfer and save the response, including TRISA erro
 $ trisa transfer -i outgoing.json -k private.pem
 ```
 
-If both an output path and the private key are provided then a JSON file is produced with the unsealed envelope that can be read using the `open` command or resent using the `seal` command. Note that the `.pb` extension is not allowed in this case.
+If both an output path and the private key are provided then a JSON file is produced with the unsealed envelope that can be read using the `open` command or resent using the `seal` command.
 
 You can also use a secure envelope payload template to seal and transfer an envelope in one step instead of using the intermediate `seal` command:
 

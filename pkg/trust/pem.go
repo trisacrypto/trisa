@@ -42,10 +42,12 @@ func PEMDecodePrivateKey(in []byte) (interface{}, error) {
 	if block == nil {
 		return nil, ErrDecodePrivateKey
 	}
-	return parsePrivateKey(block)
+	return ParsePrivateKey(block)
 }
 
-func parsePrivateKey(block *pem.Block) (interface{}, error) {
+// ParsePrivateKey from PEM block. May return an *ecdsa.PrivateKey, *rsa.PrivateKey, or
+// ed25519.PrivateKey depending on the block type and the x509 parsing method.
+func ParsePrivateKey(block *pem.Block) (interface{}, error) {
 	// EC PRIVATE KEY specific handling
 	if block.Type == BlockECPrivateKey {
 		return x509.ParseECPrivateKey(block.Bytes)

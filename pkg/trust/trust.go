@@ -109,7 +109,7 @@ func (p *Provider) Decode(in []byte) (err error) {
 		case BlockCertificate:
 			p.chain.Certificate = append(p.chain.Certificate, block.Bytes)
 		case BlockPrivateKey, BlockECPrivateKey, BlockRSAPrivateKey:
-			if p.key, err = parsePrivateKey(block); err != nil {
+			if p.key, err = ParsePrivateKey(block); err != nil {
 				return err
 			}
 		default:
