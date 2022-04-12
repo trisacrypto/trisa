@@ -313,8 +313,8 @@ Managing the environment variables for configuring the `trisa` CLI can be done w
 
 Download a copy of the following data for the payload:
 
-- [`identity.json`]()
-- [`transaction.json`]()
+- [`identity.json`](https://gist.github.com/bbengfort/be1f255756834268cc006c31d088eb3b)
+- [`transaction.json`](https://gist.github.com/bbengfort/b1b2a883ca61da95d84019310cbfd091)
 
 This contains payload information as though we are sending Alice a compliance information transfer from a VASP named "MyVASP".
 
