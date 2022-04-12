@@ -19,17 +19,6 @@ import (
 	"software.sslmate.com/src/go-pkcs12"
 )
 
-// PEM Block types
-const (
-	BlockPublickKey         = "PUBLIC KEY"
-	BlockPrivateKey         = "PRIVATE KEY"
-	BlockRSAPublicKey       = "RSA PUBLIC KEY"
-	BlockRSAPrivateKey      = "RSA PRIVATE KEY"
-	BlockECPrivateKey       = "EC PRIVATE KEY"
-	BlockCertificate        = "CERTIFICATE"
-	BlockCertificateRequest = "CERTIFICATE REQUEST"
-)
-
 // Provider wraps a PEM-encoded certificate chain, which can optionally include private
 // keys. Providers with keys (private providers) are used to instantiate mTLS servers,
 // while public Providers are used in ProviderPools to facilitate mTLS clients.
@@ -120,7 +109,7 @@ func (p *Provider) Decode(in []byte) (err error) {
 		case BlockCertificate:
 			p.chain.Certificate = append(p.chain.Certificate, block.Bytes)
 		case BlockPrivateKey, BlockECPrivateKey, BlockRSAPrivateKey:
-			if p.key, err = parsePrivateKey(block); err != nil {
+			if p.key, err = ParsePrivateKey(block); err != nil {
 				return err
 			}
 		default:

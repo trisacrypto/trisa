@@ -9,9 +9,9 @@ import "fmt"
 const (
 	VersionMajor         = 0
 	VersionMinor         = 3
-	VersionPatch         = 1
+	VersionPatch         = 2
 	VersionReleaseLevel  = "v1beta1"
-	VersionReleaseNumber = 5
+	VersionReleaseNumber = 6
 )
 
 // Version returns the semantic version for the current build.
@@ -25,9 +25,9 @@ func Version() string {
 
 	if VersionReleaseLevel != "" {
 		if VersionReleaseNumber > 0 {
-			return fmt.Sprintf("%s-%s.%d", versionCore, VersionReleaseLevel, VersionReleaseNumber)
+			return fmt.Sprintf("%s (%s revision %d)", versionCore, VersionReleaseLevel, VersionReleaseNumber)
 		}
-		return fmt.Sprintf("%s-%s", versionCore, VersionReleaseLevel)
+		return fmt.Sprintf("%s (%s)", versionCore, VersionReleaseLevel)
 	}
 	return versionCore
 }
