@@ -444,7 +444,7 @@ func envelope(c *cli.Context) (err error) {
 
 	var sealingKey interface{}
 	if path := c.String("sealing-key"); path != "" {
-		if sealingKey, err = loadPublicKeys(path); err != nil {
+		if sealingKey, err = loadSealingKey(path); err != nil {
 			return cli.Exit(err, 1)
 		}
 	}
@@ -516,8 +516,8 @@ func seal(c *cli.Context) (err error) {
 
 		// If the sealing key is provided, use it to seal the envelope
 		var sealKey interface{}
-		if path := c.String("sealing-key"); path == "" {
-			if sealKey, err = loadPublicKeys(path); err != nil {
+		if path := c.String("sealing-key"); path != "" {
+			if sealKey, err = loadSealingKey(path); err != nil {
 				return cli.Exit(err, 1)
 			}
 		} else {
@@ -667,7 +667,7 @@ func transfer(c *cli.Context) (err error) {
 		// If the sealing key is provided, use it to seal the envelope
 		if seal := c.String("sealing-key"); seal != "" {
 			var sealKey interface{}
-			if sealKey, err = loadPublicKeys(seal); err != nil {
+			if sealKey, err = loadSealingKey(seal); err != nil {
 				return cli.Exit(err, 1)
 			}
 
@@ -1059,6 +1059,18 @@ func loadPublicKeys(path string) (key *api.SigningKey, err error) {
 		return nil, fmt.Errorf("unhandled extension %q use .json or .pem", filepath.Ext(path))
 	}
 
+	return key, nil
+}
+
+func loadSealingKey(path string) (key interface{}, err error) {
+	var sealingKey *api.SigningKey
+	if sealingKey, err = loadPublicKeys(path); err != nil {
+		return nil, err
+	}
+
+	if key, err = x509.ParsePKIXPublicKey(sealingKey.Data); err != nil {
+		return nil, err
+	}
 	return key, nil
 }
 

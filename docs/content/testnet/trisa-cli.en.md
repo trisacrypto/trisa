@@ -67,12 +67,31 @@ The identity payload is the compliance information required for the transfer and
 $ trisa make -i identity.json -t transaction.json -o envelope.json
 ```
 
-With no other arguments, this command creates an unsealed envelope that does not have an envelope ID nor sent at and received at timestamps in the payload. The documentation refers to this kind of secure envelope as a "payload template" in the rest of the documentation because it can be loaded by the `trisa seal` or `trisa transfer` commands to update the envelope ID, timestamps, before sealing the envelope with the public keys of the recipient.
+With no other arguments, this command creates an unsealed envelope that has a random envelope ID, the current time as the sent at timestamp, and no received at timestamp in the payload. The documentation refers to this kind of secure envelope as a "payload template" in the rest of the documentation because it can be loaded by the `trisa seal` or `trisa transfer` commands to update the envelope ID, timestamps, before sealing the envelope with the public keys of the recipient.
 
-To create a complete envelope or a fully sealed envelope
-
+To create a complete envelope or a fully sealed envelope, simply specify the public sealing key with the `-seal` flag as well as any additional metadata you'd like to supply on the envelope such as the envelope ID (see `trisa make --help` for more details).
 
 ## Sealing
+
+To seal an envelope you must have the public keys of the recipient, see [the key exchanges section]({{< relref "#key-exchanges" >}}) for more detail on how to retrieve the public sealing key of a remote peer. Once you've exchanged keys and saved them to disk, you can seal an unsealed envelope with the following command:
+
+```
+$ trisa seal -in unsealed_envelope.json -out sealed_evelope.json -seal public.pem
+```
+
+Once the envelope has been sealed, only the recipient with the private key counterpart to the public key used to seal the envelope can open the secure envelope.
+
+While sealing the envelope you also have the opportunity to update the envelope, e.g. to mark the received at timestamp or set a different envelope ID to create a new transfer:
+
+```
+$ trisa seal -in envelope.json -out sealed.json -seal public.pem -received-at now
+```
+
+Another common workflow is to generate an error envelope with the same ID as an incoming envelope. Error envelopes do not require any cryptography, so the public key is not required:
+
+```
+$ trisa seal -in envelope.json -error-code COMPLIANCE_CHECK_FAIL -error-message "sanctioned entity"
+```
 
 ## Opening
 
@@ -95,6 +114,15 @@ $ trisa open -in envelope.json -error
 ```
 
 Note that no private key is required for errors since errors are not encrypted.
+
+{{% notice tip %}}
+By default a key exchange will use your TRISA identity certs as the sealing key, however the `trisa open` command won't automatically use your TRISA identity certs for unsealing the envelope. If you used the default key exchange then you can take advantage of the environment configuration to pass the path to your identity certs that contain your private key as follows:
+
+```
+$ trisa open -in envelope.json -key $TRISA_CERTS
+```
+{{% /notice %}}
+
 
 ## Interacting with TRISA Peers
 
@@ -244,3 +272,95 @@ Categories that may be helpful in filtering:
 | Mixer           |                       |
 | Individual      |                       |
 | Other           |                       |
+
+## Guided Walkthrough
+
+This section contains a guided walkthrough of an interaction with the [Alice rVASP]({{< relref "rvasps.md" >}}) using the CLI. To complete this walkthrough you will need TRISA TestNet certificates issued by the TRISA Global Directory Service, the `trisa` CLI application installed and configured with those certs as discussed at the top of this guide. Ensure that the `$TRISA_DIRECTORY` environment variable is set to `testnet`.
+
+First, perform a TRISA Global Directory search for the Alice VASP:
+
+```
+$ trisa search -n alice
+{
+  "error":  null,
+  "results":  [
+    {
+      "id":  "7a96ca2c-2818-4106-932e-1bcfd743b04c",
+      "registered_directory":  "trisatest.net",
+      "common_name":  "api.alice.vaspbot.net",
+      "endpoint":  "api.alice.vaspbot.net:443"
+    }
+  ]
+}
+```
+
+To get more information about Alice VASP, lookup the record in the GDS:
+
+```
+$ trisa lookup -cn api.alice.vaspbot.net
+{
+    "name":  "AliceCoin",
+    "country":  "US",
+    [...]
+}
+```
+
+The rest of the interactions will be with the Alice rVASP, so ensure that the `$TRISA_ENDPOINT` environment variable is set to `api.alice.vaspbot.net:443` (or whatever endpoint was returned by the directory service).
+
+{{% notice tip %}}
+Managing the environment variables for configuring the `trisa` CLI can be done with a `.env` file in your current working directory.
+{{% /notice %}}
+
+Download a copy of the following data for the payload:
+
+- [`identity.json`]()
+- [`transaction.json`]()
+
+This contains payload information as though we are sending Alice a compliance information transfer from a VASP named "MyVASP".
+
+Build the payload template:
+
+```
+$ trisa make -i identity.json -t transaction.json -o unsealed_envelope.json
+```
+
+This should create an unsealed envelope with the payload data, the sent at timestamp set to now and a random envelope ID. To view the payload in the unsealed envelope:
+
+```
+$ trisa open -i unsealed_envelope.json -payload
+```
+
+Conduct a key exchange with Alice to get Alice's public keys to seal the envelope:
+
+```
+$ trisa exchange -o alice.pem
+```
+
+You can then seal the envelope so that only Alice can open it:
+
+```
+$ trisa seal -i unsealed_envelope.json -s alice.pem -o outgoing.json
+```
+
+You can now make the transfer to Alice:
+
+```
+$ trisa transfer -i outgoing.json -o incoming.json
+```
+
+View the payload from Alice using your private key to decrypt the message. Note that you'll need to source the `.env` file for the following command to work if you're using the `.env` file for configuration:
+
+```
+$ source .env
+$ trisa open -i incoming.json -k $TRISA_CERTS -payload
+```
+
+{{% notice warning %}}
+If you receive the following error when running the above command:
+
+```
+envelope in unhandled state corrupted
+```
+
+It means that the rVASP is running an older TRISA version. Please contact the TRISA admins if this is the rVASP running in TestNet or use the latest docker image if you're running an rVASP in your local environment.
+{{% /notice %}}
