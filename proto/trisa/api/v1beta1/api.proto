@@ -171,7 +171,7 @@ message SigningKey {
     string not_after = 9;
     bool revoked = 10;
 
-    // The PEM encoded public key to PKIX, ASN.1 DER form without the trust chain.
+    // The serialized public key to PKIX, ASN.1 DER form.
     bytes data = 11;
 }
 
