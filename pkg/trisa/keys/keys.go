@@ -37,9 +37,8 @@ type PrivateKey interface {
 }
 
 type KeyIdentifier interface {
-	Algorithm() string          // The sealing public key algorithm to identify the key type
-	Signature() (string, error) // An identifier of the public key for key management
-	SignatureAlgorithm() string // The algorithm used to generate the signature
+	PublicKeyAlgorithm() string          // The sealing public key algorithm to identify the key type
+	PublicKeySignature() (string, error) // An identifier of the public key for key management
 }
 
 type KeyMarshaler interface {
