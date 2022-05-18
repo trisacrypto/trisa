@@ -67,7 +67,7 @@ message NaturalPerson {
 
     // Definition: the particulars of a location at which a person may be communicated with.
     // Zero or More
-    repeated Address geographic_addresses  = 2;
+    repeated Address geographic_addresses = 2 [json_name = "geographicAddress"];
 
     // Definition: a distinct identifier used by governments of countries to uniquely
     // identify a natural or legal person.
@@ -98,17 +98,17 @@ message NaturalPersonName {
     // specified in the element naturalPersonNameIdentifierType.
     // Definition: full name separated into primary and secondary identifier.
     // One or more
-    repeated NaturalPersonNameId name_identifiers = 1;
+    repeated NaturalPersonNameId name_identifiers = 1 [json_name = "nameIdentifier"];
 
     // Definition: full name separated into primary and secondary identifier using
     // local characters.
     // Zero or more
-    repeated LocalNaturalPersonNameId local_name_identifiers = 2;
+    repeated LocalNaturalPersonNameId local_name_identifiers = 2 [json_name = "localNameIdentifier"];
 
     // Definition: Alternate representation of a name that corresponds to the manner
     // the name is pronounced.
     // Zero or more
-    repeated LocalNaturalPersonNameId phonetic_name_identifiers = 3;
+    repeated LocalNaturalPersonNameId phonetic_name_identifiers = 3 [json_name = "phoneticNameIdentifier"];
 }
 
 message NaturalPersonNameId {
@@ -236,7 +236,7 @@ message Address {
     // defined by postal services, presented in free format text.
     // Datatype: “Max70Text”
     // Zero to Seven
-    repeated string address_line = 15;
+    repeated string address_line = 15 [json_name = "addressLine"];
 
     // Constraint: The value used for the field country must be present on the
     // ISO-3166-1 alpha-2 codes or the value XX.
@@ -319,7 +319,7 @@ message LegalPerson {
 
     // Definition: The address of the legal person.
     // Zero or more
-    repeated Address geographic_addresses  = 2;
+    repeated Address geographic_addresses = 2 [json_name = "geographicAddress"];
 
     // Definition: The unique identification number applied by the VASP to customer.
     // NOTE The specification has a descrepency in that 5.2.9.3.3 specifies an element
@@ -349,17 +349,17 @@ message LegalPersonName {
     // At least one occurrence of legalPersonNameIdentifier must have the value
     // ‘LEGL’ specified in the element legalPersonNameIdentifierType.
     // One or more
-    repeated LegalPersonNameId name_identifiers = 1;
+    repeated LegalPersonNameId name_identifiers = 1 [json_name = "nameIdentifier"];
 
     // Definition: The name and type of name by which the legal person is known using
     // local characters.
     // Zero or more
-    repeated LocalLegalPersonNameId local_name_identifiers = 2;
+    repeated LocalLegalPersonNameId local_name_identifiers = 2 [json_name = "localNameIdentifier"];
 
     // Definition: The name and type of name by which the legal person is known using
     // local characters.
     // Zero or more
-    repeated LocalLegalPersonNameId phonetic_name_identifiers = 3;
+    repeated LocalLegalPersonNameId phonetic_name_identifiers = 3 [json_name = "phoneticNameIdentifier"];
 }
 
 message LegalPersonNameId {

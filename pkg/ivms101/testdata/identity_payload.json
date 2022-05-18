@@ -69,8 +69,8 @@
 				"nationalIdentification": {
 					"nationalIdentifier": "319560446",
 					"nationalIdentifierType": "DRLC",
-					"country_of_issue": "GB",
-					"registration_authority": "RA000591"
+					"countryOfIssue": "GB",
+					"registrationAuthority": "RA000591"
 				},
 				"customerIdentification": "5610",
 				"dateAndPlaceOfBirth": {
@@ -143,8 +143,8 @@
 			"nationalIdentification": {
 				"nationalIdentifier": "213800AQUAUP6I215N33",
 				"nationalIdentifierType": "LEIX",
-				"country_of_issue": "GB",
-				"registration_authority": "RA000589"
+				"countryOfIssue": "GB",
+				"registrationAuthority": "RA000589"
 			},
 			"countryOfRegistration": "GB"
 		}
