@@ -79,6 +79,7 @@ func (e *Exchange) Marshal() ([]byte, error) {
 // Unmarshal the protocol buffer marshaled data and load the sealing key. If the sealing
 // key is invalid or unparsable this method returns an error.
 func (e *Exchange) Unmarshal(data []byte) (err error) {
+	e.msg = &api.SigningKey{}
 	if err = proto.Unmarshal(data, e.msg); err != nil {
 		return err
 	}

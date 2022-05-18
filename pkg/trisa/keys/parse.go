@@ -14,6 +14,10 @@ import (
 // to parse raw x509 data. If more exchange formats are detected, they should be added
 // to this methods parsing interface.
 func ParseKeyExchangeData(data []byte) (pubkey interface{}, err error) {
+	if len(data) == 0 {
+		return nil, ErrNoKeyData
+	}
+
 	if pubkey, err = x509.ParsePKIXPublicKey(data); err == nil {
 		return pubkey, nil
 	}

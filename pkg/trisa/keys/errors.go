@@ -9,4 +9,5 @@ var (
 	ErrUnparsableKeyExchange = errors.New("could not parse key exchange data with known key serialization methods")
 	ErrNoPublicKey           = errors.New("no public keys found in PEM encoded data")
 	ErrTooManyBlocks         = errors.New("too many public key blocks found in PEM encoded data")
+	ErrNoKeyData             = errors.New("cannot parse public key from empty or nil data")
 )

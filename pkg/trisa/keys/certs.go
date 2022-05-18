@@ -70,7 +70,7 @@ func (c *Certificate) Proto() (msg *api.SigningKey, err error) {
 		NotAfter:           c.certs.NotAfter.Format(time.RFC3339),
 	}
 
-	// TODO: should we marshal into PEM encoded form?
+	// TODO: when should we start marshaling into PEM encoded form?
 	if msg.Data, err = x509.MarshalPKIXPublicKey(c.certs.PublicKey); err != nil {
 		return nil, fmt.Errorf("could not marshal pkix public key: %s", err)
 	}
