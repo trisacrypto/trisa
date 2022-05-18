@@ -26,8 +26,6 @@ func ParseKeyExchangeData(data []byte) (pubkey interface{}, err error) {
 		return pubkey, nil
 	}
 
-	// TODO: add trust.Serializer here to handle GDS data
-
 	var cert *x509.Certificate
 	if cert, err = x509.ParseCertificate(data); err == nil {
 		return cert.PublicKey, nil
