@@ -3,6 +3,11 @@ Package signature provides a mechanism for computing public key signatures, whic
 used to help identify public keys used in sealing TRISA envelopes and select the
 matching private key pair when a secure envelope is received.
 
+TRISA strongly recommends that sealing/unsealing keys be distinct from identity
+certificates for improved security and to support differing retirement criteria. Some
+organizations may choose to use unique sealing/unsealing keys with each unique
+counterparty.
+
 A PublicKeySignature takes the form of "ALG:base64data" where ALG is one of the valid
 hashing algorithms used by this package and base64data contains the hash of the key.
 */
@@ -35,7 +40,7 @@ func New(pub interface{}) (_ string, err error) {
 	return Sign(pub, SHA256)
 }
 
-// Match determes if the public key signature matches the specified public key.
+// Match determines if the public key signature matches the specified public key.
 func Match(pks string, pub interface{}) bool {
 	algorithm, checksum, err := Parse(pks)
 	if err != nil {
@@ -50,7 +55,7 @@ func Match(pks string, pub interface{}) bool {
 	return bytes.Equal(sum, checksum)
 }
 
-// Sign creates a public key signature from a public key that can bbe marshalled as an
+// Sign creates a public key signature from a public key that can be marshalled as an
 // PKIX public key. It then takes the hash of the marshalled data using the specified
 // signature algorithm and returns a string that concatenates the name of the hashing
 // algorithm with the raw base64 encoded of the hash sum.

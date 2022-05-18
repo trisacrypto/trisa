@@ -48,7 +48,7 @@ type Certificate struct {
 // Ensure the Certificate implements the Key interface.
 var _ Key = &Certificate{}
 
-// IsPrivate returns ture if there is a private key associated with the certificate.
+// IsPrivate returns true if there is a private key associated with the certificate.
 func (c *Certificate) IsPrivate() bool {
 	return c.privateKey != nil
 }
@@ -94,14 +94,16 @@ func (c *Certificate) PublicKeyAlgorithm() string {
 }
 
 // PublicKeySignature returns a unique identifier that can be used to manage public keys
-// and associate them with their counterpart private keys for unsealing.
+// and associate them with their counterpart private keys for unsealing or to identify
+// the keys in use by the counterparty for creating and sealing secure envelopes.
 func (c *Certificate) PublicKeySignature() (string, error) {
 	return signature.New(c.certs.PublicKey)
 }
 
 // Marshal returns a PEM encoded Certificate Block along with a PEM encoded private key
-// block if one is available. This data is useful for storing Keys on disk or in a
-// database, but should not be used to transfer or send keys.
+// block if one is available. This data is useful for storing Keys (particularly one's
+// own private key pairs and sealing certificates) on disk or in a database, but should
+// not be used to transfer or send keys.
 func (c *Certificate) Marshal() (_ []byte, err error) {
 	var b bytes.Buffer
 	if err = pem.Encode(&b, &pem.Block{Type: trust.BlockCertificate, Bytes: c.certs.Raw}); err != nil {
@@ -128,7 +130,7 @@ func (c *Certificate) Marshal() (_ []byte, err error) {
 
 // Unmarshal a PEM encoded Certificate Block and optionally a PEM encoded private key
 // block if one is available. Unmarshal is designed to perform the inverse functionality
-// of Marhshal - e.g. Unmarshal will load Marshaled data. However, Unmarshal may work on
+// of Marshal - e.g. Unmarshal will load Marshaled data. However, Unmarshal may work on
 // generic PEM encoded chains - e.g. a trust chain with multiple certificates will use
 // the first certificate and ignore all others. An error is returned if multiple private
 // key blocks are detected in the PEM data.
@@ -175,4 +177,9 @@ func (c *Certificate) Unmarshal(data []byte) (err error) {
 		c.privateKey = keys[0]
 	}
 	return nil
+}
+
+// Certs returns the wrapped certificate object.
+func (c *Certificate) Certs() *x509.Certificate {
+	return c.certs
 }
