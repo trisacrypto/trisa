@@ -3,11 +3,14 @@ package keys_test
 import (
 	"crypto/rsa"
 	"fmt"
+	"io/ioutil"
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trisa/keys"
 	"github.com/trisacrypto/trisa/pkg/trust"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 func TestFromCertificate(t *testing.T) {
@@ -145,6 +148,23 @@ func TestCertificateNoPrivateKey(t *testing.T) {
 	require.NoError(t, err, "could not compute public key signature from unmarshaled certificate")
 	require.Equal(t, pks, opks, "unmarshaled certificate does not match original certificate")
 
+}
+
+func TestGDSLookup(t *testing.T) {
+	data, err := ioutil.ReadFile("testdata/lookup.json")
+	require.NoError(t, err, "could not load lookup reply fixture")
+
+	rep := &gds.LookupReply{}
+	err = protojson.Unmarshal(data, rep)
+	require.NoError(t, err, "could not unmarshal lookup reply fixture")
+
+	key, err := keys.FromGDSLookup(rep)
+	require.NoError(t, err, "could not parse keys from gds lookup reply")
+	require.False(t, key.IsPrivate(), "no private key should be returned from gds")
+
+	pks, err := key.PublicKeySignature()
+	require.NoError(t, err, "could not create public key signature")
+	require.Equal(t, "SHA256:p6e+TfID7MG1l6V0QsfJpuv49t0q5sHfFY1WUNkkSgk", pks, "unexpected public key signature for alice")
 }
 
 func loadCertificateProvider(path string) (_ *trust.Provider, err error) {

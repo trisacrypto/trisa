@@ -8,6 +8,7 @@ import (
 	"time"
 
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trisa/keys/signature"
 	"github.com/trisacrypto/trisa/pkg/trust"
 )
@@ -33,6 +34,29 @@ func FromProvider(certs *trust.Provider) (_ Key, err error) {
 		return nil, err
 	}
 	return key, nil
+}
+
+// FromGDSLookup returns a Key returned from the TRISA Global Directory Service. If the
+// lookup returns a signing certificate, that key is used, otherwise the identity
+// certificate is used. If no certificates are available, an error is returned.
+// This method expects the GDS to return a PEM encoded x509 certificate.
+func FromGDSLookup(in *gds.LookupReply) (_ Key, err error) {
+	cert := &Certificate{}
+	if in.SigningCertificate != nil && len(in.SigningCertificate.Data) > 0 {
+		if err = cert.Unmarshal(in.SigningCertificate.Data); err != nil {
+			return nil, err
+		}
+		return cert, nil
+	}
+
+	if in.IdentityCertificate != nil && len(in.IdentityCertificate.Data) > 0 {
+		if err = cert.Unmarshal(in.IdentityCertificate.Data); err != nil {
+			return nil, err
+		}
+		return cert, nil
+	}
+
+	return nil, ErrNoCertificate
 }
 
 // Certificate is a wrapper for an x509 certificate (containing the public key) and
