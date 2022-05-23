@@ -59,7 +59,7 @@ message Originator {
     // where there is no account, the natural or legal person that places the order with
     // the originating VASP to perform the VA transfer.
     // One or More
-    repeated Person originator_persons = 1 [json_name = "originatorPersons"];
+    repeated Person originator_persons = 1 [ json_name = "originatorPersons"];
 
     // Definition: Identifier of an account that is used to process the transaction.
     // The value for this element is case-sensitive.

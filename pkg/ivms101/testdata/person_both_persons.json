@@ -1,0 +1,66 @@
+{
+    "naturalPerson": {
+        "name": {
+            "nameIdentifier": [
+                {
+                    "primaryIdentifier": "Sanders",
+                    "secondaryIdentifier": "Alice",
+                    "nameIdentifierType": "LEGL"
+                }
+            ]
+        },
+        "geographicAddress": [
+            {
+                "addressType": "HOME",
+                "streetName": "Thorne Road",
+                "buildingNumber": "78",
+                "postCode": "11801",
+                "townName": "Hicksville",
+                "countrySubDivision": "NY",
+                "country": "US"
+            }
+        ],
+        "nationalIdentification": {
+            "nationalIdentifier": "864-118-996",
+            "nationalIdentifierType": "SOCS",
+            "countryOfIssue": "US",
+            "registrationAuthority": "RA000628"
+        },
+        "customerIdentification": "1234abc",
+        "dateAndPlaceOfBirth": {
+            "dateOfBirth": "1975-02-18",
+            "placeOfBirth": "Defiance, OH"
+        },
+        "countryOfResidence": "US"
+    },
+    "legalPerson": {
+        "name": {
+            "nameIdentifier": [
+                {
+                    "legalPersonName": "Bob's Discount VASP, PLC",
+                    "legalPersonNameIdentifierType": "LEGL"
+                },
+                {
+                    "legalPersonName": "Bob VASP",
+                    "legalPersonNameIdentifierType": "SHRT"
+                }
+            ]
+        },
+        "geographicAddress": [
+            {
+                "addressType": "BIZZ",
+                "buildingNumber": "762",
+                "streetName": "Grimsby Road",
+                "townName": "Oxford",
+                "postCode": "OX8 U89",
+                "country": "GB"
+            }
+        ],
+        "customerNumber": "abc1234",
+        "nationalIdentification": {
+            "nationalIdentifier": "213800AQUAUP6I215N33",
+            "nationalIdentifierType": "LEIX"
+        },
+        "countryOfRegistration": "GB"
+    }
+}
