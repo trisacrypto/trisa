@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/nsf/jsondiff"
 	"github.com/stretchr/testify/require"
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -13,7 +14,6 @@ import (
 )
 
 func TestIdentityPayloadSerialization(t *testing.T) {
-	t.Skip("not yet implemented")
 	in, err := ioutil.ReadFile("testdata/identity_payload.json")
 	require.NoError(t, err, "unable to read identity payload JSON fixture")
 
@@ -26,11 +26,13 @@ func TestIdentityPayloadSerialization(t *testing.T) {
 	out, err := json.Marshal(identity)
 	require.NoError(t, err, "could not marshal identity payload to JSON")
 
-	require.Equal(t, in, out, "marshaled and unmarshaled JSON does not match")
+	fmt.Println(string(out))
+	diffOpts := jsondiff.DefaultConsoleOptions()
+	res, _ := jsondiff.Compare(in, out, &diffOpts)
+	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
 }
 
 func TestIdentityPayloadSerializationFromPB(t *testing.T) {
-	t.Skip("not yet implemented")
 	// This test loads the identity payload from a protojson serialized fixture then
 	// marshals and unmarshals the data as an inverse to TestIdentityPayloadSerialization
 	// NOTE: we could use a raw protocol buffer here, but protojson makes it easier to
@@ -51,8 +53,6 @@ func TestIdentityPayloadSerializationFromPB(t *testing.T) {
 	// Marshal IVMS101 Identity Payload
 	data, err := json.Marshal(identity)
 	require.NoError(t, err, "could not marshal identity payload to JSON")
-
-	fmt.Println(string(data))
 
 	// Unmarshal IVMS101 Identity Payload
 	odentity := &ivms101.IdentityPayload{}
