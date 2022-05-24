@@ -5,250 +5,372 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/nsf/jsondiff"
 	"github.com/stretchr/testify/require"
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 )
 
-func TestLegalPerson(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/legalperson.json")
-	require.NoError(t, err)
+//
+// Person JSON
+//
 
-	// Should be able to load a valid legal person from JSON data
-	var person *ivms101.LegalPerson
-	require.NoError(t, json.Unmarshal(data, &person))
+func TestPersonMarshaling(t *testing.T) {
+	data, err := ioutil.ReadFile("testdata/person_natural_person.json")
+	require.NoError(t, err, "could not load person with natural person json fixture")
 
-	// Legal person can't have a Country of Issue
-	require.NoError(t, person.Validate())
-	person.NationalIdentification.CountryOfIssue = "GB"
-	require.Error(t, person.Validate())
+	person := &ivms101.Person{}
+	require.NoError(t, json.Unmarshal(data, person), "could not unmarshal person")
+	require.Empty(t, person.GetLegalPerson(), "legal person returned from person with natural person fixture")
+	require.NotEmpty(t, person.GetNaturalPerson(), "no natural person returned from person with natural person fixture")
 
-	// If the National Identifier is an LEI, Registration Authority must be empty
-	person.NationalIdentification.CountryOfIssue = ""
-	person.NationalIdentification.NationalIdentifierType = 9
-	person.NationalIdentification.RegistrationAuthority = ""
-	require.NoError(t, person.Validate())
-	person.NationalIdentification.RegistrationAuthority = "Chuck Norris"
-	require.Error(t, person.Validate())
+	data, err = ioutil.ReadFile("testdata/person_legal_person.json")
+	require.NoError(t, err, "could not load person with legal person json fixture")
 
-	// If the National Identifier is not an LEI, Registration Authority is mandatory
-	person.NationalIdentification.NationalIdentifierType = 3
-	require.NoError(t, person.Validate())
-	person.NationalIdentification.RegistrationAuthority = ""
-	require.Error(t, person.Validate())
+	person = &ivms101.Person{}
+	require.NoError(t, json.Unmarshal(data, person), "could not unmarshal person")
+	require.Empty(t, person.GetNaturalPerson(), "natural person returned from person with legal person fixture")
+	require.NotEmpty(t, person.GetLegalPerson(), "no legal person returned from person with legal person fixture")
 
-	// Correct name can be validated
-	require.NoError(t, person.Name.Validate())
+	data, err = ioutil.ReadFile("testdata/person_both_persons.json")
+	require.NoError(t, err, "could not load person with both persons json fixture")
 
-	// Correctly structured name ids can be validated
-	pid := &ivms101.LegalPersonNameId{
-		LegalPersonName:               person.Name.NameIdentifiers[0].LegalPersonName,
-		LegalPersonNameIdentifierType: person.Name.NameIdentifiers[0].LegalPersonNameIdentifierType,
-	}
-	require.NoError(t, pid.Validate())
-	lpid := &ivms101.LocalLegalPersonNameId{
-		LegalPersonName:               person.Name.NameIdentifiers[0].LegalPersonName,
-		LegalPersonNameIdentifierType: person.Name.NameIdentifiers[0].LegalPersonNameIdentifierType,
-	}
-	require.NoError(t, lpid.Validate())
-
-	// Complete address can be validated
-	addr := &ivms101.Address{
-		AddressType:    person.GeographicAddresses[0].AddressType,
-		BuildingNumber: person.GeographicAddresses[0].BuildingNumber,
-		StreetName:     person.GeographicAddresses[0].StreetName,
-		TownName:       person.GeographicAddresses[0].TownName,
-		PostCode:       person.GeographicAddresses[0].PostBox,
-		Country:        person.GeographicAddresses[0].Country,
-	}
-	require.NoError(t, addr.Validate())
-
-	// Correct national identifier can be validated
-	require.NoError(t, person.NationalIdentification.Validate())
-
-	// Should be able to convert a legal person into a generic Person
-	gp := person.Person()
-	require.Nil(t, gp.GetNaturalPerson())
-	require.Equal(t, person, gp.GetLegalPerson())
-
-	// Failure cases
-	// Person with missing data should not produce a valid legal person
-	notaperson := &ivms101.LegalPerson{}
-	require.Error(t, notaperson.Validate())
-
-	// Name with no identifiers can't be validated
-	notaname := &ivms101.LegalPersonName{}
-	require.Error(t, notaname.Validate())
-
-	// Name missing type can't be validated
-	noType := &ivms101.LegalPersonNameId{LegalPersonName: "Bob's Discount VASP, PLC"}
-	notaname.NameIdentifiers = append(notaname.NameIdentifiers, noType)
-	require.Error(t, notaname.Validate())
-
-	// Incomplete name identifiers can't be validated
-	pidBad := &ivms101.LegalPersonNameId{LegalPersonNameIdentifierType: 1}
-	require.Error(t, pidBad.Validate())
-	lpidBad := &ivms101.LocalLegalPersonNameId{LegalPersonNameIdentifierType: 1}
-	require.Error(t, lpidBad.Validate())
-
-	// Address with bad type can't be validated
-	typeBad := &ivms101.Address{
-		AddressType:    100000000,
-		BuildingNumber: person.GeographicAddresses[0].BuildingNumber,
-		StreetName:     person.GeographicAddresses[0].StreetName,
-		TownName:       person.GeographicAddresses[0].TownName,
-		PostCode:       person.GeographicAddresses[0].PostBox,
-		Country:        person.GeographicAddresses[0].Country,
-	}
-	require.Error(t, typeBad.Validate())
-
-	// Address with bad country can't be validated
-	countryBad := &ivms101.Address{
-		AddressType:    person.GeographicAddresses[0].AddressType,
-		BuildingNumber: person.GeographicAddresses[0].BuildingNumber,
-		StreetName:     person.GeographicAddresses[0].StreetName,
-		TownName:       person.GeographicAddresses[0].TownName,
-		PostCode:       person.GeographicAddresses[0].PostBox,
-		Country:        "Lunar",
-	}
-	require.Error(t, countryBad.Validate())
-
-	// Address with too many address lines can't be validated
-	lines := []string{
-		"123", "street", "lane", "road", "house", "cottage", "place", "usa",
-	}
-	linesBad := &ivms101.Address{
-		AddressType: person.GeographicAddresses[0].AddressType,
-		Country:     person.GeographicAddresses[0].Country,
-		AddressLine: lines,
-	}
-	require.Error(t, linesBad.Validate())
-
-	// Street is required if no address lines are provided
-	noStreet := &ivms101.Address{
-		AddressType:    person.GeographicAddresses[0].AddressType,
-		BuildingNumber: person.GeographicAddresses[0].BuildingNumber,
-		TownName:       person.GeographicAddresses[0].TownName,
-		PostCode:       person.GeographicAddresses[0].PostBox,
-		Country:        person.GeographicAddresses[0].Country,
-	}
-	require.Error(t, noStreet.Validate())
-
-	// No national identification can't be validated
-	noNid := &ivms101.NationalIdentification{NationalIdentifier: ""}
-	require.Error(t, noNid.Validate())
-
-	// Overlong national identification can't be validated
-	longNid := &ivms101.NationalIdentification{
-		NationalIdentifier:     "2343456987GHE97777342KIWERPM000000021287319636021864HT7450913054",
-		NationalIdentifierType: 9,
-		CountryOfIssue:         "GB",
-		RegistrationAuthority:  "RA000589",
-	}
-	require.Error(t, longNid.Validate())
-
-	// Invalid NID type can't be validated
-	wrongNid := &ivms101.NationalIdentification{
-		NationalIdentifier:     "213800AQUAUP6I215N33",
-		NationalIdentifierType: 1000000000,
-		CountryOfIssue:         "FR",
-		RegistrationAuthority:  "RA000589",
-	}
-	require.Error(t, wrongNid.Validate())
-
-	// Bad code for country of issue can't be validated
-	badCode := &ivms101.NationalIdentification{
-		NationalIdentifier:     "213800AQUAUP6I215N33",
-		NationalIdentifierType: 4,
-		CountryOfIssue:         "America",
-		RegistrationAuthority:  "RA000589",
-	}
-	require.Error(t, badCode.Validate())
+	person = &ivms101.Person{}
+	require.EqualError(t, json.Unmarshal(data, person), "person object cannot be both a natural and legal person")
 }
 
-func TestNaturalPerson(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/naturalperson.json")
-	require.NoError(t, err)
+//
+// NaturalPerson JSON
+//
 
-	// Should be able to load a valid natural person from JSON data
+func TestNaturalPersonMarshaling(t *testing.T) {
+	data, err := ioutil.ReadFile("testdata/natural_person.json")
+	require.NoError(t, err, "could not load natural person json fixture")
+
 	var person *ivms101.NaturalPerson
-	require.NoError(t, json.Unmarshal(data, &person))
-	require.NoError(t, person.Validate())
+	require.NoError(t, json.Unmarshal(data, &person), "could not unmarshal natural person")
+	require.NotEmpty(t, person, "no lnatural person was unmarshaled")
+	require.NotEmpty(t, person.Name, "no natural person name was unmarshaled")
+	require.Len(t, person.Name.NameIdentifiers, 1, "incorrect number of name identifiers unmarshaled")
+	require.NotEmpty(t, person.GeographicAddresses, "no natural person geographic addresses unmarshaled")
+	require.Len(t, person.GeographicAddresses, 1, "incorrect number of geographic addresses unmarshaled")
+	require.Equal(t, "1234abc", person.CustomerIdentification, "natural person customer identification not unmarshaled")
+	require.NotEmpty(t, person.NationalIdentification, "no natural person national identification unmarshaled")
+	require.Equal(t, "US", person.CountryOfResidence, "natural person country of residence not unmarshaled")
 
-	// Correct name can be validated
-	require.NoError(t, person.Name.Validate())
+	compat, err := json.Marshal(person)
+	require.NoError(t, err, "could not marshal natural person")
 
-	// Correct DOB can be validated
-	require.NoError(t, person.DateAndPlaceOfBirth.Validate())
+	diffOpts := jsondiff.DefaultConsoleOptions()
+	res, _ := jsondiff.Compare(data, compat, &diffOpts)
+	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+}
 
-	// Correctly structured name ids can be validated
-	pid := &ivms101.NaturalPersonNameId{
-		PrimaryIdentifier:   person.Name.NameIdentifiers[0].PrimaryIdentifier,
-		SecondaryIdentifier: person.Name.NameIdentifiers[0].SecondaryIdentifier,
-		NameIdentifierType:  person.Name.NameIdentifiers[0].NameIdentifierType,
+//
+// NaturalPersonName and NaturalPersonNameIdentifiers JSON
+//
+
+func TestMarshalNatName(t *testing.T) {
+	// Test ivms101 protocol buffer struct to inspect whether we
+	// correctly marshal to the correct compatible ivms101 format
+	name := &ivms101.NaturalPersonNameId{
+		PrimaryIdentifier:  "superman",
+		NameIdentifierType: ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_LEGL,
 	}
-	require.NoError(t, pid.Validate())
-	lpid := &ivms101.LocalNaturalPersonNameId{
-		PrimaryIdentifier:   person.Name.NameIdentifiers[0].PrimaryIdentifier,
-		SecondaryIdentifier: person.Name.NameIdentifiers[0].SecondaryIdentifier,
-		NameIdentifierType:  person.Name.NameIdentifiers[0].NameIdentifierType,
+	birthname := &ivms101.LocalNaturalPersonNameId{
+		PrimaryIdentifier:   "kal",
+		SecondaryIdentifier: "el",
+		NameIdentifierType:  ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_BIRT,
 	}
-	require.NoError(t, lpid.Validate())
-
-	// Complete address can be validated
-	addr := &ivms101.Address{
-		AddressType:    person.GeographicAddresses[0].AddressType,
-		BuildingNumber: person.GeographicAddresses[0].BuildingNumber,
-		StreetName:     person.GeographicAddresses[0].StreetName,
-		TownName:       person.GeographicAddresses[0].TownName,
-		PostCode:       person.GeographicAddresses[0].PostBox,
-		Country:        person.GeographicAddresses[0].Country,
+	n := &ivms101.NaturalPersonName{
+		NameIdentifiers:      []*ivms101.NaturalPersonNameId{name},
+		LocalNameIdentifiers: []*ivms101.LocalNaturalPersonNameId{birthname},
 	}
-	require.NoError(t, addr.Validate())
+	expected := []byte(`{"localNameIdentifier":[{"primaryIdentifier":"kal","secondaryIdentifier":"el","nameIdentifierType":"BIRT"}],"nameIdentifier":[{"primaryIdentifier":"superman","nameIdentifierType":"LEGL"}]}`)
+	compat, err := json.Marshal(n)
+	require.Nil(t, err)
+	require.Equal(t, expected, compat)
+}
 
-	// Correct national identifier can be validated
-	require.NoError(t, person.NationalIdentification.Validate())
-
-	// Should be able to convert a legal person into a generic Person
-	gp := person.Person()
-	require.Nil(t, gp.GetLegalPerson())
-	require.Equal(t, person, gp.GetNaturalPerson())
-
-	// Failure cases
-	// JSON data missing required fields should not produce a valid natural person
-	notaperson := &ivms101.NaturalPerson{}
-	require.Error(t, notaperson.Validate())
-
-	// Name with no identifiers can't be validated
-	notaname := &ivms101.NaturalPersonName{}
-	require.Error(t, notaname.Validate())
-
-	// Name missing type can't be validated
-	noType := &ivms101.NaturalPersonNameId{
-		PrimaryIdentifier:   "Annie",
-		SecondaryIdentifier: "Oakley",
+func TestUnmarshalNatName(t *testing.T) {
+	// Test compatible ivms101 identifiers to inspect whether we correctly
+	// unmarshal them to the correct protocol buffer structs
+	name := &ivms101.NaturalPersonNameId{
+		PrimaryIdentifier:  "superman",
+		NameIdentifierType: ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_LEGL,
 	}
-	notaname.NameIdentifiers = append(notaname.NameIdentifiers, noType)
-	require.Error(t, notaname.Validate())
+	birthname := &ivms101.LocalNaturalPersonNameId{
+		PrimaryIdentifier:   "kal",
+		SecondaryIdentifier: "el",
+		NameIdentifierType:  ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_BIRT,
+	}
+	expected := &ivms101.NaturalPersonName{
+		NameIdentifiers:      []*ivms101.NaturalPersonNameId{name},
+		LocalNameIdentifiers: []*ivms101.LocalNaturalPersonNameId{birthname},
+	}
+	n := &ivms101.NaturalPersonName{}
+	compat := []byte(`{"localNameIdentifier":[{"nameIdentifierType":"BIRT","primaryIdentifier":"kal","secondaryIdentifier":"el"}],"nameIdentifier":[{"nameIdentifierType":"LEGL","primaryIdentifier":"superman","secondaryIdentifier":""}],"phoneticNameIdentifier":null}`)
+	err := json.Unmarshal(compat, n)
+	require.Nil(t, err)
+	require.Equal(t, expected, n)
+}
 
-	// Incomplete name identifiers can't be validated
-	pidBad := &ivms101.NaturalPersonNameId{NameIdentifierType: 1}
-	require.Error(t, pidBad.Validate())
-	lpidBad := &ivms101.LocalNaturalPersonNameId{NameIdentifierType: 1}
-	require.Error(t, lpidBad.Validate())
+func TestMarshalNatNameID(t *testing.T) {
+	// Test ivms101 protocol buffer struct to inspect whether we
+	// correctly marshal to the correct compatible ivms101 format
+	ident := &ivms101.NaturalPersonNameId{
+		PrimaryIdentifier:   "clark",
+		SecondaryIdentifier: "kent",
+		NameIdentifierType:  ivms101.NaturalPersonNameTypeCode(1),
+	}
+	expected := []byte(`{"primaryIdentifier":"clark","secondaryIdentifier":"kent","nameIdentifierType":"ALIA"}`)
+	compat, err := json.Marshal(ident)
+	require.Nil(t, err)
+	require.Equal(t, expected, compat)
+}
 
-	// No date of birth can't be validated
-	pobOnly := &ivms101.DateAndPlaceOfBirth{PlaceOfBirth: "Champaign, IL"}
-	require.Error(t, pobOnly.Validate())
+func TestUnmarshalNatNameID(t *testing.T) {
+	// Test compatible ivms101 identifiers to inspect whether we correctly
+	// unmarshal them to the correct protocol buffer structs
+	expected := &ivms101.NaturalPersonNameId{
+		PrimaryIdentifier:   "clark",
+		SecondaryIdentifier: "kent",
+		NameIdentifierType:  ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_ALIA,
+	}
+	ident := &ivms101.NaturalPersonNameId{}
+	compat := []byte(`{"nameIdentifierType":"ALIA","primaryIdentifier":"clark","secondaryIdentifier":"kent"}`)
+	err := json.Unmarshal(compat, ident)
+	require.Nil(t, err)
+	require.Equal(t, expected, ident)
+}
 
-	// No place of birth can't be validated
-	dobOnly := &ivms101.DateAndPlaceOfBirth{DateOfBirth: "2011-05-21"}
-	require.Error(t, dobOnly.Validate())
+func TestMarshalLocNatNameID(t *testing.T) {
+	// Test ivms101 protocol buffer struct to inspect whether we
+	// correctly marshal to the correct compatible ivms101 format
+	ident := &ivms101.LocalNaturalPersonNameId{
+		PrimaryIdentifier:   "kal",
+		SecondaryIdentifier: "el",
+		NameIdentifierType:  ivms101.NaturalPersonNameTypeCode(2),
+	}
+	expected := []byte(`{"primaryIdentifier":"kal","secondaryIdentifier":"el","nameIdentifierType":"BIRT"}`)
+	compat, err := json.Marshal(ident)
+	require.Nil(t, err)
+	require.Equal(t, expected, compat)
+}
 
-	// Date must be parsable or can't be validated
-	badDob := &ivms101.DateAndPlaceOfBirth{DateOfBirth: "80-80-80-80"}
-	require.Error(t, badDob.Validate())
+func TestUnmarshalLocNatNameID(t *testing.T) {
+	// Test compatible ivms101 identifiers to inspect whether we correctly
+	// unmarshal them to the correct protocol buffer structs
+	expected := &ivms101.LocalNaturalPersonNameId{
+		PrimaryIdentifier:   "kal",
+		SecondaryIdentifier: "el",
+		NameIdentifierType:  ivms101.NaturalPersonNameTypeCode_NATURAL_PERSON_NAME_TYPE_CODE_BIRT,
+	}
+	ident := &ivms101.LocalNaturalPersonNameId{}
+	compat := []byte(`{"primaryIdentifier":"kal","secondaryIdentifier":"el","nameIdentifierType":"BIRT"}`)
+	err := json.Unmarshal(compat, ident)
+	require.Nil(t, err)
+	require.Equal(t, expected, ident)
+}
 
-	// Can't be born in the future
-	futureDob := &ivms101.DateAndPlaceOfBirth{DateOfBirth: "8000-05-21"}
-	require.Error(t, futureDob.Validate())
+//
+// Address JSON
+//
+
+func TestAddressMarshaling(t *testing.T) {
+	// Should be able to unmarshal address with only address line
+	addrLine := []byte(`{"addressLine":["4321 MmmmBop Lane","Middle America, USA","20000"]}`)
+	var addrA *ivms101.Address
+	require.NoError(t, json.Unmarshal(addrLine, &addrA))
+	expected := &ivms101.Address{AddressLine: []string{"4321 MmmmBop Lane", "Middle America, USA", "20000"}}
+	require.Equal(t, expected, addrA, "marshalled json differs from original")
+
+	// Should be able to marshal address line back to PB struct
+	compatA, err := json.Marshal(addrA)
+	require.Nil(t, err)
+	require.Equal(t, addrLine, compatA, "marshalled json differs from original")
+
+	// Should be able to unmarshal a valid address from a JSON file
+	data, err := ioutil.ReadFile("testdata/address.json")
+	require.NoError(t, err)
+	var addrB *ivms101.Address
+	require.NoError(t, json.Unmarshal(data, &addrB))
+
+	// Should be able to marshal to json without error
+	compatB, err := json.Marshal(addrB)
+	require.Nil(t, err)
+
+	// Newly marshaled json should match original json
+	diffOpts := jsondiff.DefaultConsoleOptions()
+	res, _ := jsondiff.Compare(data, compatB, &diffOpts)
+	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+}
+
+//
+// DateAndPlaceOfBirth JSON
+//
+
+func TestDateAndPlaceOfBirthMarshaling(t *testing.T) {
+	dobData := []byte(`{"dateOfBirth": "1984-04-20", "placeOfBirth":"Montgomery, AL, USA"}`)
+	var dob *ivms101.DateAndPlaceOfBirth
+	require.NoError(t, json.Unmarshal(dobData, &dob))
+	require.Equal(t, dob.DateOfBirth, "1984-04-20")
+	require.Equal(t, dob.PlaceOfBirth, "Montgomery, AL, USA")
+
+	outdata, err := json.Marshal(dob)
+	require.NoError(t, err, "could not marshal date and place of birth")
+
+	diffOpts := jsondiff.DefaultConsoleOptions()
+	res, _ := jsondiff.Compare(dobData, outdata, &diffOpts)
+	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+}
+
+//
+// NationalIdentification JSON
+//
+
+func TestNationalIdentificationMarshaling(t *testing.T) {
+	data, err := ioutil.ReadFile("testdata/national_identification.json")
+	require.NoError(t, err, "could not load national identification json fixture")
+
+	var natId *ivms101.NationalIdentification
+	require.NoError(t, json.Unmarshal(data, &natId), "could not unmarshal national identification")
+	require.Equal(t, "815026352", natId.NationalIdentifier)
+	require.Equal(t, ivms101.NationalIdentifierDRLC, natId.NationalIdentifierType)
+	require.Equal(t, "TV", natId.CountryOfIssue)
+	require.Equal(t, "RA777777", natId.RegistrationAuthority)
+
+	compat, err := json.Marshal(natId)
+	require.NoError(t, err, "could not marshal national identification")
+
+	diffOpts := jsondiff.DefaultConsoleOptions()
+	res, _ := jsondiff.Compare(data, compat, &diffOpts)
+	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+}
+
+//
+// LegalPerson JSON
+//
+
+func TestLegalPersonMarshaling(t *testing.T) {
+	data, err := ioutil.ReadFile("testdata/legal_person.json")
+	require.NoError(t, err, "could not load legal person json fixture")
+
+	var person *ivms101.LegalPerson
+	require.NoError(t, json.Unmarshal(data, &person), "could not unmarshal legal person")
+	require.NotEmpty(t, person, "no legal person was unmarshaled")
+	require.NotEmpty(t, person.Name, "no legal person name was unmarshaled")
+	require.Len(t, person.Name.NameIdentifiers, 2, "incorrect number of name identifiers unmarshaled")
+	require.NotEmpty(t, person.GeographicAddresses, "no legal person geographic addresses unmarshaled")
+	require.Len(t, person.GeographicAddresses, 1, "incorrect number of geographic addresses unmarshaled")
+	require.Equal(t, "abc1234", person.CustomerNumber, "legal person customer number not unmarshaled")
+	require.NotEmpty(t, person.NationalIdentification, "no legal person national identification unmarshaled")
+	require.Equal(t, "GB", person.CountryOfRegistration, "legal person country of registration not unmarshaled")
+
+	compat, err := json.Marshal(person)
+	require.NoError(t, err, "could not marshal legal person")
+
+	diffOpts := jsondiff.DefaultConsoleOptions()
+	res, _ := jsondiff.Compare(data, compat, &diffOpts)
+	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+}
+
+//
+// LegalPersonName and LegalPersonNameIdentifiers JSON
+//
+
+func TestMarshalLegName(t *testing.T) {
+	// Test ivms101 protocol buffer struct to inspect whether we
+	// correctly marshal to the correct compatible ivms101 format
+	name := &ivms101.LegalPersonNameId{
+		LegalPersonName:               "acme labs",
+		LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL,
+	}
+	tradename := &ivms101.LocalLegalPersonNameId{
+		LegalPersonName:               "animaniacs",
+		LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_TRAD,
+	}
+	n := &ivms101.LegalPersonName{
+		NameIdentifiers:      []*ivms101.LegalPersonNameId{name},
+		LocalNameIdentifiers: []*ivms101.LocalLegalPersonNameId{tradename},
+	}
+	expected := []byte(`{"localNameIdentifier":[{"legalPersonName":"animaniacs","legalPersonNameIdentifierType":"TRAD"}],"nameIdentifier":[{"legalPersonName":"acme labs","legalPersonNameIdentifierType":"LEGL"}]}`)
+	compat, err := json.Marshal(n)
+	require.Nil(t, err)
+	require.Equal(t, expected, compat)
+}
+
+func TestUnmarshalLegName(t *testing.T) {
+	// Test compatible ivms101 identifiers to inspect whether we correctly
+	// unmarshal them to the correct protocol buffer structs
+	name := &ivms101.LegalPersonNameId{
+		LegalPersonName:               "acme labs",
+		LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL,
+	}
+	tradename := &ivms101.LocalLegalPersonNameId{
+		LegalPersonName:               "animaniacs",
+		LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_TRAD,
+	}
+	expected := &ivms101.LegalPersonName{
+		NameIdentifiers:      []*ivms101.LegalPersonNameId{name},
+		LocalNameIdentifiers: []*ivms101.LocalLegalPersonNameId{tradename},
+	}
+	n := &ivms101.LegalPersonName{}
+	compat := []byte(`{"localNameIdentifier":[{"legalPersonName":"animaniacs","legalPersonNameIdentifierType":"TRAD"}],"nameIdentifier":[{"legalPersonName":"acme labs","legalPersonNameIdentifierType":"LEGL"}],"phoneticNameIdentifier":null}`)
+	err := json.Unmarshal(compat, n)
+	require.Nil(t, err)
+	require.Equal(t, expected, n)
+}
+
+func TestMarshalLegNameID(t *testing.T) {
+	// Test ivms101 protocol buffer struct to inspect whether we
+	// correctly marshal to the correct compatible ivms101 format
+	ident := &ivms101.LegalPersonNameId{
+		LegalPersonName:               "acme labs",
+		LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode(1),
+	}
+	expected := []byte(`{"legalPersonName":"acme labs","legalPersonNameIdentifierType":"LEGL"}`)
+	compat, err := json.Marshal(ident)
+	require.Nil(t, err)
+	require.Equal(t, expected, compat)
+}
+
+func TestUnmarshalLegNameID(t *testing.T) {
+	// Test compatible ivms101 identifiers to inspect whether we correctly
+	// unmarshal them to the correct protocol buffer structs
+	expected := &ivms101.LegalPersonNameId{
+		LegalPersonName:               "acme labs",
+		LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL,
+	}
+	ident := &ivms101.LegalPersonNameId{}
+	compat := []byte(`{"legalPersonName":"acme labs","legalPersonNameIdentifierType":"LEGL"}`)
+	err := json.Unmarshal(compat, ident)
+	require.Nil(t, err)
+	require.Equal(t, expected, ident)
+}
+
+func TestMarshalLocalLegNameID(t *testing.T) {
+	// Test ivms101 protocol buffer struct to inspect whether we
+	// correctly marshal to the correct compatible ivms101 format
+	ident := &ivms101.LocalLegalPersonNameId{
+		LegalPersonName:               "acme labs",
+		LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode(1),
+	}
+	expected := []byte(`{"legalPersonName":"acme labs","legalPersonNameIdentifierType":"LEGL"}`)
+	compat, err := json.Marshal(ident)
+	require.Nil(t, err)
+	require.Equal(t, expected, compat)
+}
+
+func TestUnmarshalLocalLegNameID(t *testing.T) {
+	// Test compatible ivms101 identifiers to inspect whether we correctly
+	// unmarshal them to the correct protocol buffer structs
+	expected := &ivms101.LocalLegalPersonNameId{
+		LegalPersonName:               "acme labs",
+		LegalPersonNameIdentifierType: ivms101.LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL,
+	}
+	ident := &ivms101.LocalLegalPersonNameId{}
+	compat := []byte(`{"legalPersonName":"acme labs","legalPersonNameIdentifierType":"LEGL"}`)
+	err := json.Unmarshal(compat, ident)
+	require.Nil(t, err)
+	require.Equal(t, expected, ident)
 }

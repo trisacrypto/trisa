@@ -5,12 +5,12 @@
 				"name": {
 					"nameIdentifier": [{
 							"primaryIdentifier": "Howard",
-							"secondaryIdentifer": "Jane",
+							"secondaryIdentifier": "Jane",
 							"nameIdentifierType": "LEGL"
 						},
 						{
 							"primaryIdentifier": "Price",
-							"secondaryIdentifer": "Jane",
+							"secondaryIdentifier": "Jane",
 							"nameIdentifierType": "MAID"
 						}
 					]
@@ -69,8 +69,8 @@
 				"nationalIdentification": {
 					"nationalIdentifier": "319560446",
 					"nationalIdentifierType": "DRLC",
-					"country_of_issue": "GB",
-					"registration_authority": "RA000591"
+					"countryOfIssue": "GB",
+					"registrationAuthority": "RA000591"
 				},
 				"customerIdentification": "5610",
 				"dateAndPlaceOfBirth": {
@@ -85,74 +85,72 @@
 		]
 	},
 	"originatingVASP": {
-		"legalPerson": {
-			"name": {
-				"nameIdentifiers": [{
-						"legalPersonName": "AliceCoin, Inc.",
-						"legalPersonNameIdentifierType": "LEGL"
-					},
-					{
-						"legalPersonName": "Alice VASP",
-						"legalPersonNameIdentifierType": "SHRT"
-					},
-					{
-						"legalPersonName": "AliceCoin",
-						"legalPersonNameIdentifierType": "TRAD"
-					}
-				]
-			},
-			"geographicAddresses": [{
-				"addressType": "BIZZ",
-				"streetName": "Roosevelt Place",
-				"buildingNumber": "23",
-				"postCode": "02151",
-				"townName": "Boston",
-				"countrySubDivision": "MA",
-				"country": "US"
-			}],
-			"nationalIdentification": {
-				"nationalIdentifier": "5493004YBI24IF4TIP92",
-				"nationalIdentifierType": "LEIX",
-				"countryOfIssue": "US",
-				"registrationAuthority": "RA000744"
-			},
-			"countryOfRegistration": "US"
+		"originatingVASP": {
+			"legalPerson": {
+				"name": {
+					"nameIdentifier": [{
+							"legalPersonName": "AliceCoin, Inc.",
+							"legalPersonNameIdentifierType": "LEGL"
+						},
+						{
+							"legalPersonName": "Alice VASP",
+							"legalPersonNameIdentifierType": "SHRT"
+						},
+						{
+							"legalPersonName": "AliceCoin",
+							"legalPersonNameIdentifierType": "TRAD"
+						}
+					]
+				},
+				"geographicAddress": [{
+					"addressType": "BIZZ",
+					"streetName": "Roosevelt Place",
+					"buildingNumber": "23",
+					"postCode": "02151",
+					"townName": "Boston",
+					"countrySubDivision": "MA",
+					"country": "US"
+				}],
+				"nationalIdentification": {
+					"nationalIdentifier": "5493004YBI24IF4TIP92",
+					"nationalIdentifierType": "LEIX",
+					"countryOfIssue": "US",
+					"registrationAuthority": "RA000744"
+				},
+				"countryOfRegistration": "US"
+			}
 		}
 	},
 	"beneficiaryVASP": {
-		"legalPerson": {
-			"name": {
-				"nameIdentifiers": [{
-						"legalPersonName": "Bob's Discount VASP, PLC",
-						"legalPersonNameIdentifierType": "LEGL"
-					},
-					{
-						"legalPersonName": "Bob VASP",
-						"legalPersonNameIdentifierType": "SHRT"
-					}
-				]
-			},
-			"geographicAddresses": [{
-				"addressType": "BIZZ",
-				"streetName": "Grimsby Road",
-				"buildingNumber": "762",
-				"postCode": "OX8 U89",
-				"townName": "Oxford",
-				"country": "GB"
-			}],
-			"nationalIdentification": {
-				"nationalIdentifier": "213800AQUAUP6I215N33",
-				"nationalIdentifierType": "LEIX",
-				"country_of_issue": "GB",
-				"registration_authority": "RA000589"
-			},
-			"countryOfRegistration": "GB"
+		"beneficiaryVASP": {
+			"legalPerson": {
+				"name": {
+					"nameIdentifier": [{
+							"legalPersonName": "Bob's Discount VASP, PLC",
+							"legalPersonNameIdentifierType": "LEGL"
+						},
+						{
+							"legalPersonName": "Bob VASP",
+							"legalPersonNameIdentifierType": "SHRT"
+						}
+					]
+				},
+				"geographicAddress": [{
+					"addressType": "BIZZ",
+					"streetName": "Grimsby Road",
+					"buildingNumber": "762",
+					"postCode": "OX8 U89",
+					"townName": "Oxford",
+					"country": "GB"
+				}],
+				"nationalIdentification": {
+					"nationalIdentifier": "213800AQUAUP6I215N33",
+					"nationalIdentifierType": "LEIX",
+					"countryOfIssue": "GB",
+					"registrationAuthority": "RA000589"
+				},
+				"countryOfRegistration": "GB"
+			}
 		}
-	},
-	"transferPath": {
-		"transferPath": []
-	},
-	"payloadMetadata": {
-		"transliterationMethod": []
 	}
 }
