@@ -340,7 +340,7 @@ func TestEnvelopeAccessors(t *testing.T) {
 	require.Nil(t, env.Sealer(), "seal should be nil for an error-only envelope")
 
 	payload, err := env.Payload()
-	require.EqualError(t, err, `envelope is in state "unsealed-error": payload may be invalid`)
+	require.EqualError(t, err, `envelope is in state "error": payload may be invalid`)
 	require.Nil(t, payload, "payload should be nil for an error-only envelope")
 
 	ts, err := env.Timestamp()
@@ -386,6 +386,46 @@ func TestEnvelopeAccessors(t *testing.T) {
 	actualTS, err := env.Timestamp()
 	require.NoError(t, err, "could not fetch timestamp")
 	require.True(t, ts.Equal(actualTS), "timestamp did not match expected timestamp")
+}
+
+func TestCheck(t *testing.T) {
+	emsg, err := loadEnvelopeFixture("testdata/error_envelope.json")
+	require.NoError(t, err, "could not load error envelope fixture")
+
+	terr, iserr := envelope.Check(emsg)
+	require.True(t, iserr, "expected error envelope to return iserr true")
+	require.Equal(t, api.ComplianceCheckFail, terr.Code)
+	require.Equal(t, "specified account has been frozen temporarily", terr.Message)
+	require.False(t, terr.Retry)
+
+	for _, path := range []string{"testdata/unsealed_envelope.json", "testdata/sealed_envelope.json"} {
+		msg, err := loadEnvelopeFixture(path)
+		require.NoError(t, err, "could not load %s", path)
+
+		terr, iserr = envelope.Check(msg)
+		require.False(t, iserr)
+		require.Nil(t, terr)
+	}
+}
+
+func TestStatus(t *testing.T) {
+	testCases := []struct {
+		path  string
+		state envelope.State
+	}{
+		{"testdata/error_envelope.json", envelope.Error},
+		{"testdata/unsealed_envelope.json", envelope.Unsealed},
+		{"testdata/sealed_envelope.json", envelope.Sealed},
+	}
+
+	for i, tc := range testCases {
+		msg, err := loadEnvelopeFixture(tc.path)
+		require.NoError(t, err, "could not load fixture from %s", tc.path)
+
+		state := envelope.Status(msg)
+		require.Equal(t, tc.state, state, "test case %d expected %s got %s", i+1, tc.state, state)
+	}
+
 }
 
 const (
