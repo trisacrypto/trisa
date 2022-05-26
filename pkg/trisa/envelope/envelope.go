@@ -148,6 +148,21 @@ func Reject(reject *api.Error, opts ...Option) (_ *api.SecureEnvelope, err error
 	return env.Proto(), nil
 }
 
+// Check returns any error on the specified envelope as well as a bool that indicates
+// if the envelope is in an error state (even if the envelope contains a payload).
+func Check(msg *api.SecureEnvelope) (_ *api.Error, iserr bool) {
+	env := &Envelope{msg: msg}
+	state := env.State()
+	iserr = state == Error || state == ClearError || state == UnsealedError || state == SealedError
+	return env.Error(), iserr
+}
+
+// Status returns the state the secure envelope is currently in.
+func Status(msg *api.SecureEnvelope) State {
+	env := &Envelope{msg: msg}
+	return env.State()
+}
+
 // Envelope is a wrapper for a trisa.SecureEnvelope that adds cryptographic
 // functionality to the protocol buffer payload. An envelope can be in one of three
 // states: clear, unsealed, and sealed -- referring to the cryptographic status of the
@@ -718,6 +733,15 @@ func (e *Envelope) State() State {
 	// If there is a secure envelope, it should be valid
 	if err := e.ValidateMessage(); err != nil {
 		return Corrupted
+	}
+
+	// If there is no payload and there is an error it is in error mode
+	if len(e.msg.Payload) == 0 {
+		if e.msg.Error == nil || e.msg.Error.IsZero() {
+			// Shouldn't happen because of ValidateMessage
+			return Unknown
+		}
+		return Error
 	}
 
 	// Check if the envelope is marked as sealed
