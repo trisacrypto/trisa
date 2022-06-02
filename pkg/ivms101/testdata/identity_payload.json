@@ -28,7 +28,7 @@
 					"nationalIdentifier": "112502920",
 					"nationalIdentifierType": "SOCS",
 					"countryOfIssue": "US",
-					"registrationAuthority": "RA000748"
+					"registrationAuthority": "RA777777"
 				},
 				"customerIdentification": "2642",
 				"dateAndPlaceOfBirth": {
@@ -64,13 +64,13 @@
 					"buildingNumber": "249",
 					"postCode": "WD7 7AL",
 					"townName": "Radlett",
-					"country": "United Kingdom"
+					"country": "GB"
 				}],
 				"nationalIdentification": {
 					"nationalIdentifier": "319560446",
 					"nationalIdentifierType": "DRLC",
 					"countryOfIssue": "GB",
-					"registrationAuthority": "RA000591"
+					"registrationAuthority": "RA777777"
 				},
 				"customerIdentification": "5610",
 				"dateAndPlaceOfBirth": {
@@ -112,10 +112,8 @@
 					"country": "US"
 				}],
 				"nationalIdentification": {
-					"nationalIdentifier": "5493004YBI24IF4TIP92",
-					"nationalIdentifierType": "LEIX",
-					"countryOfIssue": "US",
-					"registrationAuthority": "RA000744"
+					"nationalIdentifier": "506700T7Z685VUOZL877",
+					"nationalIdentifierType": "LEIX"
 				},
 				"countryOfRegistration": "US"
 			}
@@ -145,9 +143,8 @@
 				}],
 				"nationalIdentification": {
 					"nationalIdentifier": "213800AQUAUP6I215N33",
-					"nationalIdentifierType": "LEIX",
-					"countryOfIssue": "GB",
-					"registrationAuthority": "RA000589"
+					"nationalIdentifierType": "TXID",
+					"registrationAuthority": "RA777777"
 				},
 				"countryOfRegistration": "GB"
 			}
