@@ -11,6 +11,7 @@ The TestNet hosts three convenience "robot VASPs" (rVASPs) services to facilitat
 - Alice (`api.alice.vaspbot.net:443`): the primary integration rVASP used to trigger and receive TRISA messages.
 - Bob (`api.bob.vaspbot.net:443`): a demo rVASP to view exchanges with Alice.
 - Evil (`api.evil.vaspbot.net:443`): an "evil" rVASP that is not a TRISA TestNet member, used to test non-authenticated interactions.
+- Charlie (`api.charlie.vaspbot.net:443`): a beta rVASP used to test new rVASP updates independently of the other rVASPs.
 
 Note: the rVASPs are currently primarily configured for demos and work has begun on making them more robust for integration purposes; please check in with this documentation regularly for any changes. If you notice any bugs in the rVASP code or behavior, [please open an issue](https://github.com/trisacrypto/testnet/issues).
 
@@ -25,24 +26,26 @@ The rVASPs have a built-in database of fake customers with fake wallet addresses
 
 The following table of "customers" for Alice, Bob, and Evil can be used as a reference for interacting with each rVASP:
 
-| VASP                  | "Crypto Wallet"                    | Email                 |
-|-----------------------|------------------------------------|-----------------------|
-| api.bob.vaspbot.net   | 18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh | robert@bobvasp.co.uk  |
-| api.bob.vaspbot.net   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  |
-| api.bob.vaspbot.net   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   |
-| api.bob.vaspbot.net   | **1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9** | fred@bobvasp.co.uk    |
-| api.alice.vaspbot.net | **19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ** | sarah@alicevasp.us    |
-| api.alice.vaspbot.net | 1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX | mary@alicevasp.us     |
-| api.alice.vaspbot.net | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    |
-| api.alice.vaspbot.net | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     |
-| api.evil.vaspbot.net  | **1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz** | gambler@evilvasp.gg   |
-| api.evil.vaspbot.net  | 1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF | voldemort@evilvasp.gg |
-| api.evil.vaspbot.net  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg |
-| api.evil.vaspbot.net  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   |
+| VASP                  | "Crypto Wallet"                    | Email                 | Originator Policy | Beneficiary Policy |
+|-----------------------|------------------------------------|-----------------------|-------------------|--------------------|
+| api.bob.vaspbot.net   | 18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh | robert@bobvasp.co.uk  | SendPartial       | SyncRepair         |
+| api.bob.vaspbot.net   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  | SendFull          | SyncRequire        |
+| api.bob.vaspbot.net   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   | SendFull          | AsyncRepair        |
+| api.bob.vaspbot.net   | **1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9** | fred@bobvasp.co.uk    | SendError     | AsyncReject        |
+| api.alice.vaspbot.net | **19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ** | sarah@alicevasp.us    | SendPartial   | SyncRepair         |
+| api.alice.vaspbot.net | 1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX | mary@alicevasp.us     | SendFull          | SyncRequire        |
+| api.alice.vaspbot.net | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    | SendFull          | AsyncRepair        |
+| api.alice.vaspbot.net | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     | SendError         | AsyncReject        |
+| api.evil.vaspbot.net  | **1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz** | gambler@evilvasp.gg   | SendPartial   | SyncRepair         |
+| api.evil.vaspbot.net  | 1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF | voldemort@evilvasp.gg | SendFull          | SyncRequire        |
+| api.evil.vaspbot.net  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg | SendFull          | AsyncRepair        |
+| api.evil.vaspbot.net  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   | SendError         | AsyncReject        |
 
 Note that all rVASP data was generated using a Faker tool to produce realistic/consistent test data and fixtures and is completely fictional. For example, the records for Alice VASP (a fake US company) are primarily in North America, etc.
 
 If you're a Traveler customer, the bold addresses above have some attribution data associated with them, and they're a good candidate for Traveler-based rVASP interactions.
+
+In order to support multiple behaviors at once, such as synchronous and asynchronous responses, each wallet address is configured with an originator policy and a beneficiary policy. The originator policy defines how the rVASP will behave when *initiating* transfers to a remote VASP. The beneficiary policy defines how the rVASP will behave when *responding* to transfers from a remote VASP. These policies are described in depth below.
 
 ### Preliminaries
 
@@ -103,9 +106,7 @@ These values have the same exact specification as the ones in the command line p
 
 ### Sending a TRISA message to an rVASP
 
-The rVASP expects a `trisa.data.generic.v1beta1.Transaction` as the transaction payload and an `ivms101.IdentityPayload` as the identity payload. The identity payload beneficiary information does not need to be populated, the rVASP will respond populating the beneficiary, however the identity payload should not be null. It is recommended that you specify some fake identity data to take advantage of the rVASP parsing and validation commands.
-
-Make sure that in your transaction payload you specify a beneficiary wallet that matches the rVASP beneficiaries from the table above; e.g. use:
+The rVASP expects a `trisa.data.generic.v1beta1.Transaction` as the transaction payload and an `ivms101.IdentityPayload` as the identity payload. The transaction payload must contain a beneficiary address that matches the rVASP beneficiaries from the table above; e.g. use:
 
 ```json
 {
@@ -120,7 +121,44 @@ Make sure that in your transaction payload you specify a beneficiary wallet that
 
 You may specify any `txid` or `originator` string and the `network` and `timestamp` fields are ignored.
 
+The identity payload must also be not null, but may be partially or completely filled in depending on the corresponding beneficiary policy.
+
 Create a sealed envelope either using the directory service or direct key exchange to fetch the rVASP RSA public keys and using `AES256-GCM` and `HMAC-SHA256` as the envelope cryptography. Then use the `TRISANetwork` service `Transfer` RPC to send the sealed envelope to the rVASP.
+
+#### SyncRepair
+
+For the `SyncRepair` policy, the identity payload does not have to include the beneficiary identity, although it must be not null. The rVASP will respond synchronously with a response envelope containing a `received_at` timestamp and the complete beneficiary identity.
+
+#### SyncRequire
+
+For the `SyncRequire` policy, the identity payload must contain a complete beneficiary identity. The rVASP will respond synchronously with the same envelope containing a `received_at` timestamp in the payload.
+
+#### AsyncRepair
+
+For the `AsyncRepair` policy, the identity payload does not have to include the beneficiary identity. The rVASP will respond with a `trisa.data.generic.v1beta1.Pending` message containing `reply_not_before` and `reply_not_after` timestamps which specifies the beginning of an asynchronous transaction. In order to continue the transaction handshake, you should be ready to receive a `Transfer` RPC request from the rVASP within the time window containing a `SecureEvelope` with the same `Id`. In order to continue the transaction, you must respond with a resealed envelope containing a `received_at` timestamp in the payload, and then send a new `Transfer` request to the rVASP containing any final transaction details (`txid`, etc.). The rVASP will respond with another pending message which will initiate a final asynchronous handshake. Once the final `Transfer` request is received from the rVASP, the envelope should be resealed and echoed again to complete the transaction. The entire workflow between two rVASPs is outlined in the diagram below.
+
+![Asynchronous Repair](/img/async_repair.png)
+
+#### AsyncReject
+
+The `AsyncReject` policy simulates a synchronous rejected transaction. In this policy, the identity payload does not have to include the beneficiary identity, and the rVASP will respond with a pending message as in the `AsyncRepair` policy. The difference is that the rVASP will send an error envelope within the time window containing a TRISA rejection, indicating that the transaction has been rejected.
+
+### Responding to a TRISA message from an rVASP
+
+Envelopes received from rVASPs can be decrypted using your configured private key. As a complement to the beneficiary policies, the payload in the received envelope is determined by the originator policy associated with the originator address in the transaction payload.
+
+#### SendPartial
+
+For the `SendPartial` policy, the rVASP sends an envelope containing a complete transaction payload and a partial identity payload containing a full originator identity and a partial beneficiary identity. It expects a response envelope containing the full beneficiary information and a `received_at` timestamp in order to complete the transaction.
+
+#### SendFull
+
+For the `SendFull` policy, the rVASP sends an envelope containing a complete transaction payload and a complete identity payload. This envelope should be resealed and echoed back to the rVASP with a `received_at` timestamp in order to complete the transaction. 
+
+#### SendError
+
+The `SendError` policy exists to test handling for error envelopes. In this policy, the rVASP will simply send an error envelope with the `ComplianceCheckFail` TRISA error code.
+
 
 TODO: Soon the `trisa` command line program will be available. We will specify how to use the CLI program to send a message here as soon as it is released.
 
