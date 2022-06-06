@@ -18,6 +18,7 @@ weight: 20
 
 - **VASP**: Virtual Asset Service Provider. A legal entity (usually a business) that manages and transfers virtual assets and are required by the Travel Rule to conduct information exchanges. Compliance exchanges in the TRISA network are between VASPs.
 
+- **KYC**: Know Your Customer (or "KYC") is a due diligence practice used by VASPs to verify the identities and potential risks of their clients, users, and other counterparties. KYC procedures are intended to help banks and other financial institutions combat money laundering and other financial crimes.
 
 ## Cryptographic Terminology
 
