@@ -113,7 +113,9 @@ It is then up to your TRISA node to determine how to handle the payload. Your op
 2. Pending: return a `trisa.data.generic.v1beta1.Pending` in the transaction payload
 3. Accept: ensure the identity payload is complete and return payload with `received_at`
 
-The rVASP will handles each type of response appropriately. If a reject message is returned, the rVASP fails the transaction; if accept it "executes" the transaction; and if pending, it puts the transaction into an "await" state.
+The rVASP handles each type of response appropriately. If a reject message is returned, the rVASP fails the transaction; if accept it "executes" the transaction.
+
+The pending message initiates an asynchronous transaction. The transaction is placed into an "await" state until the rVASP receives a follow-up reject or accept response with the same envelope id. 
 
 #### Originator Policies
 
@@ -121,15 +123,15 @@ An _originator policy_ determines how the rVASP constructs an outgoing payload a
 
 ##### SendPartial
 
-For the `SendPartial` policy, the rVASP sends an envelope containing a complete transaction payload and a partial identity payload containing a full originator identity and a partial beneficiary identity. It expects a response envelope containing the full beneficiary information and a `received_at` timestamp in order to complete the transaction.
+For the `SendPartial` policy, the rVASP sends an envelope containing a transaction payload and a partial identity payload containing a full originator identity and a partial beneficiary identity. For acceptance, the recipient must complete the identity payload by filling in the beneficiary identity.
 
 ##### SendFull
 
-For the `SendFull` policy, the rVASP sends an envelope containing a complete transaction payload and a complete identity payload. This envelope should be resealed and echoed back to the rVASP with a `received_at` timestamp in order to complete the transaction.
+For the `SendFull` policy, the rVASP sends an envelope containing a transaction payload and a complete identity payload. For acceptance, the recipient must reseal and echo the envelope back with a `received_at` timestamp.
 
 ##### SendError
 
-The `SendError` policy exists to test handling for error envelopes. In this policy, the rVASP will simply send an error envelope with the `ComplianceCheckFail` TRISA error code.
+For the `SendError` policy, the rVASP will simply send an error envelope with the `ComplianceCheckFail` TRISA error code. This is useful for simluating asynchronous rejections or cancellations from the rVASP.
 
 ### Sending a TRISA message to an rVASP
 
@@ -161,17 +163,36 @@ The _beneficiary policy_ determines how an rVASP responds to an incoming TRISA t
 
 ##### SyncRepair
 
-For the `SyncRepair` policy, the identity payload does not have to include the beneficiary identity, although it must be not null. The rVASP will respond synchronously with a response envelope containing a `received_at` timestamp and the complete beneficiary identity.
+For the `SyncRepair` policy, the identity payload does not have to include the beneficiary identity, although it must be not null. The rVASP will respond synchronously by sending an accept response containing a `received_at` timestamp and the complete beneficiary identity.
 
 ##### SyncRequire
 
-For the `SyncRequire` policy, the identity payload must contain a complete beneficiary identity. The rVASP will respond synchronously with the same envelope containing a `received_at` timestamp in the payload.
+For the `SyncRequire` policy, the identity payload must contain a complete beneficiary identity. The rVASP will respond synchronously by sending an accept response containing a `received_at` timestamp in the payload. If the beneficiary information is not complete or incorrect, the rVASP will respond with a rejection error.
 
 ##### AsyncRepair
 
-For the `AsyncRepair` policy, the identity payload does not have to include the beneficiary identity. The rVASP will respond with a `trisa.data.generic.v1beta1.Pending` message containing `reply_not_before` and `reply_not_after` timestamps which specifies the beginning of an asynchronous transaction. In order to continue the transaction handshake, you should be ready to receive a `Transfer` RPC request from the rVASP within the time window containing a `SecureEvelope` with the same `Id`. In order to continue the transaction, you must respond with a resealed envelope containing a `received_at` timestamp in the payload, and then send a new `Transfer` request to the rVASP containing any final transaction details (`txid`, etc.). The rVASP will respond with another pending message which will initiate a final asynchronous handshake. Once the final `Transfer` request is received from the rVASP, the envelope should be resealed and echoed again to complete the transaction. The entire workflow between two rVASPs is outlined in the diagram below.
+For the `AsyncRepair` policy, the identity payload does not have to include the beneficiary identity. The rVASP will respond with a `trisa.data.generic.v1beta1.Pending` message containing `reply_not_before` and `reply_not_after` timestamps which specifies the beginning of an asynchronous transaction. In order to continue the transaction handshake, you should be ready to receive a `Transfer` RPC request from the rVASP within the time window containing a `SecureEvelope` with the same `Id`. In order to continue the transaction, you must respond with a resealed envelope containing a `received_at` timestamp in the payload, and then send a new `Transfer` request to the rVASP containing any final transaction details (`txid`, etc.). The rVASP will respond with another pending message which will initiate a final asynchronous handshake. Once the final `Transfer` request is received from the rVASP, the envelope should be resealed and echoed again to complete the transaction. The entire `AsyncRepair` workflow between two rVASPs is displayed below, where Alice is acting as the originator and Bob is acting as the beneficiary.
 
-![Asynchronous Repair](/img/async_repair.png)
+{{< mermaid >}}
+sequenceDiagram
+autonumber
+    Alice->>Bob: Transfer() Partial Identity Info + Partial Transaction
+    activate Bob
+    Bob-->>Alice: Pending (5-10 min)
+    activate Alice
+    Bob->>Alice: Transfer() Full Identity Info + received_at 
+    deactivate Bob
+    Alice->>Bob: Echo Payload
+    deactivate Alice
+    Alice->>Bob: Transfer() Full Identity Info + Full Transaction
+    activate Bob
+    Bob-->>Alice: Pending (5-10 min)
+    activate Alice
+    Bob->>Alice: Transfer() Full Identity Info + Full Transaction + received_at 
+    deactivate Bob
+    Alice->>Bob: Echo Payload
+    deactivate Alice
+{{< /mermaid >}}
 
 ##### AsyncReject
 
