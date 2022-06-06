@@ -139,7 +139,7 @@ func TestValidate(t *testing.T) {
 
 	// VASP entity must be ivms101 valid
 	checkValidateError(t, vasp)
-	data, err := ioutil.ReadFile(filepath.Join("..", "..", "..", "..", "ivms101", "testdata", "legalperson.json"))
+	data, err := ioutil.ReadFile(filepath.Join("..", "..", "..", "..", "ivms101", "testdata", "legal_person.json"))
 	require.NoError(t, err)
 	entity := &ivms101.LegalPerson{}
 	require.NoError(t, json.Unmarshal(data, entity))
@@ -152,8 +152,9 @@ func TestValidate(t *testing.T) {
 		Technical: &pb.Contact{},
 	}
 
-	// VASP must contain at least one contact with an email address
+	// VASP must contain at least one contact with a name and email address
 	checkValidateError(t, vasp)
+	vasp.Contacts.Technical.Name = "Jason Bourne"
 	vasp.Contacts.Technical.Email = "technical@example.com"
 
 	// VASP must contain a TRISA endpoint and common name
@@ -195,4 +196,68 @@ func checkValidateError(t *testing.T, vasp *pb.VASP) {
 func checkValidateNoError(t *testing.T, vasp *pb.VASP) {
 	require.NoError(t, vasp.Validate(true))
 	require.NoError(t, vasp.Validate(false))
+}
+
+func TestContactsValidation(t *testing.T) {
+	contacts := &pb.Contacts{}
+	require.EqualError(t, contacts.Validate(), "no contact specified on the VASP entity", "at least one non-nil contact is required")
+
+	contacts = &pb.Contacts{
+		Administrative: &pb.Contact{},
+		Technical:      &pb.Contact{},
+		Legal:          &pb.Contact{},
+		Billing:        &pb.Contact{},
+	}
+	require.EqualError(t, contacts.Validate(), "no contact specified on the VASP entity", "at least one non-zero-valued contact is required")
+
+	contacts.Administrative.Name = "k"
+	require.EqualError(t, contacts.Validate(), "administrative contact invalid: contact name must be longer than one character", "non-zero administrative contact must be valid")
+
+	contacts.Administrative.Name = "Kreg Balin"
+	contacts.Administrative.Email = "kreg@example.com"
+	contacts.Technical.Name = "Visual Nygard"
+	require.EqualError(t, contacts.Validate(), "technical contact invalid: contact email is required", "non-zero technical contact must be valid")
+
+	contacts.Technical.Email = "nygard@example.com"
+	contacts.Legal.Email = "roger@example.com"
+	require.EqualError(t, contacts.Validate(), "legal contact invalid: contact name is required", "non-zero legal contact must be valid")
+
+	contacts.Legal.Name = "Roger Rabbit"
+	contacts.Billing.Name = "Jessica Jones"
+	contacts.Billing.Email = "notanemail"
+	require.EqualError(t, contacts.Validate(), "billing contact invalid: could not parse email address", "non-zero billing contact must be valid")
+
+	contacts.Billing.Email = "jessica@example.com"
+	require.NoError(t, contacts.Validate(), "expected 4 valid contacts")
+
+	require.NoError(t, (&pb.Contacts{Administrative: contacts.Administrative}).Validate(), "contacts should be valid with one valid administrative contact")
+	require.NoError(t, (&pb.Contacts{Technical: contacts.Technical}).Validate(), "contacts should be valid with one valid technical contact")
+	require.NoError(t, (&pb.Contacts{Legal: contacts.Legal}).Validate(), "contacts should be valid with one valid legal contact")
+	require.NoError(t, (&pb.Contacts{Billing: contacts.Billing}).Validate(), "contacts should be valid with one valid billing contact")
+}
+
+func TestContactValidation(t *testing.T) {
+	contact := &pb.Contact{}
+
+	contact.Name = ""
+	contact.Email = "foo@example.com"
+	require.EqualError(t, contact.Validate(), "contact name is required")
+
+	contact.Name = "d"
+	require.EqualError(t, contact.Validate(), "contact name must be longer than one character")
+
+	contact.Name = "Crazy Joe"
+	contact.Email = ""
+	require.EqualError(t, contact.Validate(), "contact email is required")
+
+	contact.Email = "verybad%notanemail.com"
+	require.EqualError(t, contact.Validate(), "could not parse email address")
+
+	contact.Name = "Darlene Frederick"
+	contact.Email = "darlene@example.com"
+	contact.Phone = ""
+	require.NoError(t, contact.Validate(), "only name and email are required")
+
+	contact.Phone = "+18882123921"
+	require.NoError(t, contact.Validate(), "only name and email are validated")
 }

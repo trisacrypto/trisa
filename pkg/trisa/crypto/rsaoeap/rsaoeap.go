@@ -3,12 +3,11 @@ package rsaoeap
 import (
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/sha256"
 	"crypto/sha512"
-	"crypto/x509"
-	"encoding/base64"
 	"errors"
 	"fmt"
+
+	"github.com/trisacrypto/trisa/pkg/trisa/keys/signature"
 )
 
 // RSA implements the crypto.Cipher interface using RSA public/private key algorithm
@@ -68,13 +67,6 @@ func (c *RSA) EncryptionAlgorithm() string {
 // hash of the public key serialized as a PKIX public key without PEM encoding. This is
 // a prototype method of computing the public key signature and may not match other
 // external signature computation methods.
-// TODO: verify that this method matches openssl or GitHub public key identification.
 func (c *RSA) PublicKeySignature() (_ string, err error) {
-	var data []byte
-	if data, err = x509.MarshalPKIXPublicKey(c.pub); err != nil {
-		return "", err
-	}
-
-	sum := sha256.Sum256(data)
-	return fmt.Sprintf("SHA256:%s", base64.RawStdEncoding.EncodeToString(sum[:])), nil
+	return signature.New(c.pub)
 }

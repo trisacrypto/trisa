@@ -251,15 +251,15 @@ func (p *Peers) Search(name string) (_ *Peer, err error) {
 }
 
 // Connect to the remote peer - thread safe.
-func (p *Peers) Connect() (err error) {
+func (p *Peers) Connect(opts ...grpc.DialOption) (err error) {
 	p.Lock()
-	err = p.connect()
+	err = p.connect(opts...)
 	p.Unlock()
 	return err
 }
 
 // Connect to the remote peer - not thread safe.
-func (p *Peers) connect() (err error) {
+func (p *Peers) connect(opts ...grpc.DialOption) (err error) {
 	// Are we already connected?
 	if p.directory != nil {
 		return nil
@@ -269,9 +269,11 @@ func (p *Peers) connect() (err error) {
 		return errors.New("no directory service URL to dial")
 	}
 
-	opts := make([]grpc.DialOption, 0, 1)
-	config := &tls.Config{}
-	opts = append(opts, grpc.WithTransportCredentials(credentials.NewTLS(config)))
+	if len(opts) == 0 {
+		opts = make([]grpc.DialOption, 0, 1)
+		config := &tls.Config{}
+		opts = append(opts, grpc.WithTransportCredentials(credentials.NewTLS(config)))
+	}
 
 	var cc *grpc.ClientConn
 	if cc, err = grpc.Dial(p.directoryURL, opts...); err != nil {

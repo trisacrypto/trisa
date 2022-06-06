@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"net/mail"
 	"strings"
 
 	"github.com/trisacrypto/trisa/pkg/ivms101"
@@ -108,27 +109,8 @@ func (v *VASP) Validate(partial bool) (err error) {
 		return errors.New("no contact specified on the VASP entity")
 	}
 
-	if v.Contacts.Technical == nil &&
-		v.Contacts.Billing == nil &&
-		v.Contacts.Administrative == nil &&
-		v.Contacts.Legal == nil {
-		return errors.New("no contact specified on the VASP entity")
-	}
-
-	if v.Contacts.Technical != nil && v.Contacts.Technical.Email == "" {
-		return errors.New("missing technical contact email")
-	}
-
-	if v.Contacts.Billing != nil && v.Contacts.Billing.Email == "" {
-		return errors.New("missing billing contact email")
-	}
-
-	if v.Contacts.Administrative != nil && v.Contacts.Administrative.Email == "" {
-		return errors.New("missing administrative contact email")
-	}
-
-	if v.Contacts.Legal != nil && v.Contacts.Legal.Email == "" {
-		return errors.New("missing legal contact email")
+	if err = v.Contacts.Validate(); err != nil {
+		return err
 	}
 
 	if v.CommonName == "" || v.TrisaEndpoint == "" {
@@ -157,4 +139,72 @@ func (v *VASP) Validate(partial bool) (err error) {
 	}
 
 	return nil
+}
+
+// Validate checks is the required contacts are not zero and properly structured.
+func (c *Contacts) Validate() (err error) {
+	nValid := 0
+	if c.Administrative != nil && !c.Administrative.IsZero() {
+		if err = c.Administrative.Validate(); err != nil {
+			return fmt.Errorf("administrative contact invalid: %s", err)
+		}
+		nValid++
+	}
+
+	if c.Technical != nil && !c.Technical.IsZero() {
+		if err = c.Technical.Validate(); err != nil {
+			return fmt.Errorf("technical contact invalid: %s", err)
+		}
+		nValid++
+	}
+
+	if c.Legal != nil && !c.Legal.IsZero() {
+		if err = c.Legal.Validate(); err != nil {
+			return fmt.Errorf("legal contact invalid: %s", err)
+		}
+		nValid++
+	}
+
+	if c.Billing != nil && !c.Billing.IsZero() {
+		if err = c.Billing.Validate(); err != nil {
+			return fmt.Errorf("billing contact invalid: %s", err)
+		}
+		nValid++
+	}
+
+	if nValid == 0 {
+		return errors.New("no contact specified on the VASP entity")
+	}
+	return nil
+}
+
+// Validate checks if a contact record is complete with all required fields.
+func (c *Contact) Validate() (err error) {
+	// A record must have a name that is longer than 1 character
+	if c.Name == "" {
+		return errors.New("contact name is required")
+	}
+
+	if len(c.Name) < 2 {
+		return errors.New("contact name must be longer than one character")
+	}
+
+	// If the name is present (e.g. the contact is not zero) then an email that is
+	// parseable by RFC 5322 (e.g. by the standard lib mail package).
+	if c.Email == "" {
+		return errors.New("contact email is required")
+	}
+
+	if _, err = mail.ParseAddress(c.Email); err != nil {
+		return errors.New("could not parse email address")
+	}
+
+	return nil
+}
+
+// IsZero returns true if the contact is empty; e.g. it has no name, email, or phone
+// number. The Natural Person record on the contact is ignored since this is a deep
+// nested structure. The extra field is also ignored since this is side data.
+func (c *Contact) IsZero() bool {
+	return c.Name == "" && c.Email == "" && c.Phone == ""
 }

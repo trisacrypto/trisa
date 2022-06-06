@@ -8,6 +8,7 @@ import (
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto/aesgcm"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto/rsaoeap"
+	"github.com/trisacrypto/trisa/pkg/trisa/keys"
 )
 
 type Option func(e *Envelope) error
@@ -58,6 +59,15 @@ func WithSeal(seal crypto.Cipher) Option {
 }
 
 func WithSealingKey(key interface{}) Option {
+	// Indirect a keys.PublicKey to use its sealing key
+	if ikey, ok := key.(keys.PublicKey); ok {
+		var err error
+		if key, err = ikey.SealingKey(); err != nil {
+			return WithSealingKey(key)
+		}
+		return errorOption(err)
+	}
+
 	return func(e *Envelope) (err error) {
 		switch t := key.(type) {
 		case *rsa.PublicKey:
@@ -72,6 +82,15 @@ func WithSealingKey(key interface{}) Option {
 }
 
 func WithUnsealingKey(key interface{}) Option {
+	// Indirect a keys.Private to use its unsealing key
+	if ikey, ok := key.(keys.PrivateKey); ok {
+		var err error
+		if key, err = ikey.UnsealingKey(); err != nil {
+			return WithUnsealingKey(key)
+		}
+		return errorOption(err)
+	}
+
 	return func(e *Envelope) (err error) {
 		switch t := key.(type) {
 		case *rsa.PrivateKey:
@@ -91,4 +110,10 @@ func WithRSAPublicKey(key *rsa.PublicKey) Option {
 
 func WithRSAPrivateKey(key *rsa.PrivateKey) Option {
 	return WithUnsealingKey(key)
+}
+
+func errorOption(err error) Option {
+	return func(e *Envelope) error {
+		return err
+	}
 }
