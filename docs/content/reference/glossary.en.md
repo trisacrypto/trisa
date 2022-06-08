@@ -1,7 +1,7 @@
 ---
 title: Glossary
 date: 2021-06-14T15:59:09-05:00
-lastmod: 2022-03-31T16:10:07-05:00
+lastmod: 2022-06-06T10:51:44-05:00
 description: "TRISA Glossary and Terminology"
 weight: 20
 ---
@@ -12,11 +12,20 @@ weight: 20
 
 - **Beneficiary**: The recipient of a blockchain transaction and therefore also the recipient of a TRISA transfer. The "beneficiary" can refer to the beneficiary VASP, the beneficiary customer of the VASP or both.
 
+- **Natural Person**: A "Natural Person" is a human user. Originating and beneficiary customers are considered Natural Persons in accordance with the [IVMS101 specification](https://intervasp.org/).
+
+- **Legal Person**: A "Legal Person" is an organization or legal entity. Originating and beneficiary VASPs are considered Legal Persons in accordance with the [IVMS101 specification](https://intervasp.org/).
+
 - **Local vs Remote VASP**: A reference to the source of peer-to-peer traffic in an information exchange. The "local VASP" usually refers to the service you are running, while the "remote VASP" usually refers to some other VASP in the TRISA network. Local vs. Remote is often used interchangeably with originator vs. beneficiary. If you are initiating the transaction then the local VASP is the originator and the remote VASP is the beneficiary. If you are receiving a transaction then the local VASP is the beneficiary and the remote VASP is the originator.
 
 - **Travel Rule**: Record-keeping rules for transfers between financial institutions that allow law enforcement agencies to prevent illicit finance (e.g. money laundering or the financing of terrorism).
 
 - **VASP**: Virtual Asset Service Provider. A legal entity (usually a business) that manages and transfers virtual assets and are required by the Travel Rule to conduct information exchanges. Compliance exchanges in the TRISA network are between VASPs.
+
+- **KYC**: Know Your Customer (or "KYC") is a due diligence practice used by VASPs to verify the identities and potential risks of their clients, users, and other counterparties. KYC procedures are intended to help banks and other financial institutions combat money laundering and other financial crimes.
+
+- **AML**: Anti-Money Laundering (or "AML") refers to laws and regulations intended to stop criminals from disguising illegally obtained funds as legitimate income.
+
 
 
 ## Cryptographic Terminology
