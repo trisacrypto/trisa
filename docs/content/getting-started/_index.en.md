@@ -1,7 +1,7 @@
 ---
-title: Integration Overview
+title: Getting Started
 date: 2021-04-23T01:35:35-04:00
-lastmod: 2021-04-23T01:35:35-04:00
+lastmod: 2022-06-08T14:51:13-04:00
 description: "Describes how to integrate the TRISA protocol in the TestNet"
 weight: 20
 ---
