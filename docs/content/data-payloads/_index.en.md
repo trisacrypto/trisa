@@ -34,7 +34,7 @@ You can use the online [IVMS101 Validator](https://ivmsvalidator.com/) produced 
 
 ## Transaction Payloads
 
-The `transaction` field in a TRISA `Payload` is a protobuf message intended to contain information to identify the associated transaction on the blockchain. It may also be used to send control flow messages and handing-specific instructions. As with the `identity` payload, a `transaction` is defined as an [`any`](https://developers.google.com/protocol-buffers/docs/proto3#any); meaning that technically, it can be *any* message type.
+The `transaction` field in a TRISA `Payload` is a protobuf message intended to contain information to identify the associated transaction on the blockchain. It may also be used to send control flow messages and handling-specific instructions. As with the `identity` payload, a `transaction` is defined as an [`any`](https://developers.google.com/protocol-buffers/docs/proto3#any); meaning that technically, it can be *any* message type.
 
 To ensure compatibility with fellow TRISA members and convenient message parsing, use one of the TRISA defined [generic transaction data structures](https://github.com/trisacrypto/trisa/blob/main/proto/trisa/data/generic/v1beta1/transaction.proto) described below:
 
