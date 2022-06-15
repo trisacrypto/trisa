@@ -48,7 +48,7 @@ In order to support multiple behaviors at once, such as synchronous and asynchro
 
 ### Preliminaries
 
-This documentation assumes that you have a service that is running the latest `TRISANetwork` service and that it has been registered in the TRISA TestNet and correctly has TestNet certificates installed. See [ TRISA Integration Overview]({{< ref "integration/_index.md" >}}) for more information. **WARNING**: the rVASPs do not participate in the TRISA production network, they will only respond to verified TRISA TestNet mTLS connections.
+This documentation assumes that you have a service that is running the latest `TRISANetwork` service and that it has been registered in the TRISA TestNet and correctly has TestNet certificates installed. See [ TRISA Integration Overview]({{< ref "getting-started/_index.md" >}}) for more information. **WARNING**: the rVASPs do not participate in the TRISA production network, they will only respond to verified TRISA TestNet mTLS connections.
 
 To interact with the rVASP API, you may either:
 
@@ -115,7 +115,7 @@ It is then up to your TRISA node to determine how to handle the payload. Your op
 
 The rVASP handles each type of response appropriately. If a reject message is returned, the rVASP fails the transaction; if accept it "executes" the transaction.
 
-The pending message initiates an asynchronous transaction. The transaction is placed into an "await" state until the rVASP receives a follow-up reject or accept response with the same envelope id. 
+The pending message initiates an asynchronous transaction. The transaction is placed into an "await" state until the rVASP receives a follow-up reject or accept response with the same envelope id.
 
 #### Originator Policies
 
@@ -180,7 +180,7 @@ autonumber
     activate Bob
     Bob-->>Alice: Pending (5-10 min)
     activate Alice
-    Bob->>Alice: Transfer() Full Identity Info + received_at 
+    Bob->>Alice: Transfer() Full Identity Info + received_at
     deactivate Bob
     Alice->>Bob: Echo Payload
     deactivate Alice
@@ -188,7 +188,7 @@ autonumber
     activate Bob
     Bob-->>Alice: Pending (5-10 min)
     activate Alice
-    Bob->>Alice: Transfer() Full Identity Info + Full Transaction + received_at 
+    Bob->>Alice: Transfer() Full Identity Info + Full Transaction + received_at
     deactivate Bob
     Alice->>Bob: Echo Payload
     deactivate Alice
