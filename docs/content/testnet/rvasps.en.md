@@ -27,18 +27,18 @@ The following table of "customers" for Alice, Bob, and Evil can be used as a ref
 
 | VASP                  | "Crypto Wallet"                    | Email                 | Originator Policy | Beneficiary Policy |
 |-----------------------|------------------------------------|-----------------------|-------------------|--------------------|
-| api.bob.vaspbot.net   | 18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh | robert@bobvasp.co.uk  | SendPartial       | SyncRepair         |
+| api.bob.vaspbot.net   | **18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh** | robert@bobvasp.co.uk  | SendPartial       | SyncRepair         |
 | api.bob.vaspbot.net   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  | SendFull          | SyncRequire        |
 | api.bob.vaspbot.net   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   | SendFull          | AsyncRepair        |
-| api.bob.vaspbot.net   | **1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9** | fred@bobvasp.co.uk    | SendError     | AsyncReject        |
-| api.alice.vaspbot.net | 1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX | mary@alicevasp.us     | SendPartial       | SyncRepair         |
+| api.bob.vaspbot.net   | _1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9_ | fred@bobvasp.co.uk    | SendError     | AsyncReject        |
+| api.alice.vaspbot.net | **1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX** | mary@alicevasp.us     | SendPartial       | SyncRepair         |
 | api.alice.vaspbot.net | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    | SendFull          | SyncRequire        |
 | api.alice.vaspbot.net | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     | SendFull          | AsyncRepair        |
-| api.alice.vaspbot.net | **19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ** | sarah@alicevasp.us    | SendError     | AsyncReject        |
-| api.evil.vaspbot.net  | 1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF | voldemort@evilvasp.gg | SendPartial       | SyncRepair         |
+| api.alice.vaspbot.net | _19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ_ | sarah@alicevasp.us    | SendError     | AsyncReject        |
+| api.evil.vaspbot.net  | **1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF** | voldemort@evilvasp.gg | SendPartial       | SyncRepair         |
 | api.evil.vaspbot.net  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg | SendFull          | SyncRequire        |
 | api.evil.vaspbot.net  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   | SendFull          | AsyncRepair        |
-| api.evil.vaspbot.net  | **1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz** | gambler@evilvasp.gg   | SendError     | AsyncReject        |
+| api.evil.vaspbot.net  | _1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz_ | gambler@evilvasp.gg   | SendError     | AsyncReject        |
 
 Note that all rVASP data was generated using a Faker tool to produce realistic/consistent test data and fixtures and is completely fictional. For example, the records for Alice VASP (a fake US company) are primarily in North America, etc.
 
@@ -115,7 +115,7 @@ It is then up to your TRISA node to determine how to handle the payload. Your op
 
 The rVASP handles each type of response appropriately. If a reject message is returned, the rVASP fails the transaction; if accept it "executes" the transaction.
 
-The pending message initiates an asynchronous transaction. The transaction is placed into an "await" state until the rVASP receives a follow-up reject or accept response with the same envelope id. 
+The pending message initiates an asynchronous transaction. The transaction is placed into an "await" state until the rVASP receives a follow-up reject or accept response with the same envelope id.
 
 #### Originator Policies
 
@@ -180,7 +180,7 @@ autonumber
     activate Bob
     Bob-->>Alice: Pending (5-10 min)
     activate Alice
-    Bob->>Alice: Transfer() Full Identity Info + received_at 
+    Bob->>Alice: Transfer() Full Identity Info + received_at
     deactivate Bob
     Alice->>Bob: Echo Payload
     deactivate Alice
@@ -188,7 +188,7 @@ autonumber
     activate Bob
     Bob-->>Alice: Pending (5-10 min)
     activate Alice
-    Bob->>Alice: Transfer() Full Identity Info + Full Transaction + received_at 
+    Bob->>Alice: Transfer() Full Identity Info + Full Transaction + received_at
     deactivate Bob
     Alice->>Bob: Echo Payload
     deactivate Alice
