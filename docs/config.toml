@@ -64,6 +64,12 @@ enableMissingTranslationPlaceholders = false
     url = "https://github.com/trisacrypto/trisa"
     weight = 10
 
+  [[Languages.en.menu.shortcuts]]
+    name = "<i class='fas fa-book'></i> TRISA API Documentation"
+    identifier = "trisadocs"
+    url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
+    weight = 11
+
   [Languages.de]
     title = "TRISA Dokumentation"
     weight = 2
