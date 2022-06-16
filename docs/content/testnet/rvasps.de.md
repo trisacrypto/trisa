@@ -46,7 +46,7 @@ Wenn Sie ein Traveler-Kunde sind, haben die fettgedruckten Adressen oben einige 
 
 ### Präliminarien
 
-In dieser Dokumentation wird davon ausgegangen, dass Sie einen Dienst haben, der den neuesten `TRISANetwork`-Dienst ausführt, und dass er im TRISA TestNet registriert ist und TestNet-Zertifikate korrekt installiert hat. Weitere Informationen finden Sie in der [TRISA-Integrationsübersicht]({{< ref "integration/_index.md" >}}). **WARNUNG**: Die rVASPs nehmen nicht am TRISA-Produktionsnetz teil, sie antworten nur auf verifizierte TRISA TestNet mTLS-Verbindungen.
+In dieser Dokumentation wird davon ausgegangen, dass Sie einen Dienst haben, der den neuesten `TRISANetwork`-Dienst ausführt, und dass er im TRISA TestNet registriert ist und TestNet-Zertifikate korrekt installiert hat. Weitere Informationen finden Sie in der [TRISA-Integrationsübersicht]({{< ref "getting-started/_index.md" >}}). **WARNUNG**: Die rVASPs nehmen nicht am TRISA-Produktionsnetz teil, sie antworten nur auf verifizierte TRISA TestNet mTLS-Verbindungen.
 
 Um mit der rVASP-API zu interagieren, können Sie entweder:
 
