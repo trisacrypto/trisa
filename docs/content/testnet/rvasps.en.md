@@ -48,7 +48,7 @@ In order to support multiple behaviors at once, such as synchronous and asynchro
 
 ### Preliminaries
 
-This documentation assumes that you have a service that is running the latest `TRISANetwork` service and that it has been registered in the TRISA TestNet and correctly has TestNet certificates installed. See [ TRISA Integration Overview]({{< ref "integration/_index.md" >}}) for more information. **WARNING**: the rVASPs do not participate in the TRISA production network, they will only respond to verified TRISA TestNet mTLS connections.
+This documentation assumes that you have a service that is running the latest `TRISANetwork` service and that it has been registered in the TRISA TestNet and correctly has TestNet certificates installed. See [ TRISA Integration Overview]({{< ref "getting-started/_index.md" >}}) for more information. **WARNING**: the rVASPs do not participate in the TRISA production network, they will only respond to verified TRISA TestNet mTLS connections.
 
 To interact with the rVASP API, you may either:
 
