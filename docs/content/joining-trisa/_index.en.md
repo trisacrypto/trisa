@@ -1,7 +1,7 @@
 ---
 title: Joining TRISA
-date: 2021-04-23T01:35:35-04:00
-lastmod: 2022-06-08T14:51:13-04:00
+date: 2022-06-17T09:15:46-04:00
+lastmod: 2022-06-17T09:15:46-04:00
 description: "Describes how to join TRISA"
 weight: 20
 ---

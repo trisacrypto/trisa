@@ -1,7 +1,7 @@
 ---
 title: TRISA CLI
 date: 2022-04-02T12:09:09-05:00
-lastmod: 2022-04-10T09:32:16-05:00
+lastmod: 2022-06-17T09:15:46-04:00
 description: "Using the TRISA command line interface for development"
 weight: 15
 ---
