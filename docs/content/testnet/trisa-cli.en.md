@@ -24,7 +24,7 @@ Before you can start using the TRISA CLI, you must first configure your environm
 **Prerequisites**:
 
 1. The `trisa` command installed and on your `$PATH`
-2. Your [testnet certificates]({{< ref "/gds/registration" >}}) that include both the trust chain and private key.
+2. Your [testnet certificates]({{< ref "/joining-trisa/registration" >}}) that include both the trust chain and private key.
 
 The TRISA CLI command is configured via flags specified for each command or by setting environment variables in your shell with the configuration. The CLI also supports the use of [.env](https://platform.sh/blog/2021/we-need-to-talk-about-the-env/) files in the current working directory for configuration. To see what CLI flags should be specified use `trisa --help`. An example `.env` configuration file is as follows:
 
