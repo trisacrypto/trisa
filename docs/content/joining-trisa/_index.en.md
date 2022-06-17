@@ -1,9 +1,9 @@
 ---
 title: Joining TRISA
 date: 2022-06-17T09:15:46-04:00
-lastmod: 2022-06-17T09:15:46-04:00
+lastmod: 2022-06-17T16:53:39-04:00
 description: "Describes how to join TRISA"
-weight: 20
+weight: 21
 ---
 
 To join the TRISA or TestNet networks, you must register with the TRISA Global Directory Service (GDS) or one of the jurisdiction-specific directory services. Registering with the directory service engages two workflows:

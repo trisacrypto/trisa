@@ -1,13 +1,15 @@
 ---
 title: Anatomy of a PKCS12 file 
 date: 2022-06-17T09:15:46-04:00
-lastmod: 2022-06-17T09:15:46-04:00
+lastmod: 2022-06-17T16:53:39-04:00
 description: "Anatomy of a PKCS12 file"
-weight: 60
+weight: 50
 ---
 
-After registration, one of the mechanisms to receive mTLS certificates from the Global Directory Service (GDS) when registration has been reviewed and approved is an emailed PKCS12 Encrypted Certificate. Then the next steps will occur after registration:
-- If the registration form is valid: GDS will return a PKCS12 password.
+When your registration has been reviewed and approved, you will receive mTLS certificates from the Global Directory Service (GDS). These will be sent via an email containing PKCS12 password protected certificates.
+
+What to expect after registration and during certificate issuance:
+- If the registration form is valid: GDS will return a PKCS12 password. This is the password you will use to decrypt your certificates.
 {{% notice note %}}
 This is the only time the PKCS12 password is made available during the certificate issuance process.
 {{% /notice %}}
