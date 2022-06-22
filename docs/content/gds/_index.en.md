@@ -14,7 +14,7 @@ The TRISA organization hosts the TRISA Global Directory Service (GDS) on behalf 
 
 GDS serves as a Certificate Authority for TRISA exchanges. After VASPs submit required information and are verified, GDS issues them Identity Certificates which VASPs can use to establish mTLS connections with counterparties, thereby securing communications that contain private Originator and Beneficiary data. These certificates are issued after extended validation and prove that the VASP is a trusted member of the TRISA network. In this way, GDS does not control the exchange; rather it helps to confirm the identities of parties involved in Travel Rule information exchanges.
 
-Since only TRISA members can access the directory listing of other verified members, VASPs can search and lookup VASP counterparties. GDS allows members to make informed compliance decisions before sending or receiving large sums of virtual assets. It is important to note that TRISA is a peer-to-peer network with no centralized authority for collecting or exchanging Travel Rule data.
+GDS also serves as a decentralized store of member information, including member node (aka endpoint) addresses, TRIXO form details, and public keys. TRISA members can access the directory listing of other verified members, search, and lookup VASP counterparties. In this way, GDS helps members to make informed compliance decisions before sending or receiving large sums of virtual assets. 
 
 GDS is replicated across multiple continents. The servers hosting GDS are in three regions: US, EU, and Singapore. The servers are decentralized and geo-replicated to ensure that the GDS is consistent, available, and fault-tolerant. TRISA plans to expand to more regions in the future.
 
