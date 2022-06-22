@@ -46,7 +46,7 @@ rVASP有一个内置的数据库，里面存储着带有假钱包地址的假客
 
 ### 条件
 
-本文档假设您有一个正在运行最新`TRISANetwork`的服务，并且它已经在TRISA TestNet中注册，并且正确地安装了TestNet证书。参见[TRISA 集成概况]({{< ref "integration/_index.md" >}})了解更多信息。**警告**: rVASP不参与TRISA工作网络，他们将只响应已验证的TRISA TestNet mTLS连接。
+本文档假设您有一个正在运行最新`TRISANetwork`的服务，并且它已经在TRISA TestNet中注册，并且正确地安装了TestNet证书。参见[TRISA 集成概况]({{< ref "getting-started/_index.md" >}})了解更多信息。**警告**: rVASP不参与TRISA工作网络，他们将只响应已验证的TRISA TestNet mTLS连接。
 
 要与rVASP API交互，您可以:
 

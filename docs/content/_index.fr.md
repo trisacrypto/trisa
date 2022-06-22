@@ -8,7 +8,7 @@ weight: 0
 
 # TRISA
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/testnet/pkg.svg)](https://pkg.go.dev/github.com/trisacrypto/testnet/pkg)
+[![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/trisa/pkg.svg)](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/trisacrypto/trisa)](https://goreportcard.com/report/github.com/trisacrypto/trisa)
 
 L'objectif de l'architecture de partage d'informations sur les règles de voyage (TRISA) est de permettre la mise en conformité avec les règles de voyage du GAFI et du FinCEN pour les informations d'identité des transactions en crypto-monnaies sans modifier les protocoles de base de la blockchain, et sans encourir de coûts de transaction accrus ni modifier les flux de transaction P2P en monnaie virtuelle. Le protocole et la spécification TRISA sont définis par le [groupe de travail TRISA](https://trisa.io) ; pour en savoir plus sur la spécification, [veuillez lire la version actuelle du livre blanc TRISA](https://trisa.io/trisa-whitepaper/).
