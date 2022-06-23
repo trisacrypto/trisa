@@ -29,7 +29,7 @@ Once you have registered with the GDS and been verified, you will receive Identi
 
 When registering with the GDS, you will need to provide the `address:port` endpoint where your VASP implements the TRISA Network service. This address will be registered with the GDS and utilized by other VASPs when your VASP is identified as the beneficiary VASP.
 
-For integration purposes, when you [register](https://vaspdirectory.net/certificate/registration) with the GDS, you can opt for either MainNet or TestNet Certificates, or both. The TestNet instance is designed for testing, and the registration process is streamlined in the TestNet to facilitate quick integration. The MainNet is design for production Travel Rule implementations. It is recommended to register for both MainNet and TestNet, specifying different endpoints for to reduce confusion for your VASP counterparties.
+For integration purposes, when you [register](https://vaspdirectory.net/certificate/registration) with the GDS, you can opt for either MainNet or TestNet Certificates, or both. The TestNet instance is designed for testing, and the registration process is streamlined in the TestNet to facilitate quick integration. The MainNet is design for production Travel Rule implementations. It is recommended to register for both MainNet and TestNet, specifying different endpoints to reduce confusion for your VASP counterparties.
 
 For more complete details, visit the documentation on [registration]({{< ref "/joining-trisa/registration" >}}).
 
