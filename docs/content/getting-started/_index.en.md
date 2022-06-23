@@ -35,7 +35,7 @@ For more complete details, visit the documentation on [registration]({{< ref "/j
 
 ### Directory Service Registration
 
-To start your registration, visit [https://vaspdirectory.net/](https://vaspdirectory.net/certificate/registration). Note that you can use this website to enter your registration details on a field-by-field basis, or to upload a JSON document containing your registration details. The final step of registration will be a [pkcs12 password]({{< ref "/joining-trisa/pkcs12" >}}), which you must keep to decrypt the Identity Certificates that will be sent via email.
+To start your registration, visit [https://vaspdirectory.net/](https://vaspdirectory.net/certificate/registration). Note that you can use this website to enter your registration details on a field-by-field basis, or to upload a JSON document containing your registration details. Several people at your organization (e.g. legal, technical, administrative points-of-contact) may need to collaborate to complete the needed information. The final step of registration will be a [pkcs12 password]({{< ref "/joining-trisa/pkcs12" >}}), which you must keep to decrypt the Identity Certificates that will be sent via email.
 
 This registration will result in an email being sent to all the technical contacts specified through the webform or in the JSON file. The emails will guide you through the remainder of the registration process. Once you’ve completed the registration steps, TRISA administrators will receive your registration for review.
 
@@ -75,4 +75,11 @@ If a language beside Go is required, client libraries may be generated from the 
 The TRISA Network protocol defines how data is transferred between participating VASPs. The recommended format for data transferred for identifying information is the IVMS101 data format. It is the responsibility of the implementing VASP to ensure the identifying data sent/received satisfies the FATF Travel Rule.
 
 The result of a successful TRISA transaction results in a key and encrypted data that satisfies the FATF Travel Rule. TRISA does not define how this data should be stored once obtained. It is the responsibility of the implementing VASP to handle the secure storage of the resulting data for the transaction.
+
+Some other considerations you will need to make to be prepared to fully integrate TRISA include:
+
+1. How will your TRISA endpoint integrate with your existing backend systems?
+2. How will you handle key management (e.g. your own private keys as well as the public keys of your counterparties)?
+3. Are you prepared to store [envelopes]({{< ref "/secure-envelopes" >}}) securely and in compliance with privacy regulations once you have received them from your counterparties?
+
 
