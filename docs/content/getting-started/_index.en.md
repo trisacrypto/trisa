@@ -25,7 +25,7 @@ Before you can integrate the TRISA protocol into your VASP software, you must [r
 
 The TRISA Global Directory Service (GDS) provides public key and TRISA remote peer connection information for registered VASPs. For more detailed information about the directory, see the documentation on the [GDS]({{< ref "/gds" >}}).
 
-Once you have registered with the GDS and been verified, you will receive Identity Certificates. The public key in these certificate will be made available to other VASPs via the GDS.
+Once you have registered with the GDS and been verified, you will receive Identity Certificates. The public key in these certificates will be made available to other VASPs via the GDS.
 
 When registering with the GDS, you will need to provide the `address:port` endpoint where your VASP implements the TRISA Network service. This address will be registered with the GDS and utilized by other VASPs when your VASP is identified as the beneficiary VASP.
 
