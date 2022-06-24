@@ -43,13 +43,48 @@ Once TestNet administrators have reviewed and approved the registration, you wil
 
 To begin setup, you’ll need the following:
 
-
-
 *   KYV certificate (from TRISA DS registration)
 *   The public key used for the CSR to obtain your certificate
 *   The associated private key
 *   The host name of the TRISA directory service
 *   Ability to bind to the address:port that is associated with your VASP in the TRISA directory service.
+
+### For a preview of information required in the certificate registration, see below:
+
+#### JSON View
+
+```json
+ 
+ "trixo": {
+    "primary_national_jurisdiction": "USA",
+    "primary_regulator": "FinCEN",
+    "other_jurisdictions": [],
+    "financial_transfers_permitted": "no",
+    "has_required_regulatory_program": "yes",
+    "conducts_customer_kyc": true,
+    "kyc_threshold": "1.00",
+    "kyc_threshold_currency": "USD",
+    "must_comply_travel_rule": true,
+    "applicable_regulations": [
+      "FATF Recommendation 16"
+    ],
+    "compliance_threshold": "3000.00",
+    "compliance_threshold_currency": "USD",
+    "must_safeguard_pii": true,
+    "safeguards_pii": true
+  }
+```
+
+#### Spreadsheet View
+
+| SECTION 3. | CDD & TRAVEL RULE POLICIES                                                                                                                                                                              |   |   |   |
+|:----------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|---|---|
+|     3a.    | Does the Entity have a programme that sets minimum AML, CFT, KYC / CDD and Sanctions standards per the requirements of the jurisdiction(s) regulatory regimes where it is licensed/approved/registered? |   |   |   |
+|     3b.    | Does the Entity conduct KYC / CDD before permitting its customers to send/receive virtual asset transfers?                                                                                              |   |   |   |
+|     3c.    |       If Yes, at what threshold does the Entity conduct KYC before permitting the customer to send/receive virtual asset transfers?                                                                     |   |   |   |
+|     3d.    | Is the Entity required to comply with the application of the Travel Rule standards (FATF Recommendation 16) in the jurisdiction(s) where it is licensed / approved / registered?                        |   |   |   |
+|     3e.    |      If Yes, please specify the applicable regulation(s)                                                                                                                                                |   |   |   |
+|            |                                                                                                                                                                                                         |   |   |   |
 
 
 ### Integration Overview
