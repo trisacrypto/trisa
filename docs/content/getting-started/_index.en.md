@@ -35,7 +35,46 @@ For more complete details, visit the documentation on [registration]({{< ref "/j
 
 ### Directory Service Registration
 
-To start your registration, visit [https://vaspdirectory.net/](https://vaspdirectory.net/certificate/registration). Note that you can use this website to enter your registration details on a field-by-field basis, or to upload a JSON document containing your registration details. Several people at your organization (e.g. legal, technical, administrative points-of-contact) may need to collaborate to complete the needed information. The final step of registration will be a [pkcs12 password]({{< ref "/joining-trisa/pkcs12" >}}), which you must keep to decrypt the Identity Certificates that will be sent via email.
+To start your registration, visit [https://vaspdirectory.net/](https://vaspdirectory.net/certificate/registration). Note that you can use this website to enter your registration details on a field-by-field basis, or to upload a JSON document containing your registration details. 
+
+One of the key pieces of information you'll need is your TRIXO Form. For a preview of this form, see below. To see the TRIXO form in full, see the [TRIXO documentation]({{< ref "/joining-trisa/trixo" >}}).
+
+JSON View
+
+```json
+ 
+ "trixo": {
+    "primary_national_jurisdiction": "USA",
+    "primary_regulator": "FinCEN",
+    "other_jurisdictions": [],
+    "financial_transfers_permitted": "no",
+    "has_required_regulatory_program": "yes",
+    "conducts_customer_kyc": true,
+    "kyc_threshold": "1.00",
+    "kyc_threshold_currency": "USD",
+    "must_comply_travel_rule": true,
+    "applicable_regulations": [
+      "FATF Recommendation 16"
+    ],
+    "compliance_threshold": "3000.00",
+    "compliance_threshold_currency": "USD",
+    "must_safeguard_pii": true,
+    "safeguards_pii": true
+  }
+```
+
+ Spreadsheet View
+
+| SECTION 3. | CDD & TRAVEL RULE POLICIES                                                                                                                                                                              |
+|:----------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|     3a.    | Does the Entity have a programme that sets minimum AML, CFT, KYC / CDD and Sanctions standards per the requirements of the jurisdiction(s) regulatory regimes where it is licensed/approved/registered? |
+|     3b.    | Does the Entity conduct KYC / CDD before permitting its customers to send/receive virtual asset transfers?                                                                                              |
+|     3c.    |       If Yes, at what threshold does the Entity conduct KYC before permitting the customer to send/receive virtual asset transfers?                                                                     |
+|     3d.    | Is the Entity required to comply with the application of the Travel Rule standards (FATF Recommendation 16) in the jurisdiction(s) where it is licensed / approved / registered?                        |
+|     3e.    |      If Yes, please specify the applicable regulation(s)                                                                                                                                                |
+|     3f.    | What is the minimum threshold above which the entity is required to collect/send Travel Rule information?                                                                                               |
+
+Several people at your organization (e.g. legal, technical, administrative points-of-contact) may need to collaborate to complete the needed information. The final step of registration will be a [pkcs12 password]({{< ref "/joining-trisa/pkcs12" >}}), which you must keep to decrypt the Identity Certificates that will be sent via email.
 
 This registration will result in an email being sent to all the technical contacts specified through the webform or in the JSON file. The emails will guide you through the remainder of the registration process. Once you’ve completed the registration steps, TRISA administrators will receive your registration for review.
 
