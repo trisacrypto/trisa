@@ -6,11 +6,11 @@ description: "How to Contribute"
 weight: 99
 ---
 
-The TRISA Protocol is hosted on GitHub at [https://github.com/trisacrypto/trisa](https://github.com/trisacrypto/trisa).
+The TRISA Protocol implementation is hosted on GitHub at [https://github.com/trisacrypto/trisa](https://github.com/trisacrypto/trisa).
 
-The Global Directory Service is hosted on GitHub at [https://github.com/trisacrypto/directory](https://github.com/trisacrypto/trisa).
+The codebase for the Global Directory Service is hosted on GitHub at [https://github.com/trisacrypto/directory](https://github.com/trisacrypto/trisa).
 
-The TRISA TestNet is hosted on GitHub at [https://github.com/trisacrypto/testnet](https://github.com/trisacrypto/testnet).
+The codebase for the TRISA TestNet is hosted on GitHub at  [https://github.com/trisacrypto/testnet](https://github.com/trisacrypto/testnet).
 
 
 ## Setting up GitHub for Contributing
