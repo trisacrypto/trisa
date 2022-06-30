@@ -1,20 +1,21 @@
 ---
 title: IVMS101
-date: 2022-06-29T11:25:52-06:00
-lastmod: 2022-06-29T11:25:52-06:00
+date: 2022-06-29T11:25:52-04:00
+lastmod: 2022-06-29T11:25:52-04:00
 description: "Working with IVMS101 JSON and Protocol Buffers"
-weight: 10
+weight: 30
 ---
 
-# IVMS101 JSON Fixtures
+# Working with IVMS101
 
-IVMS101 JSON data should be marshaled and unmarshaled using the `encoding/json` package to produce data mostly compatible with the [ivmsvalidator.com](https://ivmsvalidator.com/) tool produced by 21 Analytics. The JSON fixtures in this directory that end in the extension `.json` represent that JSON style.
+IVMS101 JSON data should be marshaled and unmarshaled using the `encoding/json` package to produce data mostly compatible with the [ivmsvalidator.com](https://ivmsvalidator.com/) tool produced by 21 Analytics.
 
-A second JSON style is present in the TRISA codebase, fixtures that are unmarshaled using the `protojson` package and are not compatible with the validator tool. The fixtures that end in the extension `.pb.json` are this style of JSON fixture.
+This page describes how to convert between JSON and protocol buffer formatting for IVMS101 records. Unless you are specifically developing against a Go code base with marshaled protocol buffer TRISA structs, we strongly recommend that you use `encoding/json` for IVMS 101 serialization and JSON exchange. The only reason to use the protojson style is if you're specifically working with protocol buffers and need a human-readable/editable format.
 
-**Unless you are specifically developing against a Go code base with marshaled protocol buffer TRISA structs, we strongly recommend that you use `encoding/json` for IVMS 101 serialization and JSON exchange.**
+- For examples of fixtures that represent the JSON style, see the files from [the `trisa` directory](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101/testdata) that end in the extension `.json`.
+- Fixtures that are unmarshaled using the `protojson` package are not compatible with the validator tool. For examples of these fixtures see the files from [the `trisa` directory](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101/testdata) that end in the extension `.pb.json`.
 
-The only reason to use the protojson style is if you're specifically working with protocol buffers and need a human-readable/editable format.
+
 
 ## Marshaling and Unmarshaling
 
@@ -72,7 +73,7 @@ import (
 	"io/ioutil"
 
 	"github.com/trisacrypto/trisa/pkg/ivms101"
-    "google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 func LoadPBJ(path string) (identity *ivms101.IdentityPayload, err error) {
