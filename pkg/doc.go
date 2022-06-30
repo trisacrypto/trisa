@@ -8,4 +8,4 @@
 	- The trisa folder contains structs and methods for a range of TRISA-related tasks, such as performing cryptography and making mTLS connections.
 
 */
-package pkg 
+package pkg
