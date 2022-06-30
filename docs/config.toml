@@ -64,6 +64,12 @@ enableMissingTranslationPlaceholders = false
     url = "https://github.com/trisacrypto/trisa"
     weight = 10
 
+  [[Languages.en.menu.shortcuts]]
+    name = "<i class='fas fa-book'></i> TRISA API Documentation"
+    identifier = "trisadocs"
+    url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
+    weight = 11
+
   [Languages.de]
     title = "TRISA Dokumentation"
     weight = 2
@@ -76,6 +82,12 @@ enableMissingTranslationPlaceholders = false
     url = "https://github.com/trisacrypto/trisa"
     weight = 12
 
+  [[Languages.de.menu.shortcuts]]
+    name = "<i class='fas fa-book'></i> TRISA API Documentation"
+    identifier = "trisadocs"
+    url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
+    weight = 13
+
   [Languages.fr]
     title = "Documentation de TRISA"
     weight = 3
@@ -86,7 +98,13 @@ enableMissingTranslationPlaceholders = false
     name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
     identifier = "ds"
     url = "https://github.com/trisacrypto/trisa"
-    weight = 13
+    weight = 14
+
+   [[Languages.fr.menu.shortcuts]]
+    name = "<i class='fas fa-book'></i> TRISA API Documentation"
+    identifier = "trisadocs"
+    url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
+    weight = 15
 
   [Languages.zh]
     title = "TRISA 文档"
@@ -98,7 +116,13 @@ enableMissingTranslationPlaceholders = false
     name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
     identifier = "ds"
     url = "https://github.com/trisacrypto/trisa"
-    weight = 14
+    weight = 16
+
+  [[Languages.zh.menu.shortcuts]]
+    name = "<i class='fas fa-book'></i> TRISA API Documentation"
+    identifier = "trisadocs"
+    url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
+    weight = 17
 
   [Languages.ja]
     title = "TRISAのドキュメント"
@@ -110,7 +134,13 @@ enableMissingTranslationPlaceholders = false
     name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
     identifier = "ds"
     url = "https://github.com/trisacrypto/trisa"
-    weight = 15
+    weight = 18
+
+  [[Languages.ja.menu.shortcuts]]
+    name = "<i class='fas fa-book'></i> TRISA API Documentation"
+    identifier = "trisadocs"
+    url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
+    weight = 19
 
 [markup]
 [markup.goldmark]

@@ -6,12 +6,6 @@ description: "Registering a VASP with the Directory Service"
 weight: 20
 ---
 
-To join the TRISA or TestNet networks, you must register with the TRISA Global Directory Service (GDS) or one of the jurisdiction-specific directory services. Registering with the directory service engages two workflows:
-
-1. A KYV review process to ensure the network maintains trusted membership
-2. Certificate issuance for mTLS authentication in the network
-
-Coming soon: more details on the registration form, email verification, and the review process.
 
 ## Certificate Issuance
 

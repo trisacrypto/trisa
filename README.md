@@ -1,6 +1,9 @@
 
 # Travel Rule Information Sharing Architecture (TRISA) for Virtual Asset Service Providers
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/trisa/pkg.svg)](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/trisacrypto/trisa)](https://goreportcard.com/report/github.com/trisacrypto/trisa)
+
 Please visit the [TRISA website](https://trisa.io) for more information and the [TRISA documentation](https://trisatest.net) for developer docs and integration.
 
 # Contributing to TRISA
