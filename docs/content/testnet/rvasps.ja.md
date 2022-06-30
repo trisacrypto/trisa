@@ -46,7 +46,7 @@ rVASPには、偽のウォレットアドレスを持つ偽の顧客のデータ
 
 ### 予選
 
-このドキュメントは、最新の「TRISA ネットワーク」サービスを実行しているサービスがあり、そのサービスがTRISA TestNetに登録されており、TestNet証明書が正しくインストールされていることを前提としています。 [TRISA統合の概要を参照してください]({{< ref "integration/_index.md" >}}) 詳細については。 **警告**: rVASPはTRISAネットワークに参加せず、検証済みのTRISA  TestNet mTLS接続にのみ応答します。
+このドキュメントは、最新の「TRISA ネットワーク」サービスを実行しているサービスがあり、そのサービスがTRISA TestNetに登録されており、TestNet証明書が正しくインストールされていることを前提としています。 [TRISA統合の概要を参照してください]({{< ref "getting-started/_index.md" >}}) 詳細については。 **警告**: rVASPはTRISAネットワークに参加せず、検証済みのTRISA  TestNet mTLS接続にのみ応答します。
 
 rVASP APIと対話するには、次のいずれかを実行できます。
 

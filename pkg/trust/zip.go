@@ -293,7 +293,7 @@ func (s *Serializer) Write(p *Provider, w io.Writer) (err error) {
 		return archive.Close()
 	case CompressionZIP:
 		archive := zip.NewWriter(w)
-		name := p.String() + ".pem"
+		name := p.String() + s.getZipExt()
 		name = strings.ReplaceAll(strings.ToLower(name), " ", "_")
 
 		var rc io.Writer
@@ -349,7 +349,7 @@ func (s *Serializer) WritePool(pool ProviderPool, w io.Writer) (err error) {
 				return err
 			}
 
-			name := p.String() + ".pem"
+			name := p.String() + s.getZipExt()
 			name = strings.ReplaceAll(strings.ToLower(name), " ", "_")
 
 			var rc io.Writer
@@ -452,4 +452,11 @@ func (s *Serializer) getFormat() (string, error) {
 	}
 
 	return s.Format, nil
+}
+
+func (s *Serializer) getZipExt() string {
+	if s.Private {
+		return ".p12"
+	}
+	return ".pem"
 }
