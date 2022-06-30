@@ -4,25 +4,16 @@ Use of this source code is governed by the MIT License that can be found in
 the LICENSE file.
 
 Package trisa hosts several subpackages, methods, and structs for a range of
-TRISA-related tasks. The packages include:
+TRISA-related tasks. The packages include the following:
 
-- api
-
-- crypto
-
-- envelope
-
-- data
-
-- gds
-
-- handler
-
-- keys
-
-- mtls
-
-- peers
+Package api implements the  TRISANetwork service that defines the peer-to-peer
+interactions between VASPs necessary to conduct compliance information
+exchanges. All TRISA members must implement all services described by the TRISA
+protocol to ensure that exchanges are conducted correctly and securely. The
+primary RPCs are Transfer and TransferStream, which allow VASPs to exchange
+compliance information before conducting a virtual asset transaction. The other
+RPCs facilitate Transfers, allowing address confirmations before a transfer
+and public key exchange so that transaction envelopes can be encrypted and signed.
 
 Package crypto describes interfaces for the various encryption and hmac
 algorithms that might be used to encrypt and sign transaction envelopes
