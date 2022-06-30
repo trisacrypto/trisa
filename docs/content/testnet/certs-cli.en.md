@@ -1,18 +1,20 @@
 ---
-title: "Certificates CLI"
+title: "Creating Test Certificates"
 date: 2022-06-28T15:45:48-04:00
 lastmod: 2022-06-28T19:34:20-04:00
 description: "Using the Certificates Tool and Local Disk Certificate Management and Test CA"
 weight: 80
 ---
 
-The Certificates command line client under the Directory Service is a utility designed to create local disk certificate management and test Certificate Authority (CA) for testing purposes. The code is located under `cmd/certs`. To install the latest version of the Certificates CLI, you must have [Go installed](https://go.dev/doc/install) on your computer. The following command will install the latest version of the CLI:
+In the process of testing your TRISA implementation, you may wish to generate some test certificates (e.g. for use in unit testing). The TRISA engineers have created a command line tool for this purpose, which can be found in the [`trisacrypto/directory` repository](https://github.com/trisacrypto/directory).
+
+The Certificates command line client is a utility designed for local disk certificate management and test Certificate Authority (CA) for testing purposes. The code is located under [`cmd/certs`](https://github.com/trisacrypto/directory/tree/main/cmd/certs). To install the latest version of the Certificates CLI, you must have [Go installed](https://go.dev/doc/install) on your computer. The following command will install the latest version of the CLI:
 
 ```
 $ go install github.com/trisacrypto/directory/cmd/certs@latest
 ```
 
-Alternatively, to install the Certificate CLI from the Directory Project root, run the following:
+Alternatively, to install the Certificate CLI from the `trisacrypto/directory` root, first clone the Directory repository and then run the following:
 
 ```
 $ go install ./cmd/certs
@@ -24,12 +26,12 @@ Before using the `certs` CLI, you must confirm your environment has the `certs` 
 
 ```
 $ ls $GOPATH/bin
-certs                                            
+certs
 ```
 
-The `certs` CLI has two command categories: for the CA and for the client certs. To see the CLI commands and which flags should be specified, use `certs --help`. 
+The `certs` CLI has two command categories: for the CA and for the client certs. To see the CLI commands and which flags should be specified, use `certs --help`.
 
-## Creating a Test Certificate Authority (CA) Certs 
+## Creating a Test Certificate Authority (CA)
 
 The first step to creating the local disk certificate management is creating the CA certs that contain a randomly generated certificate and RSA key pair. You can use `certs init` to create CA certs if they do not already exist. The `-c` flag specifies the output location to write the CA certs; without the flag, the default location of the CA certs will be in `fixtures/certs/ca.gz`. If you want to overwrite existing CA keys, you can use the `-f` flag.
 
@@ -42,7 +44,7 @@ $ certs init -c path/to/ca.gz
 After creating the local CA, it then can issue "self-signed" certificates by that local CA, e.g., certificates signed by the keys in `ca.gz`, as follows:
 
 ```
-$ certs issue -c ca.gz -n "Common_Name" -O "Organization" 
+$ certs issue -c ca.gz -n "Common_Name" -O "Organization"
 ```
 
 The `issue` command requires the `-n` flag (which specifies the common name for the certificate) and the `-O` flag (which specifies the name of the organization that the certificates are for.) The default output location is `<common_name.gz>`. However, there are other flags to specify additional information for the organization.
@@ -54,13 +56,13 @@ The `issue` command requires the `-n` flag (which specifies the common name for 
 -p value, --province value      province or state of the organization
 -l value, --locality value      locality or city of the organization
 -a value, --address value       street address of the organization
--z value, --postcode value      postal code of the organization       
+-z value, --postcode value      postal code of the organization
 ```
 
 You can also [PKCS12]({{%relref "joining-trisa/pkcs12" %}}) encrypt the issued cert with the `-P` flag to specify the password and the `-o` flag to specify the output location using the `.p12` extension.
 
 ```
-$ certs issue -c ca.gz -o certs.p12 -P password -n "Common_Name" -O "Organization" 
+$ certs issue -c ca.gz -o certs.p12 -P password -n "Common_Name" -O "Organization"
 ```
 
 ## Decrypting Files
@@ -74,7 +76,7 @@ The `decrypt` command requires the `-p` flag (which specifies the password of th
 
 ## Creating Trust Chain Pools
 
-Additionally, the `certs` CLI has a command to create a trust chain pool from certificates that were created on your local disk. It saves the pool into a zip file that you can specify with the `-o` flag. The pools are used to manage the public trust certificates of peers in the network. The pool maps common names to the provider certificates and ensures that only public providers without private keys are stored in the pool. 
+Additionally, the `certs` CLI has a command to create a trust chain pool from certificates that were created on your local disk. It saves the pool into a zip file that you can specify with the `-o` flag. The pools are used to manage the public trust certificates of peers in the network. The pool maps common names to the provider certificates and ensures that only public providers without private keys are stored in the pool.
 
 ```
 $ certs pool <common_name1.pem> <common_name2.pem> -o pool.zip
