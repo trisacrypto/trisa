@@ -40,26 +40,31 @@ To ensure compatibility with fellow TRISA members and convenient message parsing
 
 ### A `Transaction` Message
 
-A `Transaction` is a generic message for TRISA transaction payloads. The goal of this payload is to provide enough information to link Travel Rule compliance information in the `identity` payload with a transaction on the blockchain or network. 
+A `Transaction` is a generic message for TRISA transaction payloads. The goal of this payload is to provide enough information to link Travel Rule compliance information in the `identity` payload with a transaction on the blockchain or network.
 
 ```proto
 message Transaction {
-    string txid = 1;           // Transaction hash, to notify beneficiary VASP of the transaction sent by originating VASP
+    string txid = 1;           // Transaction ID or hash unique to chain
+                               // Used to notify beneficiary VASP of the transaction
+                               // sent by the originating VASP.
+
     string originator = 2;     // Crypto address of originator
     string beneficiary = 3;    // Crypto address of beneficiary
     double amount = 4;         // Amount of transaction
-    string network = 5;        // Network ticker (E.g.: ETH, BTC, etc) 
+    string network = 5;        // Chain of transaction/network ticker (e.g.: ETH, BTC)
     string timestamp = 6;      // Transaction timestamp (RFC 3339)
     string extra_json = 7;     // Extra data (JSON-formatted)
 
-    string asset_type = 8;     // Token ticker, for identifying the token on chain. 
-                               // For native token, set this field the same as network ticker (E.g.: ETH, BTC, USDT, etc)
+    string asset_type = 8;     // Token ticker, for identifying the token on chain.
+                               // For native tokens, set to the same as network ticker
+                               // (e.g.: ETH, BTC, USDT, etc)
 
     string tag = 9;            // Optional address memo/destination-tag
 }
 ```
 
-Example: 
+Below are some examples of how the `Transaction` message might be used in the context of different types of transactions and chains.
+
 1. Blockchain without smart contract (e.g.: BTC)
     ```json
     {
@@ -75,7 +80,7 @@ Example:
    }
    ```
 
-2. Blockchain supports smart contract (e.g.: ETH)
+2. Blockchain supporting a smart contract (e.g.: ETH)
     - Native token
         ```json
         {
@@ -90,10 +95,11 @@ Example:
           "tag": ""
         }
         ```
+
     - Custom token (e.g.: ERC20)
         ```json
         {
-          
+
           "txid": "0x6286b5688bcc789c2d681c01beb3e49ac870de15461cb5a90d14b8a161e84236",
           "originator": "0xea0b5f97c3843175ee67ddb237e294a9144c0a68",
           "beneficiary": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -105,7 +111,8 @@ Example:
           "tag": ""
         }
         ```
-3. Blockchain supports destination tag (e.g.: XRP)
+
+3. Blockchain supporting destination tags (e.g.: XRP)
     ```json
     {
       "txid": "BFD895E1D93FB6E25A3BE38A2E62B6D88753F502B4C6E55F297981538538A2F2",
@@ -117,7 +124,7 @@ Example:
       "extra_json": "{\"value_when_transacted\": \"USD $32.53\"}",
       "asset_type": "XRP",
       "tag": "311041419"
-   } 
+   }
 
     ```
 
