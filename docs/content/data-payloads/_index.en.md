@@ -27,10 +27,11 @@ message Payload {
 
 The `identity` field in a TRISA `Payload` is a protobuf message intended to contain compliance identity information of the Originator and the Beneficiary. It is defined as an [`any`](https://developers.google.com/protocol-buffers/docs/proto3#any); this means that technically, it can be *any* message type. However, to encourage maximum compatibility between yourself and fellow TRISA members, we strongly recommend the use of [IVMS101](https://intervasp.org).
 
-Examples of identity payloads, described both as [protocol buffer messages](https://github.com/trisacrypto/trisa/blob/main/pkg/ivms101/testdata/identity_payload.pb.json) and as [JSON](https://github.com/trisacrypto/trisa/blob/main/pkg/ivms101/testdata/identity_payload.json) are available in the [`trisa`](https://github.com/trisacrypto/trisa) reference implementation.
+For help marshaling and unmarshaling [IVMS101 identity payloads]({{< relref "ivms/" >}}), see the documentation about the [`ivms101` package in `trisa`](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101).
 
-You can use the online [IVMS101 Validator](https://ivmsvalidator.com/) produced by [21Analytics](https://www.21analytics.ch/) to ensure your message is properly structured IVMS101.
+You can use the online [IVMS101 Validator](https://ivmsvalidator.com/) produced by [21 Analytics](https://www.21analytics.ch/) to ensure your message is properly structured IVMS101.
 
+Examples of identity payloads, described both as [protocol buffer messages](https://github.com/trisacrypto/trisa/blob/main/pkg/ivms101/testdata/identity_payload.pb.json) and as [JSON](https://github.com/trisacrypto/trisa/blob/main/pkg/ivms101/testdata/identity_payload.json), are available in the [`trisa`](https://github.com/trisacrypto/trisa) reference implementation.
 
 ## Transaction Payloads
 
