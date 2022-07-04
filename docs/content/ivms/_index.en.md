@@ -20,7 +20,7 @@ Unless you are specifically developing against a Go code base with marshaled pro
 
 The [`ivms101` package in `trisa`](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101) is designed to provide convenient tools for marshaling and unmarshaling IVMS101 identity payloads (which contain many nested fields) to and from a file, as illustrated below.
 
-For examples of fixtures that represent the JSON style, see the files from [the `trisa` directory](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101/testdata) that end in the extension `.json`. For examples `protojson` fixtures, see the files from [the `trisa` directory](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101/testdata) that end in the extension `.pb.json`.
+For examples of fixtures that represent the JSON style, see the files from [the `trisa` directory](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101/testdata) that end in the extension `.json`. For examples of `protojson` fixtures, see the files from [the `trisa` directory](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101/testdata) that end in the extension `.pb.json`.
 
 ### IVMS101 JSON
 

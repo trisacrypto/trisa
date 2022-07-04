@@ -31,7 +31,7 @@ For help marshaling and unmarshaling [IVMS101 identity payloads]({{< relref "ivm
 
 You can use the online [IVMS101 Validator](https://ivmsvalidator.com/) produced by [21 Analytics](https://www.21analytics.ch/) to ensure your message is properly structured IVMS101.
 
-Examples of identity payloads, described both as [protocol buffer messages](https://github.com/trisacrypto/trisa/blob/main/pkg/ivms101/testdata/identity_payload.pb.json) and as [JSON](https://github.com/trisacrypto/trisa/blob/main/pkg/ivms101/testdata/identity_payload.json) are available in the [`trisa`](https://github.com/trisacrypto/trisa) reference implementation.
+Examples of identity payloads, described both as [protocol buffer messages](https://github.com/trisacrypto/trisa/blob/main/pkg/ivms101/testdata/identity_payload.pb.json) and as [JSON](https://github.com/trisacrypto/trisa/blob/main/pkg/ivms101/testdata/identity_payload.json), are available in the [`trisa`](https://github.com/trisacrypto/trisa) reference implementation.
 
 ## Transaction Payloads
 
