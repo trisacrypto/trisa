@@ -99,7 +99,7 @@ If a language beside Go is required, client libraries may be generated from the 
 
 ### Integration Notes
 
-The TRISA Network protocol defines how data is transferred between participating VASPs. The recommended format for data transferred for identifying information is the IVMS101 data format. It is the responsibility of the implementing VASP to ensure the identifying data sent/received satisfies the FATF Travel Rule.
+The TRISA Network protocol defines how data is transferred between participating VASPs. The recommended format for data transferred for identifying information is the [IVMS101 data format]({{< relref "ivms/" >}}). It is the responsibility of the implementing VASP to ensure the identifying data sent/received satisfies the FATF Travel Rule.
 
 The result of a successful TRISA transaction results in a key and encrypted data that satisfies the FATF Travel Rule. TRISA does not define how this data should be stored once obtained. It is the responsibility of the implementing VASP to handle the secure storage of the resulting data for the transaction.
 
