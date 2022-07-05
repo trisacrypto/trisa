@@ -3,7 +3,7 @@ title: "Directory Service"
 date: 2021-06-14T11:21:42-05:00
 lastmod: 2022-06-22T16:45:54-04:00
 description: "The Global TRISA Directory Service (GDS)"
-weight: 50
+weight: 30
 ---
 
 The TRISA organization hosts the TRISA Global Directory Service (GDS) on behalf of the TRISA network. The TRISA protocol specifies interactions with GDS. GDS facilitates peer-to-peer exchanges between TRISA members as follows:
@@ -22,7 +22,7 @@ GDS is replicated across multiple continents. The servers hosting GDS are in thr
 
 GDS also manages the certificate revocation list (CRL) to maintain the network over time. The directory issues sealing keys and manages revocation and reissuance of certificates.
 
-This documentation describes the TRISA implementation of the directory service and TRISA-specific interactions with it.
+This documentation describes the TRISA implementation of the directory service and TRISA-specific interactions with it. For details about working with the GDS API, visit the [API documentation]({{< ref "/gds/api" >}}).
 
 ## Networks
 
