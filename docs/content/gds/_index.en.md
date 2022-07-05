@@ -3,7 +3,7 @@ title: "Directory Service"
 date: 2021-06-14T11:21:42-05:00
 lastmod: 2022-06-22T16:45:54-04:00
 description: "The Global TRISA Directory Service (GDS)"
-weight: 30
+weight: 50
 ---
 
 The TRISA organization hosts the TRISA Global Directory Service (GDS) on behalf of the TRISA network. The TRISA protocol specifies interactions with GDS. GDS facilitates peer-to-peer exchanges between TRISA members as follows:
