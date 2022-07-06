@@ -1,14 +1,40 @@
 ---
-title: "Sectigo"
+title: "Certificate Authority"
 date: 2020-12-24T07:58:37-05:00
-lastmod: 2020-12-24T07:58:37-05:00
-description: "Directory Service interactions with the Sectigo CA API"
+lastmod: 2022-07-05T12:58:57-05:00
+description: "The TRISA PKI Infrastructure"
 weight: 50
 ---
 
+TRISA is unique amongst open source Travel Rule protocols in that it is a **trusted network**, meaning that all communications are protected. TRISA uses mTLS (mutual transport layer security) to protect communications between peers. In addition to helping protect against malicious API requests, mTLS can prevent spoofing and phishing, as well as brute force and on-path attacks.
+
+mTLS requires that both peers in an interaction have Identity Certificates with a mutually-recognized root Certificate Authority (CA). This root CA is necessary to enhance trust and ensure that private client data is being sent to the correct party.
+
+Imagine two VASPs that wish to exchange Travel Rule data, Alice and Bob. When Alice registers for TRISA, it receives Identity Certificates, which serve as proof to Bob that Alice is who it says it is, and vice versa:
+
+![TRISA PKI infrastructure](/img/trisa-pki.jpg)
+
+1. First, Alice looks Bob up in the Global Directory Serice to retrieve its endpoint and public key.
+2. Alice then presents it's own Identity Certificates to Bob's endpoint via an mTLS connection.
+3. Bob can then verify that Alice's certs are signed by the TRISA root Certificate Authority.
+4. Bob looks up Alice and verifies its certificates and endpoint details in the Global Directory Service.
+5. Bob presents it's Identity Certificates to Alice's endpoint via mTLS.
+6. Alice can then verify that Bob's certs are signed by the TRISA root Certificate Authority.
+7. Alice confirms that Bob's certificate details match those in the Global Directory Service.
+8. Now that both parties are satisfied that they can trust each other with private customer data, they proceed with a Travel Rule information exchange.
+
+## The Sectigo CA API
+
+{{% notice warning %}}
+This portion of the documentation is targeted at TRISA developers rather than TRISA implementers. For the most part, the mechanics of certificate issuance will be fully abstracted away from TRISA implementers, who are encouraged to register for certificates using [vaspdirectory.net](https://vaspdirectory.net/).
+{{% /notice %}}
+
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/directory/pkg/sectigo.svg)](https://pkg.go.dev/github.com/trisacrypto/directory/pkg/sectigo)
 
-The TRISA Directory Service issues certificates using the Sectigo Certificate Authority via its IoT Portal. Because the directory service must collect public key material in order to facilitate an initial trusted handshake for mTLS, it uses the Sectigo IoT Manager API as part of the VASP registration and verification process. The `github.com/trisacrypto/directory/pkg/sectigo` package is a Go library for interacting with the API, implementing the endpoints and methods required by the directory service. The TestNet also provides a command line utility for interacting with the API for administrative and debugging purposes. This documentation describes the command line utility, which also gives an overview of how to use the API directly to issue and revoke certificates.
+The TRISA Directory Service currently issues certificates using the Sectigo Certificate Authority via its IoT Portal. Because the directory service must collect public key material in order to facilitate an initial trusted handshake for mTLS, it uses the Sectigo IoT Manager API as part of the VASP registration and verification process. The `github.com/trisacrypto/directory/pkg/sectigo` package is a Go library for interacting with the API, implementing the endpoints and methods required by the directory service. The TestNet also provides a command line utility for interacting with the API for administrative and debugging purposes.
+
+This documentation describes the command line utility, which also gives an overview of how to use the API directly to issue and revoke certificates.
 
 Reference material:
 
@@ -16,7 +42,7 @@ Reference material:
 - [IoT Manager API Documentation](https://support.sectigo.com/Com_KnowledgeDetailPage?Id=kA01N000000bvCJ)
 - [IoT Manager Portal](https://iot.sectigo.com)
 
-## Getting Started
+### Getting Started
 
 To install the `sectigo` CLI utility, either download a pre-compiled binary from the [releases on GitHub](https://github.com/trisacrypto/directory/releases) or install locally using:
 
@@ -26,7 +52,7 @@ $ go get github.com/trisacrypto/directory/cmd/sectigo
 
 This will add the `sectigo` command to your `$PATH`.
 
-## Authentication
+### Authentication
 
 The first step is authentication, you should set your username and password in the `$SECTIGO_USERNAME` and `$SECTIGO_PASSWORD` environment variables (alternatively you can pass them as parameters on the command line). To verify your authentication status you can use:
 
@@ -46,7 +72,7 @@ If you'd like to check your credentials state, e.g. if the access tokens are val
 $ sectigo auth --debug
 ```
 
-## Authorities and Profiles
+### Authorities and Profiles
 
 To begin to interact with certificates you need to list the authorities and profiles that your user account has access to.
 
@@ -88,7 +114,7 @@ This will return the raw profile configuration. Before creating certificates wit
 $ sectigo profile -i 42 --params
 ```
 
-## Creating Certificates
+### Creating Certificates
 
 You can request a certificate to be created with the `commonName` and `pkcs12Password` params as follows (note for profiles that require other params, you'll have to use the code base directly and implement your own method):
 
@@ -138,7 +164,7 @@ $ openssl pkcs12 -in certs/example.com.p12 -out certs/example.com.pem -nodes
 
 For more on working with the PKCS12 file, see [Export Certificates and Private Key from a PKCS#12 File with OpenSSL](https://www.ssl.com/how-to/export-certificates-private-key-from-pkcs12-file-with-openssl/).
 
-## Uploading a CSR
+### Uploading a CSR
 
 An alternative to certificate creation is to upload a certificate signing request (CSR). This mechanism is often preferable because it means that no private key material has to be transmitted accross the network and the private key can remain on secure hardware.
 
@@ -197,7 +223,7 @@ $ sectigo upload -p 42 <common_name>.csr
 
 The `-p` flag specifies the profile to use the CSR batch request with and must be a valid profileId. The uploaded CSRs can be a single text file with multiple CSRs in PEM form using standard BEGIN/END separators.
 
-## Managing Certificates
+### Managing Certificates
 
 You can search for a certificate by name or serial number, but mostly commonly you search by the domain or common name to get the serial number:
 
