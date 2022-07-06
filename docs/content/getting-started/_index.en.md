@@ -82,4 +82,4 @@ Some other considerations you will need to make to be prepared to fully integrat
 2. How will you handle key management (e.g. your own private keys as well as the public keys of your counterparties)?
 3. Are you prepared to store [envelopes]({{< ref "/secure-envelopes" >}}) securely and in compliance with privacy regulations once you have received them from your counterparties?
 
-
+For more considerations, see our [Best Practices]({{< ref "/reference/best-practices" >}}) documentation.
