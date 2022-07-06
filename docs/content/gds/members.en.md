@@ -12,12 +12,15 @@ The `TRISAMembers` service is an experimental service that provides extra, secur
 
 This section describes the protocol buffers for the `TRISAMembers` endpoint, which can be found [here](https://github.com/trisacrypto/directory/blob/main/proto/gds/members/v1alpha1/members.proto). This file can be compiled into the language of your choice ([example for Go](https://github.com/trisacrypto/directory/tree/main/pkg/gds/members/v1alpha1)). *Note: You will need to download and install the protocol buffer compiler if you have not already.*
 
-Currently, the `TRISAMembers` service is comprised of only a single RPC &mdash; the `List` RPC. Other experimental, secure RPCs may be made available in the future.
+Currently, the `TRISAMembers` service is comprised of two RPCs &mdash; the `List` and `Details` RPCs. Other experimental, secure RPCs may be made available in the future.
 
 ```proto
 service TRISAMembers {
     // List all verified VASP members in the Directory Service.
     rpc List(ListRequest) returns (ListReply) {};
+
+    // Get details for a VASP member in the Directory Service.
+    rpc Details(DetailsRequest) returns (MemberDetails) {};
 }
 ```
 
@@ -72,6 +75,38 @@ message VASPMember {
     trisa.gds.models.v1beta1.BusinessCategory business_category = 8;
     repeated string vasp_categories = 9;
     string verified_on = 10;
+}
+```
+
+## Getting TRIXO and IVMS101 `LegalPerson` Details
+
+The `Details` RPC returns a detailed record for the requested VASP, including the `VASPMember` details described earlier in this page, as well as the TRIXO form and IVMS101 record for the VASP. The RPC expects as input a `DetailsRequest` and returns a `MemberDetails` message.
+
+### `DetailsRequest`
+
+A `DetailsRequest` allows the caller to specify the VASP member to retrieve details for from the Global Directory Service (GDS). The `member_id` is expected to be the VASP's TRISA member ID, a unique identifier to the GDS.
+
+```proto
+message DetailsRequest {
+    string member_id = 1;
+}
+```
+
+### `MemberDetails`
+
+A `MemberDetails` message provides details about the requested VASP member, which includes not only their high level `VASPMember` summary, but also the IVMS101 legal person record and responses to the TRIXO questionnaire (both of which are a required component of all TRISA certificate requests).
+
+
+```proto
+message MemberDetails {
+    // Summary information about the VASP member
+    VASPMember member_summary = 1;
+
+    // The IVMS101 legal person identifying the VASP member
+    ivms101.LegalPerson legal_person = 2;
+
+    // The TRIXO questionnaire used to register the VASP
+    trisa.gds.models.v1beta1.TRIXOQuestionnaire trixo = 3;
 }
 ```
 
