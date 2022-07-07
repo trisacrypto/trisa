@@ -6,7 +6,6 @@ description: "Describing the Integration and Development with TestNet"
 weight: 30
 ---
 
-
 The TRISA TestNet has been established to provide a demonstration of the TRISA peer-to-peer protocol, host "robot VASP" services to facilitate TRISA integration, and is the location of the primary TRISA Global Directory Service (GDS) that facilitates public key exchange and peer discovery.  The TestNet instance is designed for testing, and the registration process is streamlined in the TestNet to facilitate quick integration. The Testnet enables you to test and validate transactions that share sensitive information safely and securely.
 
 For reference, the TRISA Protocol documentation]({{< relref "getting-started/protocol">}} provides additional information on enabling the peer-to-peer exchange of compliance information.
