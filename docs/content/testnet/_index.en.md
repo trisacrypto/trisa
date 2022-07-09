@@ -1,21 +1,22 @@
 ---
-title: Integration and Development with TestNet
+title: TestNet Integration and Development
 date: 2021-06-14T11:20:10-05:00
 lastmod: 2022-07-07T15:34:15-04:00
 description: "Describing the Integration and Development with TestNet"
 weight: 30
 ---
 
-The TRISA TestNet has been established to provide a demonstration of the TRISA peer-to-peer protocol, host "robot VASP" services to facilitate TRISA integration, and is the location of the primary TRISA Global Directory Service (GDS) that facilitates public key exchange and peer discovery.  The TestNet instance is designed for testing, and the registration process is streamlined in the TestNet to facilitate quick integration. The Testnet enables you to test and validate transactions that share sensitive information safely and securely.
+The TRISA TestNet has been established to provide a demonstration of the TRISA peer-to-peer protocol, host "robot VASP" services to facilitate TRISA integration, and facilitate public key exchange and peer discovery via TRISA's Global Directory Service (GDS).  The TestNet instance is designed for testing, and the registration process is streamlined in the TestNet to facilitate quick integration. The Testnet enables you to test and validate transactions that share sensitive information safely and securely.
 
-For reference, the TRISA Protocol documentation]({{< relref "getting-started/protocol">}} provides additional information on enabling the peer-to-peer exchange of compliance information.
+For reference, the [TRISA Protocol documentation]({{< relref "getting-started/protocol">}}) provides additional information on enabling the peer-to-peer exchange of compliance information.
 
-The TRISA TestNet is comprised of the following services:
+The TRISA TestNet is comprised of several services, including:
 
-- [TRISA Directory Service](https://trisatest.net) - a user interface to explore the TRISA Global Directory Service and register to become a TRISA member
+- A TestNet [Certificate Authority]({{< relref "joining-trisa/ca">}}) that issues TestNet Identity Certificates (*note that these are distinct from MainNet certificates and not interchangeable*).
+- [TRISA Directory Service](https://vaspdirectory.net/) - a user interface to explore the TRISA Global Directory Service and register to become a TRISA member
 - [TestNet Demo](https://vaspbot.net) - a demo site to show TRISA interactions between “robot” VASPs that run in the TestNet
 
-The TestNet hosts three ["robot VASPs" (rVASPs)]({{< relref "testnet/rvasps">}}) that have been implemented as a convenience for TRISA members to integrate their TRISA services and validate the compliance solution safely. The primary rVASP is Alice, a secondary for demo purposes is Bob, and an "evil" rVASP to test interactions with non-verified TRISA members.
+The TestNet also hosts three ["robot VASPs" (rVASPs)]({{< relref "testnet/rvasps">}}) that have been implemented as a convenience for TRISA members to integrate their TRISA services and validate the compliance solution safely. The primary rVASP is Alice, a secondary for demo purposes is Bob, and an "evil" rVASP to test interactions with non-verified TRISA members.
 
 The TestNet also provides a [command line utility]({{< relref "testnet/trisa-cli">}}) for interacting with the API for administrative and debugging purposes, using the testnet certificates.
 
@@ -27,6 +28,6 @@ The following steps are required to join the TestNet:
 
 1. [Register](https://vaspdirectory.net/certificate/registration) with the GDS to create your TRISA Account with your VASP email address, where you can opt-in for TestNet Certificates. During registration, you can add collaborators within your organization.
 
-2. Complete the  multi-part VASP Verification form and due diligence process. Once approved, you gain will gain to the TestNet.
+2. Complete the VASP Verification form and due diligence process. Once approved, you will gain to the TestNet.
 
-3. Set up your TRISA node or integrate with a 3rd-party solution to start testing. When considering setting up your own server to host your own TRISA node, you must consider items necessary that may incur significant costs and resources, such as the server itself, long-term data storage solution, and developer time to configure and test.
+3. Set up your TRISA node and implement the [TRISA API]({{< relref "getting-started/api">}}), or alternatively, integrate with a 3rd-party solution to start testing. When considering setting up your own server to host your own TRISA node, you must consider items necessary that may incur significant costs and resources, such as the server itself, long-term data storage solution, and developer time to configure and test.
