@@ -28,6 +28,6 @@ The following steps are required to join the TestNet:
 
 1. [Register](https://vaspdirectory.net/certificate/registration) with the GDS to create your TRISA Account with your VASP email address, where you can opt-in for TestNet Certificates. During registration, you can add collaborators within your organization.
 
-2. Complete the VASP Verification form and due diligence process. Once approved, you will gain to the TestNet.
+2. Complete the VASP Verification form and due diligence process. Once approved, you will gain access to the TestNet.
 
 3. Set up your TRISA node and implement the [TRISA API]({{< relref "getting-started/api">}}), or alternatively, integrate with a 3rd-party solution to start testing. When considering setting up your own server to host your own TRISA node, you must consider items necessary that may incur significant costs and resources, such as the server itself, long-term data storage solution, and developer time to configure and test.
