@@ -10,7 +10,7 @@ weight: 200
 TRISA recommends that Travel Rule information transfers be stored post-transfer as encrypted Secure Envelope protocol buffers. The unsealing keys for these envelopes should be stored separately, and should be deleted once the compliance period has ended, rendering the Envelopes un-openable. This is commonly referred to as "deletion by erasure". Note that compliance periods differ by region and jurisdiction but are typically between 5 and 7 years.
 
 ## Key Management
-TRISA recommends that TRISA implementers use the [Key Handler package](https://github.com/trisacrypto/trisa/tree/main/pkg/trisa/handler) for key management. (Documentation coming soon)
+TRISA recommends that TRISA implementers use the [Key Handler package]({{< relref "getting-started/keys">}}) for key management.
 
 ## Throughput
 Depending on the volume of Travel Rule transactions that your organization executes on a regular basis, you may wish to consider using the bidirectional streaming mode, `TransferStream`, which will support more throughput.
