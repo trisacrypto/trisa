@@ -89,6 +89,8 @@ Depending on your business details, specific fields may be required. For more in
 
 There is an [IVMS 101 Validator](https://ivmsvalidator.com/) which can be used to double check the formatting of an IVMS101 message to ensure it is correct.
 
+For help marshaling and unmarshaling [IVMS101 identity payloads]({{< relref "ivms/" >}}), see the documentation about the [`ivms101` package in `trisa`](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101).
+
 ## How do I figure out where to connect to the counterparty? How do I get counterparty IVMS 101 info?
 
 As part of the protocol, the Originator can use the [Global Directory Service]({{< relref "reference/faq#gds" >}}) to lookup the counterpoint endpoint, and sends a secure envelope providing their IVMS101 details. The Beneficiary can then verify and store the counterparty PII information needed for compliance. Next the Beneficiary can return a new secure envelope with their IVMS101 details so that the Originator can store the information for compliance.

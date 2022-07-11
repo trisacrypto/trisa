@@ -22,7 +22,7 @@ GDS is replicated across multiple continents. The servers hosting GDS are in thr
 
 GDS also manages the certificate revocation list (CRL) to maintain the network over time. The directory issues sealing keys and manages revocation and reissuance of certificates.
 
-This documentation describes the TRISA implementation of the directory service and TRISA-specific interactions with it.
+This documentation describes the TRISA implementation of the directory service and TRISA-specific interactions with it. For details about working with the GDS API, visit the [API documentation]({{< ref "/gds/api" >}}).
 
 ## Networks
 
