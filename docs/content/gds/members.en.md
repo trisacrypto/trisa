@@ -86,7 +86,7 @@ The `Summary` RPC returns a brief summary of information about verified VASP mem
 
 ### `SummaryRequest`
 
-A `SummaryRequest` allows the caller to specify a VASP member to retrieve details for from the Global Directory Service (GDS). If desired, the caller can indicate a start date to return a count of how many new members there are in a certain time frame. The caller can also include a VASP ID to return details about that VASP's record in the summary.
+A `SummaryRequest` allows the caller to request VASP summary information from the Global Directory Service (GDS). If desired, the caller can indicate a start date to return a count of how many new members have been added since a previous query. The caller can also include a VASP ID to return that VASP's record in the summary.
 
 ```proto
 message SummaryRequest {
@@ -100,7 +100,7 @@ message SummaryRequest {
 
 ### `SummaryReply`
 
-A `SummaryReply` returns summary info about the members in the Directory Service. This information includes a count of registered VASPs and certificates issued within the Directory Service. `SummaryReply` also provides a count of new members and details about particular member VASPs, if requested.
+A `SummaryReply` returns summary info about the members in the Directory Service. This information includes a count of registered VASPs and certificates issued within the Directory Service. `SummaryReply` also provides a count of new members and details about a particular member VASP, if requested.
 
 ```proto
 message SummaryReply {
