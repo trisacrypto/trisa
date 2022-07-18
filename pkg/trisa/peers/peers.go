@@ -78,18 +78,22 @@ func (p *Peers) Add(info *PeerInfo) (err error) {
 	}
 
 	// Critical section for peer
-	// Only update if data is available on info to avoid overwriting existing data
+	// Only update if data is available on info and not available on the peer to avoid
+	// overwriting existing data. This means that this method will not correct bad data
+	// from a GDS Lookup but will always retain the original data. This could create a
+	// problem if the peer info is partially updated so callers should ensure that the
+	// info struct is always completely populated.
 	peer.Lock()
-	if info.ID != "" {
+	if peer.info.ID == "" && info.ID != "" {
 		peer.info.ID = info.ID
 	}
-	if info.RegisteredDirectory != "" {
+	if peer.info.RegisteredDirectory == "" && info.RegisteredDirectory != "" {
 		peer.info.RegisteredDirectory = info.RegisteredDirectory
 	}
-	if info.Endpoint != "" {
+	if peer.info.Endpoint == "" && info.Endpoint != "" {
 		peer.info.Endpoint = info.Endpoint
 	}
-	if info.SigningKey != nil {
+	if peer.info.SigningKey == nil && info.SigningKey != nil {
 		peer.info.SigningKey = info.SigningKey
 	}
 	peer.Unlock()
@@ -188,11 +192,22 @@ func (p *Peers) Lookup(commonName string) (peer *Peer, err error) {
 		Endpoint:            rep.Endpoint,
 	}
 
-	var pub interface{}
-	if pub, err = x509.ParsePKIXPublicKey(rep.SigningCertificate.Data); err == nil {
-		var ok bool
-		if info.SigningKey, ok = pub.(*rsa.PublicKey); !ok {
-			info.SigningKey = nil
+	var (
+		ok  bool
+		pub interface{}
+	)
+	switch {
+	case rep.SigningCertificate != nil && len(rep.SigningCertificate.Data) > 0:
+		if pub, err = x509.ParsePKIXPublicKey(rep.SigningCertificate.Data); err == nil {
+			if info.SigningKey, ok = pub.(*rsa.PublicKey); !ok {
+				info.SigningKey = nil
+			}
+		}
+	case rep.IdentityCertificate != nil && len(rep.IdentityCertificate.Data) > 0:
+		if pub, err = x509.ParsePKIXPublicKey(rep.IdentityCertificate.Data); err == nil {
+			if info.SigningKey, ok = pub.(*rsa.PublicKey); !ok {
+				info.SigningKey = nil
+			}
 		}
 	}
 
