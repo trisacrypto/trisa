@@ -114,6 +114,7 @@ func (p *Peer) ExchangeKeys(force bool) (_ *rsa.PublicKey, err error) {
 	}
 
 	// Parse public keys from remote client
+	// TODO: does this function marshal the key correctly? We should use the keys package.
 	var pub interface{}
 	if pub, err = x509.ParsePKIXPublicKey(rep.Data); err != nil {
 		return nil, err
