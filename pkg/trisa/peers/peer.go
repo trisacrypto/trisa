@@ -154,15 +154,15 @@ func (p *Peer) String() string {
 }
 
 // Connect to the remote peer - thread safe.
-func (p *Peer) Connect() (err error) {
+func (p *Peer) Connect(opts ...grpc.DialOption) (err error) {
 	p.Lock()
-	err = p.connect()
+	err = p.connect(opts...)
 	p.Unlock()
 	return err
 }
 
 // Connect to the remote peer - not thread safe.
-func (p *Peer) connect() (err error) {
+func (p *Peer) connect(opts ...grpc.DialOption) (err error) {
 	// Are we already connected?
 	if p.client != nil {
 		return nil
@@ -172,12 +172,16 @@ func (p *Peer) connect() (err error) {
 		return errors.New("peer does not have an endpoint to connect to")
 	}
 
-	opts := make([]grpc.DialOption, 0, 1)
-	var opt grpc.DialOption
-	if opt, err = mtls.ClientCreds(p.info.Endpoint, p.parent.certs, p.parent.pool); err != nil {
-		return err
+	if len(opts) == 0 {
+		opts = make([]grpc.DialOption, 0, 1)
+
+		var opt grpc.DialOption
+		if opt, err = mtls.ClientCreds(p.info.Endpoint, p.parent.certs, p.parent.pool); err != nil {
+			return err
+		}
+
+		opts = append(opts, opt)
 	}
-	opts = append(opts, opt)
 
 	var cc *grpc.ClientConn
 	if cc, err = grpc.Dial(p.info.Endpoint, opts...); err != nil {

@@ -11,7 +11,10 @@ import (
 
 // Test that the ExchangeKeys function correctly retrieves a key from the endpoint.
 func TestExchangeKeys(t *testing.T) {
-	cache := makePeersCache(t)
+	// Create a mocked peers cache connected to a mock directory
+	cache, mgds, err := makePeersCache()
+	require.NoError(t, err, "could not create mocked peers cache")
+	defer mgds.Shutdown()
 
 	// Retrieve test peer
 	p, err := cache.Get("test-peer")
