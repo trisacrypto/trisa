@@ -193,6 +193,7 @@ func TestLookup(t *testing.T) {
 	// TODO: create case where lookup has signing certificate (but not identity)
 	// TODO: create case where lookup has both identity and signing certificates
 	// TODO: ensure there is a case where lookup has neither identity nor signing certificates
+	mgds.Reset()
 	mgds.OnLookup = func(ctx context.Context, in *gds.LookupRequest) (out *gds.LookupReply, err error) {
 		out = &gds.LookupReply{}
 		switch in.CommonName {
@@ -229,6 +230,10 @@ func TestLookup(t *testing.T) {
 			})
 		}
 	})
+
+	require.Equal(t, 0, mgds.Calls[gdsmock.SearchRPC])
+	require.Equal(t, 2, mgds.Calls[gdsmock.LookupRPC])
+	require.Equal(t, 0, mgds.Calls[gdsmock.StatusRPC])
 
 	// Cache should contain the two peers
 	leonardo, err := cache.Get("leonardo.trisa.dev")
@@ -288,6 +293,7 @@ func TestSearch(t *testing.T) {
 	require.EqualError(t, err, "too many results returned for \"Da Vinci Digital Exchange\"")
 
 	// Have the mock GDS respond correctly based on the input
+	mgds.Reset()
 	mgds.OnSearch = func(ctx context.Context, in *gds.SearchRequest) (out *gds.SearchReply, err error) {
 		out = &gds.SearchReply{}
 		if err = loadGRPCFixture("testdata/gds_search_reply.pb.json", out); err != nil {
@@ -321,15 +327,19 @@ func TestSearch(t *testing.T) {
 			{"search-donatello", "Brooklyn BitMining Ltd"},
 		}
 		for _, tt := range tests {
-			tt := tt
-			t.Run(tt.name, func(t *testing.T) {
+			tc := tt
+			t.Run(tc.name, func(t *testing.T) {
 				t.Parallel()
-				p, err := cache.Search(tt.peer)
+				p, err := cache.Search(tc.peer)
 				require.NoError(t, err)
 				require.NotNil(t, p)
 			})
 		}
 	})
+
+	require.Equal(t, 2, mgds.Calls[gdsmock.SearchRPC])
+	require.Equal(t, 0, mgds.Calls[gdsmock.LookupRPC])
+	require.Equal(t, 0, mgds.Calls[gdsmock.StatusRPC])
 
 	// Cache should contain the two peers
 	leonardo, err := cache.Get("leonardo.trisa.dev")

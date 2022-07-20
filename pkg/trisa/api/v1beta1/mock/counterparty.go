@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"sync"
 
 	"github.com/trisacrypto/trisa/pkg/bufconn"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
@@ -70,6 +71,7 @@ func NewAuth(bufnet *bufconn.Listener, certs *trust.Provider, pool trust.Provide
 // functions or the WithFixture or WithError functions. The Calls map can be used to
 // count the number of times the remote peer RPC was called.
 type RemotePeer struct {
+	sync.Mutex
 	api.UnimplementedTRISAHealthServer
 	api.UnimplementedTRISANetworkServer
 	bufnet           *bufconn.Listener
@@ -188,26 +190,32 @@ func (s *RemotePeer) UseError(rpc string, code codes.Code, msg string) error {
 }
 
 func (s *RemotePeer) Transfer(ctx context.Context, in *api.SecureEnvelope) (*api.SecureEnvelope, error) {
-	s.Calls[TransferRPC]++
+	s.IncrementCalls(TransferRPC)
 	return s.OnTransfer(ctx, in)
 }
 
 func (s *RemotePeer) TransferStream(stream api.TRISANetwork_TransferStreamServer) error {
-	s.Calls[TransferStreamRPC]++
+	s.IncrementCalls(TransferStreamRPC)
 	return s.OnTransferStream(stream)
 }
 
 func (s *RemotePeer) KeyExchange(ctx context.Context, in *api.SigningKey) (*api.SigningKey, error) {
-	s.Calls[KeyExchangeRPC]++
+	s.IncrementCalls(KeyExchangeRPC)
 	return s.OnKeyExchange(ctx, in)
 }
 
 func (s *RemotePeer) ConfirmAddress(ctx context.Context, in *api.Address) (*api.AddressConfirmation, error) {
-	s.Calls[ConfirmAddressRPC]++
+	s.IncrementCalls(ConfirmAddressRPC)
 	return s.OnConfirmAddress(ctx, in)
 }
 
 func (s *RemotePeer) Status(ctx context.Context, in *api.HealthCheck) (*api.ServiceState, error) {
-	s.Calls[StatusRPC]++
+	s.IncrementCalls(StatusRPC)
 	return s.OnStatus(ctx, in)
+}
+
+func (s *RemotePeer) IncrementCalls(rpc string) {
+	s.Lock()
+	s.Calls[rpc]++
+	s.Unlock()
 }

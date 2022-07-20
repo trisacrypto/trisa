@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"sync"
 
 	"github.com/trisacrypto/trisa/pkg/bufconn"
 	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
@@ -12,36 +13,6 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 )
-
-type lookupInfo struct {
-	ID                  string
-	RegisteredDirectory string
-	CommonName          string
-	Endpoint            string
-	ValidCertificate    bool
-}
-
-var RemotePeers = map[string]*lookupInfo{
-	"leonardo": {
-		ID:                  "1",
-		RegisteredDirectory: "testdirectory.org",
-		CommonName:          "leonardo",
-		Endpoint:            "https://leonardo.trisatest.net:443",
-		ValidCertificate:    true,
-	},
-	"donatello": {
-		ID:                  "2",
-		RegisteredDirectory: "testdirectory.org",
-		CommonName:          "donatello",
-		Endpoint:            "https://donatello.trisatest.net:443",
-	},
-	"leonardo da vinci": {
-		ID:                  "3",
-		RegisteredDirectory: "testdirectory.org",
-		CommonName:          "leonardo da vinci",
-		Endpoint:            "https://leonardodavinci.trisatest.net:443",
-	},
-}
 
 const (
 	LookupRPC = "trisa.gds.api.v1beta1.TRISADirectory/Lookup"
@@ -71,6 +42,7 @@ func New(bufnet *bufconn.Listener) *GDS {
 // callers using the OnRPC functions or the WithFixture or WithError functions. The
 // Calls map can be used to count the number of times the remote peer PRC was called.
 type GDS struct {
+	sync.Mutex
 	gds.UnimplementedTRISADirectoryServer
 	bufnet   *bufconn.Listener
 	srv      *grpc.Server
@@ -162,16 +134,22 @@ func (s *GDS) UseError(rpc string, code codes.Code, msg string) error {
 }
 
 func (s *GDS) Lookup(ctx context.Context, in *gds.LookupRequest) (*gds.LookupReply, error) {
-	s.Calls[LookupRPC]++
+	s.IncrementCalls(LookupRPC)
 	return s.OnLookup(ctx, in)
 }
 
 func (s *GDS) Search(ctx context.Context, in *gds.SearchRequest) (*gds.SearchReply, error) {
-	s.Calls[SearchRPC]++
+	s.IncrementCalls(SearchRPC)
 	return s.OnSearch(ctx, in)
 }
 
 func (s *GDS) Status(ctx context.Context, in *gds.HealthCheck) (*gds.ServiceState, error) {
-	s.Calls[StatusRPC]++
+	s.IncrementCalls(StatusRPC)
 	return s.OnStatus(ctx, in)
+}
+
+func (s *GDS) IncrementCalls(rpc string) {
+	s.Lock()
+	s.Calls[rpc]++
+	s.Unlock()
 }
