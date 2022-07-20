@@ -1,0 +1,11 @@
+{
+  "id": "b19c9ebd-82f5-4bda-91ef-226e3ecee4b8",
+  "registered_directory": "testdirectory.org",
+  "common_name": "donatello.example.com",
+  "endpoint": "donatello.example.com:443",
+  "identity_certificate": null,
+  "signing_certificate": null,
+  "name": "Brooklyn BitMining Ltd",
+  "country": "US",
+  "verified_on": "2022-04-21T11:04:23Z"
+}

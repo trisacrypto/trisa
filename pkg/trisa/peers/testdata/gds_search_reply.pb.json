@@ -1,0 +1,16 @@
+{
+  "results": [
+    {
+      "id": "19d84515-007a-48cc-9efd-b153a263e77c",
+      "registered_directory": "testdirectory.org",
+      "common_name": "leonardo.trisa.dev",
+      "endpoint": "leonardo.trisa.dev:8000"
+    },
+    {
+      "id": "b19c9ebd-82f5-4bda-91ef-226e3ecee4b8",
+      "registered_directory": "testdirectory.org",
+      "common_name": "donatello.example.com",
+      "endpoint": "donatello.example.com:443"
+    }
+  ]
+}
