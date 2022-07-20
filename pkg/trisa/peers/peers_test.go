@@ -6,13 +6,13 @@ import (
 	"crypto/rsa"
 	"io/ioutil"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
-	"github.com/trisacrypto/trisa/pkg/bufconn"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	apimock "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/mock"
 	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
 	gdsmock "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1/mock"
+	"github.com/trisacrypto/trisa/pkg/trisa/mtls"
 	"github.com/trisacrypto/trisa/pkg/trisa/peers"
 	"github.com/trisacrypto/trisa/pkg/trust"
 	"google.golang.org/grpc"
@@ -96,28 +96,23 @@ func TestAdd(t *testing.T) {
 
 // Test that FromContext returns the correct Peer given the connection context.
 func TestFromContext(t *testing.T) {
-	trisa, err := network.NewMocked(nil)
-	require.NoError(t, err, "could not create mocked trisa network")
-	defer trisa.Close()
-
-	// Set up a mock directory service response for from context lookup
-	ds, err := trisa.Directory()
-	require.NoError(t, err, "could not get directory")
-	mgds, ok := ds.(*directory.MockGDS)
-	require.True(t, ok, "expected a mocked directory servce")
+	// Create a mocked peers cache connected to a mock directory
+	cache, mgds, err := makePeersCache()
+	require.NoError(t, err, "could not create mocked peers cache")
+	defer mgds.Shutdown()
 
 	// Make assertions about what is being looked up in the GDS
-	mgds.GetMock().OnLookup = func(ctx context.Context, in *gds.LookupRequest) (out *gds.LookupReply, err error) {
+	mgds.OnLookup = func(ctx context.Context, in *gds.LookupRequest) (out *gds.LookupReply, err error) {
 		// Assert that the expected common name is being looked up
-		require.Equal(t, "client.trisa.dev", in.CommonName, "unexpected common name in lookup request")
+		require.Equal(t, "server.trisa.dev", in.CommonName, "unexpected common name in lookup request")
 		require.Empty(t, in.Id, "unexpected id in lookup request")
 		require.Empty(t, in.RegisteredDirectory, "unexpected registered directory in lookup request")
 
 		return &gds.LookupReply{
 			Id:                  "0960c00e-68a7-4606-9d0f-ff8537186d34",
 			RegisteredDirectory: "localhost",
-			CommonName:          "client.trisa.dev",
-			Endpoint:            "client.trisa.dev:4000",
+			CommonName:          "server.trisa.dev",
+			Endpoint:            "server.trisa.dev:4000",
 			Name:                "Testing VASP",
 			Country:             "US",
 			VerifiedOn:          "2022-05-10T22:29:55Z",
@@ -125,30 +120,36 @@ func TestFromContext(t *testing.T) {
 	}
 
 	// Create an mTLS connection to test the context over bufconn
-	opts, err := trisa.PeerDialer()("testing.trisa.dev")
-	require.NoError(t, err, "could not create mtls dial credentials")
-	require.Len(t, opts, 1, "dial options contains unexpected number of things")
+	certs, pool, err := loadCertificates("testdata/server.pem")
+	require.NoError(t, err, "could not load server certificate fixtures")
 
-	// Create an mTLS RemotePeer gRPC server for testing
-	conf := config.TRISAConfig{Certs: "testdata/server.pem", Pool: "testdata/pool.pem"}
-	bufnet := bufconn.New()
-	remote, err := pmock.NewAuth(bufnet, conf)
-	require.NoError(t, err, "could not create authenticated remote peer mock")
+	remote, err := apimock.NewAuth(nil, certs, pool)
+	require.NoError(t, err, "could not create remote universal mock")
+	defer remote.Shutdown()
 
-	// Connect a TRISANetwork client to the authenticated mock
-	opts = append(opts, grpc.WithContextDialer(bufnet.Dialer))
-	cc, err := grpc.Dial("server.trisa.dev", opts...)
-	require.NoError(t, err, "could not dial authenticated remote peer mock")
+	// Lookup the peer from the directory service and connect it to the remote
+	peer, err := cache.Lookup("server.trisa.dev")
+	require.NoError(t, err, "could not lookup peer from directory service")
+
+	opts := make([]grpc.DialOption, 0, 2)
+	opts = append(opts, grpc.WithContextDialer(remote.Channel().Dialer))
+
+	clientCerts, clientPool, err := loadCertificates("testdata/client.pem")
+	require.NoError(t, err, "could not load client certificate fixture")
+	creds, err := mtls.ClientCreds(peer.Info().Endpoint, clientCerts, clientPool)
+	require.NoError(t, err, "could not create mtls client credentials")
+	opts = append(opts, creds)
+
+	err = peer.Connect(opts...)
+	require.NoError(t, err, "could not connect to remote peer with mtls credentials")
 
 	// Setup to get the context from the remote dialer
-	client := api.NewTRISANetworkClient(cc)
 	remote.OnTransfer = func(ctx context.Context, in *api.SecureEnvelope) (*api.SecureEnvelope, error) {
 		// Ok, after all that work above we finally have an actual gRPC context with mTLS info
-		peer, err := trisa.FromContext(ctx)
+		peer, err := cache.FromContext(ctx)
 		require.NoError(t, err, "could not lookup peer from context")
 
-		info, err := peer.Info()
-		require.NoError(t, err, "could not get info from the peer")
+		info := peer.Info()
 		require.Equal(t, "client.trisa.dev", info.CommonName, "unknown common name")
 
 		// Don't return anything
@@ -156,131 +157,8 @@ func TestFromContext(t *testing.T) {
 	}
 
 	// Make the request with the client to finish the tests
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	_, err = client.Transfer(ctx, &api.SecureEnvelope{})
+	_, err = peer.Transfer(&api.SecureEnvelope{})
 	require.NoError(t, err, "could not make transfer to initiate from context tests")
-
-	// // Create a mocked peers cache connected to a mock directory
-	// cache, mgds, err := makePeersCache()
-	// require.NoError(t, err, "could not create mocked peers cache")
-	// defer mgds.Shutdown()
-
-	// // Add a peer to the cache
-	// require.NoError(t, cache.Add(&peers.PeerInfo{
-	// 	CommonName: "leonardo",
-	// 	ID:         "1",
-	// }))
-
-	// // Context does not contain a peer
-	// ctx := context.Background()
-	// _, err = cache.FromContext(ctx)
-	// require.Error(t, err)
-
-	// // Peer has badly formatted credentials
-	// remotePeer := peer.Peer{
-	// 	AuthInfo: nil,
-	// }
-	// _, err = cache.FromContext(peer.NewContext(ctx, &remotePeer))
-	// require.Error(t, err)
-
-	// // Peer has no certificate
-	// remotePeer.AuthInfo = credentials.TLSInfo{}
-	// _, err = cache.FromContext(peer.NewContext(ctx, &remotePeer))
-	// require.Error(t, err)
-
-	// remotePeer.AuthInfo = credentials.TLSInfo{
-	// 	State: tls.ConnectionState{
-	// 		VerifiedChains: nil,
-	// 	},
-	// }
-	// _, err = cache.FromContext(peer.NewContext(ctx, &remotePeer))
-	// require.Error(t, err)
-
-	// remotePeer.AuthInfo = credentials.TLSInfo{
-	// 	State: tls.ConnectionState{
-	// 		VerifiedChains: [][]*x509.Certificate{{}},
-	// 	},
-	// }
-	// _, err = cache.FromContext(peer.NewContext(ctx, &remotePeer))
-	// require.Error(t, err)
-
-	// // Certificate has no common name
-	// remotePeer.AuthInfo = credentials.TLSInfo{
-	// 	State: tls.ConnectionState{
-	// 		VerifiedChains: [][]*x509.Certificate{
-	// 			{
-	// 				{
-	// 					Subject: pkix.Name{},
-	// 				},
-	// 			},
-	// 		},
-	// 	},
-	// }
-	// _, err = cache.FromContext(peer.NewContext(ctx, &remotePeer))
-	// require.Error(t, err)
-
-	// // Peer does not exist in the cache - should be created
-	// remotePeer.AuthInfo = credentials.TLSInfo{
-	// 	State: tls.ConnectionState{
-	// 		VerifiedChains: [][]*x509.Certificate{
-	// 			{
-	// 				{
-	// 					Subject: pkix.Name{
-	// 						CommonName: "donatello",
-	// 					},
-	// 				},
-	// 			},
-	// 		},
-	// 	},
-	// }
-
-	// // Test calling FromContext concurrently
-	// t.Run("fromContext", func(t *testing.T) {
-	// 	tests := []struct {
-	// 		name string
-	// 		Peer string
-	// 	}{
-	// 		{"alreadyExists", "leonardo"},
-	// 		{"alreadyExists2", "leonardo"},
-	// 		{"newPeer", "donatello"},
-	// 		{"newPeer2", "donatello"},
-	// 	}
-	// 	for _, tt := range tests {
-	// 		tt := tt
-	// 		t.Run(tt.name, func(t *testing.T) {
-	// 			t.Parallel()
-	// 			remotePeer := peer.Peer{
-	// 				AuthInfo: credentials.TLSInfo{
-	// 					State: tls.ConnectionState{
-	// 						VerifiedChains: [][]*x509.Certificate{
-	// 							{
-	// 								{
-	// 									Subject: pkix.Name{
-	// 										CommonName: tt.Peer,
-	// 									},
-	// 								},
-	// 							},
-	// 						},
-	// 					},
-	// 				},
-	// 			}
-	// 			p, err := cache.FromContext(peer.NewContext(ctx, &remotePeer))
-	// 			require.NoError(t, err)
-	// 			require.Equal(t, tt.Peer, p.Info().CommonName)
-	// 		})
-	// 	}
-	// })
-
-	// // Cache should contain the two peers
-	// leonardo, err := cache.Get("leonardo")
-	// require.NoError(t, err)
-	// require.Equal(t, "leonardo", leonardo.Info().CommonName)
-	// require.Equal(t, "1", leonardo.Info().ID)
-
-	// donatello, err := cache.Get("donatello")
-	// require.NoError(t, err)
-	// require.Equal(t, "donatello", donatello.Info().CommonName)
 }
 
 // Test that the Lookup function returns the correct remote peer given the common name.
