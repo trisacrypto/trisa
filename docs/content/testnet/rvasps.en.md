@@ -115,7 +115,7 @@ It is then up to your TRISA node to determine how to handle the payload. Your op
 
 The rVASP handles each type of response appropriately. If a reject message is returned, the rVASP fails the transaction; if accept it "executes" the transaction.
 
-The pending message initiates an asynchronous transaction. The transaction is placed into an "await" state until the rVASP receives a follow-up reject or accept response with the same envelope id.
+The pending message initiates an asynchronous transaction as defined in the TRISA [whitepaper](https://trisa.io/trisa-whitepaper/#6.2.3). The transaction is placed into an "await" state until the rVASP receives a follow-up reject or accept response with the same envelope id.
 
 #### Originator Policies
 
@@ -131,7 +131,7 @@ For the `SendFull` policy, the rVASP sends an envelope containing a transaction 
 
 ##### SendError
 
-For the `SendError` policy, the rVASP will simply send an error envelope with the `ComplianceCheckFail` TRISA error code. This is useful for simulating asynchronous rejections or cancellations from the rVASP.
+For the `SendError` policy, the rVASP will simply send an envelope containing a `ComplianceCheckFail` TRISA error. The rVASP expects the recipient to also return an envelope with an error in it, otherwise an error will be returned by the CLI to the user. This is useful for simulating synchronous rejections or cancellations from the rVASP.
 
 ### Sending a TRISA message to an rVASP
 
@@ -167,11 +167,21 @@ For the `SyncRepair` policy, the identity payload does not have to include the b
 
 ##### SyncRequire
 
-For the `SyncRequire` policy, the identity payload must contain a complete beneficiary identity. The rVASP will respond synchronously by sending an accept response containing a `received_at` timestamp in the payload. If the beneficiary information is incomplete or incorrect, the rVASP will respond with a rejection error.
+For the `SyncRequire` policy, the identity payload must contain a complete beneficiary identity as defined in the TRISA [whitepaper](https://trisa.io/trisa-whitepaper/#4.3). The rVASP will respond synchronously by sending an accept response containing a `received_at` timestamp in the payload. If the beneficiary information is incomplete or incorrect, the rVASP will respond with a rejection error.
 
 ##### AsyncRepair
 
-For the `AsyncRepair` policy, the identity payload does not have to include the beneficiary identity. The rVASP will respond with a `trisa.data.generic.v1beta1.Pending` message containing `reply_not_before` and `reply_not_after` timestamps which specify the beginning of an asynchronous transaction. In order to continue the transaction handshake, you should be ready to receive a `Transfer` RPC request from the rVASP within the time window containing a `SecureEnvelope` with the same `Id`. In order to continue the transaction, you must respond with a resealed envelope containing a `received_at` timestamp in the payload, and then send a new `Transfer` request to the rVASP containing any final transaction details (`txid`, etc.). The rVASP will respond with another pending message which will initiate a final asynchronous handshake. Once the final `Transfer` request is received from the rVASP, the envelope should be resealed and echoed again to complete the transaction. The entire `AsyncRepair` workflow between two rVASPs is displayed below, where Alice is acting as the originator and Bob is acting as the beneficiary.
+For the `AsyncRepair` policy, the identity payload does not have to include the beneficiary identity. In order to complete the transaction, the originator must:
+1. Send a `Transfer` request to the rVASP containing "partial" transaction and identity information. The transaction payload must contain a valid beneficiary address but the identity payload does not have to contain full beneficiary info.
+2. Receive a `trisa.data.generic.v1beta1.Pending` response from the rVASP containing `reply_not_before` and `reply_not_after` timestamps, specifiying the beginning of an asynchronous transaction.
+3.  Be ready to receive an asynchronous callback from the rVASP within the time window. This can be done by caching the original pending message and waiting for a `Transfer` request from the rVASP with the same envelope `Id` and within the time window specified in the pending message.
+4. Respond to the callback RPC with a resealed envelope containing a `received_at` timestamp in the payload.
+5. Initiate a new `Transfer` request to the rVASP containing any final transaction details (`txid`, etc.).
+6. Receive another pending response from the rVASP which initiates a final asynchronous handshake.
+7. Receive a second `Transfer` callback request from the rVASP containing the full transaction payload and full identity payload along with a `received_at` timestamp.
+8. Finalize the transaction by echoing the envelope back to the rVASP.
+
+The entire `AsyncRepair` workflow between two rVASPs is displayed below, where Alice is acting as the originator and Bob is acting as the beneficiary.
 
 {{< mermaid >}}
 sequenceDiagram
@@ -196,4 +206,4 @@ autonumber
 
 ##### AsyncReject
 
-The `AsyncReject` policy simulates a synchronous rejected transaction. In this policy, the identity payload does not have to include the beneficiary identity, and the rVASP will respond with a pending message as in the `AsyncRepair` policy. The difference is that the rVASP will send an error envelope within the time window containing a TRISA rejection, indicating that the transaction has been rejected.
+The `AsyncReject` policy simulates a synchronous rejected transaction. In this policy, the identity payload does not have to include the beneficiary identity, and the rVASP will respond with a pending message as in the `AsyncRepair` policy. The difference is that the rVASP will send a callback `Transfer` within the time window containing an TRISA rejection error, indicating that the transaction has been rejected.
