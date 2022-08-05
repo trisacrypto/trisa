@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/x509"
 	"io/ioutil"
 	"testing"
 
@@ -12,6 +13,7 @@ import (
 	apimock "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/mock"
 	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
 	gdsmock "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1/mock"
+	models "github.com/trisacrypto/trisa/pkg/trisa/gds/models/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trisa/mtls"
 	"github.com/trisacrypto/trisa/pkg/trisa/peers"
 	"github.com/trisacrypto/trisa/pkg/trust"
@@ -102,7 +104,7 @@ func TestFromContext(t *testing.T) {
 	defer mgds.Shutdown()
 
 	// Make assertions about what is being looked up in the GDS
-	mgds.OnLookup = func(ctx context.Context, in *gds.LookupRequest) (out *gds.LookupReply, err error) {
+	mgds.OnLookup = func(_ context.Context, in *gds.LookupRequest) (out *gds.LookupReply, err error) {
 		// Assert that the expected common name is being looked up
 		require.Equal(t, "server.trisa.dev", in.CommonName, "unexpected common name in lookup request")
 		require.Empty(t, in.Id, "unexpected id in lookup request")
@@ -144,7 +146,7 @@ func TestFromContext(t *testing.T) {
 	require.NoError(t, err, "could not connect to remote peer with mtls credentials")
 
 	// Setup to get the context from the remote dialer
-	remote.OnTransfer = func(ctx context.Context, in *api.SecureEnvelope) (*api.SecureEnvelope, error) {
+	remote.OnTransfer = func(ctx context.Context, _ *api.SecureEnvelope) (*api.SecureEnvelope, error) {
 		// Ok, after all that work above we finally have an actual gRPC context with mTLS info
 		peer, err := cache.FromContext(ctx)
 		require.NoError(t, err, "could not lookup peer from context")
@@ -159,6 +161,8 @@ func TestFromContext(t *testing.T) {
 	// Make the request with the client to finish the tests
 	_, err = peer.Transfer(&api.SecureEnvelope{})
 	require.NoError(t, err, "could not make transfer to initiate from context tests")
+
+	// TODO: Test with different certificates to make sure the auth info parsing in FromContext is correct
 }
 
 // Test that the Lookup function returns the correct remote peer given the common name.
@@ -188,13 +192,59 @@ func TestLookup(t *testing.T) {
 	require.EqualError(t, err, "[99] the GDS really shouldn't be returning these errors")
 	require.Nil(t, peer, "peer should be nil when an error is returned")
 
+	// Lookup should not error if GDS returns a nil identity and nil signing certificate
+	require.NoError(t, mgds.UseFixture(gdsmock.LookupRPC, "testdata/leonardo.trisa.dev.pb.json"))
+	peer, err = cache.Lookup("leonardo.trisa.dev")
+	require.NoError(t, err, "could not lookup peer from directory service")
+	require.Nil(t, peer.SigningKey(), "signing key should be nil when no certificate is returned")
+
+	// Configure a reply fixture for the other lookup test cases
+	reply := &gds.LookupReply{}
+	require.NoError(t, loadGRPCFixture("testdata/leonardo.trisa.dev.pb.json", reply))
+	mgds.OnLookup = func(context.Context, *gds.LookupRequest) (*gds.LookupReply, error) {
+		return reply, nil
+	}
+
+	// Generate keys to distinguish between identity and signing certificates
+	origCert, origKey, err := generateCertificate()
+	require.NoError(t, err, "could not generate certificate")
+	identityCert, _, err := generateCertificate()
+	require.NoError(t, err, "could not generate certificate")
+	signingCert, signingKey, err := generateCertificate()
+	require.NoError(t, err, "could not generate certificate")
+
+	// Lookup should store the identity key if the identity certificate is available on the lookup reply
+	reply.CommonName = "identity"
+	reply.IdentityCertificate = origCert
+	peer, err = cache.Lookup("identity")
+	require.NoError(t, err, "could not lookup peer from directory service")
+	require.Equal(t, origKey, peer.SigningKey(), "identity key should be stored")
+
+	// Lookup should not overwrite an existing key on the peer
+	reply.IdentityCertificate = identityCert
+	peer, err = cache.Lookup("identity")
+	require.NoError(t, err, "could not lookup peer from directory service")
+	require.Equal(t, origKey, peer.SigningKey(), "identity key should not be overwritten")
+
+	// Lookup should store the signing key if the signing certificate is available on the lookup reply
+	reply.CommonName = "signing"
+	reply.IdentityCertificate = nil
+	reply.SigningCertificate = signingCert
+	peer, err = cache.Lookup("signing")
+	require.NoError(t, err, "could not lookup peer from directory service")
+	require.Equal(t, signingKey, peer.SigningKey(), "signing key should be stored")
+
+	// Lookup should prefer the signing certificate over the identity certificate if both are available on the lookup reply
+	reply.CommonName = "both"
+	reply.IdentityCertificate = identityCert
+	reply.SigningCertificate = signingCert
+	peer, err = cache.Lookup("both")
+	require.NoError(t, err, "could not lookup peer from directory service")
+	require.Equal(t, signingKey, peer.SigningKey(), "signing key should be stored")
+
 	// Handle the case where the GDS returns valid responses
-	// TODO: create case where lookup has identity certificate (but not signing)
-	// TODO: create case where lookup has signing certificate (but not identity)
-	// TODO: create case where lookup has both identity and signing certificates
-	// TODO: ensure there is a case where lookup has neither identity nor signing certificates
 	mgds.Reset()
-	mgds.OnLookup = func(ctx context.Context, in *gds.LookupRequest) (out *gds.LookupReply, err error) {
+	mgds.OnLookup = func(_ context.Context, in *gds.LookupRequest) (out *gds.LookupReply, err error) {
 		out = &gds.LookupReply{}
 		switch in.CommonName {
 		case "leonardo.trisa.dev":
@@ -294,7 +344,7 @@ func TestSearch(t *testing.T) {
 
 	// Have the mock GDS respond correctly based on the input
 	mgds.Reset()
-	mgds.OnSearch = func(ctx context.Context, in *gds.SearchRequest) (out *gds.SearchReply, err error) {
+	mgds.OnSearch = func(_ context.Context, in *gds.SearchRequest) (out *gds.SearchReply, err error) {
 		out = &gds.SearchReply{}
 		if err = loadGRPCFixture("testdata/gds_search_reply.pb.json", out); err != nil {
 			return nil, status.Error(codes.FailedPrecondition, err.Error())
@@ -396,6 +446,22 @@ func loadCertificates(path string) (certs *trust.Provider, pool trust.ProviderPo
 	}
 
 	return certs, pool, nil
+}
+
+// Helper function to generate a certificate with a random key
+func generateCertificate() (cert *models.Certificate, key *rsa.PublicKey, err error) {
+	var privateKey *rsa.PrivateKey
+	if privateKey, err = rsa.GenerateKey(rand.Reader, 2048); err != nil {
+		return nil, nil, err
+	}
+
+	key = &privateKey.PublicKey
+	cert = &models.Certificate{}
+	if cert.Data, err = x509.MarshalPKIXPublicKey(key); err != nil {
+		return nil, nil, err
+	}
+
+	return cert, key, nil
 }
 
 // Helper function to load gRPC fixtures from disks, errors will be status errors.

@@ -2,6 +2,8 @@ package peers_test
 
 import (
 	"context"
+	"crypto/ecdsa"
+	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -54,21 +56,59 @@ func TestExchangeKeys(t *testing.T) {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 
+	// Handle the case where the key exchange returns an error
+	require.NoError(t, remote.UseError(mock.KeyExchangeRPC, codes.Internal, "key exchange error"))
+
 	// If signing key already exists, it should not be overwritten
 	key, err := p.ExchangeKeys(false)
 	require.NoError(t, err)
 	require.Equal(t, p.Info().SigningKey, key)
 
-	// TODO: test case where exchange keys returns an error
-	// TODO: review other cases we should test with code coverage
+	// Should return an error if key exchange is forced but the RPC returns an error
+	_, err = p.ExchangeKeys(true)
+	require.Error(t, err, "expected exchange keys to return an error")
+	require.Nil(t, p.SigningKey(), "expected signing key to be nil")
+
+	// Should return an error if the key exchange returns an unparseable key
+	remote.OnKeyExchange = func(context.Context, *api.SigningKey) (*api.SigningKey, error) {
+		return &api.SigningKey{
+			Data: []byte("not a key"),
+		}, nil
+	}
+	_, err = p.ExchangeKeys(true)
+	require.Error(t, err, "expected exchange keys with invalid key to return an error")
+
+	// Should return an error if the key exchange returns a key in the wrong format
+	remote.OnKeyExchange = func(context.Context, *api.SigningKey) (*api.SigningKey, error) {
+		var (
+			key  *ecdsa.PrivateKey
+			data []byte
+			err  error
+		)
+		if key, err = ecdsa.GenerateKey(elliptic.P224(), rand.Reader); err != nil {
+			return nil, err
+		}
+		if data, err = x509.MarshalPKIXPublicKey(&key.PublicKey); err != nil {
+			return nil, err
+		}
+		return &api.SigningKey{
+			Data: data,
+		}, nil
+	}
+	_, err = p.ExchangeKeys(true)
+	require.EqualError(t, err, fmt.Sprintf("unsupported public key type %T", &ecdsa.PublicKey{}))
+
+	// Load the certificate fixtures
+	certs, _, err := loadCertificates("testdata/server.pem")
+	require.NoError(t, err, "could not load certificate fixtures")
+	privateKey, err := certs.GetRSAKeys()
+	require.NoError(t, err, "could not extract rsa keys from fixtures")
+	publicKey := &privateKey.PublicKey
+	publicData, err := x509.MarshalPKIXPublicKey(publicKey)
+	require.NoError(t, err, "could not marshal public key from fixtures")
 
 	// Handle case where a key exchange is successful
 	remote.OnKeyExchange = func(context.Context, *api.SigningKey) (*api.SigningKey, error) {
-		certs, _, err := loadCertificates("testdata/server.pem")
-		if err != nil {
-			return nil, status.Error(codes.FailedPrecondition, err.Error())
-		}
-
 		rkey, err := keys.FromProvider(certs)
 		if err != nil {
 			return nil, status.Error(codes.FailedPrecondition, err.Error())
@@ -91,10 +131,9 @@ func TestExchangeKeys(t *testing.T) {
 	})
 
 	// Signing key should be overwritten
-	// TODO: please validate these checks are correctly checking what we expect
 	key = p.Info().SigningKey
-	require.NotEqual(t, signingKey.PublicKey, key)
+	require.Equal(t, publicKey, key)
 	data, err := x509.MarshalPKIXPublicKey(key)
 	require.NoError(t, err)
-	require.NotEmpty(t, data)
+	require.Equal(t, publicData, data)
 }
