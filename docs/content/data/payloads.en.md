@@ -3,7 +3,7 @@ title: Data Payloads
 date: 2022-06-08T14:54:48-04:00
 lastmod: 2022-06-08T14:54:48-04:00
 description: "Preparing and formatting data for payloads."
-weight: 22
+weight: 30
 ---
 
 A `Payload` contains information to be securely exchanged for Travel Rule compliance, including (1) identity details, (2) transaction information for both counterparties to uniquely identify the transaction on the chain, and (3) timestamps for use in regulatory
@@ -27,7 +27,7 @@ message Payload {
 
 The `identity` field in a TRISA `Payload` is a protobuf message intended to contain compliance identity information of the Originator and the Beneficiary. It is defined as an [`any`](https://developers.google.com/protocol-buffers/docs/proto3#any); this means that technically, it can be *any* message type. However, to encourage maximum compatibility between yourself and fellow TRISA members, we strongly recommend the use of [IVMS101](https://intervasp.org).
 
-For help marshaling and unmarshaling [IVMS101 identity payloads]({{< relref "ivms/" >}}), see the documentation about the [`ivms101` package in `trisa`](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101).
+For help marshaling and unmarshaling [IVMS101 identity payloads]({{< relref "data/ivms" >}}), see the documentation about the [`ivms101` package in `trisa`](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101).
 
 You can use the online [IVMS101 Validator](https://ivmsvalidator.com/) produced by [21 Analytics](https://www.21analytics.ch/) to ensure your message is properly structured IVMS101.
 

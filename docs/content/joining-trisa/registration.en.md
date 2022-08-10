@@ -6,6 +6,49 @@ description: "Registering a VASP with the Directory Service"
 weight: 20
 ---
 
+Before you can integrate the TRISA protocol into your VASP software, you must [register](https://vaspdirectory.net/certificate/registration) with the TRISA Global Directory Service (GDS).
+
+The TRISA Global Directory Service (GDS) provides public key and TRISA remote peer connection information for registered VASPs. For more detailed information about the directory, see the documentation on the [GDS]({{< ref "/gds" >}}).
+
+Once you have registered and been verified, you will receive Identity Certificates. The public key in these certificates will be made available to other VASPs via the GDS.
+
+When registering with the GDS, you will need to provide the `address:port` endpoint where your VASP implements the TRISA Network service. This address will be registered with the GDS and utilized by other VASPs when your VASP is identified as the beneficiary VASP.
+
+For integration purposes, when you [register](https://vaspdirectory.net/certificate/registration) with the GDS, you can opt for either MainNet or TestNet Certificates, or both. The TestNet instance is designed for [testing]({{< ref "/testing" >}}), and the registration process is streamlined in the TestNet to facilitate quick integration. The MainNet is design for production Travel Rule implementations. It is recommended to register for both MainNet and TestNet, specifying different endpoints to reduce confusion for your VASP counterparties.
+
+### Directory Service Registration
+
+To start your registration, visit [https://vaspdirectory.net/](https://vaspdirectory.net/certificate/registration). Note that you can use this website to enter your registration details on a field-by-field basis, or to upload a JSON document containing your registration details.
+
+One of the key pieces of information you'll need is your TRIXO Form. Below is an excerpt of some of the key fields in the TRIXO form, which provides information about transaction thresholds, currency types, and applicable regulators. Frequently, several people at an organization (e.g. legal, technical, administrative points-of-contact) need to collaborate to complete the needed information. To see the TRIXO form in full, see the [TRIXO documentation]({{< ref "/joining-trisa/trixo" >}}).
+
+```json
+
+ "trixo": {
+    "primary_national_jurisdiction": "USA",
+    "primary_regulator": "FinCEN",
+    "other_jurisdictions": [],
+    "financial_transfers_permitted": "no",
+    "has_required_regulatory_program": "yes",
+    "conducts_customer_kyc": true,
+    "kyc_threshold": "1.00",
+    "kyc_threshold_currency": "USD",
+    "must_comply_travel_rule": true,
+    "applicable_regulations": [
+      "FATF Recommendation 16"
+    ],
+    "compliance_threshold": "3000.00",
+    "compliance_threshold_currency": "USD",
+    "must_safeguard_pii": true,
+    "safeguards_pii": true
+  }
+```
+
+The final step of registration will be a [pkcs12 password]({{< ref "/joining-trisa/pkcs12" >}}), which you must keep to decrypt the Identity Certificates that will be sent via email.
+
+This registration will result in an email being sent to all the technical contacts specified through the webform or in the JSON file. The emails will guide you through the remainder of the registration process. Once you’ve completed the registration steps, TRISA administrators will receive your registration for review.
+
+Once the administrators have reviewed and approved the registration, you will receive [pkcs12 password]({{< ref "/joining-trisa/pkcs12" >}})-protected, compressed Identity Certificate via email and your VASP will be publicly visible in the GDS.
 
 ## Certificate Issuance
 

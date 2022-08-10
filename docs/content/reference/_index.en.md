@@ -1,9 +1,9 @@
 ---
 title: Reference
 date: 2021-06-14T15:59:09-05:00
-lastmod: 2021-06-14T15:59:09-05:00
+lastmod: 2022-08-10T16:34:21-04:00
 description: "TRISA Reference"
-weight: 200
+weight: 50
 ---
 
 ### Where to look for more information and assistance:

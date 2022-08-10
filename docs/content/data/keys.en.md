@@ -6,7 +6,7 @@ description: "Describing Key Handler Package"
 weight: 50
 ---
 
-The Key Handler Package provides interfaces and handlers for managing public/private key pairs used for sealing and unsealing secure envelopes (often referred to as _sealing_ or _signing_ keys). TRISA nodes must handle keys in a variety of formats, such as x.509 certificates on disk or marshaled data when sending keys in TRISA key exchanges. The key management package makes PKS simpler by standardizing how keys (both private and public keys) are managed, serialized, and stored.
+The Key Handler package provides interfaces and handlers for managing public/private key pairs used for sealing and unsealing secure envelopes (often referred to as _sealing_ or _signing_ keys). TRISA nodes must handle keys in a variety of formats, such as x.509 certificates on disk or marshaled data when sending keys in TRISA key exchanges. The key management package makes PKS simpler by standardizing how keys (both private and public keys) are managed, serialized, and stored.
 
 Godoc Package Reference: [github.com/trisacrypto/trisa/pkg/trisa/keys](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg/trisa/keys)
 

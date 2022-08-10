@@ -1,9 +1,9 @@
 ---
 title: FAQ
 date: 2021-06-14T15:59:09-05:00
-lastmod: 2022-06-08T12:34:54-04:00
+lastmod: 2022-08-10T16:34:06-04:00
 description: "Frequently asked questions"
-weight: 10
+weight: 20
 ---
 
 ## What does the "TRISA" acronym mean?
@@ -73,7 +73,7 @@ Secure Envelopes wrap the identity and blockchain transaction payloads, applying
 
 ![secure envelopes](/img/secure_envelopes.png).
 
-The [Secure Envelope documentation](https://trisa.dev/secure-envelopes/) discusses its implementation further.
+The [Secure Envelope documentation]({{< ref "/data/envelopes" >}}) discusses its implementation further.
 
 ## How does mTLS work? {##mtls}
 
@@ -89,7 +89,7 @@ Depending on your business details, specific fields may be required. For more in
 
 There is an [IVMS 101 Validator](https://ivmsvalidator.com/) which can be used to double check the formatting of an IVMS101 message to ensure it is correct.
 
-For help marshaling and unmarshaling [IVMS101 identity payloads]({{< relref "ivms/" >}}), see the documentation about the [`ivms101` package in `trisa`](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101).
+For help marshaling and unmarshaling [IVMS101 identity payloads]({{< relref "data/ivms" >}}), see the documentation about the [`ivms101` package in `trisa`](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101).
 
 ## How do I figure out where to connect to the counterparty? How do I get counterparty IVMS 101 info?
 
@@ -105,6 +105,6 @@ The use of gRPC also facilitates convenient encryption at rest to ensure that PI
 
 ## What's the difference between TestNet and MainNet?
 
-The [TestNet](https://trisa.dev/testnet/) is a sandbox environment that allows VASPs to test securely sharing the cryptocurrency transaction details required to meet the FATF Travel Rule requirements. The TestNet includes [“robot” VASPs](http://localhost:1313/testnet/rvasps/) that give users the ability to interact with the TestNet by simulating transactions to see how secure transactions are conducted. Once a VASP completes testing, the VASP can switch to MainNet, where live transactions take place.
+The [TestNet]({{< ref "/testing" >}})  is a sandbox environment that allows VASPs to test securely sharing the cryptocurrency transaction details required to meet the FATF Travel Rule requirements. The TestNet includes [“robot” VASPs]({{< ref "/testing/rvasps" >}})  that give users the ability to interact with the TestNet by simulating transactions to see how secure transactions are conducted. Once a VASP completes testing, the VASP can switch to MainNet, where live transactions take place.
 
 It’s important to note that the reason that there are two networks is because those networks are issued from different intermediate certificate authorities. A VASP that has been issued a TestNet certificate cannot connect to a node that is running on MainNet and vice versa. In other words, the MainNet certificate authority will not recognize TestNet certificates. When you [submit a request for TRISA certificates](https://vaspdirectory.net/certificate/registration), you may simultaneously request certificates for TestNet and MainNet.

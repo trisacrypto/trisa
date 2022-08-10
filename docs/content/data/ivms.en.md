@@ -3,7 +3,7 @@ title: Working with IVMS101
 date: 2022-06-29T11:25:52-04:00
 lastmod: 2022-06-29T11:25:52-04:00
 description: "Working with IVMS101 JSON and Protocol Buffers"
-weight: 30
+weight: 10
 ---
 
 IVMS101 (the interVASP Messaging Standard) is an internationally recognized standard that helps with language encodings, numeric identification systems, phonetic name pronunciations, and standardized country codes (ISO 3166). This page describes how to convert between JSON and protocol buffer formatting for IVMS101 records. For general information about IVMS, please visit [intervasp.org](https://intervasp.org/).

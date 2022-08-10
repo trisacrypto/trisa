@@ -1,9 +1,9 @@
 ---
-title: "Directory Service"
+title: "Global Directory Service"
 date: 2021-06-14T11:21:42-05:00
 lastmod: 2022-06-22T16:45:54-04:00
 description: "The Global TRISA Directory Service (GDS)"
-weight: 50
+weight: 25
 ---
 
 The TRISA organization hosts the TRISA Global Directory Service (GDS) on behalf of the TRISA network. The TRISA protocol specifies interactions with GDS. GDS facilitates peer-to-peer exchanges between TRISA members as follows:
@@ -26,7 +26,7 @@ This documentation describes the TRISA implementation of the directory service a
 
 ## Networks
 
-TRISA currently operates two directory services: a TestNet (trisatest.net) and the MainNet (vaspdirectory.net). The [TestNet]({{< ref "/testnet" >}}) is intended to facilitate development and integration and should not be used for actual compliance exchanges. The MainNet is separated from the TestNet with a completely different certificate authority, and certificates issued to TestNet nodes cannot be used to connect to MainNet nodes and vice-versa.
+TRISA currently operates two directory services: a TestNet (trisatest.net) and the MainNet (vaspdirectory.net). The [TestNet]({{< ref "/testing" >}}) is intended to facilitate development and integration and should not be used for actual compliance exchanges. The MainNet is separated from the TestNet with a completely different certificate authority, and certificates issued to TestNet nodes cannot be used to connect to MainNet nodes and vice-versa.
 
 Connect to the GDS and register for certificates with the following endpoints/urls:
 

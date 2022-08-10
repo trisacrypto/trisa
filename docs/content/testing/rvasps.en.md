@@ -155,7 +155,7 @@ The identity payload cannot be null and must be valid IVMS101, but may be partia
 
 Create a sealed envelope using either the directory service or direct key exchange to fetch the rVASP RSA public keys and use `AES256-GCM` and `HMAC-SHA256` as the envelope cryptography. Then, use the `TRISANetwork` service `Transfer` RPC to send the sealed envelope to the rVASP.
 
-See [Secure Envelopes]({{< ref "secure-envelopes" >}}) for more on how to compose a valid secure envelope for transfers and the [TRISA CLI]({{< ref "testnet/trisa-cli" >}}) for more on how to use a command line application for sending transfers.
+See [Secure Envelopes]({{< ref "data/envelopes" >}}) for more on how to compose a valid secure envelope for transfers and the [TRISA CLI]({{< ref "testing/trisa-cli" >}}) for more on how to use a command line application for sending transfers.
 
 #### Beneficiary Policies
 
