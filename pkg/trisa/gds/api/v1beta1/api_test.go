@@ -1,7 +1,6 @@
 package api_test
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -11,7 +10,7 @@ import (
 )
 
 func TestRegistrationForm(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/alice-trixo.json")
+	data, err := os.ReadFile("testdata/alice-trixo.json")
 	require.NoError(t, err)
 
 	form := &api.RegisterRequest{}
@@ -25,6 +24,6 @@ func TestRegistrationForm(t *testing.T) {
 		out, err := opts.Marshal(form)
 		require.NoError(t, err)
 
-		ioutil.WriteFile(path, out, 0644)
+		os.WriteFile(path, out, 0644)
 	}
 }

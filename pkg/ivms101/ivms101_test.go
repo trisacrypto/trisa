@@ -2,7 +2,7 @@ package ivms101_test
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/nsf/jsondiff"
@@ -15,7 +15,7 @@ import (
 //
 
 func TestPersonMarshaling(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/person_natural_person.json")
+	data, err := os.ReadFile("testdata/person_natural_person.json")
 	require.NoError(t, err, "could not load person with natural person json fixture")
 
 	person := &ivms101.Person{}
@@ -23,7 +23,7 @@ func TestPersonMarshaling(t *testing.T) {
 	require.Empty(t, person.GetLegalPerson(), "legal person returned from person with natural person fixture")
 	require.NotEmpty(t, person.GetNaturalPerson(), "no natural person returned from person with natural person fixture")
 
-	data, err = ioutil.ReadFile("testdata/person_legal_person.json")
+	data, err = os.ReadFile("testdata/person_legal_person.json")
 	require.NoError(t, err, "could not load person with legal person json fixture")
 
 	person = &ivms101.Person{}
@@ -31,7 +31,7 @@ func TestPersonMarshaling(t *testing.T) {
 	require.Empty(t, person.GetNaturalPerson(), "natural person returned from person with legal person fixture")
 	require.NotEmpty(t, person.GetLegalPerson(), "no legal person returned from person with legal person fixture")
 
-	data, err = ioutil.ReadFile("testdata/person_both_persons.json")
+	data, err = os.ReadFile("testdata/person_both_persons.json")
 	require.NoError(t, err, "could not load person with both persons json fixture")
 
 	person = &ivms101.Person{}
@@ -43,7 +43,7 @@ func TestPersonMarshaling(t *testing.T) {
 //
 
 func TestNaturalPersonMarshaling(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/natural_person.json")
+	data, err := os.ReadFile("testdata/natural_person.json")
 	require.NoError(t, err, "could not load natural person json fixture")
 
 	var person *ivms101.NaturalPerson
@@ -190,7 +190,7 @@ func TestAddressMarshaling(t *testing.T) {
 	require.Equal(t, addrLine, compatA, "marshalled json differs from original")
 
 	// Should be able to unmarshal a valid address from a JSON file
-	data, err := ioutil.ReadFile("testdata/address.json")
+	data, err := os.ReadFile("testdata/address.json")
 	require.NoError(t, err)
 	var addrB *ivms101.Address
 	require.NoError(t, json.Unmarshal(data, &addrB))
@@ -229,7 +229,7 @@ func TestDateAndPlaceOfBirthMarshaling(t *testing.T) {
 //
 
 func TestNationalIdentificationMarshaling(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/national_identification.json")
+	data, err := os.ReadFile("testdata/national_identification.json")
 	require.NoError(t, err, "could not load national identification json fixture")
 
 	var natId *ivms101.NationalIdentification
@@ -252,7 +252,7 @@ func TestNationalIdentificationMarshaling(t *testing.T) {
 //
 
 func TestLegalPersonMarshaling(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/legal_person.json")
+	data, err := os.ReadFile("testdata/legal_person.json")
 	require.NoError(t, err, "could not load legal person json fixture")
 
 	var person *ivms101.LegalPerson

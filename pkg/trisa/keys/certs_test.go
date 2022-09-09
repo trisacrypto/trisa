@@ -3,7 +3,7 @@ package keys_test
 import (
 	"crypto/rsa"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -151,7 +151,7 @@ func TestCertificateNoPrivateKey(t *testing.T) {
 }
 
 func TestGDSLookup(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/lookup.json")
+	data, err := os.ReadFile("testdata/lookup.json")
 	require.NoError(t, err, "could not load lookup reply fixture")
 
 	rep := &gds.LookupReply{}
