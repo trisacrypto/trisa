@@ -1,7 +1,7 @@
 /*
- The TRISA CLI client allows you to create and execute TRISA requests from the command
- line for development or testing purposes. For more information on how to use the CLI,
- run `trisa --help` or see the documenation at https://trisa.dev.
+The TRISA CLI client allows you to create and execute TRISA requests from the command
+line for development or testing purposes. For more information on how to use the CLI,
+run `trisa --help` or see the documenation at https://trisa.dev.
 */
 package main
 
@@ -13,7 +13,6 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -1006,7 +1005,7 @@ func loadPublicKeys(path string) (key *api.SigningKey, err error) {
 	key = new(api.SigningKey)
 
 	var data []byte
-	if data, err = ioutil.ReadFile(path); err != nil {
+	if data, err = os.ReadFile(path); err != nil {
 		return nil, fmt.Errorf("could not read key file: %s", err)
 	}
 
@@ -1076,7 +1075,7 @@ func loadSealingKey(path string) (key interface{}, err error) {
 
 func loadPrivateKey(path string) (key interface{}, err error) {
 	var data []byte
-	if data, err = ioutil.ReadFile(path); err != nil {
+	if data, err = os.ReadFile(path); err != nil {
 		return nil, fmt.Errorf("could not read key file: %s", err)
 	}
 
@@ -1127,7 +1126,7 @@ func dumpKeys(key *api.SigningKey, path string) (err error) {
 		return fmt.Errorf("unknown extension %q use .json or .pem", filepath.Ext(path))
 	}
 
-	if err = ioutil.WriteFile(path, data, 0644); err != nil {
+	if err = os.WriteFile(path, data, 0644); err != nil {
 		return fmt.Errorf("could not write keys to disk: %s", err)
 	}
 	fmt.Printf("saved keys to %s\n", path)
@@ -1141,7 +1140,7 @@ func loadIdentity(path string) (_ *anypb.Any, err error) {
 	}
 
 	var data []byte
-	if data, err = ioutil.ReadFile(path); err != nil {
+	if data, err = os.ReadFile(path); err != nil {
 		return nil, fmt.Errorf("could not read identity from %s", err)
 	}
 
@@ -1166,7 +1165,7 @@ func loadTransaction(path string) (_ *anypb.Any, err error) {
 	}
 
 	var data []byte
-	if data, err = ioutil.ReadFile(path); err != nil {
+	if data, err = os.ReadFile(path); err != nil {
 		return nil, fmt.Errorf("could not read transaction from %s", err)
 	}
 
@@ -1193,7 +1192,7 @@ func loadTransaction(path string) (_ *anypb.Any, err error) {
 
 func loadEnvelope(path string) (msg *api.SecureEnvelope, err error) {
 	var data []byte
-	if data, err = ioutil.ReadFile(path); err != nil {
+	if data, err = os.ReadFile(path); err != nil {
 		return nil, fmt.Errorf("could not read envelope file: %s", err)
 	}
 
@@ -1241,7 +1240,7 @@ func dumpProto(msg proto.Message, path string) (err error) {
 	default:
 		return fmt.Errorf("unknown extension %q use .json or .pb", filepath.Ext(path))
 	}
-	if err = ioutil.WriteFile(path, data, 0644); err != nil {
+	if err = os.WriteFile(path, data, 0644); err != nil {
 		return fmt.Errorf("could not write message to disk: %s", err)
 	}
 	fmt.Printf("message saved to %s\n", path)

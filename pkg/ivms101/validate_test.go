@@ -2,7 +2,7 @@ package ivms101_test
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -10,7 +10,7 @@ import (
 )
 
 func TestLegalPerson(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/legal_person.json")
+	data, err := os.ReadFile("testdata/legal_person.json")
 	require.NoError(t, err)
 
 	// Should be able to load a valid legal person from JSON data
@@ -166,7 +166,7 @@ func TestLegalPerson(t *testing.T) {
 }
 
 func TestNaturalPerson(t *testing.T) {
-	data, err := ioutil.ReadFile("testdata/natural_person.json")
+	data, err := os.ReadFile("testdata/natural_person.json")
 	require.NoError(t, err)
 
 	// Should be able to load a valid natural person from JSON data

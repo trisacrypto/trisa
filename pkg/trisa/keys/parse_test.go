@@ -11,7 +11,6 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -81,7 +80,7 @@ func TestParsePublicKeys(t *testing.T) {
 func TestParseCertificates(t *testing.T) {
 	// Loading a trust chain that has a private key attached should return only the
 	// public key of the leaf certificate.
-	data, err := ioutil.ReadFile("testdata/certs.pem")
+	data, err := os.ReadFile("testdata/certs.pem")
 	require.NoError(t, err, "could not read certs.pem fixture")
 
 	key, err := keys.ParseKeyExchangeData(data)

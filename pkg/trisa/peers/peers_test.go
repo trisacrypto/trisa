@@ -5,7 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -472,7 +472,7 @@ func loadGRPCFixture(path string, v proto.Message) (err error) {
 	}
 
 	var data []byte
-	if data, err = ioutil.ReadFile(path); err != nil {
+	if data, err = os.ReadFile(path); err != nil {
 		return status.Errorf(codes.FailedPrecondition, "could not read fixture: %s", err)
 	}
 

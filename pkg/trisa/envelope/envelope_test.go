@@ -6,7 +6,6 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"testing"
@@ -478,7 +477,7 @@ func loadFixture(path string, m proto.Message, check bool) (err error) {
 	}
 
 	var data []byte
-	if data, err = ioutil.ReadFile(path); err != nil {
+	if data, err = os.ReadFile(path); err != nil {
 		return err
 	}
 
@@ -590,7 +589,7 @@ func dumpFixture(path string, m proto.Message) (err error) {
 	if data, err = dumppb.Marshal(m); err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, data, 0644)
+	return os.WriteFile(path, data, 0644)
 }
 
 func dumpPrivateKey(path string, key *rsa.PrivateKey) (err error) {
@@ -604,12 +603,12 @@ func dumpPrivateKey(path string, key *rsa.PrivateKey) (err error) {
 		Bytes: data,
 	})
 
-	return ioutil.WriteFile(path, block, 0600)
+	return os.WriteFile(path, block, 0600)
 }
 
 func loadPrivateKey(path string) (key *rsa.PrivateKey, err error) {
 	var data []byte
-	if data, err = ioutil.ReadFile(path); err != nil {
+	if data, err = os.ReadFile(path); err != nil {
 		return nil, err
 	}
 

@@ -32,7 +32,6 @@ func TestConfig(t *testing.T) {
 	require.Len(t, cfg.Certificates, 1)
 	require.Equal(t, uint16(tls.VersionTLS12), cfg.MinVersion)
 	require.NotEmpty(t, cfg.CurvePreferences)
-	require.True(t, cfg.PreferServerCipherSuites)
 	require.NotEmpty(t, cfg.CipherSuites)
 	require.Equal(t, tls.RequireAndVerifyClientCert, cfg.ClientAuth)
 	require.NotNil(t, cfg.ClientCAs)

@@ -2,7 +2,7 @@ package models_test
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -139,7 +139,7 @@ func TestValidate(t *testing.T) {
 
 	// VASP entity must be ivms101 valid
 	checkValidateError(t, vasp)
-	data, err := ioutil.ReadFile(filepath.Join("..", "..", "..", "..", "ivms101", "testdata", "legal_person.json"))
+	data, err := os.ReadFile(filepath.Join("..", "..", "..", "..", "ivms101", "testdata", "legal_person.json"))
 	require.NoError(t, err)
 	entity := &ivms101.LegalPerson{}
 	require.NoError(t, json.Unmarshal(data, entity))
