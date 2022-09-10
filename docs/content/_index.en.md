@@ -1,7 +1,7 @@
 ---
 title: Home
 date: 2020-12-24T07:58:37-05:00
-lastmod: 2021-06-14T11:17:15-05:00
+lastmod: 2022-08-10T13:22:20-04:00
 description: "TRISA Developer Documentation"
 weight: 0
 ---
@@ -21,4 +21,4 @@ This site contains the developer documentation for the TRISA protocol and refere
 
 Please visit the [API Documentation](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg) for more information about the TRISA package.
 
-The v1 release of TRISA is under active development, more documentation is coming soon!
+*Note: Translations of this documentation are done periodically by human translators, and may become out-of-sync with the English text or reflect errors. If you notice an error, please open a [bug report](https://github.com/trisacrypto/trisa/issues/new) to notify us.*

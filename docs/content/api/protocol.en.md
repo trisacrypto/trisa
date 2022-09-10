@@ -1,7 +1,7 @@
 ---
 title: TRISA Protocol
 date: 2022-07-06T15:08:52-04:00
-lastmod: 2022-07-06T15:08:52-04:00
+lastmod: 2022-08-10T13:28:55-04:00
 description: "How the TRISA protocol works"
 weight: 5
 ---
@@ -68,7 +68,7 @@ For example, some VASPs have optimized blockchain transactions to group 50-200 p
 
 When a Beneficiary VASP receives Travel Rule transfer information from the Originating VASP through the TRISA protocol it may not always be able to respond immediately with any needed corrections or fill in for the missing/incorrect Beneficiary information provided. Thus the Beneficiary VASP should be able to respond back, at a later time, with the correct beneficiary information or provide errors if appropriate e.g., the beneficiary address is not owned by the Beneficiary VASP.
 
-The Beneficiary VASP will return a [control flow response](https://trisa.dev/data-payloads/#a-pending-message) to the transfer message to notify the Originating VASP that they will handle the compliance transfer in an asynchronous manner. The reply is also composed as a secure message with digitally signed timestamps for auditing purposes. Inside of the transaction payload, the Beneficiary VASP will provide additional information about when the Originating VASP can expect a response. The Originating VASP should delay any further action or communication until either the expected time frame expires or they receive a follow-on response from the Beneficiary VASP.
+The Beneficiary VASP will return a [control flow response]({{< relref "data/payloads#a-pending-message" >}}) to the transfer message to notify the Originating VASP that they will handle the compliance transfer in an asynchronous manner. The reply is also composed as a secure message with digitally signed timestamps for auditing purposes. Inside of the transaction payload, the Beneficiary VASP will provide additional information about when the Originating VASP can expect a response. The Originating VASP should delay any further action or communication until either the expected time frame expires or they receive a follow-on response from the Beneficiary VASP.
 
 ```proto
 message Pending {

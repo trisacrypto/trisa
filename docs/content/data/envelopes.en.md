@@ -3,7 +3,7 @@ title: Secure Envelopes
 date: 2022-03-03T15:36:09-06:00
 lastmod: 2022-03-03T15:36:09-06:00
 description: "Working with Secure Envelopes and cryptography in the TRISA protocol."
-weight: 21
+weight: 20
 ---
 
 ![Secure Envelopes](/img/secure_envelopes.png)

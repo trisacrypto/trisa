@@ -1,14 +1,14 @@
 ---
 title: License
 date: 2021-06-14T11:34:06-05:00
-lastmod: 2021-06-14T11:34:06-05:00
+lastmod: 2022-08-10T16:33:39-04:00
 description: "Open Source License"
-weight: 100
+weight: 50
 ---
 
 The MIT License
 
-Copyright (c) 2021 TRISA https://trisa.io
+Copyright (c) 2022 TRISA https://trisa.io
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

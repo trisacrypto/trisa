@@ -1,14 +1,14 @@
 ---
 title: TRISA Errors and Rejections
 date: 2022-07-01T16:45:58-04:00
-lastmod: 2022-07-01T16:45:58-04:00
-description: "Describing TRISA Errors and Rejections "
-weight: 40
+lastmod: 2022-08-10T16:16:31-04:00
+description: "Describing TRISA Errors and Rejections"
+weight: 15
 ---
 
 Error codes are standardized in the TRISA network to prevent confusion and allow easy identification of rejections or other problems to expedite the repair of the connection or information exchange. Then, the human-readable message stating the reason for the error should be loggable and actionable. Both standardized and unique/detail messages are acceptable. The message that caused the error should be retried with a fix, otherwise the rejection is permanent, and the request should not be retried. The payload of the additional data or reasons for the rejection, e.g., a parent error, a diff, a location for redirect, etc., should be described by the error code.
 
-See [error protocol buffers](https://github.com/trisacrypto/trisa/blob/main/proto/trisa/api/v1beta1/errors.proto) for more details.
+See the [error protocol buffers](https://github.com/trisacrypto/trisa/blob/main/proto/trisa/api/v1beta1/errors.proto) for more details.
 
 ## TRISA Errors Codes, Messages, and Descriptions
 

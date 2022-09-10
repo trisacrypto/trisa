@@ -1,75 +1,48 @@
 ---
 title: Getting Started
 date: 2021-04-23T01:35:35-04:00
-lastmod: 2022-06-08T14:51:13-04:00
-description: "Describes how to integrate the TRISA protocol in the TestNet"
-weight: 20
+lastmod: 2022-08-10T13:22:02-04:00
+description: "Getting Started with TRISA"
+weight: 5
 ---
 
+Welcome! If you're new to TRISA, this guide will provide a path to help get you started.
+
+- If you are a **hands-on developer**, you may wish to skip to the section for [**technical implementers**]({{< relref "getting-started#dev" >}}).
+- If you are an **administrator or technical leader** at your organization, you may wish to skip to the [**administrative guide**]({{< relref "getting-started#admin" >}}).
 
 ## Getting Started with TRISA
 
 There are three key steps to getting started integrating TRISA into your organization's Travel Rule solution:
 
-1. Register with a TRISA Directory Service
-2. Implement the TRISA Network protocol
-3. Implement the TRISA Health protocol
+1. *Register with the TRISA Directory Service*: Before you can integrate the TRISA protocol into your VASP software, you must [register](https://vaspdirectory.net/certificate/registration) with the TRISA Global Directory Service (GDS). This process is typically done by an administrator or technical leader at the organization and takes 1-2 business days. For more complete details, visit the documentation on [registration]({{< ref "/joining-trisa/registration" >}}).
+2. *Implement the TRISA Protocol using TestNet*: To integrate TRISA, you will need to implement a TRISA node that can act as both a server and a client in TRISA exchanges. This process will require a team of developers and generally takes a few months. The TRISA [TestNet]({{< ref "/testing" >}}) is designed to support you with the development and testing of your TRISA node. It will enable you to perform live tests and validate transactions that share sensitive information safely and securely. Check out the [implementation overview]({{< ref "/getting-started#overview" >}}) for more details about how to get started.
+3. *Implement your MainNet TRISA Node*: Once you have fully tested your implementation using the TestNet and RobotVASPs, you can quickly switch to the production TRISA Network by installing MainNet certificates to your TRISA node. Note that this may require registering for MainNet certificates if those were not requested in step 3.
 
-This page will walk through each of these three steps, providing links to other resources as necessary.
+This page will provide resources for getting started for both VASP administrators as well as technical implementation teams.
 
-## VASP Directory Service Registration
+## For Administrators {##admin}
 
-Before you can integrate the TRISA protocol into your VASP software, you must [register](https://vaspdirectory.net/certificate/registration) with the TRISA Global Directory Service (GDS).
+If you're an administrator or technical leader whose organization is using (or planning to adopt) the TRISA protocol, this section is for you!
 
-### Registration Overview
+These are the key portions of the documentation you will need to get started:
+- [Joining TRISA]({{< ref "/joining-trisa" >}})
+- [Registering with the Global Directory Service]({{< ref "/joining-trisa/registration" >}})
+- [TRISA FAQ]({{< ref "/reference/faq" >}})
+- [TRISA Glossary]({{< ref "/reference/glossary" >}})
+- [External links and resources for TRISA]({{< ref "/reference" >}})
 
-The TRISA Global Directory Service (GDS) provides public key and TRISA remote peer connection information for registered VASPs. For more detailed information about the directory, see the documentation on the [GDS]({{< ref "/gds" >}}).
-
-Once you have registered with the GDS and been verified, you will receive Identity Certificates. The public key in these certificates will be made available to other VASPs via the GDS.
-
-When registering with the GDS, you will need to provide the `address:port` endpoint where your VASP implements the TRISA Network service. This address will be registered with the GDS and utilized by other VASPs when your VASP is identified as the beneficiary VASP.
-
-For integration purposes, when you [register](https://vaspdirectory.net/certificate/registration) with the GDS, you can opt for either MainNet or TestNet Certificates, or both. The TestNet instance is designed for testing, and the registration process is streamlined in the TestNet to facilitate quick integration. The MainNet is design for production Travel Rule implementations. It is recommended to register for both MainNet and TestNet, specifying different endpoints to reduce confusion for your VASP counterparties.
-
-For more complete details, visit the documentation on [registration]({{< ref "/joining-trisa/registration" >}}).
-
-### Directory Service Registration
-
-To start your registration, visit [https://vaspdirectory.net/](https://vaspdirectory.net/certificate/registration). Note that you can use this website to enter your registration details on a field-by-field basis, or to upload a JSON document containing your registration details.
-
-One of the key pieces of information you'll need is your TRIXO Form. Below is an excerpt of some of the key fields in the TRIXO form, which provides information about transaction thresholds, currency types, and applicable regulators. Frequently, several people at an organization (e.g. legal, technical, administrative points-of-contact) need to collaborate to complete the needed information. To see the TRIXO form in full, see the [TRIXO documentation]({{< ref "/joining-trisa/trixo" >}}).
-
-```json
-
- "trixo": {
-    "primary_national_jurisdiction": "USA",
-    "primary_regulator": "FinCEN",
-    "other_jurisdictions": [],
-    "financial_transfers_permitted": "no",
-    "has_required_regulatory_program": "yes",
-    "conducts_customer_kyc": true,
-    "kyc_threshold": "1.00",
-    "kyc_threshold_currency": "USD",
-    "must_comply_travel_rule": true,
-    "applicable_regulations": [
-      "FATF Recommendation 16"
-    ],
-    "compliance_threshold": "3000.00",
-    "compliance_threshold_currency": "USD",
-    "must_safeguard_pii": true,
-    "safeguards_pii": true
-  }
-```
+Integrating TRISA will require a team of engineers capable of implementing the TRISA protocol. When considering setting up your own server to host your own TRISA node, you must consider items necessary that may incur significant costs and resources, such as the server itself, long-term data storage solution, and developer time to configure and test. If your organization does not have access to a technical team or resources, you may instead choose to integrate with a 3rd-party TRISA solution. A list of some of the commercial TRISA solutions is available in [this guide](https://trisa.io/regulators-guide/).
 
 
-The final step of registration will be a [pkcs12 password]({{< ref "/joining-trisa/pkcs12" >}}), which you must keep to decrypt the Identity Certificates that will be sent via email.
+## For Technical Implementers {##dev}
 
-This registration will result in an email being sent to all the technical contacts specified through the webform or in the JSON file. The emails will guide you through the remainder of the registration process. Once you’ve completed the registration steps, TRISA administrators will receive your registration for review.
+If you're a developer whose organization is using (or planning to adopt) the TRISA protocol, this section is for you!
 
-Once the administrators have reviewed and approved the registration, you will receive [pkcs12 password]({{< ref "/joining-trisa/pkcs12" >}})-protected, compressed Identity Certificate via email and your VASP will be publicly visible in the GDS.
-
-
-## Implementing the TRISA P2P Protocol
+These are the key portions of the documentation you will need to get started:
+- [TRISA Protocol and API]({{< ref "/api" >}})
+- [Working with TRISA Data]({{< ref "/data" >}})
+- [Testing and Deployment]({{< ref "/testing" >}})
 
 ### Prerequisites
 
@@ -81,7 +54,7 @@ To begin setup, you’ll need the following:
 *   The host name of the TRISA directory service
 *   Ability to bind to the `address:port` that is associated with your VASP in the TRISA directory service.
 
-### Integration Overview
+### Integration Overview {##overview}
 
 Integrating VASPs must run their own implementation of the protocol. Integrators are expected to integrate incoming transfer requests and key exchanges and may optionally also integrate outgoing transfer requests and key exchanges.
 
@@ -99,7 +72,7 @@ If a language beside Go is required, client libraries may be generated from the 
 
 ### Integration Notes
 
-The TRISA Network protocol defines how data is transferred between participating VASPs. The recommended format for data transferred for identifying information is the [IVMS101 data format]({{< relref "ivms/" >}}). It is the responsibility of the implementing VASP to ensure the identifying data sent/received satisfies the FATF Travel Rule.
+The TRISA Network protocol defines how data is transferred between participating VASPs. The recommended format for data transferred for identifying information is the [IVMS101 data format]({{< relref "data/ivms" >}}). It is the responsibility of the implementing VASP to ensure the identifying data sent/received satisfies the FATF Travel Rule.
 
 The result of a successful TRISA transaction results in a key and encrypted data that satisfies the FATF Travel Rule. TRISA does not define how this data should be stored once obtained. It is the responsibility of the implementing VASP to handle the secure storage of the resulting data for the transaction.
 
@@ -107,6 +80,6 @@ Some other considerations you will need to make to be prepared to fully integrat
 
 1. How will your TRISA endpoint integrate with your existing backend systems?
 2. How will you handle key management (e.g. your own private keys as well as the public keys of your counterparties)?
-3. Are you prepared to store [envelopes]({{< ref "/secure-envelopes" >}}) securely and in compliance with privacy regulations once you have received them from your counterparties?
+3. Are you prepared to store [envelopes]({{< ref "/data/envelopes" >}}) securely and in compliance with privacy regulations once you have received them from your counterparties?
 
 For more considerations, see our [Best Practices]({{< ref "/reference/best-practices" >}}) documentation.

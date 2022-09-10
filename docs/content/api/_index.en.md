@@ -1,18 +1,16 @@
 ---
-title: Contributing
-date: 2021-06-14T11:34:06-05:00
-lastmod: 2022-02-05T15:00:58-05:00
-description: "Contributing to the Open Source Project"
-weight: 110
+title: TRISA Protocol and API
+date: 2022-07-06T15:08:52-04:00
+lastmod: 2022-07-06T15:08:52-04:00
+description: "Navigating the Open Source TRISA Code"
+weight: 10
 ---
 
-TRISA is an open source project and welcomes contributions!
+This section of the documentation describes the TRISA Protocol and API.
 
-If you're a developer whose organization is using (or planning to adopt) the TRISA protocol, this section is for you!
+###  Navigating the Open Source TRISA Code
 
-## Navigating the Repository
-
-This repository contains a gRPC implementation of the TRISA protocol as described by the [white paper](https://trisa.io/trisa-whitepaper/), which leverages [protocol buffers](https://grpc.io/) and Golang.
+The [`trisa`](https://github.com/trisacrypto/trisa) repository contains a gRPC implementation of the TRISA protocol as described by the [white paper](https://trisa.io/trisa-whitepaper/), which leverages [protocol buffers](https://grpc.io/) and Golang.
 
 The `proto` folder contains the core RPC definitions, including:
  - the interVASP Messaging Standard (IVMS) message definitions, which serve as the basis for how two VASP peers should mutually describe entities involved in cryptographic transfers, including names, locations, and government identifiers. This is the spec that will allow originators to identify themselves to beneficiaries and to request information from those beneficiaries to meet the legal requirements of their regulators.
@@ -27,10 +25,7 @@ The `pkg` folder contains the reference implementation code, including compiled 
 
 [^1]: Note that these compiled files are compiled for Golang; but this is certainly not the only option. Those interested in building implementation code in a different language should look to the `lib` folder, which currently contains placeholder folders but is intended to showcase such other implementations (including compiled protocol buffer code for these other languages).
 
-## The Global Directory Service
+Another integral part of the TRISA protocol is the [Global Directory Service]({{< ref "/gds" >}}), which serves as a look-up tool for TRISA members to identify peers with which they wish to exchange information. For RPC definitions and implementation code related to the Global Directory Service, visit the companion [directory repository](https://github.com/trisacrypto/directory).
 
-Another integral part of the TRISA protocol is the Global Directory Service, which serves as a look-up tool for TRISA members to identify peers with which they wish to exchange information. For RPC definitions and implementation code related to the Global Directory Service, visit the companion [directory repository](https://github.com/trisacrypto/directory). To learn more about how to become a member of the directory, visit [vaspdirectory.net](https://vaspdirectory.net/).
 
-## Translations
 
-Translations of the documentation on trisa.dev are done periodically by human translators, and may become out-of-sync with the English text or reflect errors. If you notice an error, please open a [bug report](https://github.com/trisacrypto/trisa/issues/new) to notify us.

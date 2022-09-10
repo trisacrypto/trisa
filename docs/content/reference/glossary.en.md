@@ -1,9 +1,9 @@
 ---
 title: Glossary
 date: 2021-06-14T15:59:09-05:00
-lastmod: 2022-06-06T10:51:44-05:00
+lastmod: 2022-08-10T16:33:59-04:00
 description: "TRISA Glossary and Terminology"
-weight: 20
+weight: 30
 ---
 
 ## General Terminology
