@@ -3,7 +3,7 @@ package ivms101_test
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/nsf/jsondiff"
@@ -14,7 +14,7 @@ import (
 )
 
 func TestIdentityPayloadSerialization(t *testing.T) {
-	in, err := ioutil.ReadFile("testdata/identity_payload.json")
+	in, err := os.ReadFile("testdata/identity_payload.json")
 	require.NoError(t, err, "unable to read identity payload JSON fixture")
 
 	// Unmarshal IVMS101 Identity Payload
@@ -37,7 +37,7 @@ func TestIdentityPayloadSerializationFromPB(t *testing.T) {
 	// marshals and unmarshals the data as an inverse to TestIdentityPayloadSerialization
 	// NOTE: we could use a raw protocol buffer here, but protojson makes it easier to
 	// read and manage the JSON fixture for the future.
-	pbdata, err := ioutil.ReadFile("testdata/identity_payload.pb.json")
+	pbdata, err := os.ReadFile("testdata/identity_payload.pb.json")
 	require.NoError(t, err, "unable to read identity payload PB JSON fixture")
 
 	jsonpb := protojson.UnmarshalOptions{

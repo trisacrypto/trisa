@@ -3,7 +3,6 @@ package trust_test
 import (
 	"archive/zip"
 	"bytes"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -71,7 +70,7 @@ func TestSerializer(t *testing.T) {
 	}
 
 	// Create temporary file for reading and writing
-	f, err := ioutil.TempFile("", "110831*.gz")
+	f, err := os.CreateTemp("", "110831*.gz")
 	require.NoError(t, err)
 	path := f.Name()
 	f.Close()

@@ -6,7 +6,6 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -122,7 +121,7 @@ func (s *Serializer) Read(r io.Reader) (_ *Provider, err error) {
 		}
 		fallthrough
 	case CompressionNone, CompressionZIP:
-		if data, err = ioutil.ReadAll(r); err != nil {
+		if data, err = io.ReadAll(r); err != nil {
 			return nil, err
 		}
 	default:

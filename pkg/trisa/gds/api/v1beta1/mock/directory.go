@@ -3,7 +3,7 @@ package mock
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"sync"
 
 	"github.com/trisacrypto/trisa/pkg/bufconn"
@@ -71,7 +71,7 @@ func (s *GDS) Reset() {
 // the protocol buffer response to the specified RPC, simplifying handler mocking.
 func (s *GDS) UseFixture(rpc, path string) (err error) {
 	var data []byte
-	if data, err = ioutil.ReadFile(path); err != nil {
+	if data, err = os.ReadFile(path); err != nil {
 		return fmt.Errorf("could not read fixture: %v", err)
 	}
 
