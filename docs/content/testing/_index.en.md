@@ -26,7 +26,7 @@ The TestNet also provides a [command line utility]({{< relref "testing/trisa-cli
 
 The following steps are required to join the TestNet:
 
-1. [Register](https://vaspdirectory.net/certificate/registration) with the GDS to create your TRISA Account with your VASP email address, where you can opt-in for TestNet Certificates. During registration, you can add collaborators within your organization.
+1. [Register](https://vaspdirectory.net/guide) with the GDS to create your TRISA Account with your VASP email address, where you can opt-in for TestNet Certificates. During registration, you can add collaborators within your organization.
 
 2. Complete the VASP Verification form and due diligence process. Once approved, you will gain access to the TestNet.
 

@@ -6,7 +6,7 @@ description: "Registering a VASP with the Directory Service"
 weight: 20
 ---
 
-Before you can integrate the TRISA protocol into your VASP software, you must [register](https://vaspdirectory.net/certificate/registration) with the TRISA Global Directory Service (GDS).
+Before you can integrate the TRISA protocol into your VASP software, you must [register](https://vaspdirectory.net/guide) with the TRISA Global Directory Service (GDS).
 
 The TRISA Global Directory Service (GDS) provides public key and TRISA remote peer connection information for registered VASPs. For more detailed information about the directory, see the documentation on the [GDS]({{< ref "/gds" >}}).
 
@@ -14,11 +14,11 @@ Once you have registered and been verified, you will receive Identity Certificat
 
 When registering with the GDS, you will need to provide the `address:port` endpoint where your VASP implements the TRISA Network service. This address will be registered with the GDS and utilized by other VASPs when your VASP is identified as the beneficiary VASP.
 
-For integration purposes, when you [register](https://vaspdirectory.net/certificate/registration) with the GDS, you can opt for either MainNet or TestNet Certificates, or both. The TestNet instance is designed for [testing]({{< ref "/testing" >}}), and the registration process is streamlined in the TestNet to facilitate quick integration. The MainNet is design for production Travel Rule implementations. It is recommended to register for both MainNet and TestNet, specifying different endpoints to reduce confusion for your VASP counterparties.
+For integration purposes, when you [register](https://vaspdirectory.net/guide) with the GDS, you can opt for either MainNet or TestNet Certificates, or both. The TestNet instance is designed for [testing]({{< ref "/testing" >}}), and the registration process is streamlined in the TestNet to facilitate quick integration. The MainNet is design for production Travel Rule implementations. It is recommended to register for both MainNet and TestNet, specifying different endpoints to reduce confusion for your VASP counterparties.
 
 ### Directory Service Registration
 
-To start your registration, visit [https://vaspdirectory.net/](https://vaspdirectory.net/certificate/registration). Note that you can use this website to enter your registration details on a field-by-field basis, or to upload a JSON document containing your registration details.
+To start your registration, visit [https://vaspdirectory.net/](https://vaspdirectory.net/guide). You will first need to create an account, and then log in using that account to start the registration process. Note that you can use this website to enter your registration details on a field-by-field basis, or to upload a JSON document containing your registration details.
 
 One of the key pieces of information you'll need is your TRIXO Form. Below is an excerpt of some of the key fields in the TRIXO form, which provides information about transaction thresholds, currency types, and applicable regulators. Frequently, several people at an organization (e.g. legal, technical, administrative points-of-contact) need to collaborate to complete the needed information. To see the TRIXO form in full, see the [TRIXO documentation]({{< ref "/joining-trisa/trixo" >}}).
 
