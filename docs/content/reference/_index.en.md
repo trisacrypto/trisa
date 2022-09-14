@@ -10,7 +10,7 @@ weight: 50
 
 * Submit your registration to join the TRISA Network: [TRISA Global Directory Service](https://vaspdirectory.net)
 
-* Complete the certificate registration form: [Certificate Registration](https://vaspdirectory.net/certificate/registration)
+* Create an account and complete the certificate registration form: [Certificate Registration](https://vaspdirectory.net/guide)
 
 * Connect with other VASPs, regulators, and engineers working on Travel Rule compliance: [TRISA Slack](https://trisa-workspace.slack.com)
 
