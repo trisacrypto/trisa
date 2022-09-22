@@ -146,38 +146,6 @@ message MemberDetails {
 }
 ```
 
-## Getting TRIXO and IVMS101 `LegalPerson` Details
-
-The `Details` RPC returns a detailed record for the requested VASP, including the `VASPMember` details described earlier in this page, as well as the TRIXO form and IVMS101 record for the VASP. The RPC expects as input a `DetailsRequest` and returns a `MemberDetails` message.
-
-### `DetailsRequest`
-
-A `DetailsRequest` allows the caller to specify the VASP member to retrieve details for from the Global Directory Service (GDS). The `member_id` is expected to be the VASP's TRISA member ID, a unique identifier to the GDS.
-
-```proto
-message DetailsRequest {
-    string member_id = 1;
-}
-```
-
-### `MemberDetails`
-
-A `MemberDetails` message provides details about the requested VASP member, which includes not only their high level `VASPMember` summary, but also the IVMS101 legal person record and responses to the TRIXO questionnaire (both of which are a required component of all TRISA certificate requests).
-
-
-```proto
-message MemberDetails {
-    // Summary information about the VASP member
-    VASPMember member_summary = 1;
-
-    // The IVMS101 legal person identifying the VASP member
-    ivms101.LegalPerson legal_person = 2;
-
-    // The TRIXO questionnaire used to register the VASP
-    trisa.gds.models.v1beta1.TRIXOQuestionnaire trixo = 3;
-}
-```
-
 ## Connecting with mTLS
 
 To use the `TRISAMembers` service, you must authenticate with [mTLS](https://grpc.io/docs/guides/auth/) using the TRISA identity certificates you were granted during registration.
