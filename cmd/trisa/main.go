@@ -23,6 +23,7 @@ import (
 	"github.com/trisacrypto/trisa/pkg"
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	apierr "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/errors"
 	generic "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1"
 	env "github.com/trisacrypto/trisa/pkg/trisa/envelope"
 	gds "github.com/trisacrypto/trisa/pkg/trisa/gds/api/v1beta1"
@@ -566,7 +567,7 @@ func open(c *cli.Context) (err error) {
 
 	// Extract the error if requested - no cryptography required
 	if c.Bool("error") {
-		if msg.Error == nil || msg.Error.IsZero() {
+		if msg.Error == nil || apierr.IsZero(msg.Error) {
 			return cli.Exit("there is no error on the secure envelope", 1)
 		}
 
@@ -698,7 +699,7 @@ func transfer(c *cli.Context) (err error) {
 	}
 
 	// Is the envelope sealed?
-	if !req.Sealed && (req.Error == nil || req.Error.IsZero()) {
+	if !req.Sealed && (req.Error == nil || apierr.IsZero(req.Error)) {
 		return cli.Exit("envelope has not been sealed", 1)
 	}
 

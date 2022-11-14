@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	apierr "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/errors"
 	generic "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trisa/envelope"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -325,7 +326,7 @@ func TestEnvelopeAccessors(t *testing.T) {
 	// Create a secure envelope with an error
 	in := &api.SecureEnvelope{
 		Id:        uuid.NewString(),
-		Error:     &api.Error{Code: api.ComplianceCheckFail, Message: "afraid of the dark"},
+		Error:     &api.Error{Code: apierr.ComplianceCheckFail, Message: "afraid of the dark"},
 		Timestamp: ats.Format(time.RFC3339Nano),
 	}
 
@@ -355,12 +356,12 @@ func TestEnvelopeAccessors(t *testing.T) {
 	// Test parsing empty string timestamp
 	in.Timestamp = ""
 	_, err = env.Timestamp()
-	require.EqualError(t, err, "trisa rejection [BAD_REQUEST]: missing ordering timestamp on secure envelope")
+	require.ErrorIs(t, err, envelope.ErrNoOrderingTimesamp)
 
 	// Test parsing a bad timestamp string
 	in.Timestamp = "2022-15-45T38:32:12Z"
 	_, err = env.Timestamp()
-	require.EqualError(t, err, "trisa rejection [BAD_REQUEST]: could not parse ordering timestamp on secure envelope as RFC3339 timestamp")
+	require.ErrorIs(t, err, envelope.ErrInvalidOrderingTimestamp)
 
 	// Create an envelope with a payload
 	payload, err = loadPayloadFixture("testdata/payload.json")
@@ -393,7 +394,7 @@ func TestCheck(t *testing.T) {
 
 	terr, iserr := envelope.Check(emsg)
 	require.True(t, iserr, "expected error envelope to return iserr true")
-	require.Equal(t, api.ComplianceCheckFail, terr.Code)
+	require.Equal(t, apierr.ComplianceCheckFail, terr.Code)
 	require.Equal(t, "specified account has been frozen temporarily", terr.Message)
 	require.False(t, terr.Retry)
 

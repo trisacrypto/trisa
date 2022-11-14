@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	protocol "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	apierr "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/errors"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto/aesgcm"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto/rsaoeap"
@@ -42,8 +43,9 @@ func New(id string, payload *protocol.Payload, cipher crypto.Crypto) *Envelope {
 // information stored in the envelope. It returns a data structure with discovered
 // cipher and decrypted Payload for access. On error returns *protocol.Error so that
 // the error can be directly returned to the client.
-func Open(in *protocol.SecureEnvelope, key interface{}) (_ *Envelope, err error) {
+func Open(in *protocol.SecureEnvelope, key interface{}) (*Envelope, *protocol.Error) {
 	var (
+		err           error
 		asym          crypto.Cipher
 		encryptionKey []byte
 		hmacSecret    []byte
@@ -51,16 +53,16 @@ func Open(in *protocol.SecureEnvelope, key interface{}) (_ *Envelope, err error)
 	)
 
 	if in == nil {
-		return nil, protocol.Errorf(protocol.BadRequest, "missing secure envelope")
+		return nil, apierr.Errorf(apierr.BadRequest, "missing secure envelope")
 	}
 
 	// Check the algorithms to make sure they're supported
 	// TODO: allow more algorithms than just AES256-GCM and HMAC-SHA256
 	if in.EncryptionAlgorithm != "AES256-GCM" {
-		return nil, protocol.Errorf(protocol.UnhandledAlgorithm, "%s encryption unsupported", in.EncryptionAlgorithm)
+		return nil, apierr.Errorf(apierr.UnhandledAlgorithm, "%s encryption unsupported", in.EncryptionAlgorithm)
 	}
 	if in.HmacAlgorithm != "HMAC-SHA256" {
-		return nil, protocol.Errorf(protocol.UnhandledAlgorithm, "%s hmac unsupported", in.HmacAlgorithm)
+		return nil, apierr.Errorf(apierr.UnhandledAlgorithm, "%s hmac unsupported", in.HmacAlgorithm)
 	}
 
 	// Create the asymmetric cipher with the private key to decrypt the payload key.
@@ -68,39 +70,39 @@ func Open(in *protocol.SecureEnvelope, key interface{}) (_ *Envelope, err error)
 	switch t := key.(type) {
 	case *rsa.PrivateKey:
 		if asym, err = rsaoeap.New(t); err != nil {
-			return nil, protocol.Errorf(protocol.InternalError, "could not create RSA cipher for asymmetric decryption: %s", err)
+			return nil, apierr.Errorf(apierr.InternalError, "could not create RSA cipher for asymmetric decryption: %s", err)
 		}
 	default:
-		return nil, protocol.Errorf(protocol.UnhandledAlgorithm, "could not use %T for asymetric decryption", t)
+		return nil, apierr.Errorf(apierr.UnhandledAlgorithm, "could not use %T for asymetric decryption", t)
 	}
 
 	// Decrypt the payload encryption key and hmac secret.
 	if encryptionKey, err = asym.Decrypt(in.EncryptionKey); err != nil {
-		return nil, protocol.Errorf(protocol.InvalidKey, "encryption key signed incorrectly: %s", err).WithRetry()
+		return nil, apierr.WithRetry(apierr.Errorf(apierr.InvalidKey, "encryption key signed incorrectly: %s", err))
 	}
 	if hmacSecret, err = asym.Decrypt(in.HmacSecret); err != nil {
-		return nil, protocol.Errorf(protocol.InvalidKey, "hmac secret signed incorrectly: %s", err).WithRetry()
+		return nil, apierr.WithRetry(apierr.Errorf(apierr.InvalidKey, "hmac secret signed incorrectly: %s", err))
 	}
 
 	// Create the envelope with the AES-GCM Cipher
 	// TODO: allow multiple Cipher/Signer types
 	env := &Envelope{ID: in.Id, Payload: &protocol.Payload{}}
 	if env.Cipher, err = aesgcm.New(encryptionKey, hmacSecret); err != nil {
-		return nil, protocol.Errorf(protocol.InternalError, "could not create AES-GCM cipher for symmetric decryption: %s", err)
+		return nil, apierr.Errorf(apierr.InternalError, "could not create AES-GCM cipher for symmetric decryption: %s", err)
 	}
 
 	// Verify the signature and decrypt the payload
 	if err = env.Cipher.Verify(in.Payload, in.Hmac); err != nil {
-		return nil, protocol.Errorf(protocol.InvalidSignature, "could not verify HMAC signature: %s", err)
+		return nil, apierr.Errorf(apierr.InvalidSignature, "could not verify HMAC signature: %s", err)
 	}
 
 	if payloadData, err = env.Cipher.Decrypt(in.Payload); err != nil {
-		return nil, protocol.Errorf(protocol.InvalidKey, "could not decrypt payload with key: %s", err)
+		return nil, apierr.Errorf(apierr.InvalidKey, "could not decrypt payload with key: %s", err)
 	}
 
 	// Parse the payload
 	if err = proto.Unmarshal(payloadData, env.Payload); err != nil {
-		return nil, protocol.Errorf(protocol.EnvelopeDecodeFail, "could not unmarshal payload from decrypted data: %s", err)
+		return nil, apierr.Errorf(apierr.EnvelopeDecodeFail, "could not unmarshal payload from decrypted data: %s", err)
 	}
 	return env, nil
 }
@@ -109,8 +111,9 @@ func Open(in *protocol.SecureEnvelope, key interface{}) (_ *Envelope, err error)
 // the internal Cipher to encrypt the Payload then encrypts the keys in the Cipher with
 // the public key. On error returns *protocol.Error so that the error can be directly
 // returned to the client.
-func (e *Envelope) Seal(key interface{}) (out *protocol.SecureEnvelope, err error) {
+func (e *Envelope) Seal(key interface{}) (out *protocol.SecureEnvelope, _ *protocol.Error) {
 	var (
+		err         error
 		asym        crypto.Cipher
 		payloadData []byte
 	)
@@ -120,14 +123,14 @@ func (e *Envelope) Seal(key interface{}) (out *protocol.SecureEnvelope, err erro
 	switch t := key.(type) {
 	case *rsa.PublicKey:
 		if asym, err = rsaoeap.New(t); err != nil {
-			return nil, protocol.Errorf(protocol.InternalError, "could not create RSA cipher for asymmetric encryption: %s", err)
+			return nil, apierr.Errorf(apierr.InternalError, "could not create RSA cipher for asymmetric encryption: %s", err)
 		}
 	default:
-		return nil, protocol.Errorf(protocol.UnhandledAlgorithm, "could not use %T for asymmetric encryption", t)
+		return nil, apierr.Errorf(apierr.UnhandledAlgorithm, "could not use %T for asymmetric encryption", t)
 	}
 
 	if payloadData, err = proto.Marshal(e.Payload); err != nil {
-		return nil, protocol.Errorf(protocol.InternalError, "could not marshal payload data: %s", err)
+		return nil, apierr.Errorf(apierr.InternalError, "could not marshal payload data: %s", err)
 	}
 
 	// Create the secure envelope with algorithm details
@@ -139,22 +142,22 @@ func (e *Envelope) Seal(key interface{}) (out *protocol.SecureEnvelope, err erro
 
 	// Encrypt and sign the payload
 	if out.Payload, err = e.Cipher.Encrypt(payloadData); err != nil {
-		return nil, protocol.Errorf(protocol.InternalError, "could not encrypt payload data: %s", err)
+		return nil, apierr.Errorf(apierr.InternalError, "could not encrypt payload data: %s", err)
 	}
 
 	if out.Hmac, err = e.Cipher.Sign(out.Payload); err != nil {
-		return nil, protocol.Errorf(protocol.InternalError, "could not sign payload data: %s", err)
+		return nil, apierr.Errorf(apierr.InternalError, "could not sign payload data: %s", err)
 	}
 
 	// Encrypt the payload encryption key and hmac secret
 	// TODO: Update the crypto interface to allow fetching the key and secret
 	keys := e.Cipher.(*aesgcm.AESGCM)
 	if out.EncryptionKey, err = asym.Encrypt(keys.EncryptionKey()); err != nil {
-		return nil, protocol.Errorf(protocol.InternalError, "could not encrypt payload encryption key: %s", err)
+		return nil, apierr.Errorf(apierr.InternalError, "could not encrypt payload encryption key: %s", err)
 	}
 
 	if out.HmacSecret, err = asym.Encrypt(keys.HMACSecret()); err != nil {
-		return nil, protocol.Errorf(protocol.InternalError, "could not encrypt hmac secret: %s", err)
+		return nil, apierr.Errorf(apierr.InternalError, "could not encrypt hmac secret: %s", err)
 	}
 
 	return out, nil
@@ -162,7 +165,7 @@ func (e *Envelope) Seal(key interface{}) (out *protocol.SecureEnvelope, err erro
 
 // Seal a payload using the specified symmetric key cipher and public signing key. This
 // is a convienience method for users who do not want to directly Seal an Envelope.
-func Seal(id string, payload *protocol.Payload, cipher crypto.Crypto, key interface{}) (*protocol.SecureEnvelope, error) {
+func Seal(id string, payload *protocol.Payload, cipher crypto.Crypto, key interface{}) (*protocol.SecureEnvelope, *protocol.Error) {
 	env := &Envelope{ID: id, Payload: payload, Cipher: cipher}
 	return env.Seal(key)
 }

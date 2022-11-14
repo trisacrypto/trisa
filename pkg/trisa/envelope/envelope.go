@@ -49,6 +49,7 @@ import (
 
 	"github.com/google/uuid"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	apierr "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/errors"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto/aesgcm"
 	"google.golang.org/protobuf/proto"
@@ -470,11 +471,11 @@ func (e *Envelope) decrypt() (_ *api.Error, err error) {
 		// TODO: allow more algorithms by adding composition functionality to the crypto pacakge
 		if e.msg.EncryptionAlgorithm != "AES256-GCM" {
 			err = fmt.Errorf("unsupported encryption algorithm %q", e.msg.EncryptionAlgorithm)
-			return api.Errorf(api.UnhandledAlgorithm, err.Error()), err
+			return apierr.Errorf(apierr.UnhandledAlgorithm, err.Error()), err
 		}
 		if e.msg.HmacAlgorithm != "HMAC-SHA256" {
 			err = fmt.Errorf("unsupported digital signature algorithm %q", e.msg.HmacAlgorithm)
-			return api.Errorf(api.UnhandledAlgorithm, err.Error()), err
+			return apierr.Errorf(apierr.UnhandledAlgorithm, err.Error()), err
 		}
 
 		if e.crypto, err = aesgcm.New(e.msg.EncryptionKey, e.msg.HmacSecret); err != nil {
@@ -484,25 +485,25 @@ func (e *Envelope) decrypt() (_ *api.Error, err error) {
 
 	// Verify the HMAC signature of the envelope
 	if err = e.crypto.Verify(e.msg.Payload, e.msg.Hmac); err != nil {
-		return api.Errorf(api.InvalidSignature, "could not verify HMAC signature"), err
+		return apierr.Errorf(apierr.InvalidSignature, "could not verify HMAC signature"), err
 	}
 
 	// Decrypt the payload data
 	var data []byte
 	if data, err = e.crypto.Decrypt(e.msg.Payload); err != nil {
-		return api.Errorf(api.InvalidKey, "could not decrypt payload with encryption key"), err
+		return apierr.Errorf(apierr.InvalidKey, "could not decrypt payload with encryption key"), err
 	}
 
 	// Parse the payload
 	e.payload = &api.Payload{}
 	if err = proto.Unmarshal(data, e.payload); err != nil {
-		return api.Errorf(api.EnvelopeDecodeFail, "could not unmarshal payload from decrypted data"), err
+		return apierr.Errorf(apierr.EnvelopeDecodeFail, "could not unmarshal payload from decrypted data"), err
 	}
 
 	// Validate the payload
 	// TODO: use more specific error such as UNPARSEABLE_TRANSACTION or INCOMPLETE_IDENTITY
 	if err = e.ValidatePayload(); err != nil {
-		return api.Errorf(api.ValidationError, err.Error()), err
+		return apierr.Errorf(apierr.ValidationError, err.Error()), err
 	}
 
 	// Set the payload and the signature to nil now that the message is in clear text
@@ -638,11 +639,11 @@ func (e *Envelope) unsealEnvelope() (reject *api.Error, err error) {
 	}
 
 	if e.msg.EncryptionKey, err = e.seal.Decrypt(e.msg.EncryptionKey); err != nil {
-		return api.Errorf(api.InvalidKey, "could not unseal encryption key").WithRetry(), err
+		return apierr.WithRetry(apierr.Errorf(apierr.InvalidKey, "could not unseal encryption key")), err
 	}
 
 	if e.msg.HmacSecret, err = e.seal.Decrypt(e.msg.HmacSecret); err != nil {
-		return api.Errorf(api.InvalidKey, "could not unseal HMAC secret").WithRetry(), err
+		return apierr.WithRetry(apierr.Errorf(apierr.InvalidKey, "could not unseal HMAC secret")), err
 	}
 
 	// Mark the envelope as unsealed
@@ -678,7 +679,7 @@ func (e *Envelope) Payload() (_ *api.Payload, err error) {
 // Error returns the TRISA rejection error on the envelope if it exists
 func (e *Envelope) Error() *api.Error {
 	// Ensure a nil error is returned if the error is zero-valued
-	if e.msg.Error != nil && e.msg.Error.IsZero() {
+	if e.msg.Error != nil && apierr.IsZero(e.msg.Error) {
 		return nil
 	}
 	return e.msg.Error
@@ -688,14 +689,14 @@ func (e *Envelope) Error() *api.Error {
 // not on the envelope or it cannot be parsed, an error is returned.
 func (e *Envelope) Timestamp() (ts time.Time, err error) {
 	if e.msg.Timestamp == "" {
-		return ts, &api.Error{Code: api.BadRequest, Message: "missing ordering timestamp on secure envelope"}
+		return ts, ErrNoOrderingTimesamp
 	}
 
 	// First attempt: parse with nanosecond resolution
 	if ts, err = time.Parse(time.RFC3339Nano, e.msg.Timestamp); err != nil {
 		// Second attempt: try without nanosecond resolution
 		if ts, err = time.Parse(time.RFC3339, e.msg.Timestamp); err != nil {
-			return ts, &api.Error{Code: api.BadRequest, Message: "could not parse ordering timestamp on secure envelope as RFC3339 timestamp"}
+			return ts, ErrInvalidOrderingTimestamp
 		}
 	}
 	return ts, err
@@ -719,7 +720,7 @@ func (e *Envelope) Sealer() crypto.Cipher {
 func (e *Envelope) State() State {
 	// If a payload exists on the envelope, then it is in the clear
 	if e.payload != nil {
-		if e.msg.Error == nil || e.msg.Error.IsZero() {
+		if e.msg.Error == nil || apierr.IsZero(e.msg.Error) {
 			return Clear
 		}
 		return ClearError
@@ -737,7 +738,7 @@ func (e *Envelope) State() State {
 
 	// If there is no payload and there is an error it is in error mode
 	if len(e.msg.Payload) == 0 {
-		if e.msg.Error == nil || e.msg.Error.IsZero() {
+		if e.msg.Error == nil || apierr.IsZero(e.msg.Error) {
 			// Shouldn't happen because of ValidateMessage
 			return Unknown
 		}
@@ -746,14 +747,14 @@ func (e *Envelope) State() State {
 
 	// Check if the envelope is marked as sealed
 	if e.msg.Sealed {
-		if e.msg.Error == nil || e.msg.Error.IsZero() {
+		if e.msg.Error == nil || apierr.IsZero(e.msg.Error) {
 			return Sealed
 		}
 		return SealedError
 	}
 
 	// Message is unsealed
-	if e.msg.Error == nil || e.msg.Error.IsZero() {
+	if e.msg.Error == nil || apierr.IsZero(e.msg.Error) {
 		return Unsealed
 	}
 	return UnsealedError
@@ -775,7 +776,7 @@ func (e *Envelope) ValidateMessage() error {
 
 	// The message should have either an error or an encrypted payload
 	if len(e.msg.Payload) == 0 {
-		if e.msg.Error == nil || e.msg.Error.IsZero() {
+		if e.msg.Error == nil || apierr.IsZero(e.msg.Error) {
 			return ErrNoMessageData
 		}
 		return nil

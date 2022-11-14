@@ -18,4 +18,6 @@ var (
 	ErrCannotEncrypt            = errors.New("cannot encrypt envelope: no cryptographic handler available")
 	ErrCannotSeal               = errors.New("cannot seal envelope: no public key cryptographic handler available")
 	ErrCannotUnseal             = errors.New("cannot unseal envelope: no private key cryptographic handler available")
+	ErrNoOrderingTimesamp       = errors.New("missing ordering timestamp on secure envelope")
+	ErrInvalidOrderingTimestamp = errors.New("could not parse ordering timestamp on secure envelope as RFC3339 timestamp")
 )

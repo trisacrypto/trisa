@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 	protocol "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	apierr "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/errors"
 	"github.com/trisacrypto/trisa/pkg/trisa/handler"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -41,14 +42,14 @@ func TestEnvelope(t *testing.T) {
 	require.NotNil(t, envelope.Cipher)
 
 	// Fail to seal the envelope with an unsupported key type
-	_, err = envelope.Seal(nil)
-	require.Error(t, err)
-	_, err = envelope.Seal(privateKey)
-	require.Error(t, err)
+	_, aerr := envelope.Seal(nil)
+	require.NotNil(t, aerr)
+	_, aerr = envelope.Seal(privateKey)
+	require.Error(t, apierr.Err(aerr))
 
 	// Seal the envelope with an RSA key
-	secure, err := envelope.Seal(publicKey)
-	require.NoError(t, err)
+	secure, aerr := envelope.Seal(publicKey)
+	require.Nil(t, aerr)
 	require.NotNil(t, secure)
 	require.Equal(t, envelope.ID, secure.Id)
 	require.Equal(t, envelope.Cipher.EncryptionAlgorithm(), secure.EncryptionAlgorithm)
@@ -59,37 +60,37 @@ func TestEnvelope(t *testing.T) {
 	require.NotEmpty(t, secure.HmacSecret)
 
 	// Fail to open a nil envelope
-	_, err = handler.Open(nil, privateKey)
-	require.Error(t, err)
+	_, aerr = handler.Open(nil, privateKey)
+	require.NotNil(t, aerr)
 
 	// Fail to open an envelope with an invalid encryption algorithm
 	secure.EncryptionAlgorithm = "invalid"
-	_, err = handler.Open(secure, privateKey)
-	require.Error(t, err)
+	_, aerr = handler.Open(secure, privateKey)
+	require.NotNil(t, aerr)
 
 	// Fail to open an envelope with an invalid hmac algorithm
 	secure.EncryptionAlgorithm = envelope.Cipher.EncryptionAlgorithm()
 	secure.HmacAlgorithm = "invalid"
-	_, err = handler.Open(secure, privateKey)
-	require.Error(t, err)
+	_, aerr = handler.Open(secure, privateKey)
+	require.NotNil(t, aerr)
 
 	// Fail to open an envelope with an unsupported key type
 	secure.EncryptionAlgorithm = envelope.Cipher.EncryptionAlgorithm()
 	secure.HmacAlgorithm = envelope.Cipher.SignatureAlgorithm()
-	_, err = handler.Open(secure, nil)
-	require.Error(t, err)
-	_, err = handler.Open(secure, publicKey)
-	require.Error(t, err)
+	_, aerr = handler.Open(secure, nil)
+	require.NotNil(t, aerr)
+	_, aerr = handler.Open(secure, publicKey)
+	require.NotNil(t, aerr)
 
 	// Fail to open the envelope using the wrong key
 	wrongKey, err := rsa.GenerateKey(rand.Reader, 2048)
 	require.NoError(t, err)
-	_, err = handler.Open(secure, wrongKey)
-	require.Error(t, err)
+	_, aerr = handler.Open(secure, wrongKey)
+	require.NotNil(t, aerr)
 
 	// Successfully opening an envelope
-	opened, err := handler.Open(secure, privateKey)
-	require.NoError(t, err)
+	opened, aerr := handler.Open(secure, privateKey)
+	require.Nil(t, aerr)
 	require.NotNil(t, opened)
 	require.Equal(t, envelope.ID, opened.ID)
 	require.Equal(t, envelope.Cipher, opened.Cipher)

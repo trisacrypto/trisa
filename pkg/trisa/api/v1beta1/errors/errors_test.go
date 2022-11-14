@@ -5,7 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	trisa "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1/errors"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
@@ -14,80 +15,72 @@ import (
 
 func TestErrors(t *testing.T) {
 	err := api.Errorf(api.UnknownIdentity, "could not parse %q", "foo")
-	require.Error(t, err)
-	require.Equal(t, err.Error(), `trisa rejection [UNKNOWN_IDENTITY]: could not parse "foo"`)
-	require.False(t, err.IsZero())
+	require.False(t, api.IsZero(err))
 
-	oerr, ok := api.Errorp(err)
-	require.True(t, ok)
-	require.Equal(t, err, oerr)
-	require.False(t, oerr.IsZero())
-
-	oerr, ok = api.Errorp(errors.New("unhandled error"))
+	oerr, ok := api.Errorp(errors.New("unhandled error"))
 	require.False(t, ok)
-	require.Equal(t, oerr.Error(), "trisa rejection [UNHANDLED]: unhandled error")
-	require.False(t, oerr.IsZero())
+	require.False(t, api.IsZero(oerr))
 
-	sterr := err.Err()
+	sterr := api.Err(err)
 	require.Equal(t, sterr.Error(), `rpc error: code = Aborted desc = [UNKNOWN_IDENTITY] could not parse "foo"`)
 
 	oerr, ok = api.Errorp(sterr)
 	require.True(t, ok)
 	require.True(t, proto.Equal(err, oerr), "unexpected return value from Errorp")
-	require.False(t, oerr.IsZero())
+	require.False(t, api.IsZero(oerr))
 
 	// WithRetry should return a new error with retry set to true
-	errWithRetry := err.WithRetry()
+	errWithRetry := api.WithRetry(err)
 	require.Equal(t, err.Code, errWithRetry.Code)
 	require.Equal(t, err.Message, errWithRetry.Message)
 	require.True(t, errWithRetry.Retry)
 	require.Nil(t, errWithRetry.Details)
-	require.False(t, errWithRetry.IsZero())
+	require.False(t, api.IsZero(errWithRetry))
 
-	_, parseErr := err.WithDetails(nil)
+	_, parseErr := api.WithDetails(err, nil)
 	require.Error(t, parseErr)
 
 	// WithDetails should add an arbitrary proto.Message to the error details
-	details := &api.Error{
+	details := &trisa.Error{
 		Code: api.UnknownIdentity,
 	}
-	errWithDetails, parseErr := err.WithDetails(details)
+	errWithDetails, parseErr := api.WithDetails(err, details)
 	require.NoError(t, parseErr)
 	require.Equal(t, err.Code, errWithDetails.Code)
 	require.Equal(t, err.Message, errWithDetails.Message)
 	require.Equal(t, err.Retry, errWithDetails.Retry)
-	actualDetails := &api.Error{}
+	actualDetails := &trisa.Error{}
 	require.NoError(t, anypb.UnmarshalTo(errWithDetails.Details, actualDetails, proto.UnmarshalOptions{}))
 	require.True(t, proto.Equal(details, actualDetails), "unexpected details created by WithDetails")
-	require.False(t, errWithDetails.IsZero())
+	require.False(t, api.IsZero(errWithDetails))
 }
 
 func TestIsZero(t *testing.T) {
-	err := &api.Error{}
-	require.True(t, err.IsZero(), "no code and no message should be zero valued")
+	err := &trisa.Error{}
+	require.True(t, api.IsZero(err), "no code and no message should be zero valued")
 
-	err = &api.Error{Retry: true}
-	require.True(t, err.IsZero(), "non-zero retry is not sufficient")
+	err = &trisa.Error{Retry: true}
+	require.True(t, api.IsZero(err), "non-zero retry is not sufficient")
 
-	details, _ := anypb.New(&api.Error{Code: api.ExceededTradingVolume, Message: "too fast"})
-	err = &api.Error{Details: details}
-	require.True(t, err.IsZero(), "non-zero details is not sufficient")
+	details, _ := anypb.New(&trisa.Error{Code: api.ExceededTradingVolume, Message: "too fast"})
+	err = &trisa.Error{Details: details}
+	require.True(t, api.IsZero(err), "non-zero details is not sufficient")
 
-	err = &api.Error{Code: api.OutOfNetwork}
-	require.False(t, err.IsZero(), "a code greater than zero should be sufficient")
+	err = &trisa.Error{Code: api.OutOfNetwork}
+	require.False(t, api.IsZero(err), "a code greater than zero should be sufficient")
 
-	err = &api.Error{Message: "unexpected content"}
-	require.False(t, err.IsZero(), "a message without a code should be sufficient")
+	err = &trisa.Error{Message: "unexpected content"}
+	require.False(t, api.IsZero(err), "a message without a code should be sufficient")
 
-	err = &api.Error{Code: api.OutOfNetwork, Message: "unexpected content"}
-	require.False(t, err.IsZero(), "both a message and a code should be non-zero")
+	err = &trisa.Error{Code: api.OutOfNetwork, Message: "unexpected content"}
+	require.False(t, api.IsZero(err), "both a message and a code should be non-zero")
 
 	// After marshaling an empty protocol buffer message, it should still be zero
-	data, merr := proto.Marshal(&api.Error{})
+	data, merr := proto.Marshal(&trisa.Error{})
 	require.NoError(t, merr, "could not marshal protocol buffer")
-	umerr := &api.Error{}
+	umerr := &trisa.Error{}
 	require.NoError(t, proto.Unmarshal(data, umerr), "could not unmarshal error pb")
-	require.True(t, umerr.IsZero(), "should be zero after marshal and unmarshal")
+	require.True(t, api.IsZero(umerr), "should be zero after marshal and unmarshal")
 }
 
 // Test that the Err function returns an error that includes the corresponding gRPC
@@ -95,7 +88,7 @@ func TestIsZero(t *testing.T) {
 func TestErr(t *testing.T) {
 	tests := []struct {
 		name         string
-		code         api.Error_Code
+		code         trisa.Error_Code
 		message      string
 		expectedCode codes.Code
 	}{
@@ -107,11 +100,11 @@ func TestErr(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := &api.Error{
+			err := &trisa.Error{
 				Code:    tt.code,
 				Message: tt.message,
 			}
-			stErr := err.Err()
+			stErr := api.Err(err)
 			require.NotNil(t, stErr)
 			require.Equal(t, tt.expectedCode, status.Code(stErr))
 			require.Contains(t, stErr.Error(), tt.message)
