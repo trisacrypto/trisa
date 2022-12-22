@@ -26,7 +26,15 @@ The BFF (backend for frontend) is the backend API that powers the GDS UI at [vas
 
 The BFF uses Auth0 for authentication and authorization and must connect to the Auth0 Management API in order to manage users. The Auth0 client is configured as follows:
 
-
+| EnvVar                       | Type     | Default | Description                                                                                                                                                                        |
+|------------------------------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| GDS_BFF_AUTH0_DOMAIN         | string   |         | The tenant domain provided by the Auth0 application or API (domain only, no scheme or path)                                                                                        |
+| GDS_BFF_AUTH0_ISSUER         | string   |         | Set to the custom domain if enabled in Auth0 (ensuring the trailing slash is set if required by the Auth0 configuration) - this will confirm the issuer from the Auth0 JWT tokens. |
+| GDS_BFF_AUTH0_AUDIENCE       | string   |         | The audience to verify for the Auth0 API configuration (usually the unique name of the API).                                                                                       |
+| GDS_BFF_AUTH0_PROVIDER_CACHE | duration | 5m      | The maximum duration to cache user and application data on Auth0 to prevent repeated data queries.                                                                                 |
+| GDS_BFF_AUTH0_CLIENT_ID      | string   |         | The Client ID for the management API specified by Auth0.                                                                                                                           |
+| GDS_BFF_AUTH0_CLIENT_SECRET  | string   |         | The Client Secret for the management API specified by Auth0.                                                                                                                       |
+| GDS_BFF_AUTH0_TESTING        | bool     | false   | If true a mock authenticator is used for testing purposes.                                                                                                                         |
 
 ### Network Configuration
 
