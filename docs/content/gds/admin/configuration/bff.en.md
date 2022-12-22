@@ -24,57 +24,61 @@ The BFF (backend for frontend) is the backend API that powers the GDS UI at [vas
 
 ### Auth0 Config
 
+The BFF uses Auth0 for authentication and authorization and must connect to the Auth0 Management API in order to manage users. The Auth0 client is configured as follows:
+
+
 
 ### Network Configuration
 
 
+
 ### Database
 
-The GDS makes use of a globally replicated key-value store for persistence. By default it uses the TrtlDB for this, but for testing or smaller deployments it can use a local LevelDB database instead. The database store is configured as follows:
+The BFF makes use of a globally replicated key-value store for persistence of BFF-specific data structures such as organizations and announcements. By default it uses the TrtlDB for this, but for testing or smaller deployments it can use a local LevelDB database instead.
+
+Generally speaking, the BFF uses the same TrtlDB as the GDS MainNet instance, and we've ensured there are no namespace conflicts to prevent this. The BFF primary store can also be independent of the GDS stores if necessary.
+
+The primary database store is configured as follows:
 
 | EnvVar                       | Type   | Default | Description                                                                          |
 |------------------------------|--------|---------|--------------------------------------------------------------------------------------|
-| GDS_DATABASE_URL             | string |         | Required, the DSN to connect to the database on (see below for details)              |
-| GDS_DATABASE_REINDEX_ON_BOOT | bool   | false   | When the server starts, instead of loading indexes from disk, recreate and save them |
-| GDS_DATABASE_INSECURE        | bool   | false   | If set do not connect to the TrtlDB with mTLS authentication                         |
-| GDS_DATABASE_CERT_PATH       | string |         | The path to the mTLS client-side certs for database auth                             |
-| GDS_DATABASE_POOL_PATH       | string |         | The path to the mTLS public cert pools to accept server connections                  |
+| GDS_BFF_DATABASE_URL             | string |         | Required, the DSN to connect to the database on (see below for details)              |
+| GDS_BFF_DATABASE_REINDEX_ON_BOOT | bool   | false   | When the server starts, instead of loading indexes from disk, recreate and save them |
+| GDS_BFF_DATABASE_INSECURE        | bool   | false   | If set do not connect to the TrtlDB with mTLS authentication                         |
+| GDS_BFF_DATABASE_CERT_PATH       | string |         | The path to the mTLS client-side certs for database auth                             |
+| GDS_BFF_DATABASE_POOL_PATH       | string |         | The path to the mTLS public cert pools to accept server connections                  |
 
-The `GDS_DATABASE_URL` is a standard DSN with a scheme, host, path, and query parameters. In the case of the GDS the scheme can be either `trtl://` or `leveldb://`.
+The `GDS_BFF_DATABASE_URL` is a standard DSN with a scheme, host, path, and query parameters. In the case of the BFF the scheme can be either `trtl://` or `leveldb://`.
 
-When connecting to a TrtlDB, the host and port need to be specified with a trailing slash, e.g. `trtl://localhost:4436/`. Connecting via mTLS is only relevant when connecting to a TrtlDB. If `GDS_DATABASE_INSECURE` is `false`, then the `GDS_DATABASE_CERT_PATH` and `GDS_DATABASE_POOL_PATH` are required.
+When connecting to a TrtlDB, the host and port need to be specified with a trailing slash, e.g. `trtl://localhost:4436/`. Connecting via mTLS is only relevant when connecting to a TrtlDB. If `GDS_BFF_DATABASE_INSECURE` is `false`, then the `GDS_BFF_DATABASE_CERT_PATH` and `GDS_BFF_DATABASE_POOL_PATH` are required.
 
 When connecting to a LevelDB, the path to the directory on disk where the leveldb should be stored must be passed to the DSN. To specify a relative path, use three slashes: `leveldb:///relpath/to/db`, to specify an absolute path use four: `leveldb:////abspath/to/db`.
 
 ### Email and SendGrid
 
-The GDS uses [SendGrid](https://sendgrid.com/) to send email notifications and to enable communication workflows with users and admins. Configure GDS to use SendGrid as follows:
+The BFF uses [SendGrid](https://sendgrid.com/) to send email notifications and to enable communication workflows with users and admins. Configure BFF to use SendGrid as follows:
 
-| EnvVar                 | Type   | Default                                | Description                                                                                 |
-|------------------------|--------|----------------------------------------|---------------------------------------------------------------------------------------------|
-| GDS_SERVICE_EMAIL      | string | TRISA Directory Service                | The email address used as the sender for all emails from the GDS system.                    |
-| GDS_ADMIN_EMAIL        | string | TRISA Admins                           | The email address to send admin emails to from the server.                                  |
-| SENDGRID_API_KEY       | string |                                        | API Key to authenticate to SendGrid with.                                                   |
-| GDS_DIRECTORY_ID       | string | vaspdirectory.net                      | (Reused) The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev) |
-| GDS_VERIFY_CONTACT_URL | string | https://vaspdirectory.net/verify       | The base URL to include in emails for contact verification                                  |
-| GDS_ADMIN_REVIEW_URL   | string | https://admin.vaspdirectory.net/vasps/ | The base URL to include in emails to link to a new VASP registration                        |
-| GDS_EMAIL_TESTING      | bool   | false                                  | Use email in testing mode rather than send live emails                                      |
-| GDS_EMAIL_STORAGE      | string | ""                                     | Directory to store test emails for "mark one eyeball" review                                |
+| EnvVar                | Type   | Default                                           | Description                                                              |
+|-----------------------|--------|---------------------------------------------------|--------------------------------------------------------------------------|
+| GDS_BFF_SERVICE_EMAIL | string | TRISA Directory Service <admin@vaspdirectory.net> | The email address used as the sender for all emails from the BFF system. |
+| SENDGRID_API_KEY      | string |                                                   | API Key to authenticate to SendGrid with.                                |
+| GDS_BFF_EMAIL_TESTING | bool   | false                                             | Use email in testing mode rather than send live emails                   |
+| GDS_BFF_EMAIL_STORAGE | string | ""                                                | Directory to store test emails for "mark one eyeball" review             |
 
 SendGrid is considered **enabled** if the SendGrid API Key is set. The service and admin email addresses are required if SendGrid is enabled.
 
 ### Sentry
 
-The GDS uses [Sentry](https://sentry.io/) to assist with error monitoring and performance tracing. Configure GDS to use Sentry as follows:
+The BFF uses [Sentry](https://sentry.io/) to assist with error monitoring and performance tracing. Configure BFF to use Sentry as follows:
 
 | EnvVar                       | Type    | Default     | Description                                                                                       |
 |------------------------------|---------|-------------|---------------------------------------------------------------------------------------------------|
-| GDS_SENTRY_DSN               | string  |             | The DSN for the Sentry project. If not set then Sentry is considered disabled.                    |
-| GDS_SENTRY_SERVER_NAME       | string  |             | Optional - a server name to tag Sentry events with.                                               |
-| GDS_SENTRY_ENVIRONMENT       | string  |             | The environment to report (e.g. development, staging, production). Required if Sentry is enabled. |
-| GDS_SENTRY_RELEASE           | string  | {{version}} | Specify the release version for Sentry tracking. By default this will be the package version.   |
-| GDS_SENTRY_TRACK_PERFORMANCE | bool    | false       | Enable performance tracing to Sentry with the specified sample rate.                              |
-| GDS_SENTRY_SAMPLE_RATE       | float64 | 0.2         | The percentage of transactions to trace (0.0 to 1.0).                                             |
-| GDS_SENTRY_DEBUG             | bool    | false       | Set Sentry to debug mode for testing.                                                             |
+| GDS_BFF_SENTRY_DSN               | string  |             | The DSN for the Sentry project. If not set then Sentry is considered disabled.                    |
+| GDS_BFF_SENTRY_SERVER_NAME       | string  |             | Optional - a server name to tag Sentry events with.                                               |
+| GDS_BFF_SENTRY_ENVIRONMENT       | string  |             | The environment to report (e.g. development, staging, production). Required if Sentry is enabled. |
+| GDS_BFF_SENTRY_RELEASE           | string  | {{version}} | Specify the release version for Sentry tracking. By default this will be the package version.   |
+| GDS_BFF_SENTRY_TRACK_PERFORMANCE | bool    | false       | Enable performance tracing to Sentry with the specified sample rate.                              |
+| GDS_BFF_SENTRY_SAMPLE_RATE       | float64 | 0.2         | The percentage of transactions to trace (0.0 to 1.0).                                             |
+| GDS_BFF_SENTRY_DEBUG             | bool    | false       | Set Sentry to debug mode for testing.                                                             |
 
 Sentry is considered **enabled** if a DSN is configured. Performance tracing is only enabled if Sentry is enabled *and* track performance is set to true. If Sentry is enabled, an environment is required, otherwise the configuration will be invalid.
