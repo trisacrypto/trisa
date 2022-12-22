@@ -19,7 +19,7 @@ All TRISA related containers are hosted publicly on [DockerHub](https://hub.dock
 The primary container images are as follows:
 
 - [trisa/gds](https://hub.docker.com/repository/docker/trisa/gds): The primary GDS service that runs the TRISA Directory API, the TRISA Members API, the Admin API, and the Certificate Manager process.
-- [trisa/gds-user-ui](https://hub.docker.com/repository/docker/trisa/gds-user-ui): The primary GDS UI React application compiled for production and servied using an nginx container.
+- [trisa/gds-user-ui](https://hub.docker.com/repository/docker/trisa/gds-user-ui): The primary GDS UI React application compiled for production and served using an nginx container.
 - [trisa/bff](https://hub.docker.com/repository/docker/trisa/gds-bff): The Backend for Frontend (BFF) that allows the GDS UI to access both the MainNet and TestNet GDS services.
 - [trisa/gds-admin-ui](https://hub.docker.com/repository/docker/trisa/gds-admin-ui) and [trisa/gds-testnet-admin-ui](https://hub.docker.com/repository/docker/trisa/gds-testnet-admin-ui): the Admin UI React application compiled for production and served using an nginx container.
 - [trisa/trtl](https://hub.docker.com/repository/docker/trisa/trtl) and [trisa/trtl-init](https://hub.docker.com/repository/docker/trisa/trtl-init): distributed TrtlDB containers optimized for TRISA cross-region deployment.
