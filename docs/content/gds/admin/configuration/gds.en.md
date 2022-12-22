@@ -40,14 +40,14 @@ The Admin API (a REST API that powers the Admin UI) is configured as follows:
 | GDS_ADMIN_COOKIE_DOMAIN                  | string            |                                        | The domain to set secure cookies for (particularly for CSRF and authentication)                        |
 | GDS_ADMIN_AUDIENCE                       | string            |                                        | The audience to set and verify in JWT tokens issued by the Admin API                                   |
 | GDS_ADMIN_OAUTH_GOOGLE_AUDIENCE          | string            |                                        | The audience from the Google OAuth config to verify Google login tokens                                |
-| GDS_ADMIN_OAUTH_AUTHORIZED_EMAIL_DOMAINS | []string          |                                        | The list of authorized email domains to allow access to the admin UI for (e.g. trisa.io)               |
+| GDS_ADMIN_OAUTH_AUTHORIZED_EMAIL_DOMAINS | []string          |                                        | The list of authorized email domains to allow access to the admin UI (e.g. trisa.io)               |
 | GDS_ADMIN_TOKEN_KEYS                     | map[string]string |                                        | A mapping of key id (ksuid/ulid) to the path to an RSA signing key in PEM format for JWT token signing |
 
 Note that the enabled flag is only respected if `GDS_MAINTENANCE` is `false`, otherwise maintenance mode supersedes service enabled flags.
 
 ### Members API
 
-The Members API is a gRPC API that is secured by TRISA verified mTLS and is configured as follows:
+The Members API is a gRPC API that is secured by TRISA, verified by mTLS, and is configured as follows:
 
 | EnvVar                | Type   | Default | Description                                                           |
 |-----------------------|--------|---------|-----------------------------------------------------------------------|

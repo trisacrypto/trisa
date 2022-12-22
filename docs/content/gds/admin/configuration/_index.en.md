@@ -6,7 +6,7 @@ description: "Configuration Guide for GDS Services"
 weight: 20
 ---
 
-TRISA GDS and TestNet services are primarily configured using environment variables and will respect [dotenv files](https://github.com/joho/godotenv) in the current working directory. The canonical reference of the configuration for an GDS service is the `config` package of that service (described below). This documentation enumerates the most important configuration variables, their default values, and any hints or warnings about how to use them.
+TRISA GDS and TestNet services are primarily configured using environment variables and will respect [dotenv files](https://github.com/joho/godotenv) in the current working directory. The canonical reference of the configuration for a GDS service is the `config` package of that service (described below). This documentation enumerates the most important configuration variables, their default values, and any hints or warnings about how to use them.
 
 > **Required Configuration**
 >
@@ -15,6 +15,6 @@ TRISA GDS and TestNet services are primarily configured using environment variab
 ## Configuration Documentation
 
 - [GDS Node Configuration]({{< ref "gds/admin/configuration/gds" >}})
-- [BFF Service Configuratin]({{< ref "gds/admin/configuration/bff" >}})
+- [BFF Service Configuration]({{< ref "gds/admin/configuration/bff" >}})
 - [React Apps Configuration]({{< ref "gds/admin/configuration/ui" >}})
 - [TrtlDB Configuration]({{< ref "gds/admin/configuration/trtl" >}})
