@@ -10,7 +10,7 @@ The GDS is a collection of three APIs and several background services backed by 
 
 | EnvVar           | Type   | Default           | Description                                                                                                      |
 |------------------|--------|-------------------|------------------------------------------------------------------------------------------------------------------|
-| GDS_DIRECTORY_ID | string | vaspdirectory.net | The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev)                               |
+| GDS_DIRECTORY_ID | string | vaspdirectory.net | The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev).                              |
 | GDS_SECRET_KEY   | string |                   | A base64 encoded random 32 byte array that is used for salts and random seeds - required.                        |
 | GDS_MAINTENANCE  | bool   | false             | Sets the server to maintenance mode, which will respond to requests with Unavailable except for status requests. |
 | GDS_LOG_LEVEL    | string | info              | The verbosity of logging, one of trace, debug, info, warn, error, fatal, or panic.                               |
@@ -22,8 +22,8 @@ The primary GDS API (the gRPC TRISA Directory service) is configured as follows:
 
 | EnvVar          | Type   | Default | Description                                            |
 |-----------------|--------|---------|--------------------------------------------------------|
-| GDS_API_ENABLED | bool   | true    | If false, disables the TRISA Directory service         |
-| GDS_BIND_ADDR   | string | :4433   | The IP address and port to bind the GDS gRPC server to |
+| GDS_API_ENABLED | bool   | true    | If false, disables the TRISA Directory service.        |
+| GDS_BIND_ADDR   | string | :4433   | The IP address and port to bind the GDS gRPC server to. |
 
 Note that the enabled flag is only respected if `GDS_MAINTENANCE` is `false`, otherwise maintenance mode supersedes service enabled flags.
 
@@ -33,15 +33,15 @@ The Admin API (a REST API that powers the Admin UI) is configured as follows:
 
 | EnvVar                                   | Type              | Default                                | Description                                                                                            |
 |------------------------------------------|-------------------|----------------------------------------|--------------------------------------------------------------------------------------------------------|
-| GDS_ADMIN_ENABLED                        | bool              | true                                   | If false, disables the Admin API service                                                               |
-| GDS_ADMIN_BIND_ADDR                      | string            | :4434                                  | The IP address and port to bind the Admin API http server to                                           |
+| GDS_ADMIN_ENABLED                        | bool              | true                                   | If false, disables the Admin API service.                                                              |
+| GDS_ADMIN_BIND_ADDR                      | string            | :4434                                  | The IP address and port to bind the Admin API http server to.                                          |
 | GDS_ADMIN_MODE                           | string            | release                                | Sets the Gin mode, one of debug, release, or test.                                                     |
 | GDS_ADMIN_ALLOW_ORIGINS                  | []string          | http://localhost,http://localhost:3000 | A list of allowed origins for the CORS middleware to accept.                                           |
-| GDS_ADMIN_COOKIE_DOMAIN                  | string            |                                        | The domain to set secure cookies for (particularly for CSRF and authentication)                        |
-| GDS_ADMIN_AUDIENCE                       | string            |                                        | The audience to set and verify in JWT tokens issued by the Admin API                                   |
-| GDS_ADMIN_OAUTH_GOOGLE_AUDIENCE          | string            |                                        | The audience from the Google OAuth config to verify Google login tokens                                |
-| GDS_ADMIN_OAUTH_AUTHORIZED_EMAIL_DOMAINS | []string          |                                        | The list of authorized email domains to allow access to the admin UI (e.g. trisa.io)               |
-| GDS_ADMIN_TOKEN_KEYS                     | map[string]string |                                        | A mapping of key id (ksuid/ulid) to the path to an RSA signing key in PEM format for JWT token signing |
+| GDS_ADMIN_COOKIE_DOMAIN                  | string            |                                        | The domain to set secure cookies for (particularly for CSRF and authentication).                       |
+| GDS_ADMIN_AUDIENCE                       | string            |                                        | The audience to set and verify in JWT tokens issued by the Admin API.                                  |
+| GDS_ADMIN_OAUTH_GOOGLE_AUDIENCE          | string            |                                        | The audience from the Google OAuth config to verify Google login tokens.                               |
+| GDS_ADMIN_OAUTH_AUTHORIZED_EMAIL_DOMAINS | []string          |                                        | The list of authorized email domains to allow access to the admin UI (e.g. trisa.io).              |
+| GDS_ADMIN_TOKEN_KEYS                     | map[string]string |                                        | A mapping of key id (ksuid/ulid) to the path to an RSA signing key in PEM format for JWT token signing. |
 
 Note that the enabled flag is only respected if `GDS_MAINTENANCE` is `false`, otherwise maintenance mode supersedes service enabled flags.
 
@@ -51,11 +51,11 @@ The Members API is a gRPC API that is secured by TRISA, verified by mTLS, and is
 
 | EnvVar                | Type   | Default | Description                                                           |
 |-----------------------|--------|---------|-----------------------------------------------------------------------|
-| GDS_MEMBERS_ENABLED   | bool   | true    | If false, disables the Members API service                            |
-| GDS_MEMBERS_BIND_ADDR | string | :4435   | The IP address and port to bind the Members gRPC server to            |
-| GDS_MEMBERS_INSECURE  | bool   | false   | If set do not enable mTLS authentication                              |
-| GDS_MEMBERS_CERTS     | string |         | The path to the mTLS server-side certs for server auth                |
-| GDS_MEMBERS_CERT_POOL | string |         | The path to the mTLS public cert pools to accept incoming connections |
+| GDS_MEMBERS_ENABLED   | bool   | true    | If false, disables the Members API service.                           |
+| GDS_MEMBERS_BIND_ADDR | string | :4435   | The IP address and port to bind the Members gRPC server to.           |
+| GDS_MEMBERS_INSECURE  | bool   | false   | If set do not enable mTLS authentication.                             |
+| GDS_MEMBERS_CERTS     | string |         | The path to the mTLS server-side certs for server auth.               |
+| GDS_MEMBERS_CERT_POOL | string |         | The path to the mTLS public cert pools to accept incoming connections. |
 
 Note that the enabled flag is only respected if `GDS_MAINTENANCE` is `false`, otherwise maintenance mode supersedes service enabled flags. If `GDS_MEMBERS_INSECURE` is `false`, then `GDS_MEMBERS_CERTS` and `GDS_MEMBERS_CERT_POOL` are required.
 
@@ -65,11 +65,11 @@ The GDS makes use of a globally replicated key-value store for persistence. By d
 
 | EnvVar                       | Type   | Default | Description                                                                          |
 |------------------------------|--------|---------|--------------------------------------------------------------------------------------|
-| GDS_DATABASE_URL             | string |         | Required, the DSN to connect to the database on (see below for details)              |
-| GDS_DATABASE_REINDEX_ON_BOOT | bool   | false   | When the server starts, instead of loading indexes from disk, recreate and save them |
-| GDS_DATABASE_INSECURE        | bool   | false   | If set do not connect to the TrtlDB with mTLS authentication                         |
-| GDS_DATABASE_CERT_PATH       | string |         | The path to the mTLS client-side certs for database auth                             |
-| GDS_DATABASE_POOL_PATH       | string |         | The path to the mTLS public cert pools to accept server connections                  |
+| GDS_DATABASE_URL             | string |         | Required, the DSN to connect to the database on (see below for details).             |
+| GDS_DATABASE_REINDEX_ON_BOOT | bool   | false   | When the server starts, instead of loading indexes from disk, recreate and save them. |
+| GDS_DATABASE_INSECURE        | bool   | false   | If set do not connect to the TrtlDB with mTLS authentication.                        |
+| GDS_DATABASE_CERT_PATH       | string |         | The path to the mTLS client-side certs for database auth.                            |
+| GDS_DATABASE_POOL_PATH       | string |         | The path to the mTLS public cert pools to accept server connections.                 |
 
 The `GDS_DATABASE_URL` is a standard DSN with a scheme, host, path, and query parameters. In the case of the GDS the scheme can be either `trtl://` or `leveldb://`.
 
@@ -83,14 +83,14 @@ The GDS uses [SendGrid](https://sendgrid.com/) to send email notifications and t
 
 | EnvVar                 | Type   | Default                                | Description                                                                                 |
 |------------------------|--------|----------------------------------------|---------------------------------------------------------------------------------------------|
-| GDS_SERVICE_EMAIL      | string | TRISA Directory Service                | The email address used as the sender for all emails from the GDS system.                    |
-| GDS_ADMIN_EMAIL        | string | TRISA Admins                           | The email address to send admin emails to from the server.                                  |
+| GDS_SERVICE_EMAIL      | string | TRISA Directory Service <admin@vaspdirectory.net>               | The email address used as the sender for all emails from the GDS system.                    |
+| GDS_ADMIN_EMAIL        | string | TRISA Admins <admin@trisa.io>                           | The email address to send admin emails to from the server.                                  |
 | SENDGRID_API_KEY       | string |                                        | API Key to authenticate to SendGrid with.                                                   |
-| GDS_DIRECTORY_ID       | string | vaspdirectory.net                      | (Reused) The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev) |
-| GDS_VERIFY_CONTACT_URL | string | https://vaspdirectory.net/verify       | The base URL to include in emails for contact verification                                  |
-| GDS_ADMIN_REVIEW_URL   | string | https://admin.vaspdirectory.net/vasps/ | The base URL to include in emails to link to a new VASP registration                        |
-| GDS_EMAIL_TESTING      | bool   | false                                  | Use email in testing mode rather than send live emails                                      |
-| GDS_EMAIL_STORAGE      | string | ""                                     | Directory to store test emails for "mark one eyeball" review                                |
+| GDS_DIRECTORY_ID       | string | vaspdirectory.net                      | (Reused) The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev). |
+| GDS_VERIFY_CONTACT_URL | string | https://vaspdirectory.net/verify       | The base URL to include in emails for contact verification.                                 |
+| GDS_ADMIN_REVIEW_URL   | string | https://admin.vaspdirectory.net/vasps/ | The base URL to include in emails to link to a new VASP registration.                       |
+| GDS_EMAIL_TESTING      | bool   | false                                  | Use email in testing mode rather than send live emails.                                      |
+| GDS_EMAIL_STORAGE      | string | ""                                     | Directory to store test emails for "mark one eyeball" review.                                |
 
 SendGrid is considered **enabled** if the SendGrid API Key is set. The service and admin email addresses are required if SendGrid is enabled.
 
@@ -101,15 +101,15 @@ The CertMan is a background process that runs on the GDS and manages certificate
 | EnvVar                          | Type     | Default           | Description                                                                                                    |
 |---------------------------------|----------|-------------------|----------------------------------------------------------------------------------------------------------------|
 | GDS_CERTMAN_ENABLED             | bool     | true              | If false, disables the CertMan background process.                                                             |
-| GDS_CERTMAN_REQUEST_INTERVAL    | duration | 10m               | The interval between certificate request processing runs                                                       |
-| GDS_CERTMAN_REISSUANCE_INTERVAL | duration | 24h               | The interval between certificate reissuance processing runs                                                    |
-| GDS_CERTMAN_STORAGE             | string   |                   | The path to a directory on disk where CertMan temporarily downloads certificates (otherwise a tmp dir is used) |
-| GDS_DIRECTORY_ID                | string   | vaspdirectory.net | (Reused) The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev)                    |
-| SECTIGO_USERNAME                | string   |                   | The username to authenticate with the Sectigo API                                                              |
-| SECTIGO_PASSWORD                | string   |                   | The password to authenticate with the Sectigo API                                                              |
-| SECTIGO_PROFILE                 | string   |                   | The certificate profile to use (see below for details)                                                         |
-| SECTIGO_ENDPOINT                | string   |                   | The endpoint to connect to Sectigo on (leave blank for production)                                             |
-| SECTIGO_TESTING                 | bool     |                   | If Sectigo is in testing mode it will not make actual Sectigo requests                                         |
+| GDS_CERTMAN_REQUEST_INTERVAL    | duration | 10m               | The interval between certificate request processing runs.                                                       |
+| GDS_CERTMAN_REISSUANCE_INTERVAL | duration | 24h               | The interval between certificate reissuance processing runs.                                                    |
+| GDS_CERTMAN_STORAGE             | string   |                   | The path to a directory on disk where CertMan temporarily downloads certificates (otherwise a tmp dir is used). |
+| GDS_DIRECTORY_ID                | string   | vaspdirectory.net | (Reused) The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev).                    |
+| SECTIGO_USERNAME                | string   |                   | The username to authenticate with the Sectigo API.                                                              |
+| SECTIGO_PASSWORD                | string   |                   | The password to authenticate with the Sectigo API.                                                              |
+| SECTIGO_PROFILE                 | string   |                   | The certificate profile to use (see below for details).                                                         |
+| SECTIGO_ENDPOINT                | string   |                   | The endpoint to connect to Sectigo on (leave blank for production).                                             |
+| SECTIGO_TESTING                 | bool     |                   | If Sectigo is in testing mode it will not make actual Sectigo requests.                                         |
 
 Note that CertMan also needs valid email (SendGrid) and Google Secrets configurations if it is enabled.
 
@@ -124,9 +124,9 @@ The Backup manager is only available when the GDS is using the LevelDB database 
 | EnvVar              | Type     | Default | Description                                                      |
 |---------------------|----------|---------|------------------------------------------------------------------|
 | GDS_BACKUP_ENABLED  | bool     | false   | If true, enables the backup background process.                  |
-| GDS_BACKUP_INTERVAL | duration | 24h     | The interval between database backups                            |
-| GDS_BACKUP_STORAGE  | string   |         | The path on disk to store database backups (required if enabled) |
-| GDS_BACKUP_KEEP     | int      | 1       | The number of backups to keep before cleaning up old backups     |
+| GDS_BACKUP_INTERVAL | duration | 24h     | The interval between database backups.                            |
+| GDS_BACKUP_STORAGE  | string   |         | The path on disk to store database backups (required if enabled). |
+| GDS_BACKUP_KEEP     | int      | 1       | The number of backups to keep before cleaning up old backups.     |
 
 Backups should not be enabled when using the TrtlDB database store! If the backups are enabled then the storage path is required.
 
@@ -136,9 +136,9 @@ GDS uses Google Secret Manager to store certificates and PKCS12 passwords and ot
 
 | EnvVar                         | Type   | Default | Description                                                                                          |
 |--------------------------------|--------|---------|------------------------------------------------------------------------------------------------------|
-| GOOGLE_APPLICATION_CREDENTIALS | string |         | Path to the JSON credentials for the Google Service Account that has access to Google Secret Manager |
-| GOOGLE_PROJECT_NAME            | string |         | Name of the Google Project for API access to Google Secret Manager                                   |
-| GDS_SECRETS_TESTING            | bool   | false   | If set to true, uses a local in-memory "secret store" for testing and development                    |
+| GOOGLE_APPLICATION_CREDENTIALS | string |         | Path to the JSON credentials for the Google Service Account that has access to Google Secret Manager. |
+| GOOGLE_PROJECT_NAME            | string |         | Name of the Google Project for API access to Google Secret Manager.                                   |
+| GDS_SECRETS_TESTING            | bool   | false   | If set to true, uses a local in-memory "secret store" for testing and development.                    |
 
 Note that the `GOOGLE_APPLICATION_CREDENTIALS` and `GOOGLE_PROJECT_NAME` are required if `GDS_SECRETS_TESTING` is `false`.
 
