@@ -28,6 +28,48 @@ Internally, trtl uses a log-structured merge tree embedded database such as Leve
 
 The `TRTL_DATABASE_URL` is a standard DSN with a scheme, host, path, and query parameters. Trtl should always have access to a locally embedded database such as LevelDB. When connecting to a LevelDB, the path to the directory on disk where the leveldb should be stored must be passed to the DSN. To specify a relative path, use three slashes: `leveldb:///relpath/to/db`, to specify an absolute path use four: `leveldb:////abspath/to/db`.
 
+### Replica Config
+
+TrtlDB is a globally replicated database and the replica config provides metadata about the TrtlDB instance for replication purposes while also setting parameters for replication. Replication is configured as follows:
+
+| EnvVar                       | Type     | Default | Description                                                                                                           |
+|------------------------------|----------|---------|-----------------------------------------------------------------------------------------------------------------------|
+| TRTL_REPLICA_ENABLED         | bool     | true    | If false, disables replication so that the trtldb acts as a single node.                                              |
+| TRTL_REPLICA_PID             | uint64   |         | The precedence ID of the node (must be unique in the system) - lower IDs have precedence in consistency tie breakers. |
+| TRTL_REPLICA_REGION          | string   |         | The region that the replica is assigned to for provenance and geographic compliance.                                  |
+| TRTL_REPLICA_NAME            | string   |         | A unique name that identifies the replica name across peers.                                                          |
+| TRTL_REPLICA_GOSSIP_INTERVAL | duration | 1m      | The mean interval between gossip (synchronization) sessions between trtl peers.                                       |
+| TRTL_REPLICA_GOSSIP_SIGMA    | duration | 5s      | The standard deviation of the jittered interval between gossip sessions.                                              |
+
+If `TRTL_REPLICA_ENABLED` is `true` then `TRTL_REPLICA_PID`, `TRTL_REPLICA_REGION`, and `TRTL_REPLICA_NAME` are required to identify the unique replica in the system.
+
+Replication occurs with bilateral anti-entropy, meaning that after a jittered interval, each replica randomly selects a peer to synchronize with. This is also referred to as a gossip protocol. The `TRTL_REPLICA_GOSSIP_INTERVAL` and `TRTL_REPLICA_GOSSIP_SIGMA` describe a normal distribution of randomly selected synchronization intervals, providing jitter so that the network is not bursty.
+
+### Replica Identification Strategy
+
+When deployed in on a kubernetes cluster, a trtl process running in a container in a pod must identify itself to determine what replica it is so that it can configure itself correctly (particularly if the replica is part of a stateful set). The replica strategy configuration defines how a trtl process bootstraps itself as follows:
+
+| EnvVar                             | Type   | Default | Description                                                                                                              |
+|------------------------------------|--------|---------|--------------------------------------------------------------------------------------------------------------------------|
+| TRTL_REPLICA_STRATEGY_HOSTNAME_PID | bool   | false   | Set to true to use the hostname PID strategy (will be the first strategy tried).                                         |
+| TRTL_REPLICA_HOSTNAME              | string |         | Set the hostname of the process from the environment for the hostname-pid strategy.                                      |
+| TRTL_REPLICA_STRATEGY_FILE_PID     | string |         | Set to the path of a PID file, if not empty uses the file PID strategy (second strategy after hostname-pid).              |
+| TRTL_REPLICA_STRATEGY_JSON_CONFIG  | string |         | Set to the path of a JSON configuration file, if not empty uses the JSON config strategy (third strategy after file-pid). |
+
+The strategies allow the process to identify its PID - either by processing a hostname (e.g. trtl-10) or by reading the pid from a file. The remaineder of the replica can then be configured from the JSON file rather than directly from the environment.
+
+### MTLS Config
+
+Connections to the TrtlDB are secured and authenticated using mTLS. The mTLS configuration is as follows:
+
+| EnvVar               | Type   | Default | Description                                                                               |
+|----------------------|--------|---------|-------------------------------------------------------------------------------------------|
+| TRTL_INSECURE        | bool   | false   | If true the server will start without mTLS configured.                                    |
+| TRTL_MTLS_CHAIN_PATH | string |         | The path to the pool file with valid certificate authorities to authenticate clients for. |
+| TRTL_MTLS_CERT_PATH  | string |         | The path to the certificates with the private key for the trtl server.                    |
+
+If `TRTL_INSECURE` is `false` then the `TRTL_MTLS_CHAIN_PATH` and the `TRTL_MTLS_CERT_PATH` are both required.
+
 ### Backups
 
 The Backup manager is a background process that clones the embedded database pages into a zipped folder on disk that can be downloaded for backup purposes. Backups run periodically and can be run without interupting database processing since the backup takes a live snapshot of the database. Backups are configured as follows:
