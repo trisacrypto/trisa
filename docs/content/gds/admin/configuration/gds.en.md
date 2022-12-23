@@ -151,7 +151,7 @@ The GDS uses [Sentry](https://sentry.io/) to assist with error monitoring and pe
 | GDS_SENTRY_DSN               | string  |             | The DSN for the Sentry project. If not set then Sentry is considered disabled.                    |
 | GDS_SENTRY_SERVER_NAME       | string  |             | Optional - a server name to tag Sentry events with.                                               |
 | GDS_SENTRY_ENVIRONMENT       | string  |             | The environment to report (e.g. development, staging, production). Required if Sentry is enabled. |
-| GDS_SENTRY_RELEASE           | string  | {{version}} | Specify the release of Ensign for Sentry tracking. By default this will be the package version.   |
+| GDS_SENTRY_RELEASE           | string  | {{version}} | Specify the release version for Sentry tracking. By default this will be the package version.   |
 | GDS_SENTRY_TRACK_PERFORMANCE | bool    | false       | Enable performance tracing to Sentry with the specified sample rate.                              |
 | GDS_SENTRY_SAMPLE_RATE       | float64 | 0.2         | The percentage of transactions to trace (0.0 to 1.0).                                             |
 | GDS_SENTRY_DEBUG             | bool    | false       | Set Sentry to debug mode for testing.                                                             |
