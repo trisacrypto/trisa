@@ -18,8 +18,8 @@ The BFF (backend for frontend) is the backend API that powers the GDS UI at [vas
 | GDS_BFF_ALLOW_ORIGINS | []string | http://localhost:3000 | A list of allowed origins for the CORS middleware to accept.                                                     |
 | GDS_BFF_REGISTER_URL  | string   |                       | The base URL to direct users to for registration signup (no trailing slash) - used in email templates.           |
 | GDS_BFF_LOGIN_URL     | string   |                       | The base URL to direct users to for login (no trailing slash) - used in email templates.                         |
-| GDS_BFF_COOKIE_DOMAIN | string   |                       | The domain to set secure cookies for (particularly for CSRF and authentication)                                  |
-| GDS_BFF_SERVE_DOCS    | bool     | false                 | If true, OpenAPI documentation is complied and served alongside the BFF API.                                     |
+| GDS_BFF_COOKIE_DOMAIN | string   |                       | The domain to set secure cookies for (particularly for CSRF and authentication).                                  |
+| GDS_BFF_SERVE_DOCS    | bool     | false                 | If true, OpenAPI documentation is compiled and served alongside the BFF API.                                     |
 
 ### User Cache Config
 
@@ -37,7 +37,7 @@ The BFF uses Auth0 for authentication and authorization and must connect to the 
 
 | EnvVar                       | Type     | Default | Description                                                                                                                                                                        |
 |------------------------------|----------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| GDS_BFF_AUTH0_DOMAIN         | string   |         | The tenant domain provided by the Auth0 application or API (domain only, no scheme or path)                                                                                        |
+| GDS_BFF_AUTH0_DOMAIN         | string   |         | The tenant domain provided by the Auth0 application or API (domain only, no scheme or path).                                                                                        |
 | GDS_BFF_AUTH0_ISSUER         | string   |         | Set to the custom domain if enabled in Auth0 (ensuring the trailing slash is set if required by the Auth0 configuration) - this will confirm the issuer from the Auth0 JWT tokens. |
 | GDS_BFF_AUTH0_AUDIENCE       | string   |         | The audience to verify for the Auth0 API configuration (usually the unique name of the API).                                                                                       |
 | GDS_BFF_AUTH0_PROVIDER_CACHE | duration | 5m      | Configures the JWKS caching provider to fetch public keys from Auth0 for JWT token validation.                                                                                     |
@@ -53,15 +53,15 @@ The configuration without the prefixes is specified below, at the end of each se
 
 #### GDS Database Connection
 
-The GDS Database connection is a store connection that is similar to the BFF Datbase connection described in a following section. Configuring for the TestNet and MainNet database connections is as follows:
+The GDS Database connection is a store connection that is similar to the BFF Database connection described in the following section. Configuration for the TestNet and MainNet database connections is as follows:
 
 | EnvVar                   | Type   | Default | Description                                                                          |
 |--------------------------|--------|---------|--------------------------------------------------------------------------------------|
-| DATABASE_URL             | string |         | Required, the DSN to connect to the database on (see below for details)              |
-| DATABASE_REINDEX_ON_BOOT | bool   | false   | When the server starts, instead of loading indexes from disk, recreate and save them |
-| DATABASE_INSECURE        | bool   | false   | If set do not connect to the TrtlDB with mTLS authentication                         |
-| DATABASE_CERT_PATH       | string |         | The path to the mTLS client-side certs for database auth                             |
-| DATABASE_POOL_PATH       | string |         | The path to the mTLS public cert pools to accept server connections                  |
+| DATABASE_URL             | string |         | Required, the DSN to connect to the database on (see below for details).              |
+| DATABASE_REINDEX_ON_BOOT | bool   | false   | When the server starts, instead of loading indexes from disk, recreate and save them. |
+| DATABASE_INSECURE        | bool   | false   | If set do not connect to the TrtlDB with mTLS authentication.                        |
+| DATABASE_CERT_PATH       | string |         | The path to the mTLS client-side certs for database auth.                             |
+| DATABASE_POOL_PATH       | string |         | The path to the mTLS public cert pools to accept server connections.                  |
 
 Note that only a `trtl://` database url should be used for network database connections and that `DATABASE_REINDEX_ON_BOOT` should _always_ be `false` for the BFF.
 
@@ -82,9 +82,9 @@ The BFF connects to the GDS TRISA Directory API to perform operations like regis
 
 | EnvVar             | Type     | Default | Description                                                         |
 |--------------------|----------|---------|---------------------------------------------------------------------|
-| DIRECTORY_INSECURE | bool     | false   | If false does not connect to the directory API using TLS            |
-| DIRECTORY_ENDPOINT | string   |         | The endpoint (host:port) to connect to the directory API on         |
-| DIRECTORY_TIMEOUT  | duration | 10s     | The connection timeout for directory API request and dial contexts  |
+| DIRECTORY_INSECURE | bool     | false   | If false does not connect to the directory API using TLS.            |
+| DIRECTORY_ENDPOINT | string   |         | The endpoint (host:port) to connect to the directory API on.         |
+| DIRECTORY_TIMEOUT  | duration | 10s     | The connection timeout for directory API request and dial contexts.  |
 
 List of environment variables:
 
@@ -101,11 +101,11 @@ The BFF connects to the secure GDS Members API to give logged in users access to
 
 | EnvVar                 | Type     | Default | Description                                                         |
 |------------------------|----------|---------|---------------------------------------------------------------------|
-| MEMBERS_ENDPOINT       | string   |         | The endpoint (host:port) to connect to the members API on           |
-| MEMBERS_TIMEOUT        | duration | 10s     | The connection timeout for members API request and dial contexts    |
-| MEMBERS_MTLS_INSECURE  | bool     | false   | If false does not connect to the members API using mTLS             |
-| MEMBERS_MTLS_CERT_PATH | string   |         | The path to the mTLS client-side certs for members API auth         |
-| MEMBERS_MTLS_POOL_PATH | string   |         | The path to the mTLS public cert pools to accept server connections |
+| MEMBERS_ENDPOINT       | string   |         | The endpoint (host:port) to connect to the members API on.           |
+| MEMBERS_TIMEOUT        | duration | 10s     | The connection timeout for members API request and dial contexts.    |
+| MEMBERS_MTLS_INSECURE  | bool     | false   | If false does not connect to the members API using mTLS.             |
+| MEMBERS_MTLS_CERT_PATH | string   |         | The path to the mTLS client-side certs for members API auth.         |
+| MEMBERS_MTLS_POOL_PATH | string   |         | The path to the mTLS public cert pools to accept server connections. |
 
 List of environment variables:
 
@@ -130,11 +130,11 @@ The primary database store is configured as follows:
 
 | EnvVar                       | Type   | Default | Description                                                                          |
 |------------------------------|--------|---------|--------------------------------------------------------------------------------------|
-| GDS_BFF_DATABASE_URL             | string |         | Required, the DSN to connect to the database on (see below for details)              |
-| GDS_BFF_DATABASE_REINDEX_ON_BOOT | bool   | false   | When the server starts, instead of loading indexes from disk, recreate and save them |
-| GDS_BFF_DATABASE_INSECURE        | bool   | false   | If set do not connect to the TrtlDB with mTLS authentication                         |
-| GDS_BFF_DATABASE_CERT_PATH       | string |         | The path to the mTLS client-side certs for database auth                             |
-| GDS_BFF_DATABASE_POOL_PATH       | string |         | The path to the mTLS public cert pools to accept server connections                  |
+| GDS_BFF_DATABASE_URL             | string |         | Required, the DSN to connect to the database on (see below for details).              |
+| GDS_BFF_DATABASE_REINDEX_ON_BOOT | bool   | false   | When the server starts, instead of loading indexes from disk, recreate and save them. |
+| GDS_BFF_DATABASE_INSECURE        | bool   | false   | If set do not connect to the TrtlDB with mTLS authentication.                         |
+| GDS_BFF_DATABASE_CERT_PATH       | string |         | The path to the mTLS client-side certs for database auth.                             |
+| GDS_BFF_DATABASE_POOL_PATH       | string |         | The path to the mTLS public cert pools to accept server connections.                  |
 
 The `GDS_BFF_DATABASE_URL` is a standard DSN with a scheme, host, path, and query parameters. In the case of the BFF the scheme can be either `trtl://` or `leveldb://`.
 
@@ -150,8 +150,8 @@ The BFF uses [SendGrid](https://sendgrid.com/) to send email notifications and t
 |-----------------------|--------|---------------------------------------------------|--------------------------------------------------------------------------|
 | GDS_BFF_SERVICE_EMAIL | string | TRISA Directory Service <admin@vaspdirectory.net> | The email address used as the sender for all emails from the BFF system. |
 | SENDGRID_API_KEY      | string |                                                   | API Key to authenticate to SendGrid with.                                |
-| GDS_BFF_EMAIL_TESTING | bool   | false                                             | Use email in testing mode rather than send live emails                   |
-| GDS_BFF_EMAIL_STORAGE | string | ""                                                | Directory to store test emails for "mark one eyeball" review             |
+| GDS_BFF_EMAIL_TESTING | bool   | false                                             | Use email in testing mode rather than send live emails.                   |
+| GDS_BFF_EMAIL_STORAGE | string | ""                                                | Directory to store test emails for "mark one eyeball" review.             |
 
 SendGrid is considered **enabled** if the SendGrid API Key is set. The service and admin email addresses are required if SendGrid is enabled.
 
