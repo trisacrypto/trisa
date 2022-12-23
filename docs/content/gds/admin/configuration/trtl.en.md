@@ -6,7 +6,7 @@ description: "Configuring the Trtl Database"
 weight: 40
 ---
 
-TrtlDb is a globally replicated key-value store that uses anti-entropy for eventually consistent replication that minimizes egress costs, maximizes availability, and is partition tolerant. It exposes unary and streaming APIs for data accesses and is secured via mTLS connections. Its environment variables are prefixed with the `TRTL_` tag. The primary configuration is as follows:
+TrtlDb is a globally replicated key-value store that uses anti-entropy for eventually consistent replication that minimizes egress costs, maximizes availability, and is partition tolerant. It exposes unary and streaming APIs for data access and is secured via mTLS connections. Its environment variables are prefixed with the `TRTL_` tag. The primary configuration is as follows:
 
 | EnvVar               | Type   | Default | Description                                                                                                      |
 |----------------------|--------|---------|------------------------------------------------------------------------------------------------------------------|
@@ -15,7 +15,7 @@ TrtlDb is a globally replicated key-value store that uses anti-entropy for event
 | TRTL_METRICS_ADDR    | string | :7777   | The IP address and port to bind the prometheus metrics http server to.                                           |
 | TRTL_METRICS_ENABLED | bool   | true    | If false, disables the prometheus metrics http server.                                                           |
 | TRTL_LOG_LEVEL       | string | info    | The verbosity of logging, one of trace, debug, info, warn, error, fatal, or panic.                               |
-| TRTL_CONSOLE_LOG     | bool   | false   | If true will print human readable logs instead of JSON logs for machine consumption.                             |
+| TRTL_CONSOLE_LOG     | bool   | false   | If true, will print human readable logs instead of JSON logs for machine consumption.                             |
 
 ### Database
 
@@ -47,7 +47,7 @@ Replication occurs with bilateral anti-entropy, meaning that after a jittered in
 
 ### Replica Identification Strategy
 
-When deployed in on a kubernetes cluster, a trtl process running in a container in a pod must identify itself to determine what replica it is so that it can configure itself correctly (particularly if the replica is part of a stateful set). The replica strategy configuration defines how a trtl process bootstraps itself as follows:
+When deployed in a kubernetes cluster, a trtl process running in a container in a pod must identify itself to determine what replica it is so that it can configure itself correctly (particularly if the replica is part of a stateful set). The replica strategy configuration defines how a trtl process bootstraps itself as follows:
 
 | EnvVar                             | Type   | Default | Description                                                                                                              |
 |------------------------------------|--------|---------|--------------------------------------------------------------------------------------------------------------------------|
@@ -56,7 +56,7 @@ When deployed in on a kubernetes cluster, a trtl process running in a container 
 | TRTL_REPLICA_STRATEGY_FILE_PID     | string |         | Set to the path of a PID file, if not empty uses the file PID strategy (second strategy after hostname-pid).              |
 | TRTL_REPLICA_STRATEGY_JSON_CONFIG  | string |         | Set to the path of a JSON configuration file, if not empty uses the JSON config strategy (third strategy after file-pid). |
 
-The strategies allow the process to identify its PID - either by processing a hostname (e.g. trtl-10) or by reading the pid from a file. The remaineder of the replica can then be configured from the JSON file rather than directly from the environment.
+The strategies allow the process to identify its PID - either by processing a hostname (e.g. trtl-10) or by reading the pid from a file. The remainder of the replica can then be configured from the JSON file rather than directly from the environment.
 
 ### MTLS Config
 
@@ -64,7 +64,7 @@ Connections to the TrtlDB are secured and authenticated using mTLS. The mTLS con
 
 | EnvVar               | Type   | Default | Description                                                                               |
 |----------------------|--------|---------|-------------------------------------------------------------------------------------------|
-| TRTL_INSECURE        | bool   | false   | If true the server will start without mTLS configured.                                    |
+| TRTL_INSECURE        | bool   | false   | If true, the server will start without mTLS configured.                                    |
 | TRTL_MTLS_CHAIN_PATH | string |         | The path to the pool file with valid certificate authorities to authenticate clients for. |
 | TRTL_MTLS_CERT_PATH  | string |         | The path to the certificates with the private key for the trtl server.                    |
 
