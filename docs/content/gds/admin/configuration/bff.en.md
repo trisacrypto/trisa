@@ -20,7 +20,16 @@ The BFF (backend for frontend) is the backend API that powers the GDS UI at [vas
 | GDS_BFF_LOGIN_URL     | string   |                       | The base URL to direct users to for login (no trailing slash) - used in email templates.                         |
 | GDS_BFF_COOKIE_DOMAIN | string   |                       | The domain to set secure cookies for (particularly for CSRF and authentication)                                  |
 | GDS_BFF_SERVE_DOCS    | bool     | false                 | If true, OpenAPI documentation is complied and served alongside the BFF API.                                     |
-| GDS_BFF_USER_CACHE    | bool     | false                 | If true, user information from auth0 is cached in an expiring LRU to reduce the number of look ups.              |
+
+### User Cache Config
+
+The BFF interacts with Auth0 to fetch data about users. To reduce the number of Auth0 network lookups an expiring LRU cache is used to store user information for a fixed amount of time while bounding the amount of space used by the cache. The configuration for the user cache is as follows:
+
+| EnvVar                        | Type     | Default | Description                                                        |
+|-------------------------------|----------|---------|--------------------------------------------------------------------|
+| GDS_BFF_USER_CACHE_ENABLED    | bool     | false   | Enable user caching to reduce lookups with the Auth0 API.          |
+| GDS_BFF_USER_CACHE_SIZE       | uint     | 16384   | The size in bytes to limit the LRU cache to.                       |
+| GDS_BFF_USER_CACHE_EXPIRATION | duration | 8h      | How long to keep records in the cache before forcing a new lookup. |
 
 ### Auth0 Config
 
@@ -31,14 +40,85 @@ The BFF uses Auth0 for authentication and authorization and must connect to the 
 | GDS_BFF_AUTH0_DOMAIN         | string   |         | The tenant domain provided by the Auth0 application or API (domain only, no scheme or path)                                                                                        |
 | GDS_BFF_AUTH0_ISSUER         | string   |         | Set to the custom domain if enabled in Auth0 (ensuring the trailing slash is set if required by the Auth0 configuration) - this will confirm the issuer from the Auth0 JWT tokens. |
 | GDS_BFF_AUTH0_AUDIENCE       | string   |         | The audience to verify for the Auth0 API configuration (usually the unique name of the API).                                                                                       |
-| GDS_BFF_AUTH0_PROVIDER_CACHE | duration | 5m      | The maximum duration to cache user and application data on Auth0 to prevent repeated data queries.                                                                                 |
+| GDS_BFF_AUTH0_PROVIDER_CACHE | duration | 5m      | Configures the JWKS caching provider to fetch public keys from Auth0 for JWT token validation.                                                                                     |
 | GDS_BFF_AUTH0_CLIENT_ID      | string   |         | The Client ID for the management API specified by Auth0.                                                                                                                           |
 | GDS_BFF_AUTH0_CLIENT_SECRET  | string   |         | The Client Secret for the management API specified by Auth0.                                                                                                                       |
 | GDS_BFF_AUTH0_TESTING        | bool     | false   | If true a mock authenticator is used for testing purposes.                                                                                                                         |
 
 ### Network Configuration
 
+The network configuration enables the BFF to connect to the GDS Database, Directory API, and Members API for both the MainNet and TestNet networks. The required configuration and configuration values is the same for both networks but the environment variables are prefixed with `GDS_BFF_TESTNET_` and `GDS_BFF_MAINNET_` respectively.
 
+The configuration without the prefixes is specified below, at the end of each section, we will provide an exhaustive list of environment variables that are required to fully configure the BFF for connecting to both the TestNet and MainNet GDS services.
+
+#### GDS Database Connection
+
+The GDS Database connection is a store connection that is similar to the BFF Datbase connection described in a following section. Configuring for the TestNet and MainNet database connections is as follows:
+
+| EnvVar                   | Type   | Default | Description                                                                          |
+|--------------------------|--------|---------|--------------------------------------------------------------------------------------|
+| DATABASE_URL             | string |         | Required, the DSN to connect to the database on (see below for details)              |
+| DATABASE_REINDEX_ON_BOOT | bool   | false   | When the server starts, instead of loading indexes from disk, recreate and save them |
+| DATABASE_INSECURE        | bool   | false   | If set do not connect to the TrtlDB with mTLS authentication                         |
+| DATABASE_CERT_PATH       | string |         | The path to the mTLS client-side certs for database auth                             |
+| DATABASE_POOL_PATH       | string |         | The path to the mTLS public cert pools to accept server connections                  |
+
+Note that only a `trtl://` database url should be used for network database connections and that `DATABASE_REINDEX_ON_BOOT` should _always_ be `false` for the BFF.
+
+List of environment variables:
+
+- `GDS_BFF_TESTNET_DATABASE_URL`
+- `GDS_BFF_TESTNET_DATABASE_INSECURE`
+- `GDS_BFF_TESTNET_DATABASE_CERT_PATH`
+- `GDS_BFF_TESTNET_DATABASE_POOL_PATH`
+- `GDS_BFF_MAINNET_DATABASE_URL`
+- `GDS_BFF_MAINNET_DATABASE_INSECURE`
+- `GDS_BFF_MAINNET_DATABASE_CERT_PATH`
+- `GDS_BFF_MAINNET_DATABASE_POOL_PATH`
+
+#### GDS Directory API Configuration
+
+The BFF connects to the GDS TRISA Directory API to perform operations like registration submission, contact verification, and verification status lookups. The configuration for the directory API clients is as follows:
+
+| EnvVar             | Type     | Default | Description                                                         |
+|--------------------|----------|---------|---------------------------------------------------------------------|
+| DIRECTORY_INSECURE | bool     | false   | If false does not connect to the directory API using TLS            |
+| DIRECTORY_ENDPOINT | string   |         | The endpoint (host:port) to connect to the directory API on         |
+| DIRECTORY_TIMEOUT  | duration | 10s     | The connection timeout for directory API request and dial contexts  |
+
+List of environment variables:
+
+- `GDS_BFF_TESTNET_DIRECTORY_INSECURE`
+- `GDS_BFF_TESTNET_DIRECTORY_ENDPOINT`
+- `GDS_BFF_TESTNET_DIRECTORY_TIMEOUT`
+- `GDS_BFF_MAINNET_DIRECTORY_INSECURE`
+- `GDS_BFF_MAINNET_DIRECTORY_ENDPOINT`
+- `GDS_BFF_MAINNET_DIRECTORY_TIMEOUT`
+
+#### GDS Members API Configuration
+
+The BFF connects to the secure GDS Members API to give logged in users access to the complete directory including listing verified members and updating their member record. The configuration for the members API client is as follows:
+
+| EnvVar                 | Type     | Default | Description                                                         |
+|------------------------|----------|---------|---------------------------------------------------------------------|
+| MEMBERS_ENDPOINT       | string   |         | The endpoint (host:port) to connect to the members API on           |
+| MEMBERS_TIMEOUT        | duration | 10s     | The connection timeout for members API request and dial contexts    |
+| MEMBERS_MTLS_INSECURE  | bool     | false   | If false does not connect to the members API using mTLS             |
+| MEMBERS_MTLS_CERT_PATH | string   |         | The path to the mTLS client-side certs for members API auth         |
+| MEMBERS_MTLS_POOL_PATH | string   |         | The path to the mTLS public cert pools to accept server connections |
+
+List of environment variables:
+
+- `GDS_BFF_TESTNET_MEMBERS_ENDPOINT`
+- `GDS_BFF_TESTNET_MEMBERS_TIMEOUT`
+- `GDS_BFF_TESTNET_MEMBERS_MTLS_INSECURE`
+- `GDS_BFF_TESTNET_MEMBERS_MTLS_CERT_PATH`
+- `GDS_BFF_TESTNET_MEMBERS_MTLS_POOL_PATH`
+- `GDS_BFF_MAINNET_MEMBERS_ENDPOINT`
+- `GDS_BFF_MAINNET_MEMBERS_TIMEOUT`
+- `GDS_BFF_MAINNET_MEMBERS_MTLS_INSECURE`
+- `GDS_BFF_MAINNET_MEMBERS_MTLS_CERT_PATH`
+- `GDS_BFF_MAINNET_MEMBERS_MTLS_POOL_PATH`
 
 ### Database
 
