@@ -29,10 +29,10 @@ The GDS User Interface uses Auth0 for authentication. Front-end Auth0 configurat
 
 | EnvVar                       | Type   | Default | Description                                                                                |
 |------------------------------|--------|---------|--------------------------------------------------------------------------------------------|
-| REACT_APP_AUTH0_DOMAIN       | string |         | The domain (or custom domain) to connect to Auth0 on (e.g. auth.vaspdirectory.net)         |
-| REACT_APP_AUTH0_CLIENT_ID    | string |         | The ClientID of the auth0 app as configured in the Auth0 dashboard.                        |
+| REACT_APP_AUTH0_DOMAIN       | string |         | The domain (or custom domain) to connect to Auth0 on (e.g. auth.vaspdirectory.net).         |
+| REACT_APP_AUTH0_CLIENT_ID    | string |         | The ClientID of the Auth0 app as configured in the Auth0 dashboard.                        |
 | REACT_APP_AUTH0_REDIRECT_URI | string |         | The callback URI for the application to receive Auth0 redirects after authentication.      |
-| REACT_APP_AUTH0_SCOPE        | string |         | The required auth0 scope (usually 'openid profile email')                                  |
+| REACT_APP_AUTH0_SCOPE        | string |         | The required Auth0 scope (usually 'openid profile email')                                  |
 | REACT_APP_AUTH0_AUDIENCE     | string |         | The audience of the tokens, usually the ID of the API (e.g. https://bff.vaspdirectory.net) |
 
 ### GDS Admin UI
