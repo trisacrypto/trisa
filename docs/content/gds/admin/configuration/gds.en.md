@@ -153,7 +153,10 @@ The GDS uses [Sentry](https://sentry.io/) to assist with error monitoring and pe
 | GDS_SENTRY_ENVIRONMENT       | string  |             | The environment to report (e.g. development, staging, production). Required if Sentry is enabled. |
 | GDS_SENTRY_RELEASE           | string  | {{version}} | Specify the release version for Sentry tracking. By default this will be the package version.   |
 | GDS_SENTRY_TRACK_PERFORMANCE | bool    | false       | Enable performance tracing to Sentry with the specified sample rate.                              |
-| GDS_SENTRY_SAMPLE_RATE       | float64 | 0.2         | The percentage of transactions to trace (0.0 to 1.0).                                             |
+| GDS_SENTRY_SAMPLE_RATE       | float64 | 0.85        | The percentage of transactions to trace (0.0 to 1.0).                                             |
+| GDS_SENTRY_REPORT_ERRORS     | bool    | false       | If true sends gRPC errors to Sentry as exceptions (useful for development or staging)             |
 | GDS_SENTRY_DEBUG             | bool    | false       | Set Sentry to debug mode for testing.                                                             |
 
 Sentry is considered **enabled** if a DSN is configured. Performance tracing is only enabled if Sentry is enabled *and* track performance is set to true. If Sentry is enabled, an environment is required, otherwise the configuration will be invalid.
+
+Note that the `sentry.Config` object has a field `Repanic` that should not be set by the user. This field is used to manage panics in chained interceptors.

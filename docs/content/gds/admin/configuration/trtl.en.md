@@ -92,7 +92,10 @@ TrtlDB uses [Sentry](https://sentry.io/) to assist with error monitoring and per
 | TRTL_SENTRY_ENVIRONMENT       | string  |             | The environment to report (e.g. development, staging, production). Required if Sentry is enabled. |
 | TRTL_SENTRY_RELEASE           | string  | {{version}} | Specify the release version for Sentry tracking. By default this will be the package version.   |
 | TRTL_SENTRY_TRACK_PERFORMANCE | bool    | false       | Enable performance tracing to Sentry with the specified sample rate.                              |
-| TRTL_SENTRY_SAMPLE_RATE       | float64 | 0.2         | The percentage of transactions to trace (0.0 to 1.0).                                             |
+| TRTL_SENTRY_SAMPLE_RATE       | float64 | 0.85        | The percentage of transactions to trace (0.0 to 1.0).                                             |
+| TRTL_SENTRY_REPORT_ERRORS     | bool    | false       | If true sends gRPC errors to Sentry as exceptions (useful for development or staging)             |
 | TRTL_SENTRY_DEBUG             | bool    | false       | Set Sentry to debug mode for testing.                                                             |
 
 Sentry is considered **enabled** if a DSN is configured. Performance tracing is only enabled if Sentry is enabled *and* track performance is set to true. If Sentry is enabled, an environment is required, otherwise the configuration will be invalid.
+
+Note that the `sentry.Config` object has a field `Repanic` that should not be set by the user. This field is used to manage panics in chained interceptors.
