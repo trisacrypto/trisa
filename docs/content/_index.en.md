@@ -11,6 +11,12 @@ weight: 0
 [![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/trisa/pkg.svg)](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/trisacrypto/trisa)](https://goreportcard.com/report/github.com/trisacrypto/trisa)
 
+{{< rawhtml >}}
+<div style="margin: auto; width:640px">
+<iframe src="https://www.slideshare.net/slideshow/embed_code/key/GHNJFDKtfO5Eon?hostedIn=slideshare&page=upload" width="640" height="410" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+</div>
+{{< /rawhtml >}}
+
 The goal of the Travel Rule Information Sharing Architecture (TRISA) is to enable
 compliance with the FATF and FinCEN Travel Rules for cryptocurrency transaction
 identity information without modifying core blockchain protocols, and without
