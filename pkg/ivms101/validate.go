@@ -119,17 +119,17 @@ func (p *LegalPerson) Validate() (err error) {
 		// Constraint: CompleteNationalIdentifierLegalPerson
 		// C9 means that Country of Issue must **only** be used for natural persons
 		if p.NationalIdentification.CountryOfIssue != "" {
-			return ErrCompleteNationalIdentifierLegalPerson
+			return ErrCompleteNationalIdentifierCountry
 		}
 		if p.NationalIdentification.NationalIdentifierType != NationalIdentifierLEIX {
 			// if the ID is not LEIX, Registration Authority is mandatory
 			if p.NationalIdentification.RegistrationAuthority == "" {
-				return ErrCompleteNationalIdentifierLegalPerson
+				return ErrCompleteNationalIdentifierAuthorityEmpty
 			}
 		} else {
 			// if the ID is an LEIX, Registration Authority must be empty
 			if p.NationalIdentification.RegistrationAuthority != "" {
-				return ErrCompleteNationalIdentifierLegalPerson
+				return ErrCompleteNationalIdentifierAuthority
 			}
 		}
 	}
@@ -207,7 +207,7 @@ func (n *NaturalPersonNameId) Validate() (err error) {
 	return nil
 }
 
-// Validate the IVMS101 constraints for local natural person anme identifiers
+// Validate the IVMS101 constraints for local natural person name identifiers
 func (n *LocalNaturalPersonNameId) Validate() (err error) {
 	if n.PrimaryIdentifier == "" || len(n.PrimaryIdentifier) > 100 {
 		return ErrInvalidNaturalPersonName
@@ -346,7 +346,7 @@ func (id *NationalIdentification) Validate() (err error) {
 		id.CountryOfIssue = strings.ToUpper(id.CountryOfIssue)
 	}
 
-	// TODO: Contraint authority in GLEIF Registration authorities list
+	// TODO: Constraint authority in GLEIF Registration authorities list
 	return nil
 }
 
