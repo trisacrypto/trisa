@@ -27,24 +27,38 @@ The following table of "customers" for Alice, Bob, and Evil can be used as a ref
 
 | VASP                  | "Crypto Wallet"                    | Email                 | Originator Policy | Beneficiary Policy |
 |-----------------------|------------------------------------|-----------------------|-------------------|--------------------|
+| api.bob.vaspbot.net   | **n8nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh** | robert.test@bobvasp.co.uk  | SendPartial       | SyncRepair         |
 | api.bob.vaspbot.net   | **18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh** | robert@bobvasp.co.uk  | SendPartial       | SyncRepair         |
+| api.bob.vaspbot.net   | nLgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george.test@bobvasp.co.uk  | SendFull          | SyncRequire        |
 | api.bob.vaspbot.net   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  | SendFull          | SyncRequire        |
+| api.bob.vaspbot.net   | n4WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry.test@bobvasp.co.uk   | SendFull          | AsyncRepair        |
 | api.bob.vaspbot.net   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   | SendFull          | AsyncRepair        |
-| api.bob.vaspbot.net   | _1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9_ | fred@bobvasp.co.uk    | SendError     | AsyncReject        |
+| api.bob.vaspbot.net   | nHzej6a2VG7C8iCAD5DAdN72cZH5THSMt9 | fred.test@bobvasp.co.uk    | SendError     | AsyncReject        |
+| api.bob.vaspbot.net   | 1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9 | fred@bobvasp.co.uk    | SendError     | AsyncReject        |
+| api.alice.vaspbot.net | **nASkqdo1hvydosVRvRv2j6eNnWpWLHucMX** | mary.test@alicevasp.us     | SendPartial       | SyncRepair         |
 | api.alice.vaspbot.net | **1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX** | mary@alicevasp.us     | SendPartial       | SyncRepair         |
+| api.alice.vaspbot.net | nMRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice.test@alicevasp.us    | SendFull          | SyncRequire        |
 | api.alice.vaspbot.net | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    | SendFull          | SyncRequire        |
+| api.alice.vaspbot.net | n4HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane.test@alicevasp.us     | SendFull          | AsyncRepair        |
 | api.alice.vaspbot.net | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     | SendFull          | AsyncRepair        |
-| api.alice.vaspbot.net | _19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ_ | sarah@alicevasp.us    | SendError     | AsyncReject        |
+| api.alice.vaspbot.net | n9nFejdNSUhzkAAdwAvP3wc53o8dL326QQ_ | sarah.test@alicevasp.us    | SendError     | AsyncReject        |
+| api.alice.vaspbot.net | 19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ_ | sarah@alicevasp.us    | SendError     | AsyncReject        |
+| api.evil.vaspbot.net  | **nPFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF** | voldemort.test@evilvasp.gg | SendPartial       | SyncRepair         |
 | api.evil.vaspbot.net  | **1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF** | voldemort@evilvasp.gg | SendPartial       | SyncRepair         |
+| api.evil.vaspbot.net  | n72n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer.test@evilvasp.gg | SendFull          | SyncRequire        |
 | api.evil.vaspbot.net  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg | SendFull          | SyncRequire        |
+| api.evil.vaspbot.net  | n82kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews.test@evilvasp.gg   | SendFull          | AsyncRepair        |
 | api.evil.vaspbot.net  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   | SendFull          | AsyncRepair        |
-| api.evil.vaspbot.net  | _1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz_ | gambler@evilvasp.gg   | SendError     | AsyncReject        |
+| api.evil.vaspbot.net  | nAsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz | gambler.test@evilvasp.gg   | SendError     | AsyncReject        |
+| api.evil.vaspbot.net  | 1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz | gambler@evilvasp.gg   | SendError     | AsyncReject        |
 
 Note that all rVASP data was generated using a Faker tool to produce realistic/consistent test data and fixtures; this data is completely fictional. For example, the records for Alice VASP (a fake US company) are primarily in North America, etc.
 
 If you're a Traveler customer, the bold addresses above have some attribution data associated with them, and are a good candidate for Traveler-based rVASP interactions.
 
 In order to support multiple behaviors at once, such as synchronous and asynchronous responses, each wallet address is configured with an originator policy and a beneficiary policy. The originator policy defines how the rVASP will behave when *initiating* transfers to a remote VASP. The beneficiary policy defines how the rVASP will behave when *responding* to transfers from a remote VASP. These policies are described in depth below.
+
+There are two wallets for each customer to support wallet addresses that look like either testnet or mainnet crypto addresses, however the rVASP behavior and data is exactly the same for each pair. Note that rVASPs don't interact with any real chain; the wallet addresses are simply a mechanism to configure behavior as described below.
 
 ### Preliminaries
 
