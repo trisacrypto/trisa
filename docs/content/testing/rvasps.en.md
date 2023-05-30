@@ -27,29 +27,29 @@ The following table of "customers" for Alice, Bob, and Evil can be used as a ref
 
 | VASP                  | "Crypto Wallet"                    | Email                 | Originator Policy | Beneficiary Policy |
 |-----------------------|------------------------------------|-----------------------|-------------------|--------------------|
-| api.bob.vaspbot.net   | **n8nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh** | robert.test@bobvasp.co.uk  | SendPartial       | SyncRepair         |
+| api.bob.vaspbot.net   | **moJuU1GjhJzUdUGukw13a4w6CWjfFsJ92q** | robert.test@bobvasp.co.uk  | SendPartial       | SyncRepair         |
 | api.bob.vaspbot.net   | **18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh** | robert@bobvasp.co.uk  | SendPartial       | SyncRepair         |
-| api.bob.vaspbot.net   | nLgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george.test@bobvasp.co.uk  | SendFull          | SyncRequire        |
+| api.bob.vaspbot.net   | n1CqdbqoPZ8Y11UzQG6KyapWj4vcN3owcs | george.test@bobvasp.co.uk  | SendFull          | SyncRequire        |
 | api.bob.vaspbot.net   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  | SendFull          | SyncRequire        |
-| api.bob.vaspbot.net   | n4WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry.test@bobvasp.co.uk   | SendFull          | AsyncRepair        |
+| api.bob.vaspbot.net   | mj2RQ7AcYs5sMQVJVTUn6ZZX7iMiMzn75o | larry.test@bobvasp.co.uk   | SendFull          | AsyncRepair        |
 | api.bob.vaspbot.net   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   | SendFull          | AsyncRepair        |
-| api.bob.vaspbot.net   | nHzej6a2VG7C8iCAD5DAdN72cZH5THSMt9 | fred.test@bobvasp.co.uk    | SendError     | AsyncReject        |
+| api.bob.vaspbot.net   | mxWc29f1JHYSupfmveBYTHKMUYsnNcrJDV | fred.test@bobvasp.co.uk    | SendError     | AsyncReject        |
 | api.bob.vaspbot.net   | 1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9 | fred@bobvasp.co.uk    | SendError     | AsyncReject        |
-| api.alice.vaspbot.net | **nASkqdo1hvydosVRvRv2j6eNnWpWLHucMX** | mary.test@alicevasp.us     | SendPartial       | SyncRepair         |
+| api.alice.vaspbot.net | **mpxi8gszWxQtayy3dztQZ1rheWRDFZ2QWp** | mary.test@alicevasp.us     | SendPartial       | SyncRepair         |
 | api.alice.vaspbot.net | **1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX** | mary@alicevasp.us     | SendPartial       | SyncRepair         |
-| api.alice.vaspbot.net | nMRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice.test@alicevasp.us    | SendFull          | SyncRequire        |
+| api.alice.vaspbot.net | n1wAFyKnzpyPchDUUwRpgXsrJYdekV7KGR | alice.test@alicevasp.us    | SendFull          | SyncRequire        |
 | api.alice.vaspbot.net | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    | SendFull          | SyncRequire        |
-| api.alice.vaspbot.net | n4HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane.test@alicevasp.us     | SendFull          | AsyncRepair        |
+| api.alice.vaspbot.net | mioiUW2dR9y7PdAFs8gPPhthaZgmpHhgGd | jane.test@alicevasp.us     | SendFull          | AsyncRepair        |
 | api.alice.vaspbot.net | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     | SendFull          | AsyncRepair        |
-| api.alice.vaspbot.net | n9nFejdNSUhzkAAdwAvP3wc53o8dL326QQ_ | sarah.test@alicevasp.us    | SendError     | AsyncReject        |
-| api.alice.vaspbot.net | 19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ_ | sarah@alicevasp.us    | SendError     | AsyncReject        |
-| api.evil.vaspbot.net  | **nPFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF** | voldemort.test@evilvasp.gg | SendPartial       | SyncRepair         |
+| api.alice.vaspbot.net | mpJCwniMFW9FXGeFejtksrpPunjLEmPZsu | sarah.test@alicevasp.us    | SendError     | AsyncReject        |
+| api.alice.vaspbot.net | 19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ | sarah@alicevasp.us    | SendError     | AsyncReject        |
+| api.evil.vaspbot.net  | **n3mRAXVqEsN22rnXWEsnRMQMc9QmM47qUX** | voldemort.test@evilvasp.gg | SendPartial       | SyncRepair         |
 | api.evil.vaspbot.net  | **1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF** | voldemort@evilvasp.gg | SendPartial       | SyncRepair         |
-| api.evil.vaspbot.net  | n72n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer.test@evilvasp.gg | SendFull          | SyncRequire        |
+| api.evil.vaspbot.net  | mmYjRCpKYYm22RGKjVuruADHBR8c5dni68 | launderer.test@evilvasp.gg | SendFull          | SyncRequire        |
 | api.evil.vaspbot.net  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg | SendFull          | SyncRequire        |
-| api.evil.vaspbot.net  | n82kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews.test@evilvasp.gg   | SendFull          | AsyncRepair        |
+| api.evil.vaspbot.net  | mfdz3J9kQ6skqRjrdkQyoSg95WZqmRXmBA  | badnews.test@evilvasp.gg   | SendFull          | AsyncRepair        |
 | api.evil.vaspbot.net  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   | SendFull          | AsyncRepair        |
-| api.evil.vaspbot.net  | nAsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz | gambler.test@evilvasp.gg   | SendError     | AsyncReject        |
+| api.evil.vaspbot.net  | mqPCJiSRPYqFmA7MtxxCwwABFQ52nzC4gV | gambler.test@evilvasp.gg   | SendError     | AsyncReject        |
 | api.evil.vaspbot.net  | 1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz | gambler@evilvasp.gg   | SendError     | AsyncReject        |
 
 Note that all rVASP data was generated using a Faker tool to produce realistic/consistent test data and fixtures; this data is completely fictional. For example, the records for Alice VASP (a fake US company) are primarily in North America, etc.
