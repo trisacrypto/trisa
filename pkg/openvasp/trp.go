@@ -5,6 +5,21 @@ import (
 	"github.com/trisacrypto/trisa/pkg/slip0044"
 )
 
+// OpenVASP Application Headers
+const (
+	APIVersionHeader        = "api-version"
+	APIExtensionsHeader     = "api-extensions"
+	RequestIdentifierHeader = "request-identifier"
+	ContentTypeHeader       = "content-type"
+)
+
+// OpenVASP Application Header Values
+const (
+	APIVersion       = "3.1.0"
+	ContentTypeValue = "application/json; charset=utf-8"
+	ContentMediaType = "application/json"
+)
+
 // TRP defines a Travel Rule Protocol payload that contains information about the
 // transaction and the originator and beneficiary of the transaction.
 type TRP struct {
