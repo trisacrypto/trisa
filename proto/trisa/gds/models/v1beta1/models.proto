@@ -184,6 +184,7 @@ enum BusinessCategory {
     GOVERNMENT_ENTITY = 2;
     BUSINESS_ENTITY = 3;
     NON_COMMERCIAL_ENTITY = 4;
+    NON_VASP_ENTITY = 5;
 }
 
 enum VerificationState {
