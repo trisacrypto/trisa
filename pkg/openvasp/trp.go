@@ -81,3 +81,40 @@ type UnsealedTRISAEnvelope struct {
 	HMACSecret    []byte `json:"hmac_secret"`
 	HMACAlgorithm string `json:"hmac_algorithm"`
 }
+
+// InquiryResolution is used to approve or reject a TRP Transfer Inquiry either
+// automatically in direct response to the inquiry request or via the callback URL
+// specified in the request. One of "approved", "rejected", or "version" should be
+// specified to ensure unambiguous results are returned to the caller.
+type InquiryResolution struct {
+	Version  string    `json:"version,omitempty"`  // the API version of the request
+	Approved *Approval `json:"approved,omitempty"` // payment address and callback
+	Rejected string    `json:"rejected,omitempty"` // human readable comment (must be specified to reject)
+}
+
+// Approval is used to accept a TRP Transfer Inquiry.
+type Approval struct {
+	Address  string `json:"address"`  // some payment address
+	Callback string `json:"callback"` // some implementation defined URL for transfer confirmation
+}
+
+// Confirmation JSON data is sent in response to a TransferInquiry via a POST to the
+// callback URl. Only one of txid or canceled should be specified. The txid should be
+// specified only if the transaction has been broadcasted. Canceled is used to indicate
+// that the transfer will not move forward with a human readable comment.
+type Confirmation struct {
+	TXID     string `json:"txid,omitempty"`     // some asset-specific tx identifier
+	Canceled string `json:"canceled,omitempty"` // human readable comment or null
+}
+
+func (c Confirmation) Validate() error {
+	if c.TXID == "" && c.Canceled == "" {
+		return ErrEmptyConfirmation
+	}
+
+	if c.TXID != "" && c.Canceled != "" {
+		return ErrAmbiguousConfirmation
+	}
+
+	return nil
+}
