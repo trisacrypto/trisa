@@ -19,10 +19,11 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.83.1'
+          hugo-version: '0.110.0'
 
       - name: Build
-        run: hugo --minify -s docs/
+        run: hugo --gc --minify -s docs/ --templateMetrics --templateMetricsHints --verbose --verboseLog --buildDrafts --buildExpired --buildFuture --forceSyncStatic
+
 
       - name: Publish
         uses: peaceiris/actions-gh-pages@v3
