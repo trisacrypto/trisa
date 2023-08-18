@@ -31,12 +31,17 @@ type TRPInfo struct {
 // Inquiry defines a Travel Rule Protocol payload that contains information about the
 // transaction and the originator and beneficiary of the transaction.
 type Inquiry struct {
-	TRP        *TRPInfo                `json:"-"`
-	Asset      slip0044.CoinType       `json:"asset"`
-	Amount     float64                 `json:"amount"`
-	Callback   string                  `json:"callback"`
-	IVMS101    ivms101.IdentityPayload `json:"IVMS101"`
-	Extensions map[string]interface{}  `json:"extensions,omitempty"`
+	TRP        *TRPInfo                 `json:"-"`
+	Asset      *Asset                   `json:"asset"`
+	Amount     float64                  `json:"amount"`
+	Callback   string                   `json:"callback"`
+	IVMS101    *ivms101.IdentityPayload `json:"IVMS101"`
+	Extensions map[string]interface{}   `json:"extensions,omitempty"`
+}
+
+type Asset struct {
+	DTI     string            `json:"dti,omitempty"`      // digital token identifier as per Digital Token Identifier Foundation
+	SLIP044 slip0044.CoinType `json:"slip0044,omitempty"` // registered coin types defined by BIP-0044
 }
 
 // The TransactionPayload extension is used to provide information about the

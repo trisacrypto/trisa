@@ -70,8 +70,6 @@ func TransferConfirmation(handler ConfirmationHandler) http.Handler {
 			return
 		}
 
-		// TODO: add the requestID, APIVersion, LNURL, etc to the confirmation
-
 		if err := handler.OnConfirmation(&confirmation); err != nil {
 			httpError(w, err)
 			return
