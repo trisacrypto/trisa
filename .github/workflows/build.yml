@@ -57,6 +57,8 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          path: ${{ env.GOPATH }}/src/github.com/trisacrypto/trisa
 
       - name: Install Protoc
         uses: arduino/setup-protoc@v2
@@ -102,6 +104,8 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          path: ${{ env.GOPATH }}/src/github.com/trisacrypto/trisa
 
       - name: Install Protoc
         uses: arduino/setup-protoc@v2
