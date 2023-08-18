@@ -20,9 +20,18 @@ const (
 	ContentMediaType = "application/json"
 )
 
-// TRP defines a Travel Rule Protocol payload that contains information about the
+// TRPInfo contains metadata information from the TRP API Headers.
+type TRPInfo struct {
+	LNURL             string
+	APIVersion        string
+	RequestIdentifier string
+	APIExtensions     []string
+}
+
+// Inquiry defines a Travel Rule Protocol payload that contains information about the
 // transaction and the originator and beneficiary of the transaction.
-type TRP struct {
+type Inquiry struct {
+	TRP        *TRPInfo                `json:"-"`
 	Asset      slip0044.CoinType       `json:"asset"`
 	Amount     float64                 `json:"amount"`
 	Callback   string                  `json:"callback"`
@@ -103,8 +112,9 @@ type Approval struct {
 // specified only if the transaction has been broadcasted. Canceled is used to indicate
 // that the transfer will not move forward with a human readable comment.
 type Confirmation struct {
-	TXID     string `json:"txid,omitempty"`     // some asset-specific tx identifier
-	Canceled string `json:"canceled,omitempty"` // human readable comment or null
+	TRP      *TRPInfo `json:"-"`
+	TXID     string   `json:"txid,omitempty"`     // some asset-specific tx identifier
+	Canceled string   `json:"canceled,omitempty"` // human readable comment or null
 }
 
 func (c Confirmation) Validate() error {

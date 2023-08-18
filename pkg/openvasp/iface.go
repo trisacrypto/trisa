@@ -1,7 +1,7 @@
 package openvasp
 
 type InquiryHandler interface {
-	OnInquiry(*TRP) (*InquiryResolution, error)
+	OnInquiry(*Inquiry) (*InquiryResolution, error)
 }
 
 type ConfirmationHandler interface {

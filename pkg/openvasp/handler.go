@@ -18,25 +18,29 @@ const (
 func TransferInquiry(handler InquiryHandler) http.Handler {
 	return APIChecks(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Decode the travel rule inquiry
-		var trp *TRP
-		if err := decodeJSON(w, r, &trp); err != nil {
+		var inquiry *Inquiry
+		if err := decodeJSON(w, r, &inquiry); err != nil {
 			httpError(w, err)
 			return
 		}
 
-		// TODO: validate the inquiry received
-		// TODO: add the requestID, APIVersion, LNURL, etc. to the confirmation
+		// Add the TRP Info to the inquiry from the headers
+		inquiry.TRP = ParseTRPInfo(r)
 
-		out, err := handler.OnInquiry(trp)
+		// TODO: validate the inquiry received
+
+		out, err := handler.OnInquiry(inquiry)
 		if err != nil {
 			httpError(w, err)
 			return
 		}
 
+		// If out is nil and no error is specified send standard response.
 		if out == nil {
 			out = &InquiryResolution{}
 		}
 
+		// If not automatically approved or rejected, add the API version to the reply.
 		if out.Approved == nil && out.Rejected == "" {
 			out.Version = APIVersion
 		}
@@ -56,6 +60,9 @@ func TransferConfirmation(handler ConfirmationHandler) http.Handler {
 			httpError(w, err)
 			return
 		}
+
+		// Add the TRP Info to the confirmation from the headers
+		confirmation.TRP = ParseTRPInfo(r)
 
 		// Validate the confirmation message
 		if err := confirmation.Validate(); err != nil {
@@ -122,6 +129,24 @@ func APIChecks(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+// Parse TRPInfo from the headers of an HTTP request. If any headers are not present,
+// then the info is populated with assumed fields or empty values as appropriate.
+// TODO: parse the LNURL from the URL rather than passing the raw URL.
+func ParseTRPInfo(r *http.Request) *TRPInfo {
+	info := &TRPInfo{
+		LNURL:             r.URL.String(),
+		APIVersion:        r.Header.Get(APIVersionHeader),
+		RequestIdentifier: r.Header.Get(RequestIdentifierHeader),
+	}
+
+	// TODO: do we need escaping or more extensive parsing?
+	if extensions := r.Header.Get(APIExtensionsHeader); extensions != "" {
+		info.APIExtensions = strings.Split(extensions, ",")
+	}
+
+	return info
 }
 
 func httpError(w http.ResponseWriter, err error) {
