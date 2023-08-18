@@ -103,7 +103,7 @@ func APIChecks(next http.Handler) http.Handler {
 		// Must specify a request identifier
 		var requestIdentifier string
 		if requestIdentifier = r.Header.Get(RequestIdentifierHeader); requestIdentifier == "" {
-			http.Error(w, "must specify request identifier header", http.StatusBadRequest)
+			http.Error(w, "must specify request identifier", http.StatusBadRequest)
 			return
 		}
 
@@ -115,7 +115,7 @@ func APIChecks(next http.Handler) http.Handler {
 		if contentType != "" {
 			mt, _, err := mime.ParseMediaType(contentType)
 			if err != nil {
-				http.Error(w, "malformed content-type header", http.StatusBadRequest)
+				http.Error(w, "malformed content-type header", http.StatusUnsupportedMediaType)
 				return
 			}
 

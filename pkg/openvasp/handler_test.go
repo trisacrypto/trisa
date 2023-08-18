@@ -127,9 +127,7 @@ func TestTransferInquiry(t *testing.T) {
 
 	t.Run("Error", func(t *testing.T) {
 		defer mock.Reset()
-		mock.CallInquiry = func(i *Inquiry) (*InquiryResolution, error) {
-			return nil, errors.New("whoopsie")
-		}
+		mock.UseError(CallInquiry, errors.New("whoopsie"))
 
 		w, r := makeRequest(t)
 		handler.ServeHTTP(w, r)
@@ -146,9 +144,7 @@ func TestTransferInquiry(t *testing.T) {
 
 	t.Run("StatusError", func(t *testing.T) {
 		defer mock.Reset()
-		mock.CallInquiry = func(i *Inquiry) (*InquiryResolution, error) {
-			return nil, &StatusError{Code: http.StatusConflict}
-		}
+		mock.UseError(CallInquiry, &StatusError{Code: http.StatusConflict})
 
 		w, r := makeRequest(t)
 		handler.ServeHTTP(w, r)
@@ -165,11 +161,229 @@ func TestTransferInquiry(t *testing.T) {
 }
 
 func TestTransferConfirmation(t *testing.T) {
+	// Create requests to execute against the inquiry handler
+	makeRequest := func(t *testing.T, payload *Confirmation) (*httptest.ResponseRecorder, *http.Request) {
+		var body bytes.Buffer
+		err := json.NewEncoder(&body).Encode(payload)
+		require.NoError(t, err, "could not encode json payload")
 
+		req := httptest.NewRequest(http.MethodPost, beneficiaryURL, &body)
+		req.Header.Set(APIVersionHeader, APIVersion)
+		req.Header.Set(RequestIdentifierHeader, requestIdentifier)
+		req.Header.Set(ContentTypeHeader, ContentTypeValue)
+
+		return httptest.NewRecorder(), req
+	}
+
+	// Create the mock handler for testing
+	mock := &MockHandler{}
+	handler := TransferConfirmation(mock)
+
+	t.Run("TXID", func(t *testing.T) {
+		defer mock.Reset()
+		mock.CallConfirmation = func(c *Confirmation) error {
+			if c.TRP == nil || c.TRP.RequestIdentifier != requestIdentifier || c.TRP.APIVersion != APIVersion {
+				return errors.New("invalid TRP info")
+			}
+
+			if err := c.Validate(); err != nil {
+				return err
+			}
+
+			if c.TXID != "foo" {
+				return errors.New("unexpected txid")
+			}
+			return nil
+		}
+
+		w, r := makeRequest(t, &Confirmation{TXID: "foo"})
+		handler.ServeHTTP(w, r)
+		require.Equal(t, 1, mock.Calls(CallConfirmation))
+		require.Equal(t, 0, mock.Calls(CallInquiry))
+
+		rep := w.Result()
+		require.Equal(t, rep.StatusCode, http.StatusNoContent)
+		require.Equal(t, requestIdentifier, rep.Header.Get(RequestIdentifierHeader))
+		require.Equal(t, APIVersion, rep.Header.Get(APIVersionHeader))
+		require.Empty(t, rep.Header.Get(ContentTypeHeader))
+	})
+
+	t.Run("Canceled", func(t *testing.T) {
+		defer mock.Reset()
+		mock.CallConfirmation = func(c *Confirmation) error {
+			if c.TRP == nil || c.TRP.RequestIdentifier != requestIdentifier || c.TRP.APIVersion != APIVersion {
+				return errors.New("invalid TRP info")
+			}
+
+			if err := c.Validate(); err != nil {
+				return err
+			}
+
+			if c.Canceled != "foo" {
+				return errors.New("unexpected canceled")
+			}
+			return nil
+		}
+
+		w, r := makeRequest(t, &Confirmation{Canceled: "foo"})
+		handler.ServeHTTP(w, r)
+		require.Equal(t, 1, mock.Calls(CallConfirmation))
+		require.Equal(t, 0, mock.Calls(CallInquiry))
+
+		rep := w.Result()
+		require.Equal(t, rep.StatusCode, http.StatusNoContent)
+		require.Equal(t, requestIdentifier, rep.Header.Get(RequestIdentifierHeader))
+		require.Equal(t, APIVersion, rep.Header.Get(APIVersionHeader))
+		require.Empty(t, rep.Header.Get(ContentTypeHeader))
+	})
+
+	t.Run("Invalid", func(t *testing.T) {
+		defer mock.Reset()
+		mock.UseError(CallConfirmation, errors.New("whoopsie"))
+
+		w, r := makeRequest(t, &Confirmation{})
+		handler.ServeHTTP(w, r)
+		require.Equal(t, 0, mock.Calls(CallInquiry))
+		require.Equal(t, 0, mock.Calls(CallConfirmation))
+
+		rep := w.Result()
+		require.Equal(t, rep.StatusCode, http.StatusBadRequest)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "must specify either txid or canceled in confirmation\n", string(data))
+	})
+
+	t.Run("Error", func(t *testing.T) {
+		defer mock.Reset()
+		mock.UseError(CallConfirmation, errors.New("whoopsie"))
+
+		w, r := makeRequest(t, &Confirmation{TXID: "foo"})
+		handler.ServeHTTP(w, r)
+		require.Equal(t, 0, mock.Calls(CallInquiry))
+		require.Equal(t, 1, mock.Calls(CallConfirmation))
+
+		rep := w.Result()
+		require.Equal(t, rep.StatusCode, http.StatusInternalServerError)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "whoopsie\n", string(data))
+	})
+
+	t.Run("StatusError", func(t *testing.T) {
+		defer mock.Reset()
+		mock.UseError(CallConfirmation, &StatusError{Code: http.StatusExpectationFailed})
+
+		w, r := makeRequest(t, &Confirmation{TXID: "foo"})
+		handler.ServeHTTP(w, r)
+		require.Equal(t, 0, mock.Calls(CallInquiry))
+		require.Equal(t, 1, mock.Calls(CallConfirmation))
+
+		rep := w.Result()
+		require.Equal(t, rep.StatusCode, http.StatusExpectationFailed)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "Expectation Failed\n", string(data))
+	})
 }
 
 func TestAPIChecks(t *testing.T) {
+	handler := APIChecks(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
 
+	t.Run("MethodNotAllowed", func(t *testing.T) {
+		r := httptest.NewRequest(http.MethodGet, originatorURL, nil)
+		w := httptest.NewRecorder()
+
+		handler.ServeHTTP(w, r)
+		rep := w.Result()
+
+		require.Equal(t, http.StatusMethodNotAllowed, rep.StatusCode, "expected method not allowed on GET")
+	})
+
+	t.Run("APIVersion", func(t *testing.T) {
+		testCases := []string{"", "9.9.999"}
+		for i, tc := range testCases {
+			r := httptest.NewRequest(http.MethodPost, originatorURL, nil)
+			w := httptest.NewRecorder()
+
+			if tc != "" {
+				r.Header.Set(APIVersionHeader, tc)
+			}
+
+			handler.ServeHTTP(w, r)
+			rep := w.Result()
+
+			require.Equal(t, http.StatusBadRequest, rep.StatusCode, "test case %d failed", i)
+			data, _ := io.ReadAll(rep.Body)
+			require.Equal(t, "must specify api version header 3.1.0\n", string(data), "test case %d failed", i)
+		}
+	})
+
+	t.Run("Request Identifier", func(t *testing.T) {
+		r := httptest.NewRequest(http.MethodPost, originatorURL, nil)
+		w := httptest.NewRecorder()
+
+		r.Header.Set(APIVersionHeader, APIVersion)
+
+		handler.ServeHTTP(w, r)
+		rep := w.Result()
+
+		require.Equal(t, http.StatusBadRequest, rep.StatusCode)
+		data, _ := io.ReadAll(rep.Body)
+		require.Equal(t, "must specify request identifier\n", string(data))
+	})
+
+	t.Run("Malformed Content Type", func(t *testing.T) {
+		r := httptest.NewRequest(http.MethodPost, originatorURL, nil)
+		w := httptest.NewRecorder()
+
+		r.Header.Set(APIVersionHeader, APIVersion)
+		r.Header.Set(RequestIdentifierHeader, "foo")
+		r.Header.Set(ContentTypeHeader, "baz/;;;--")
+
+		handler.ServeHTTP(w, r)
+		rep := w.Result()
+
+		require.Equal(t, http.StatusUnsupportedMediaType, rep.StatusCode)
+		data, _ := io.ReadAll(rep.Body)
+		require.Equal(t, "malformed content-type header\n", string(data))
+	})
+
+	t.Run("Incorrect Content Type", func(t *testing.T) {
+		r := httptest.NewRequest(http.MethodPost, originatorURL, nil)
+		w := httptest.NewRecorder()
+
+		r.Header.Set(APIVersionHeader, APIVersion)
+		r.Header.Set(RequestIdentifierHeader, "foo")
+		r.Header.Set(ContentTypeHeader, "application/xml")
+
+		handler.ServeHTTP(w, r)
+		rep := w.Result()
+
+		require.Equal(t, http.StatusUnsupportedMediaType, rep.StatusCode)
+		data, _ := io.ReadAll(rep.Body)
+		require.Equal(t, "content-type header must be application/json\n", string(data))
+	})
+
+	t.Run("Happy", func(t *testing.T) {
+		r := httptest.NewRequest(http.MethodPost, originatorURL, nil)
+		w := httptest.NewRecorder()
+
+		r.Header.Set(APIVersionHeader, APIVersion)
+		r.Header.Set(RequestIdentifierHeader, "foo")
+		r.Header.Set(ContentTypeHeader, ContentTypeValue)
+
+		handler.ServeHTTP(w, r)
+		rep := w.Result()
+
+		require.Equal(t, http.StatusNoContent, rep.StatusCode)
+		require.Equal(t, "3.1.0", rep.Header.Get(APIVersionHeader))
+		require.Equal(t, "foo", rep.Header.Get(RequestIdentifierHeader))
+	})
 }
 
 const (
