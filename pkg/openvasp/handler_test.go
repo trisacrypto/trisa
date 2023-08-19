@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"sync"
 	"testing"
 
@@ -69,7 +70,7 @@ func TestTransferInquiry(t *testing.T) {
 		require.Equal(t, 0, mock.Calls(CallConfirmation))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusOK)
+		require.Equal(t, http.StatusOK, rep.StatusCode)
 		require.Equal(t, requestIdentifier, rep.Header.Get(RequestIdentifierHeader))
 		require.Equal(t, APIVersion, rep.Header.Get(APIVersionHeader))
 		require.Equal(t, ContentTypeValue, rep.Header.Get(ContentTypeHeader))
@@ -96,7 +97,7 @@ func TestTransferInquiry(t *testing.T) {
 		require.Equal(t, 0, mock.Calls(CallConfirmation))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusOK)
+		require.Equal(t, http.StatusOK, rep.StatusCode)
 
 		data, err := io.ReadAll(rep.Body)
 		require.NoError(t, err)
@@ -118,7 +119,7 @@ func TestTransferInquiry(t *testing.T) {
 		require.Equal(t, 0, mock.Calls(CallConfirmation))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusOK)
+		require.Equal(t, http.StatusOK, rep.StatusCode)
 
 		data, err := io.ReadAll(rep.Body)
 		require.NoError(t, err)
@@ -135,7 +136,7 @@ func TestTransferInquiry(t *testing.T) {
 		require.Equal(t, 0, mock.Calls(CallConfirmation))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusInternalServerError)
+		require.Equal(t, http.StatusInternalServerError, rep.StatusCode)
 
 		data, err := io.ReadAll(rep.Body)
 		require.NoError(t, err)
@@ -152,7 +153,7 @@ func TestTransferInquiry(t *testing.T) {
 		require.Equal(t, 0, mock.Calls(CallConfirmation))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusConflict)
+		require.Equal(t, http.StatusConflict, rep.StatusCode)
 
 		data, err := io.ReadAll(rep.Body)
 		require.NoError(t, err)
@@ -202,7 +203,7 @@ func TestTransferConfirmation(t *testing.T) {
 		require.Equal(t, 0, mock.Calls(CallInquiry))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusNoContent)
+		require.Equal(t, http.StatusNoContent, rep.StatusCode)
 		require.Equal(t, requestIdentifier, rep.Header.Get(RequestIdentifierHeader))
 		require.Equal(t, APIVersion, rep.Header.Get(APIVersionHeader))
 		require.Empty(t, rep.Header.Get(ContentTypeHeader))
@@ -231,7 +232,7 @@ func TestTransferConfirmation(t *testing.T) {
 		require.Equal(t, 0, mock.Calls(CallInquiry))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusNoContent)
+		require.Equal(t, http.StatusNoContent, rep.StatusCode)
 		require.Equal(t, requestIdentifier, rep.Header.Get(RequestIdentifierHeader))
 		require.Equal(t, APIVersion, rep.Header.Get(APIVersionHeader))
 		require.Empty(t, rep.Header.Get(ContentTypeHeader))
@@ -247,7 +248,7 @@ func TestTransferConfirmation(t *testing.T) {
 		require.Equal(t, 0, mock.Calls(CallConfirmation))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusBadRequest)
+		require.Equal(t, http.StatusBadRequest, rep.StatusCode)
 
 		data, err := io.ReadAll(rep.Body)
 		require.NoError(t, err)
@@ -264,7 +265,7 @@ func TestTransferConfirmation(t *testing.T) {
 		require.Equal(t, 1, mock.Calls(CallConfirmation))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusInternalServerError)
+		require.Equal(t, http.StatusInternalServerError, rep.StatusCode)
 
 		data, err := io.ReadAll(rep.Body)
 		require.NoError(t, err)
@@ -281,7 +282,7 @@ func TestTransferConfirmation(t *testing.T) {
 		require.Equal(t, 1, mock.Calls(CallConfirmation))
 
 		rep := w.Result()
-		require.Equal(t, rep.StatusCode, http.StatusExpectationFailed)
+		require.Equal(t, http.StatusExpectationFailed, rep.StatusCode)
 
 		data, err := io.ReadAll(rep.Body)
 		require.NoError(t, err)
@@ -383,6 +384,136 @@ func TestAPIChecks(t *testing.T) {
 		require.Equal(t, http.StatusNoContent, rep.StatusCode)
 		require.Equal(t, "3.1.0", rep.Header.Get(APIVersionHeader))
 		require.Equal(t, "foo", rep.Header.Get(RequestIdentifierHeader))
+	})
+}
+
+func TestParseTRPInfo(t *testing.T) {
+	t.Run("Empty", func(t *testing.T) {
+		r := httptest.NewRequest(http.MethodPost, originatorURL, nil)
+		info := ParseTRPInfo(r)
+		require.NotNil(t, info, "expected info to not be nil")
+		require.Equal(t, originatorURL, info.LNURL)
+		require.Zero(t, info.APIVersion)
+		require.Zero(t, info.RequestIdentifier)
+		require.Zero(t, info.APIExtensions)
+	})
+
+	t.Run("Populated", func(t *testing.T) {
+		r := httptest.NewRequest(http.MethodPost, originatorURL, nil)
+		r.Header.Set(APIVersionHeader, APIVersion)
+		r.Header.Set(RequestIdentifierHeader, requestIdentifier)
+		r.Header.Set(APIExtensionsHeader, "request-signing,beneficiary-details-response")
+
+		info := ParseTRPInfo(r)
+		require.NotNil(t, info, "expected info to not be nil")
+		require.Equal(t, originatorURL, info.LNURL)
+		require.Equal(t, APIVersion, info.APIVersion)
+		require.Equal(t, requestIdentifier, info.RequestIdentifier)
+		require.Equal(t, []string{"request-signing", "beneficiary-details-response"}, info.APIExtensions)
+	})
+}
+
+func TestDecodeJSON(t *testing.T) {
+	mock := &MockHandler{}
+	inquiry := TransferInquiry(mock)
+	confirm := TransferConfirmation(mock)
+
+	makeRequest := func(t *testing.T, data string) (*httptest.ResponseRecorder, *http.Request) {
+		var body bytes.Buffer
+		_, err := body.Write([]byte(data))
+		require.NoError(t, err, "could not encode json payload")
+
+		req := httptest.NewRequest(http.MethodPost, originatorURL, &body)
+		req.Header.Set(APIVersionHeader, APIVersion)
+		req.Header.Set(RequestIdentifierHeader, requestIdentifier)
+		req.Header.Set(ContentTypeHeader, ContentTypeValue)
+
+		return httptest.NewRecorder(), req
+	}
+
+	t.Run("SyntaxError", func(t *testing.T) {
+		w, r := makeRequest(t, `{"data: "foo"}`)
+		inquiry.ServeHTTP(w, r)
+
+		rep := w.Result()
+		require.Equal(t, http.StatusBadRequest, rep.StatusCode)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "request body contains badly-formed JSON (at position 10)\n", string(data))
+	})
+
+	t.Run("UnexpectedEOF", func(t *testing.T) {
+		w, r := makeRequest(t, `{"data": "foo"`)
+		confirm.ServeHTTP(w, r)
+
+		rep := w.Result()
+		require.Equal(t, http.StatusBadRequest, rep.StatusCode)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "request body contains badly-formed JSON\n", string(data))
+	})
+
+	t.Run("EOF", func(t *testing.T) {
+		w, r := makeRequest(t, "")
+		inquiry.ServeHTTP(w, r)
+
+		rep := w.Result()
+		require.Equal(t, http.StatusBadRequest, rep.StatusCode)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "Bad Request\n", string(data))
+	})
+
+	t.Run("TypeError", func(t *testing.T) {
+		w, r := makeRequest(t, `{"txid": [1, 2, 3]}`)
+		confirm.ServeHTTP(w, r)
+
+		rep := w.Result()
+		require.Equal(t, http.StatusBadRequest, rep.StatusCode)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "request body contains an invalid value for the \"txid\" field (at 10)\n", string(data))
+	})
+
+	t.Run("Unknown Field", func(t *testing.T) {
+		w, r := makeRequest(t, `{"data": "foo"}`)
+		inquiry.ServeHTTP(w, r)
+
+		rep := w.Result()
+		require.Equal(t, http.StatusBadRequest, rep.StatusCode)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "request body contains unknown field \"data\"\n", string(data))
+	})
+
+	t.Run("TooLarge", func(t *testing.T) {
+		bigval := strings.Repeat(`money money money ... must be funny`, 700000)
+		w, r := makeRequest(t, fmt.Sprintf(`{"txid": "%s"}`, bigval))
+		confirm.ServeHTTP(w, r)
+
+		rep := w.Result()
+		require.Equal(t, http.StatusRequestEntityTooLarge, rep.StatusCode)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "Request Entity Too Large\n", string(data))
+	})
+
+	t.Run("DoubleData", func(t *testing.T) {
+		w, r := makeRequest(t, `{"txid": "foo"}{"canceled": "reason"}`)
+		confirm.ServeHTTP(w, r)
+
+		rep := w.Result()
+		require.Equal(t, http.StatusBadRequest, rep.StatusCode)
+
+		data, err := io.ReadAll(rep.Body)
+		require.NoError(t, err)
+		require.Equal(t, "request body must only contain a single JSON object\n", string(data))
 	})
 }
 
