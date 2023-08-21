@@ -3,6 +3,8 @@ package openvasp
 import (
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 	"github.com/trisacrypto/trisa/pkg/slip0044"
+	"github.com/trisacrypto/trisa/pkg/trisa/envelope"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 // TRP defines a Travel Rule Protocol payload that contains information about the
@@ -65,4 +67,57 @@ type UnsealedTRISAEnvelope struct {
 	HMAC          []byte `json:"hmac"`
 	HMACSecret    []byte `json:"hmac_secret"`
 	HMACAlgorithm string `json:"hmac_algorithm"`
+}
+
+// Convert an Envelope to either a SealedTRISAEnvelope or UnsealedTRISAEnvelope for
+// compatibility with the TRP extension specification.
+func EnvelopeToExtension(env *envelope.Envelope) (interface{}, error) {
+	if env == nil {
+		return nil, ErrNilEnvelope
+	}
+
+	var err error
+	switch env.State() {
+	case envelope.Sealed:
+		// If sealed, just serialize the envelope to JSON.
+		var envBytes []byte
+		if envBytes, err = protojson.Marshal(env.Proto()); err != nil {
+			return nil, err
+		}
+		return &SealedTRISAEnvelope{Envelope: string(envBytes)}, nil
+	case envelope.Clear:
+		// If in the clear, encrypt the payload with the key
+		var unsealed *envelope.Envelope
+		if unsealed, _, err = env.Encrypt(); err != nil {
+			return nil, err
+		}
+		proto := unsealed.Proto()
+		return &UnsealedTRISAEnvelope{
+			Id:                  proto.Id,
+			Payload:             proto.Payload,
+			EncryptionKey:       proto.EncryptionKey,
+			EncryptionAlgorithm: proto.EncryptionAlgorithm,
+			HMAC:                proto.Hmac,
+			HMACSecret:          proto.HmacSecret,
+			HMACAlgorithm:       proto.HmacAlgorithm,
+		}, nil
+	case envelope.Unsealed:
+		// If already unsealed, just return the wrapped envelope.
+		proto := env.Proto()
+		return &UnsealedTRISAEnvelope{
+			Id:                  proto.Id,
+			Payload:             proto.Payload,
+			EncryptionKey:       proto.EncryptionKey,
+			EncryptionAlgorithm: proto.EncryptionAlgorithm,
+			HMAC:                proto.Hmac,
+			HMACSecret:          proto.HmacSecret,
+			HMACAlgorithm:       proto.HmacAlgorithm,
+		}, nil
+	case envelope.Unknown:
+		return nil, ErrUnknownState
+	case envelope.Corrupted:
+		return nil, ErrInvalidState
+	default:
+		return nil, ErrEnvelopeError
+	}
 }
