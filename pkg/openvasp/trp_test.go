@@ -1,10 +1,6 @@
 package openvasp_test
 
 import (
-	"crypto/rsa"
-	"crypto/x509"
-	"encoding/pem"
-	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -106,25 +102,6 @@ func loadTransaction(path string) (transaction *generic.Transaction, err error) 
 		return nil, err
 	}
 	return transaction, nil
-}
-
-func loadPrivateKey(path string) (key *rsa.PrivateKey, err error) {
-	var data []byte
-	if data, err = os.ReadFile(path); err != nil {
-		return nil, err
-	}
-
-	block, _ := pem.Decode(data)
-	if block == nil {
-		return nil, fmt.Errorf("could not decode PEM data")
-	}
-
-	var keyt interface{}
-	if keyt, err = x509.ParsePKCS8PrivateKey(block.Bytes); err != nil {
-		return nil, err
-	}
-
-	return keyt.(*rsa.PrivateKey), nil
 }
 
 // Helper method to load a fixture from JSON
