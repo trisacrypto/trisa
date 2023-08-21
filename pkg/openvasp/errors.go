@@ -6,6 +6,10 @@ import (
 )
 
 var (
+	ErrNilEnvelope           = errors.New("envelope is nil")
+	ErrUnknownState          = errors.New("envelope is in an unknown state")
+	ErrInvalidState          = errors.New("envelope is invalid")
+	ErrEnvelopeError         = errors.New("envelope has an error")
 	ErrEmptyConfirmation     = errors.New("must specify either txid or canceled in confirmation")
 	ErrAmbiguousConfirmation = errors.New("cannot specify both txid and canceled in confirmation")
 )

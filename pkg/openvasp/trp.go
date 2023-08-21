@@ -3,6 +3,10 @@ package openvasp
 import (
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 	"github.com/trisacrypto/trisa/pkg/slip0044"
+	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	generic "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1"
+	"github.com/trisacrypto/trisa/pkg/trisa/envelope"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 // OpenVASP Application Headers
@@ -18,6 +22,12 @@ const (
 	APIVersion       = "3.1.0"
 	ContentTypeValue = "application/json; charset=utf-8"
 	ContentMediaType = "application/json"
+)
+
+// TRISA extensions
+const (
+	SealedTRISAExtension   = "sealed_trisa_envelope"
+	UnsealedTRISAExtension = "unsealed_trisa_envelope"
 )
 
 // TRPInfo contains metadata information from the TRP API Headers.
@@ -94,6 +104,83 @@ type UnsealedTRISAEnvelope struct {
 	HMAC          []byte `json:"hmac"`
 	HMACSecret    []byte `json:"hmac_secret"`
 	HMACAlgorithm string `json:"hmac_algorithm"`
+}
+
+// Convert a TRISA envelope to a TRP payload. If the envelope is sealed, then this
+// returns a payload with the SealedTRISAEnvelope extension. If the envelope is
+// unsealed, then this returns a payload with the UnsealedTRISAEnvelope extension.
+// If the envelope is in the clear then this returns a standard TRP payload with no
+// TRISA extensions.
+func EnvelopeToPayload(env *envelope.Envelope) (*Inquiry, error) {
+	if env == nil {
+		return nil, ErrNilEnvelope
+	}
+
+	var err error
+	switch env.State() {
+	case envelope.Sealed:
+		// If sealed, just serialize the envelope to JSON.
+		var envBytes []byte
+		if envBytes, err = protojson.Marshal(env.Proto()); err != nil {
+			return nil, err
+		}
+		return &Inquiry{
+			Extensions: map[string]interface{}{
+				SealedTRISAExtension: &SealedTRISAEnvelope{
+					Envelope: string(envBytes),
+				},
+			},
+		}, nil
+	case envelope.Unsealed:
+		// If already unsealed, just return the wrapped envelope.
+		proto := env.Proto()
+		return &Inquiry{
+			Extensions: map[string]interface{}{
+				UnsealedTRISAExtension: &UnsealedTRISAEnvelope{
+					Id:                  proto.Id,
+					Payload:             proto.Payload,
+					EncryptionKey:       proto.EncryptionKey,
+					EncryptionAlgorithm: proto.EncryptionAlgorithm,
+					HMAC:                proto.Hmac,
+					HMACSecret:          proto.HmacSecret,
+					HMACAlgorithm:       proto.HmacAlgorithm,
+				},
+			},
+		}, nil
+	case envelope.Clear:
+		// If in the clear, return a standard TRP payload.
+		var payload *api.Payload
+		if payload, err = env.Payload(); err != nil {
+			return nil, err
+		}
+
+		// Parse the amount and asset type from the transaction.
+		transaction := &generic.Transaction{}
+		if err = payload.Transaction.UnmarshalTo(transaction); err != nil {
+			return nil, err
+		}
+
+		inq := &Inquiry{
+			Asset:   &Asset{},
+			Amount:  transaction.Amount,
+			IVMS101: &ivms101.IdentityPayload{},
+		}
+		if inq.Asset.SLIP044, err = slip0044.ParseCoinType(transaction.AssetType); err != nil {
+			return nil, err
+		}
+
+		// Unmarshal the identity into the TRP payload.
+		if err = payload.Identity.UnmarshalTo(inq.IVMS101); err != nil {
+			return nil, err
+		}
+		return inq, nil
+	case envelope.Unknown:
+		return nil, ErrUnknownState
+	case envelope.Corrupted:
+		return nil, ErrInvalidState
+	default:
+		return nil, ErrEnvelopeError
+	}
 }
 
 // InquiryResolution is used to approve or reject a TRP Transfer Inquiry either

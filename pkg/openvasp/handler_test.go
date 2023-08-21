@@ -26,7 +26,7 @@ const (
 
 func TestTransferInquiry(t *testing.T) {
 	// Load the payload fixture
-	payload, err := loadPayload("testdata/payload.json")
+	payload, err := loadInquiryPayload("testdata/inquiry.json")
 	require.NoError(t, err, "could not open fixture at testdata/payload.json")
 	require.NotEmpty(t, payload, "payload does not contain any data")
 
@@ -587,7 +587,7 @@ func (m *MockHandler) incr(call string) {
 	m.calls[call]++
 }
 
-func loadPayload(path string) (inquiry *Inquiry, err error) {
+func loadInquiryPayload(path string) (inquiry *Inquiry, err error) {
 	var f *os.File
 	if f, err = os.Open(path); err != nil {
 		return nil, err

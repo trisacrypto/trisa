@@ -1,0 +1,11 @@
+{
+    "txid": "05d9dc3fcbf48771c8ee9e95200877ef08e2766a780d4e44eee397633eb164d0",
+    "originator": "14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v",
+    "beneficiary": "14WU745djqecaJ1gmtWQGeMCFim1W5MNp3",
+    "amount": 0.00206412,
+    "network": "btc",
+    "timestamp": "2022-01-30T16:14:00Z",
+    "extra_json": "{\"value_when_transacted\": \"USD $77.86\"}",
+    "asset_type": "BTC",
+    "tag": ""
+}
