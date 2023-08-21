@@ -1,0 +1,77 @@
+{
+  "asset": {
+    "slip0044": "BTC"
+  },
+  "amount": 1,
+  "callback": "https://beneficiary.com/transferConfirmation?q=3454366424",
+  "IVMS101": {
+    "originator": {
+      "originatorPersons": [
+        {
+          "naturalPerson": {
+            "name": {
+              "nameIdentifier": [
+                {
+                  "primaryIdentifier": "Post",
+                  "secondaryIdentifier": "Johnny",
+                  "nameIdentifierType": "LEGL"
+                }
+              ]
+            },
+            "geographicAddress": [
+              {
+                "addressType": "GEOG",
+                "streetName": "Potential Street",
+                "buildingNumber": "123",
+                "buildingName": "Cheese Hut",
+                "postCode": "91361",
+                "townName": "Thousand Oaks",
+                "countrySubDivision": "California",
+                "country": "US"
+              }
+            ],
+            "customerIdentification": "1002390"
+          }
+        }
+      ]
+    },
+    "beneficiary": {
+      "beneficiaryPersons": [
+        {
+          "naturalPerson": {
+            "name": {
+              "nameIdentifier": [
+                {
+                  "primaryIdentifier": "Tilcott",
+                  "secondaryIdentifier": "Mildred",
+                  "nameIdentifierType": "LEGL"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "accountNumber": [
+        "mhtL3YVFdpTVffmLgUp4h4bcP3Su2zr5qx"
+      ]
+    },
+    "originatingVASP": {
+      "originatingVASP": {
+        "legalPerson": {
+          "name": {
+            "nameIdentifier": [
+              {
+                "legalPersonName": "Alice VASP",
+                "legalPersonNameIdentifierType": "LEGL"
+              }
+            ]
+          },
+          "nationalIdentification": {
+            "nationalIdentifier": "GTFZ00N6IHYMHHNT8S51",
+            "nationalIdentifierType": "LEIX"
+          }
+        }
+      }
+    }
+  }
+}
