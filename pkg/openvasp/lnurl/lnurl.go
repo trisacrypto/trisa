@@ -17,6 +17,7 @@ import (
 	"strings"
 )
 
+// Encode a plain-text https URL into a bech32-encoded uppercased lnurl string.
 func Encode(url string) (lnurl string, err error) {
 	var converted []byte
 	if converted, err = convertBits([]byte(url), 8, 5, true); err != nil {
@@ -29,11 +30,12 @@ func Encode(url string) (lnurl string, err error) {
 	return strings.ToUpper(lnurl), nil
 }
 
+// Decode a bech32 encoded lnurl string and returns a plain-text https URL.
 func Decode(lnurl string) (url string, err error) {
 	lnurl = strings.ToLower(lnurl)
 
 	if !strings.HasPrefix(lnurl, "lnurl1") {
-		return "", errors.New("unhandled lnurl scheme")
+		return "", ErrUnhandledScheme
 	}
 
 	// bech32

@@ -5,8 +5,11 @@ import (
 	"strings"
 )
 
+// Set of characters used in the data of bech32 strings. Note that this string is
+// ordered, such that for a given charset[i], i is the binary value of the character.
 const charset = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
+// gen encodes the generator polynomial for the bech32 BCH checksum.
 var gen = []int{0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3}
 
 // decode decodes a bech32 encoded string, returning the human-readable
@@ -15,8 +18,7 @@ func decode(bech string) (string, []byte, error) {
 	// Only ASCII characters between 33 and 126 are allowed.
 	for i := 0; i < len(bech); i++ {
 		if bech[i] < 33 || bech[i] > 126 {
-			return "", nil, fmt.Errorf("invalid character in "+
-				"string: '%c'", bech[i])
+			return "", nil, ErrInvalidCharacter(bech[i])
 		}
 	}
 
@@ -24,8 +26,7 @@ func decode(bech string) (string, []byte, error) {
 	lower := strings.ToLower(bech)
 	upper := strings.ToUpper(bech)
 	if bech != lower && bech != upper {
-		return "", nil, fmt.Errorf("string not all lowercase or all " +
-			"uppercase")
+		return "", nil, ErrMixedCase
 	}
 
 	// We'll work with the lowercase string from now on.
@@ -37,7 +38,7 @@ func decode(bech string) (string, []byte, error) {
 	// or if the string is more than 90 characters in total.
 	one := strings.LastIndexByte(bech, '1')
 	if one < 1 || one+7 > len(bech) {
-		return "", nil, fmt.Errorf("invalid index of 1")
+		return "", nil, ErrInvalidSeparatorIndex(1)
 	}
 
 	// The human-readable part is everything before the last '1'.
@@ -48,20 +49,16 @@ func decode(bech string) (string, []byte, error) {
 	// 'charset'.
 	decoded, err := toBytes(data)
 	if err != nil {
-		return "", nil, fmt.Errorf("failed converting data to bytes: "+
-			"%v", err)
+		return "", nil, fmt.Errorf("failed converting data to bytes: %w", err)
 	}
 
 	if !bech32VerifyChecksum(hrp, decoded) {
-		moreInfo := ""
 		checksum := bech[len(bech)-6:]
-		expected, err := toChars(bech32Checksum(hrp,
-			decoded[:len(decoded)-6]))
+		expected, err := toChars(bech32Checksum(hrp, decoded[:len(decoded)-6]))
 		if err == nil {
-			moreInfo = fmt.Sprintf("Expected %v, got %v.",
-				expected, checksum)
+			err = ErrInvalidChecksum{expected, checksum}
 		}
-		return "", nil, fmt.Errorf("checksum failed. " + moreInfo)
+		return "", nil, fmt.Errorf("checksum failed: %w", err)
 	}
 
 	// We exclude the last 6 bytes, which is the checksum.
@@ -81,8 +78,7 @@ func encode(hrp string, data []byte) (string, error) {
 	// represented using the specified charset.
 	dataChars, err := toChars(combined)
 	if err != nil {
-		return "", fmt.Errorf("unable to convert data bytes to chars: "+
-			"%v", err)
+		return "", fmt.Errorf("unable to convert data bytes to chars: %w", err)
 	}
 	return hrp + "1" + dataChars, nil
 }
@@ -94,8 +90,7 @@ func toBytes(chars string) ([]byte, error) {
 	for i := 0; i < len(chars); i++ {
 		index := strings.IndexByte(charset, chars[i])
 		if index < 0 {
-			return nil, fmt.Errorf("invalid character not part of "+
-				"charset: %v", chars[i])
+			return nil, ErrNonCharsetChar(chars[i])
 		}
 		decoded = append(decoded, byte(index))
 	}
@@ -108,7 +103,7 @@ func toChars(data []byte) (string, error) {
 	result := make([]byte, 0, len(data))
 	for _, b := range data {
 		if int(b) >= len(charset) {
-			return "", fmt.Errorf("invalid data byte: %v", b)
+			return "", ErrInvalidDataByte(b)
 		}
 		result = append(result, charset[b])
 	}
@@ -119,7 +114,7 @@ func toChars(data []byte) (string, error) {
 // to a byte slice where each byte is encoding toBits bits.
 func convertBits(data []byte, fromBits, toBits uint8, pad bool) ([]byte, error) {
 	if fromBits < 1 || fromBits > 8 || toBits < 1 || toBits > 8 {
-		return nil, fmt.Errorf("only bit groups between 1 and 8 allowed")
+		return nil, ErrInvalidBitGroups
 	}
 
 	// The final bytes, each byte encoding toBits bits.
@@ -178,7 +173,7 @@ func convertBits(data []byte, fromBits, toBits uint8, pad bool) ([]byte, error) 
 
 	// Any incomplete group must be <= 4 bits, and all zeroes.
 	if filledBits > 0 && (filledBits > 4 || nextByte != 0) {
-		return nil, fmt.Errorf("invalid incomplete group")
+		return nil, ErrInvalidIncompleteGroup
 	}
 
 	return regrouped, nil
