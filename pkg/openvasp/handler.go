@@ -134,7 +134,7 @@ func APIChecks(next http.Handler) http.Handler {
 // TODO: parse the LNURL from the URL rather than passing the raw URL.
 func ParseTRPInfo(r *http.Request) *TRPInfo {
 	info := &TRPInfo{
-		LNURL:             r.URL.String(),
+		Address:           r.URL.String(),
 		APIVersion:        r.Header.Get(APIVersionHeader),
 		RequestIdentifier: r.Header.Get(RequestIdentifierHeader),
 	}

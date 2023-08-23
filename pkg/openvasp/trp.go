@@ -1,7 +1,12 @@
 package openvasp
 
 import (
+	"net/url"
+	"strings"
+
 	"github.com/trisacrypto/trisa/pkg/ivms101"
+	"github.com/trisacrypto/trisa/pkg/openvasp/lnurl"
+	"github.com/trisacrypto/trisa/pkg/openvasp/traddr"
 	"github.com/trisacrypto/trisa/pkg/slip0044"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
 	generic "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1"
@@ -32,10 +37,32 @@ const (
 
 // TRPInfo contains metadata information from the TRP API Headers.
 type TRPInfo struct {
-	LNURL             string
-	APIVersion        string
-	RequestIdentifier string
-	APIExtensions     []string
+	Address           string   // Address can be a Travel Rule Address, LNURL, or URL
+	APIVersion        string   // Defaults to the APIVersion of the package
+	RequestIdentifier string   // A unique identifier representing the specific transfer
+	APIExtensions     []string // The names of any extensions uses in the request
+}
+
+func (t TRPInfo) GetURL() (_ string, err error) {
+	switch {
+	case strings.HasPrefix(t.Address, "lnurl1"), strings.HasPrefix(t.Address, "LNURL1"):
+		return lnurl.Decode(t.Address)
+	case strings.HasPrefix(t.Address, "ta"):
+		return traddr.DecodeURL(t.Address)
+	default:
+		var u *url.URL
+		if u, err = url.Parse(t.Address); err != nil {
+			return "", err
+		}
+
+		if u.Scheme != "" {
+			query := u.Query()
+			query.Set("t", "i")
+			u.RawQuery = query.Encode()
+			return u.String(), nil
+		}
+	}
+	return "", ErrUnknownTravelAddress
 }
 
 // Inquiry defines a Travel Rule Protocol payload that contains information about the
