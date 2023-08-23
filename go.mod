@@ -3,6 +3,7 @@ module github.com/trisacrypto/trisa
 go 1.20
 
 require (
+	github.com/bombsimon/tld-validator v1.2.21
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.5.1
 	github.com/nsf/jsondiff v0.0.0-20230430225905-43f6cf3098c1
