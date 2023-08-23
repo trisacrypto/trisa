@@ -20,5 +20,5 @@ var (
 	ErrURIScheme = errors.New("travel address should not contain protocol scheme")
 
 	// ErrInvalidTLD indicates that the URL has no top-level domain
-	ErrInvalidTLD = errors.New("host missing top level domain")
+	ErrInvalidTLD = errors.New("invalid top level domain")
 )

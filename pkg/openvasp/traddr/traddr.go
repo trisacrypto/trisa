@@ -57,11 +57,6 @@ func Encode(uri string) (_ string, err error) {
 		return "", ErrMissingQueryString
 	}
 
-	// Add scheme temporarily to parse the TLD
-	if u, err = Parse("https://" + uri); err != nil {
-		return "", err
-	}
-
 	if !u.ValidTLD() {
 		return "", ErrInvalidTLD
 	}
@@ -89,11 +84,6 @@ func Decode(traddr string) (_ string, err error) {
 
 	if u.Scheme != "" {
 		return "", ErrURIScheme
-	}
-
-	// Add scheme to enable parsing
-	if u, err = Parse("https://" + string(url)); err != nil {
-		return "", err
 	}
 
 	if tag := u.Query().Get("t"); tag != "i" {
@@ -134,6 +124,14 @@ func Parse(rawURL string) (_ *URL, err error) {
 	if u, err = url.Parse(rawURL); err != nil {
 		return nil, err
 	}
+
+	// If the scheme and host is missing, try parsing with an empty scheme
+	if u.Scheme == "" && u.Host == "" {
+		if u, err = url.Parse("//" + rawURL); err != nil {
+			return nil, err
+		}
+	}
+
 	return &URL{*u}, nil
 }
 
