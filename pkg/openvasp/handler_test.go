@@ -392,7 +392,7 @@ func TestParseTRPInfo(t *testing.T) {
 		r := httptest.NewRequest(http.MethodPost, originatorURL, nil)
 		info := ParseTRPInfo(r)
 		require.NotNil(t, info, "expected info to not be nil")
-		require.Equal(t, originatorURL, info.LNURL)
+		require.Equal(t, originatorURL, info.Address)
 		require.Zero(t, info.APIVersion)
 		require.Zero(t, info.RequestIdentifier)
 		require.Zero(t, info.APIExtensions)
@@ -406,7 +406,7 @@ func TestParseTRPInfo(t *testing.T) {
 
 		info := ParseTRPInfo(r)
 		require.NotNil(t, info, "expected info to not be nil")
-		require.Equal(t, originatorURL, info.LNURL)
+		require.Equal(t, originatorURL, info.Address)
 		require.Equal(t, APIVersion, info.APIVersion)
 		require.Equal(t, requestIdentifier, info.RequestIdentifier)
 		require.Equal(t, []string{"request-signing", "beneficiary-details-response"}, info.APIExtensions)
