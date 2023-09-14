@@ -25,6 +25,8 @@ type TRPHandler struct{}
 // OnInquiry implements the InquiryHandler interface and is used to respond to TRP
 // transfer inquiry requests that initiate or conclude the TRP protocol.
 func (t *TRPHandler) OnInquiry(in *openvasp.Inquiry) (*openvasp.InquiryResolution, error) {
+
+    // TODO: add your Transfer Inquiry code here!
     log.Printf(
         "received trp inquiry with request identifier %q\n",
         in.TRP.RequestIdentifier
@@ -35,6 +37,8 @@ func (t *TRPHandler) OnInquiry(in *openvasp.Inquiry) (*openvasp.InquiryResolutio
 // OnConfirmation implements the ConfirmationHandler interface and is used to respond to
 // TRP callbacks from the beneficiary VASP.
 func (t *TRPHandler) OnConfirmation(in *openvasp.Confirmation) error {
+
+    // TODO: add your Transfer Confirmation code here!
     log.Printf(
         "received trp confirmation with request identifier %q\n",
         in.TRP.RequestIdentifier
@@ -76,7 +80,7 @@ The HTTP handler returned performs the following operations when an incoming HTT
 
 1. Validates the incoming TRP request
 2. Parses the TRP [`Inquiry`](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg/openvasp#Inquiry) object along with any extensions.
-3. Calls the handlers `OnInquiry` method
+3. Calls the handler's `OnInquiry` method
 4. Returns success or failure based on the returned value of `OnInquiry`.
 
 To return a failure condition from the `OnInquiry()` function, users may return an [`openvasp.StatusError`](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg/openvasp#StatusError) that specifies the HTTP status code and message to return. This is useful particularly to return `404` errors if the Travel Address is incorrect or no beneficiary account exists at the endpoint. If a generic `error` is returned, then the handler will return a [500 Internal Server Error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500) along with the `err.Error()` text.
@@ -103,8 +107,55 @@ The semantics are as follows:
 
 ## Transfer Confirmation
 
+The [`openvasp.TransferConfirmation`](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg/openvasp#TransferConfirmation) function accepts an object that implements the [`openvasp.ConfirmationHander`](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg/openvasp#ConfirmationHandler) interface and returns an `http.Handler` that wraps the [`ConfirmationHander`](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg/openvasp#ConfirmationHandler) to handle [TRP Transfer Confirmation `POST` requests](https://gitlab.com/OpenVASP/travel-rule-protocol/-/blob/master/core/specification.md?ref_type=heads#transfer-confirmation). The [`ConfirmationHander`](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg/openvasp#ConfirmationHandler) is defined as follows:
+
+```golang
+type ConfirmationHandler interface {
+	OnConfirmation(*Confirmation) error
+}
+```
+
+When an incoming HTTP `POST` request is received (e.g. to the callback URL specified in the transfer inquiry), the HTTP handler performs the following operations:
+
+1. Validates the incoming TRP request
+2. Parses the TRP [`Confirmation`](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg/openvasp#Confirmation) object
+3. Calls the handler's `OnConfirmation` method
+4. Returns a [200 OK](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200) response if the error is `nil` otherwise returns the `StatusError` or a [500 Internal Server Error](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500)
 
 ## Setting up a Server
+
+There are many ways to setup an `http.Server` in Golang. Feel free to use a the plain vanilla server or a framework like [Gin](https://github.com/gin-gonic/gin) or an advanced muxer like [HTTPRouter](https://github.com/julienschmidt/httprouter). The handlers defined in the `openvasp` package implement the `http.HandlerFunc` and return an `http.Handler` object and can be used in most Go frameworks.
+
+The primary consideration is mapping URLs (e.g. [multiplexing](https://www.alexedwards.net/blog/an-introduction-to-handlers-and-servemuxes-in-go)) and setting up TLS termination and mTLS authentication. TRISA recommends that you terminate TLS and mTLS at a reverse-proxy for effective load balancing. However, by way of example, here is a simple code snippet to demonstrate setting up mTLS in a Go server.
+
+```golang
+func main() {
+    // Assuming you have your mTLS certificate and keys stored in cert.pem and key.pem
+    certs, err := os.ReadFile("cert.pem")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    certPool := x509.NewCertPool()
+    certPool.AppendCertsFromPem(certs)
+
+    server := http.Server{
+        Addr: ":8080",
+        Handler: mux,
+        TLSConfig: &tls.Config{
+            ClientAuth: tls.RequireAndVerifyClientCert,
+            CliantCAs: certPool,
+            MinVersion: tls.VersionTLS13,
+        },
+    },
+
+    if er := server.ListenAndServeTLS("cert.pem", "key.pem"); err != nil {
+        log.Fatal(err)
+    }
+}
+```
+
+For more robust mTLS setup, please see the [trust](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg/trust) package in TRISA.
 
 ## API Checks
 

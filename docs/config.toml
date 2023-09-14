@@ -159,5 +159,5 @@ enableMissingTranslationPlaceholders = false
     lineNumbersInTable = true
     noClasses = true
     noHl = false
-    style = 'monokai'
+    style = 'nord'
     tabWidth = 4
