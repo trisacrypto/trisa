@@ -1,0 +1,23 @@
+sequenceDiagram
+    actor Alice
+    participant Originator as Originator VASP
+    participant Beneficary as Beneficary VASP
+    actor Bob
+
+    Bob->>Beneficary: I would like to receive funds
+    Beneficary->>Bob: Generated Travel Address for Bob
+
+    Bob-->>Alice: Send Funds to this Travel Address
+
+    Alice->>Originator: Send Funds to Travel Address
+
+    Originator->>Originator: Originator KYC Checks
+
+    Originator->>Beneficary: Transfer Inquiry with IVMS101 and Callback
+
+    Beneficary->>Beneficary: Beneficiary KYC Checks
+
+    Beneficary->>Originator: Inquiry Resolution
+
+    Originator-->> Beneficary: Execute Virtual Asset Transfer
+    Originator->> Beneficary: Transfer Confirmation

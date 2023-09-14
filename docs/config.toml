@@ -143,7 +143,21 @@ enableMissingTranslationPlaceholders = false
     weight = 19
 
 [markup]
-[markup.goldmark]
-[markup.goldmark.renderer]
-unsafe = false
+  [markup.goldmark]
+  [markup.goldmark.renderer]
+    unsafe = false
 
+  [markup.highlight]
+    anchorLineNos = false
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ''
+    hl_inline = false
+    lineAnchors = ''
+    lineNoStart = 1
+    lineNos = false
+    lineNumbersInTable = true
+    noClasses = true
+    noHl = false
+    style = 'nord'
+    tabWidth = 4
