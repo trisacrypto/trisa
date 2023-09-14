@@ -18,6 +18,11 @@ The TRP workflow uses HTTPS `POST` requests with JSON payloads to facilitate inf
 
 In principle, then, a TRISA node must add an HTTP service to its node to accept and respond to these POST requests. TRISA has implemented [handlers and middleware](https://pkg.go.dev/github.com/trisacrypto/trisa@v0.4.0/pkg/openvasp) in the `trisacrypto/trisa` go package to make it easier to add a service to your TRISA node and to translate TRISA data structures into TRP data structures.
 
+### Next Steps:
+
+1. [Integrating a TRP Bridge Handler into your TRISA node]({{< ref "bridge" >}})
+2. [Making Outgoing TRP Requests]({{< ref "client" >}})
+
 ## Considerations
 
 As a TRISA node implementer, you have registered for mTLS certificates with TRISA's Global Directory Service and went through a rigorous KYC process to be verified as a VASP that must exchange PII information to comply with the Travel Rule. You are probably used to using the GDS to lookup counterparty endpoints and you've probably experienced significant time and effort implementing key management for the cryptographic requirements that TRISA uses for non-repudiation and secure storage. Counterparties that implement TRP do not have these same requirements.
