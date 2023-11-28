@@ -88,6 +88,11 @@ message VASP {
     // Extra data that might be stored by the directory service related to the VASP.
     // Should not be populated by client code.
     google.protobuf.Any extra = 21;
+
+    // Certificate delivery preferences which determine how the VASP will receive
+    // issued certificates.
+    string certificate_webhook = 22; // Webhook URL for delivering certificates
+    bool no_email_delivery = 23; // If true, do not send certificates via email
 }
 
 // At least one of the following contact information is required for the VASP to be
