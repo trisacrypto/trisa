@@ -24,7 +24,7 @@ Before you can start using the TRISA CLI, you must first configure your environm
 **Prerequisites**:
 
 1. The `trisa` command installed and on your `$PATH`
-2. Your [testnet certificates]({{< ref "/joining-trisa/registration" >}}) that include both the trust chain and private key.
+2. Your [testnet certificates]({{% ref "/joining-trisa/registration" %}}) that include both the trust chain and private key.
 
 The TRISA CLI command is configured via flags specified for each command or by setting environment variables in your shell with the configuration. The CLI also supports the use of [.env](https://platform.sh/blog/2021/we-need-to-talk-about-the-env/) files in the current working directory for configuration. To see what CLI flags should be specified use `trisa --help`. An example `.env` configuration file is as follows:
 
@@ -73,7 +73,7 @@ To create a complete envelope or a fully sealed envelope, simply specify the pub
 
 ## Sealing
 
-To seal an envelope you must have the public keys of the recipient, see [the key exchanges section]({{< relref "#key-exchanges" >}}) for more detail on how to retrieve the public sealing key of a remote peer. Once you've exchanged keys and saved them to disk, you can seal an unsealed envelope with the following command:
+To seal an envelope you must have the public keys of the recipient, see [the key exchanges section]({{% relref "#key-exchanges" %}}) for more detail on how to retrieve the public sealing key of a remote peer. Once you've exchanged keys and saved them to disk, you can seal an unsealed envelope with the following command:
 
 ```
 $ trisa seal -in unsealed_envelope.json -out sealed_evelope.json -seal public.pem
@@ -158,7 +158,7 @@ You can also use a secure envelope payload template to seal and transfer an enve
 $ trisa transfer -i outgoing.json -s public_sealing_key.pem
 ```
 
-See [sealing secure envelopes]({{< relref "#sealing" >}}) for more information on the command line arguments that can be used to adapt secure envelopes before sending them.
+See [sealing secure envelopes]({{% relref "#sealing" %}}) for more information on the command line arguments that can be used to adapt secure envelopes before sending them.
 
 If you would like to send an error-only secure envelope to the recipient, then you must supply the envelope ID, error code, and error message as follows:
 
@@ -275,7 +275,7 @@ Categories that may be helpful in filtering:
 
 ## Guided Walkthrough
 
-This section contains a guided walkthrough of an interaction with the [Alice rVASP]({{< relref "rvasps.md" >}}) using the CLI. To complete this walkthrough you will need TRISA TestNet certificates issued by the TRISA Global Directory Service, the `trisa` CLI application installed and configured with those certs as discussed at the top of this guide. Ensure that the `$TRISA_DIRECTORY` environment variable is set to `testnet`.
+This section contains a guided walkthrough of an interaction with the [Alice rVASP](% relref "rvasps.md" %}}) using the CLI. To complete this walkthrough you will need TRISA TestNet certificates issued by the TRISA Global Directory Service, the `trisa` CLI application installed and configured with those certs as discussed at the top of this guide. Ensure that the `$TRISA_DIRECTORY` environment variable is set to `testnet`.
 
 First, perform a TRISA Global Directory search for the Alice VASP:
 

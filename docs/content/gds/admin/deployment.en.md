@@ -6,7 +6,7 @@ description: "Deploying the GDS System"
 weight: 10
 ---
 
-TRISA currently maintains two side-by-side networks that are deployed in Kubernetes clusters in North America, Germany, and Singapore. The "MainNet" (also referred to as the TRISA network) is the production TRISA service where peers exchange compliance information for real transactions. The "TestNet" is a mirror network that is setup to allow peers to develop their TRISA nodes and to ensure that they are configured correctly before engaging in production transactions. For more on using the TestNet, please see the [Testing documentation]({{< ref "testing" >}}).
+TRISA currently maintains two side-by-side networks that are deployed in Kubernetes clusters in North America, Germany, and Singapore. The "MainNet" (also referred to as the TRISA network) is the production TRISA service where peers exchange compliance information for real transactions. The "TestNet" is a mirror network that is setup to allow peers to develop their TRISA nodes and to ensure that they are configured correctly before engaging in production transactions. For more on using the TestNet, please see the [Testing documentation]({{% ref "testing" %}}).
 
 The current network architecture is as follows:
 

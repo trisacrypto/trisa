@@ -3,7 +3,7 @@ title: L'intégration
 date: 2021-04-23T01:35:35-04:00
 lastmod: 2021-10-13T14:47:18-04:00
 description: "Décrit comment intégrer le protocole TRISA dans le TestNet."
-weight: 20
+weight: 5
 ---
 
 ## Aperçu de l'intégration TRISA

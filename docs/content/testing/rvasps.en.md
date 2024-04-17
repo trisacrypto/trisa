@@ -62,7 +62,7 @@ There are two wallets for each customer to support wallet addresses that look li
 
 ### Preliminaries
 
-This documentation assumes that you have a service that is running the latest `TRISANetwork` service and that this service has been registered in the TRISA TestNet and has TestNet certificates correctly installed. See [ TRISA Integration Overview]({{< ref "getting-started/_index.md" >}}) for more information. **WARNING**: the rVASPs do not participate in the TRISA production network. They will only respond to verified TRISA TestNet mTLS connections.
+This documentation assumes that you have a service that is running the latest `TRISANetwork` service and that this service has been registered in the TRISA TestNet and has TestNet certificates correctly installed. See [ TRISA Integration Overview]() for more information. **WARNING**: the rVASPs do not participate in the TRISA production network. They will only respond to verified TRISA TestNet mTLS connections.
 
 To interact with the rVASP API, you may either:
 
@@ -169,7 +169,7 @@ The identity payload cannot be null and must be valid IVMS101, but may be partia
 
 Create a sealed envelope using either the directory service or direct key exchange to fetch the rVASP RSA public keys and use `AES256-GCM` and `HMAC-SHA256` as the envelope cryptography. Then, use the `TRISANetwork` service `Transfer` RPC to send the sealed envelope to the rVASP.
 
-See [Secure Envelopes]({{< ref "data/envelopes" >}}) for more on how to compose a valid secure envelope for transfers and the [TRISA CLI]({{< ref "testing/trisa-cli" >}}) for more on how to use a command line application for sending transfers.
+See [Secure Envelopes]({{% ref "data/envelopes" %}}) for more on how to compose a valid secure envelope for transfers and the [TRISA CLI]({{% ref "testing/trisa-cli" %}}) for more on how to use a command line application for sending transfers.
 
 #### Beneficiary Policies
 

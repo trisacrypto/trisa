@@ -8,7 +8,7 @@ weight: 21
 
 The purpose of the TRIXO questionnaire is to provide responses to a common set of questions VASPs might ask each other before exchanging Travel Rule information.
 
-When [registering for TRISA membership]({{< ref "/joining-trisa/registration" >}}), applicants must submit their TRIXO questionnaire in JSON form (shown below) as part of their application. After a VASP has been issued certificates, these TRIXO details are logged in the [TRISA Global Directory Service]({{< ref "/gds" >}}) to facilitate member lookups and mutual verification ahead of information exchanges.
+When [registering for TRISA membership]({{% ref "/joining-trisa/registration" %}}), applicants must submit their TRIXO questionnaire in JSON form (shown below) as part of their application. After a VASP has been issued certificates, these TRIXO details are logged in the [TRISA Global Directory Service]({{% ref "/gds" %}}) to facilitate member lookups and mutual verification ahead of information exchanges.
 
 #### JSON Formatting
 

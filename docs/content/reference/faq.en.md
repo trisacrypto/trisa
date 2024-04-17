@@ -20,7 +20,7 @@ Read more about TRISA in the [TRISA whitepaper](https://trisa.io/trisa-whitepape
 
 ## How does TRISA work?
 
-TRISA creates a mechanism for VASPs to exchange Travel Rule data packets by performing remote procedure calls using [gRPC]({{< relref "reference/faq#grpc" >}}) via [mTLS]({{< relref "reference/faq#mtls" >}}) connection. VASPs format the data as protocol buffers that contain details such as [IVMS101]({{< relref "reference/faq#ivms" >}}) identity and transaction payload data.
+TRISA creates a mechanism for VASPs to exchange Travel Rule data packets by performing remote procedure calls using [gRPC]({{% relref "reference/faq#grpc" %}}) via [mTLS]({{% relref "reference/faq#mtls" %}}) connection. VASPs format the data as protocol buffers that contain details such as [IVMS101]({{% relref "reference/faq#ivms" %}}) identity and transaction payload data.
 
 TRISA maintains open source [Github repositories](https://github.com/trisacrypto) available to VASPs as they build, test, and deploy their TRISA node into production.
 
@@ -40,7 +40,7 @@ TRISA centralizes a small component of the protocol by acting as a certificate a
 
 TRISA safeguards Personally Identifiable Information (PII) in flight and at rest.
 
-In flight, [secure envelopes]({{< relref "reference/faq#envelope" >}}) are exchanged over an mTLS encrypted channel created using the identity certificates issued by the TRISA network. TRISA members can use each other's public key addresses to open a secure line of communication to transmit users’ PII.
+In flight, [secure envelopes]({{% relref "reference/faq#envelope" %}}) are exchanged over an mTLS encrypted channel created using the identity certificates issued by the TRISA network. TRISA members can use each other's public key addresses to open a secure line of communication to transmit users’ PII.
 
 TRISA uses a trusted Certified Authority (CA) model, and only verified VASPs are granted certificates from the CA. Certificate authorities offer a root of trust to anchor identities to a chain of trusted entities. The CA model safeguards against a single point of failure, provides protection from attacks, and is scalable to accommodate the growing crypto landscape.
 
@@ -73,7 +73,7 @@ Secure Envelopes wrap the identity and blockchain transaction payloads, applying
 
 ![secure envelopes](/img/secure_envelopes.png).
 
-The [Secure Envelope documentation]({{< ref "/data/envelopes" >}}) discusses its implementation further.
+The [Secure Envelope documentation]() discusses its implementation further.
 
 ## How does mTLS work? {##mtls}
 
@@ -89,11 +89,11 @@ Depending on your business details, specific fields may be required. For more in
 
 There is an [IVMS 101 Validator](https://ivmsvalidator.com/) which can be used to double check the formatting of an IVMS101 message to ensure it is correct.
 
-For help marshaling and unmarshaling [IVMS101 identity payloads]({{< relref "data/ivms" >}}), see the documentation about the [`ivms101` package in `trisa`](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101).
+For help marshaling and unmarshaling [IVMS101 identity payloads]({{% relref "data/ivms" %}}), see the documentation about the [`ivms101` package in `trisa`](https://github.com/trisacrypto/trisa/tree/main/pkg/ivms101).
 
 ## How do I figure out where to connect to the counterparty? How do I get counterparty IVMS 101 info?
 
-As part of the protocol, the Originator can use the [Global Directory Service]({{< relref "reference/faq#gds" >}}) to lookup the counterpoint endpoint, and sends a secure envelope providing their IVMS101 details. The Beneficiary can then verify and store the counterparty PII information needed for compliance. Next the Beneficiary can return a new secure envelope with their IVMS101 details so that the Originator can store the information for compliance.
+As part of the protocol, the Originator can use the [Global Directory Service]({{% relref "reference/faq#gds" %}}) to lookup the counterpoint endpoint, and sends a secure envelope providing their IVMS101 details. The Beneficiary can then verify and store the counterparty PII information needed for compliance. Next the Beneficiary can return a new secure envelope with their IVMS101 details so that the Originator can store the information for compliance.
 
 ## Why gRPC? {##grpc}
 
@@ -105,6 +105,6 @@ The use of gRPC also facilitates convenient encryption at rest to ensure that PI
 
 ## What's the difference between TestNet and MainNet?
 
-The [TestNet]({{< ref "/testing" >}})  is a sandbox environment that allows VASPs to test securely sharing the cryptocurrency transaction details required to meet the FATF Travel Rule requirements. The TestNet includes [“robot” VASPs]({{< ref "/testing/rvasps" >}})  that give users the ability to interact with the TestNet by simulating transactions to see how secure transactions are conducted. Once a VASP completes testing, the VASP can switch to MainNet, where live transactions take place.
+The [TestNet]({{% ref "/testing" %}})  is a sandbox environment that allows VASPs to test securely sharing the cryptocurrency transaction details required to meet the FATF Travel Rule requirements. The TestNet includes [“robot” VASPs]({{% ref "/testing/rvasps" %}})  that give users the ability to interact with the TestNet by simulating transactions to see how secure transactions are conducted. Once a VASP completes testing, the VASP can switch to MainNet, where live transactions take place.
 
 It’s important to note that the reason that there are two networks is because those networks are issued from different intermediate certificate authorities. A VASP that has been issued a TestNet certificate cannot connect to a node that is running on MainNet and vice versa. In other words, the MainNet certificate authority will not recognize TestNet certificates. When you [submit a request for TRISA certificates](https://vaspdirectory.net/guide), you may simultaneously request certificates for TestNet and MainNet.

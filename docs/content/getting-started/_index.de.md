@@ -3,7 +3,7 @@ title: Integrationsübersicht
 date: 2021-04-23T01:35:35-04:00
 lastmod: 2021-10-08T16:27:33-04:00
 description: "Beschreibt, wie das TRISA-Protokoll in das TestNet integriert wird"
-weight: 20
+weight: 5
 ---
 
 ## Übersicht über die TRISA-Integration

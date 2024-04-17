@@ -3,7 +3,7 @@ title: TRISA Protocol and API
 date: 2022-07-06T15:08:52-04:00
 lastmod: 2022-07-06T15:08:52-04:00
 description: "Navigating the Open Source TRISA Code"
-weight: 10
+weight: 15
 ---
 
 This section of the documentation describes the TRISA Protocol and API.
@@ -25,7 +25,7 @@ The `pkg` folder contains the reference implementation code, including compiled 
 
 [^1]: Note that these compiled files are compiled for Golang; but this is certainly not the only option. Those interested in building implementation code in a different language should look to the `lib` folder, which currently contains placeholder folders but is intended to showcase such other implementations (including compiled protocol buffer code for these other languages).
 
-Another integral part of the TRISA protocol is the [Global Directory Service]({{< ref "/gds" >}}), which serves as a look-up tool for TRISA members to identify peers with which they wish to exchange information. For RPC definitions and implementation code related to the Global Directory Service, visit the companion [directory repository](https://github.com/trisacrypto/directory).
+Another integral part of the TRISA protocol is the [Global Directory Service]({{% ref "/gds" %}}), which serves as a look-up tool for TRISA members to identify peers with which they wish to exchange information. For RPC definitions and implementation code related to the Global Directory Service, visit the companion [directory repository](https://github.com/trisacrypto/directory).
 
 
 

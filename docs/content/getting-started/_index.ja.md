@@ -3,7 +3,7 @@ title: TRISAプロトコルをTestNetに統合する方法について説明し�
 date: 2021-04-23T01:35:35-04:00
 lastmod: 2021-10-22T12:37:52-04:00
 description: "TRISAプロトコルをTestNetに統合する方法について説明します"
-weight: 20
+weight: 5
 ---
 
 ## TRISA統合の概要
