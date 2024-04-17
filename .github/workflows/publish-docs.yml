@@ -23,7 +23,7 @@ jobs:
           extended: true
 
       - name: Build
-        run: hugo --gc --minify -s docs/ --templateMetrics --templateMetricsHints --verbose --verboseLog --buildDrafts --buildExpired --buildFuture --forceSyncStatic
+        run: hugo --gc --minify -s docs/ --templateMetrics --templateMetricsHints --verbose --buildDrafts --buildExpired --buildFuture --forceSyncStatic
 
 
       - name: Publish
