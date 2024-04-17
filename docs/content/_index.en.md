@@ -17,6 +17,10 @@ weight: 0
 </div>
 {{< /rawhtml >}}
 
+{{% notice style="primary" title="TRISA Envoy: An Open Source Node" icon="osi" %}}
+TRISA has released an open source node called "Envoy".
+{{% /notice %}}
+
 The goal of the Travel Rule Information Sharing Architecture (TRISA) is to enable
 compliance with the FATF and FinCEN Travel Rules for cryptocurrency transaction
 identity information without modifying core blockchain protocols, and without
