@@ -198,7 +198,7 @@ The `Register` RPC expects a `RegisterRequest` message containing:
 3. The Travel Rule implementation `trisa_endpoint` where other TRISA peers should connect. This should be an `addr:port` combination, (e.g. `trisa.vaspbot.net:443`).
 4. The VASP's `common_name`, which should be the domain name to issue certificates for and should match the domain in the `trisa_endpoint`. If this field is omitted, the `common_name` is inferred from the `trisa_endpoint`.
 5. Business information including `website`, `business_category`, `vasp_categories`, and the company's `established_on` date (in YYYY-MM-DD format).
-6. The VASP's `trixo` questionnaire data. For more information, see the [TRIXO documentation]({{< ref "/joining-trisa/trixo" >}}).
+6. The VASP's `trixo` questionnaire data. For more information, see the [TRIXO documentation]({{% ref "/joining-trisa/trixo" %}}).
 
 ```proto
 message RegisterRequest {
@@ -214,7 +214,7 @@ message RegisterRequest {
 }
 ```
 
-A `RegisterRequest` returns a `RegisterReply` message containing verification metadata as well as a `pkcs12password` that must be used to decrypt the emailed certifications. For more information, see the [PKCS12 password documentation]({{< ref "/joining-trisa/pkcs12" >}}). Do not lose or share this password!
+A `RegisterRequest` returns a `RegisterReply` message containing verification metadata as well as a `pkcs12password` that must be used to decrypt the emailed certifications. For more information, see the [PKCS12 password documentation]({{% ref "/joining-trisa/pkcs12" %}}). Do not lose or share this password!
 
 ```proto
 message RegisterReply {

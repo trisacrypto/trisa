@@ -14,7 +14,7 @@ TRISA GDS and TestNet services are primarily configured using environment variab
 
 ## Configuration Documentation
 
-- [GDS Node Configuration]({{< ref "gds/admin/configuration/gds" >}})
-- [BFF Service Configuration]({{< ref "gds/admin/configuration/bff" >}})
-- [React Apps Configuration]({{< ref "gds/admin/configuration/ui" >}})
-- [TrtlDB Configuration]({{< ref "gds/admin/configuration/trtl" >}})
+- [GDS Node Configuration]({{% ref "gds/admin/configuration/gds" %}})
+- [BFF Service Configuration]({{% ref "gds/admin/configuration/bff" %}})
+- [React Apps Configuration]({{% ref "gds/admin/configuration/ui" %}})
+- [TrtlDB Configuration]({{% ref "gds/admin/configuration/trtl" %}})

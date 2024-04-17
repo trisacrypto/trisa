@@ -46,7 +46,7 @@ Si vous êtes un client de Traveler, les adresses en gras ci-dessus sont associ�
 
 ### Préliminaires
 
-Cette documentation suppose que vous avez un service qui exécute la dernière version du service `TRISANetwork` et qu'il a été enregistré dans le TestNet TRISA et que les certificats TestNet sont correctement installés. Voir [Vue d'ensemble de l'intégration de TRISA]({{< ref "getting-started/_index.md" >}}) pour plus d’informations. **AVERTISSEMENT**: les rVASP ne participent pas au réseau de production TRISA, ils ne répondent qu'aux connexions mTLS vérifiées de TRISA TestNet.
+Cette documentation suppose que vous avez un service qui exécute la dernière version du service `TRISANetwork` et qu'il a été enregistré dans le TestNet TRISA et que les certificats TestNet sont correctement installés. Voir [Vue d'ensemble de l'intégration de TRISA]({{% ref "getting-started/_index.md" %}}) pour plus d’informations. **AVERTISSEMENT**: les rVASP ne participent pas au réseau de production TRISA, ils ne répondent qu'aux connexions mTLS vérifiées de TRISA TestNet.
 
 Pour interagir avec l'API rVASP, vous pouvez soit :
 

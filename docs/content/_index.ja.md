@@ -1,15 +1,15 @@
 ---
-title: ホームページ
+title: TRISA 開発者向けドキュメント
 date: 2020-12-24T07:58:37-05:00
 lastmod: 2021-10-15T14:35:53-05:00
 description: "TRISA デベロッパードキュメント"
 weight: 0
 ---
 
-## TRISA
-
 [![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/trisa/pkg.svg)](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg)
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/trisacrypto/trisa)](https://goreportcard.com/report/github.com/trisacrypto/trisa)
+
 
 トラベルルール情報共有アーキテクチャ（TRISA）の目標は、コアブロックチェーンプロトコルを変更したり、トランザクションコストを増加させたり、仮想通貨のピアツーピアトランザクションを変更したりすることなく、暗号通貨トランザクションID情報のFATFおよびFinCENトラベルルールへの準拠を可能にすることです流れ。TRISAプロトコルと仕様は、[TRISAワーキンググループ](https://trisa.io) によって定義されています。 仕様の詳細については、[現在のバージョンのTRISAホワイトペーパーをお読みください](https://trisa.io/trisa-whitepaper/)。
 

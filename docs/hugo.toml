@@ -11,7 +11,7 @@ defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 enableMissingTranslationPlaceholders = false
 
-[Params]
+[params]
 
     # Source Code repository section
     description = "TRISA Documentation"
@@ -49,94 +49,106 @@ enableMissingTranslationPlaceholders = false
 
     disableShortcutsTitle = true
 
-    favicon = "/images/favicon.png"
+    favicon = "favicon.png"
 
-[Languages]
-  [Languages.en]
+    additionalContentLanguage = ['en']
+
+[languages]
+  [languages.en]
     title = "TRISA Documentation"
     weight = 1
     languageName = "English"
+
+  [languages.en.params]
     landingPageName = "<i class='fas fa-home'></i> Home"
 
-  [[Languages.en.menu.shortcuts]]
+  [[languages.en.menu.shortcuts]]
     name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
     identifier = "ds"
     url = "https://github.com/trisacrypto/trisa"
     weight = 10
 
-  [[Languages.en.menu.shortcuts]]
+  [[languages.en.menu.shortcuts]]
     name = "<i class='fas fa-book'></i> TRISA API Documentation"
     identifier = "trisadocs"
     url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
     weight = 11
 
-  [Languages.de]
+  [languages.de]
     title = "TRISA Dokumentation"
     weight = 2
     languageName = "Deutsch"
+
+  [languages.de.params]
     landingPageName = "<i class='fas fa-home'></i> Startseite"
 
-  [[Languages.de.menu.shortcuts]]
+  [[languages.de.menu.shortcuts]]
     name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
     identifier = "ds"
     url = "https://github.com/trisacrypto/trisa"
     weight = 12
 
-  [[Languages.de.menu.shortcuts]]
+  [[languages.de.menu.shortcuts]]
     name = "<i class='fas fa-book'></i> TRISA API Documentation"
     identifier = "trisadocs"
     url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
     weight = 13
 
-  [Languages.fr]
+  [languages.fr]
     title = "Documentation de TRISA"
     weight = 3
     languageName = "Français"
+
+  [languages.fr.params]
     landingPageName = "<i class='fas fa-home'></i> Accueil"
 
-  [[Languages.fr.menu.shortcuts]]
+  [[languages.fr.menu.shortcuts]]
     name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
     identifier = "ds"
     url = "https://github.com/trisacrypto/trisa"
     weight = 14
 
-   [[Languages.fr.menu.shortcuts]]
+   [[languages.fr.menu.shortcuts]]
     name = "<i class='fas fa-book'></i> TRISA API Documentation"
     identifier = "trisadocs"
     url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
     weight = 15
 
-  [Languages.zh]
+  [languages.zh]
     title = "TRISA 文档"
     weight = 4
     languageName = "中文"
+
+  [languages.zh.params]
     landingPageName = "<i class='fas fa-home'></i> 主页"
 
-  [[Languages.zh.menu.shortcuts]]
+  [[languages.zh.menu.shortcuts]]
     name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
     identifier = "ds"
     url = "https://github.com/trisacrypto/trisa"
     weight = 16
 
-  [[Languages.zh.menu.shortcuts]]
+  [[languages.zh.menu.shortcuts]]
     name = "<i class='fas fa-book'></i> TRISA API Documentation"
     identifier = "trisadocs"
     url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"
     weight = 17
 
-  [Languages.ja]
+  [languages.ja]
     title = "TRISAのドキュメント"
     weight = 5
     languageName = "日本語"
+
+  [languages.ja.params]
     landingPageName = "<i class='fas fa-home'></i> ホームページ"
 
-  [[Languages.ja.menu.shortcuts]]
+  [[languages.ja.menu.shortcuts]]
     name = "<i class='fab fa-fw fa-github'></i> Version v1beta1"
     identifier = "ds"
     url = "https://github.com/trisacrypto/trisa"
     weight = 18
 
-  [[Languages.ja.menu.shortcuts]]
+  [[languages.ja.menu.shortcuts]]
     name = "<i class='fas fa-book'></i> TRISA API Documentation"
     identifier = "trisadocs"
     url = "https://pkg.go.dev/github.com/trisacrypto/trisa/pkg"

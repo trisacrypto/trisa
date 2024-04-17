@@ -40,9 +40,9 @@ The `Transfer` RPC is a unary RPC for simple, single transactions. The `Transfer
 
 ### `SecureEnvelope`
 
-A `SecureEnvelope` is the encrypted transaction envelope that is the outer layer of the TRISA information exchange protocol and facilitates the secure storage of Know Your Client (KYC) data in a transaction. The envelope specifies a unique id to reference the transaction out-of-band (e.g., in the blockchain layer). It provides the necessary information so only the originator and the beneficiary can decrypt the transaction data. For more information about Secure Envelopes, [this section]({{< relref "data/envelopes" >}}) of the documentation further describes this primary data structure for the TRISA exchange.
+A `SecureEnvelope` is the encrypted transaction envelope that is the outer layer of the TRISA information exchange protocol and facilitates the secure storage of Know Your Client (KYC) data in a transaction. The envelope specifies a unique id to reference the transaction out-of-band (e.g., in the blockchain layer). It provides the necessary information so only the originator and the beneficiary can decrypt the transaction data. For more information about Secure Envelopes, [this section]({{% relref "data/envelopes" %}}) of the documentation further describes this primary data structure for the TRISA exchange.
 
-A `SecureEnvelope` message contains different types of metadata. [The Anatomy of Secure Envelope]({{< relref "data/envelopes#the-anatomy-of-a-secure-envelope" >}}) section of this documentation further describes the envelope metadata, cryptographic metadata, and an encrypted payload and HMAC signature within the `SecureEnvelope`.
+A `SecureEnvelope` message contains different types of metadata. [The Anatomy of Secure Envelope]({{% relref "data/envelopes#the-anatomy-of-a-secure-envelope" %}}) section of this documentation further describes the envelope metadata, cryptographic metadata, and an encrypted payload and HMAC signature within the `SecureEnvelope`.
 
 ```proto
 message SecureEnvelope {
@@ -140,7 +140,7 @@ message ServiceState {
 
 The implementation of the TRISA Protocol Buffers in Go is compiled using [`protoc`](https://grpc.io/docs/protoc-installation/) when `go generate ./...` is executed in the root of the repository. The [compiled files](https://github.com/trisacrypto/trisa/tree/main/pkg/trisa/api/v1beta1) in the TRISA repository contain the TRISA Network Protocol implemented in Go.
 
-The `TRISANetworkServer` is the server API for `TRISANetwork`, while the `TRISANetworkClient` is the client API for the `TRISANetwork` service. Both contain the `Transfer`, `TransferStream`, `ConfirmAddress`, and  `KeyExchange` methods described above as [RPCs]({{< relref "api/api#the-trisanetwork-service" >}}) under the `TRISANetwork` service.
+The `TRISANetworkServer` is the server API for `TRISANetwork`, while the `TRISANetworkClient` is the client API for the `TRISANetwork` service. Both contain the `Transfer`, `TransferStream`, `ConfirmAddress`, and  `KeyExchange` methods described above as [RPCs]({{% relref "api/api#the-trisanetwork-service" %}}) under the `TRISANetwork` service.
 
 ```golang
 type TRISANetworkClient interface {

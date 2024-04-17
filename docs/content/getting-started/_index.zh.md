@@ -3,7 +3,7 @@ title: 集成概述
 date: 2021-04-23T01:35:35-04:00
 lastmod: 2021-10-13T15:23:16-04:00
 description: "描述如何在TestNet中集成TRISA协议"
-weight: 20
+weight: 5
 ---
 
 ## TRISA集成概述

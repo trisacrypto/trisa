@@ -20,8 +20,8 @@ In principle, then, a TRISA node must add an HTTP service to its node to accept 
 
 ### Next Steps:
 
-1. [Integrating a TRP Bridge Handler into your TRISA node]({{< ref "bridge" >}})
-2. [Making Outgoing TRP Requests]({{< ref "client" >}})
+1. [Integrating a TRP Bridge Handler into your TRISA node]()
+2. [Making Outgoing TRP Requests]()
 
 ## Considerations
 
@@ -39,7 +39,7 @@ Welcome, thank you for checking out TRISA! The best thing you can do for integra
 
 If you're interested in implementing the extensions for key exchange and parsing secure envelopes, you're more than welcome to use the Golang code in this library to get you started! If you're implementation is in another language, [please let us know](https://github.com/trisacrypto/trisa/issues) so that we can create library code to help you implement secure PII transfers.
 
-Please see the [Getting Started Guide]({{< ref "getting-started" >}}) for more on how to implement TRISA-specific protocol details using the extensions.
+Please see the [Getting Started Guide]() for more on how to implement TRISA-specific protocol details using the extensions.
 
 ### Policies
 

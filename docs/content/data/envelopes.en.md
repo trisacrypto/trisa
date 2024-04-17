@@ -27,7 +27,7 @@ There are two basic workflows for secure envelopes: creating and sealing an enve
 **Prerequisites**:
 
 1. You should have constructed an appropriate TRISA `Payload` that contains an `identity` (an IVMS 101 `IdentityPayload`), a `transaction` (a TRISA generic transaction) and a `sent_at` timestamp (RFC-3339 formatted).
-2. You should have the _public sealing key_ of the receipient. You can obtain this key either via the `KeyExchange` RPC or by requesting the key from the [directory service]({{< ref "/gds" >}}).
+2. You should have the _public sealing key_ of the receipient. You can obtain this key either via the `KeyExchange` RPC or by requesting the key from the [directory service]({{% ref "/gds" %}}).
 
 **Steps**:
 
