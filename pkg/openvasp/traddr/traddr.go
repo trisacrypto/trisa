@@ -12,6 +12,7 @@ repository per their ISC license.
 package traddr
 
 import (
+	"fmt"
 	"net"
 	"net/url"
 	"strings"
@@ -57,8 +58,8 @@ func Encode(uri string) (_ string, err error) {
 		return "", ErrMissingQueryString
 	}
 
-	if !u.ValidTLD() {
-		return "", ErrInvalidTLD
+	if err = u.ValidTLD(); err != nil {
+		return "", err
 	}
 
 	return scheme + checkEncode([]byte(uri)), nil
@@ -90,8 +91,8 @@ func Decode(traddr string) (_ string, err error) {
 		return "", ErrMissingQueryString
 	}
 
-	if !u.ValidTLD() {
-		return "", ErrInvalidTLD
+	if err = u.ValidTLD(); err != nil {
+		return "", err
 	}
 
 	return string(url), nil
@@ -126,7 +127,7 @@ func Parse(rawURL string) (_ *URL, err error) {
 	}
 
 	// If the scheme and host is missing, try parsing with an empty scheme
-	if u.Scheme == "" && u.Host == "" {
+	if (u.Scheme == "" && u.Host == "") || u.Hostname() == "" {
 		if u, err = url.Parse("//" + rawURL); err != nil {
 			return nil, err
 		}
@@ -135,18 +136,21 @@ func Parse(rawURL string) (_ *URL, err error) {
 	return &URL{*u}, nil
 }
 
-func (u *URL) ValidTLD() bool {
+func (u *URL) ValidTLD() error {
 	// localhost is a valid TLD
 	hostname := u.Hostname()
 	if hostname == "localhost" {
-		return true
+		return nil
 	}
 
 	// Check if the hostname is an IP address
 	if net.ParseIP(hostname) != nil {
-		return true
+		return nil
 	}
 
 	// Otherwise validate the TLD
-	return tld.FromDomainName(hostname).IsValid()
+	if !tld.FromDomainName(hostname).IsValid() {
+		return fmt.Errorf("%q is an %w", hostname, ErrInvalidTLD)
+	}
+	return nil
 }

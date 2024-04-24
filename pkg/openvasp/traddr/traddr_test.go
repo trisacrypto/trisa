@@ -40,6 +40,42 @@ func TestMake(t *testing.T) {
 			"https://beneficiary.com/x/12345?t=i&foo=bar&color=red",
 			"taGw1e4cjuujwyHBV51aspbLBUbcDhebW7ss8iF6dLEn19WfyQZt6HaUTStSE2YcadkFG",
 		},
+		{
+			"https://trisa.beneficiary.com",
+			"ta6HcFqwh5y4D3r7z66JyKqvSAekyXnXc2KwdXSUec",
+		},
+		{
+			"https://trisa.beneficiary.com/x/12345",
+			"ta4uMjxqDq4t7nefCdrm4ssCTewVbvBLzmUnVcYe4SXqGafPTPewG",
+		},
+		{
+			"https://trisa.beneficiary.com/x/12345?t=i",
+			"ta4uMjxqDq4t7nefCdrm4ssCTewVbvBLzmUnVcYe4SXqGafPTPewG",
+		},
+		{
+			"trisa.beneficiary.com:4443",
+			"ta3dgYSWEoAJPfU2Wdr2hvQmXem4dHbfKuBvkbKGfBrzdb61C",
+		},
+		{
+			"https://beneficiary.com:8000",
+			"ta21hULpYqwBirCCHHU13UMT1hhy3syAAPXJem8cJ",
+		},
+		{
+			"trisa.beneficiary.com:4443/x/12345",
+			"ta2wijJqYhcj5zriQyV5SVWybf71AyHEXgRCa7WWJ8XQk9g1NodLEHbKoHdg",
+		},
+		{
+			"https://beneficiary.com:8000/x/12345",
+			"takLQA9MSCjHr3kkHh4fnC5rWNbrySUJhTwQHZsML2anv95kkqe",
+		},
+		{
+			"trisa.beneficiary.com:4443/x/12345?t=i",
+			"ta2wijJqYhcj5zriQyV5SVWybf71AyHEXgRCa7WWJ8XQk9g1NodLEHbKoHdg",
+		},
+		{
+			"https://beneficiary.com:8000/x/12345?t=i",
+			"takLQA9MSCjHr3kkHh4fnC5rWNbrySUJhTwQHZsML2anv95kkqe",
+		},
 	}
 
 	for i, tc := range testCases {
@@ -82,6 +118,30 @@ func TestDecodeURL(t *testing.T) {
 			"taGw1e4cjuujwyHBV51aspbLBUbcDhebW7ss8iF6dLEn19WfyQZt6HaUTStSE2YcadkFG",
 			"https://beneficiary.com/x/12345?color=red&foo=bar&t=i",
 		},
+		{
+			"ta6HcFqwh5y4D3r7z66JyKqvSAekyXnXc2KwdXSUec",
+			"https://trisa.beneficiary.com?t=i",
+		},
+		{
+			"ta4uMjxqDq4t7nefCdrm4ssCTewVbvBLzmUnVcYe4SXqGafPTPewG",
+			"https://trisa.beneficiary.com/x/12345?t=i",
+		},
+		{
+			"ta3dgYSWEoAJPfU2Wdr2hvQmXem4dHbfKuBvkbKGfBrzdb61C",
+			"https://trisa.beneficiary.com:4443?t=i",
+		},
+		{
+			"ta21hULpYqwBirCCHHU13UMT1hhy3syAAPXJem8cJ",
+			"https://beneficiary.com:8000?t=i",
+		},
+		{
+			"ta2wijJqYhcj5zriQyV5SVWybf71AyHEXgRCa7WWJ8XQk9g1NodLEHbKoHdg",
+			"https://trisa.beneficiary.com:4443/x/12345?t=i",
+		},
+		{
+			"takLQA9MSCjHr3kkHh4fnC5rWNbrySUJhTwQHZsML2anv95kkqe",
+			"https://beneficiary.com:8000/x/12345?t=i",
+		},
 	}
 
 	for i, tc := range testCases {
@@ -103,6 +163,18 @@ func TestEncoding(t *testing.T) {
 			"ta2W2HPKfHxgSgrzY178knqXHg1H3jfeQrwQ9JrKBs9wv",
 			nil,
 			"happy case",
+		},
+		{
+			"trisa.beneficiary.com:8000?t=i",
+			"ta3dgYSWEoAJPfU2Wdr2hvQmXem4dHbfKyYrisbBTnXjL2Kub",
+			nil,
+			"happy case with port",
+		},
+		{
+			"trisa.beneficiary.com:8000/x/12345?t=i",
+			"ta2wijJqYhcj5zriQyV5SVWybf71AyHEXjdvtJEwNdQYykjqYkVT6dUXAfTf",
+			nil,
+			"happy case with port and path",
 		},
 		{
 			"api.testing.21analytics.xyz/transfers/01H11RHY53MBMEQB1VJ4KJF39Z?t=i",
@@ -165,6 +237,18 @@ func TestDecoding(t *testing.T) {
 			"happy case",
 		},
 		{
+			"ta3dgYSWEoAJPfU2Wdr2hvQmXem4dHbfKyYrisbBTnXjL2Kub",
+			"trisa.beneficiary.com:8000?t=i",
+			nil,
+			"happy case with port",
+		},
+		{
+			"ta2wijJqYhcj5zriQyV5SVWybf71AyHEXjdvtJEwNdQYykjqYkVT6dUXAfTf",
+			"trisa.beneficiary.com:8000/x/12345?t=i",
+			nil,
+			"happy case with port and path",
+		},
+		{
 			"ta2SRCMhxtdtKVfoV2MTziaN7F9WD7WKyGvynQa7w3as7ziTr583ZRU1DeKarHjFrLSxuQAZLciZMqry4Yk797qKErWYnCmj8sLaH",
 			"api.testing.21analytics.xyz/transfers/01H11RHY53MBMEQB1VJ4KJF39Z?t=i",
 			nil,
@@ -224,4 +308,41 @@ func TestDecoding(t *testing.T) {
 			require.Equal(t, tc.expected, addr, "equality mismatch on test case %d: %s", i, tc.msg)
 		}
 	}
+}
+
+func TestValidTLD(t *testing.T) {
+	t.Run("Valid", func(t *testing.T) {
+		tests := []string{
+			"https://beneficiary.com",
+			"beneficiary.org",
+			"trisa.beneficiary.co",
+			"https://beneficiary.co.uk:8000",
+			"beneficiary.us:8000",
+			"trisa.beneficiary.net:8000",
+			"testnet.trisa.beneficiary.io:8000",
+		}
+
+		for i, tc := range tests {
+			u, _ := traddr.Parse(tc)
+			require.NoError(t, u.ValidTLD(), "received unexpected error for test case %d", i)
+		}
+	})
+
+	t.Run("Invalid", func(t *testing.T) {
+		tests := []string{
+			"https://beneficiary.bear",
+			"beneficiary.bear",
+			"trisa.beneficiary.bear",
+			"https://beneficiary.bear:8000",
+			"beneficiary.bear:8000",
+			"trisa.beneficiary.bear:8000",
+			"testnet.trisa.beneficiary.bear:8000",
+		}
+
+		for i, tc := range tests {
+			u, _ := traddr.Parse(tc)
+			require.ErrorIs(t, u.ValidTLD(), traddr.ErrInvalidTLD, "did not receive expected error for test case %d", i)
+		}
+
+	})
 }
