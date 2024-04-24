@@ -16,7 +16,7 @@ For more information on the TRP protocol, please refer to the [TRP Documentation
 
 The TRP workflow uses HTTPS `POST` requests with JSON payloads to facilitate information exchange. The initial request endpoint is defined with an LNURL or Travel Address endpoint that the beneficiary must request from their VASP and send to the originator. Subsequent request endpoints are defined with callback URLs in the request itself. HTTP error codes and JSON payloads are used to communicate success or failure back to the counterparty.
 
-In principle, then, a TRISA node must add an HTTP service to its node to accept and respond to these POST requests. TRISA has implemented [handlers and middleware](https://pkg.go.dev/github.com/trisacrypto/trisa@v0.4.0/pkg/openvasp) in the `trisacrypto/trisa` go package to make it easier to add a service to your TRISA node and to translate TRISA data structures into TRP data structures.
+In principle, then, a TRISA node must add an HTTP service to its node to accept and respond to these POST requests. TRISA has implemented [handlers and middleware](https://pkg.go.dev/github.com/trisacrypto/trisa@v1.0.0/pkg/openvasp) in the `trisacrypto/trisa` go package to make it easier to add a service to your TRISA node and to translate TRISA data structures into TRP data structures.
 
 ### Next Steps:
 
