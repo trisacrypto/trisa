@@ -201,7 +201,7 @@ func New(payload *api.Payload, opts ...Option) (env *Envelope, err error) {
 			HmacSecret:          nil,
 			HmacAlgorithm:       "",
 			Error:               nil,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -266,7 +266,7 @@ func (e *Envelope) Reject(reject *api.Error, opts ...Option) (env *Envelope, err
 			HmacSecret:          nil,
 			HmacAlgorithm:       "",
 			Error:               reject,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -304,7 +304,7 @@ func (e *Envelope) Update(payload *api.Payload, opts ...Option) (env *Envelope, 
 			HmacSecret:          e.msg.HmacSecret,
 			HmacAlgorithm:       e.msg.HmacAlgorithm,
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -349,7 +349,7 @@ func (e *Envelope) Encrypt(opts ...Option) (env *Envelope, reject *api.Error, er
 			HmacSecret:          nil,
 			HmacAlgorithm:       "",
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -439,7 +439,7 @@ func (e *Envelope) Decrypt(opts ...Option) (env *Envelope, reject *api.Error, er
 			HmacSecret:          e.msg.HmacSecret,
 			HmacAlgorithm:       e.msg.HmacAlgorithm,
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -541,7 +541,7 @@ func (e *Envelope) Seal(opts ...Option) (env *Envelope, reject *api.Error, err e
 			HmacSecret:          e.msg.HmacSecret,
 			HmacAlgorithm:       e.msg.HmacAlgorithm,
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -613,7 +613,7 @@ func (e *Envelope) Unseal(opts ...Option) (env *Envelope, reject *api.Error, err
 			HmacSecret:          e.msg.HmacSecret,
 			HmacAlgorithm:       e.msg.HmacAlgorithm,
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              e.msg.Sealed,
 			PublicKeySignature:  e.msg.PublicKeySignature,
 		},
@@ -713,7 +713,8 @@ func (e *Envelope) Timestamp() (ts time.Time, err error) {
 			return ts, &api.Error{Code: api.BadRequest, Message: "could not parse ordering timestamp on secure envelope as RFC3339 timestamp"}
 		}
 	}
-	return ts, err
+
+	return ts.UTC(), err
 }
 
 // Crypto returns the cryptographic method used to encrypt/decrypt the payload.
