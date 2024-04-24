@@ -152,15 +152,19 @@ func Reject(reject *api.Error, opts ...Option) (_ *api.SecureEnvelope, err error
 // if the envelope is in an error state (even if the envelope contains a payload).
 func Check(msg *api.SecureEnvelope) (_ *api.Error, iserr bool) {
 	env := &Envelope{msg: msg}
-	state := env.State()
-	iserr = state == Error || state == ClearError || state == UnsealedError || state == SealedError
-	return env.Error(), iserr
+	return env.Error(), env.IsError()
 }
 
 // Status returns the state the secure envelope is currently in.
 func Status(msg *api.SecureEnvelope) State {
 	env := &Envelope{msg: msg}
 	return env.State()
+}
+
+// Timestamp returns the parsed timestamp from the secure envelope.
+func Timestamp(msg *api.SecureEnvelope) (time.Time, error) {
+	env := &Envelope{msg: msg}
+	return env.Timestamp()
 }
 
 // Envelope is a wrapper for a trisa.SecureEnvelope that adds cryptographic
@@ -197,7 +201,7 @@ func New(payload *api.Payload, opts ...Option) (env *Envelope, err error) {
 			HmacSecret:          nil,
 			HmacAlgorithm:       "",
 			Error:               nil,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -262,7 +266,7 @@ func (e *Envelope) Reject(reject *api.Error, opts ...Option) (env *Envelope, err
 			HmacSecret:          nil,
 			HmacAlgorithm:       "",
 			Error:               reject,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -300,7 +304,7 @@ func (e *Envelope) Update(payload *api.Payload, opts ...Option) (env *Envelope, 
 			HmacSecret:          e.msg.HmacSecret,
 			HmacAlgorithm:       e.msg.HmacAlgorithm,
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -345,7 +349,7 @@ func (e *Envelope) Encrypt(opts ...Option) (env *Envelope, reject *api.Error, er
 			HmacSecret:          nil,
 			HmacAlgorithm:       "",
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -435,7 +439,7 @@ func (e *Envelope) Decrypt(opts ...Option) (env *Envelope, reject *api.Error, er
 			HmacSecret:          e.msg.HmacSecret,
 			HmacAlgorithm:       e.msg.HmacAlgorithm,
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -537,7 +541,7 @@ func (e *Envelope) Seal(opts ...Option) (env *Envelope, reject *api.Error, err e
 			HmacSecret:          e.msg.HmacSecret,
 			HmacAlgorithm:       e.msg.HmacAlgorithm,
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
 		},
@@ -609,7 +613,7 @@ func (e *Envelope) Unseal(opts ...Option) (env *Envelope, reject *api.Error, err
 			HmacSecret:          e.msg.HmacSecret,
 			HmacAlgorithm:       e.msg.HmacAlgorithm,
 			Error:               e.msg.Error,
-			Timestamp:           time.Now().Format(time.RFC3339Nano),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              e.msg.Sealed,
 			PublicKeySignature:  e.msg.PublicKeySignature,
 		},
@@ -660,6 +664,11 @@ func (e *Envelope) ID() string {
 	return e.msg.Id
 }
 
+// UUID returns the envelope ID parsed as a uuid or an error
+func (e *Envelope) UUID() (uuid.UUID, error) {
+	return uuid.Parse(e.msg.Id)
+}
+
 // Proto returns the trisa.SecureEnvelope protocol buffer.
 func (e *Envelope) Proto() *api.SecureEnvelope {
 	return e.msg
@@ -684,6 +693,12 @@ func (e *Envelope) Error() *api.Error {
 	return e.msg.Error
 }
 
+// IsError returns true if the envelope is in an error state
+func (e *Envelope) IsError() bool {
+	state := e.State()
+	return state == Error || state == ClearError || state == UnsealedError || state == SealedError
+}
+
 // Timestamp returns the ordering timestamp of the secure envelope. If the timestamp is
 // not on the envelope or it cannot be parsed, an error is returned.
 func (e *Envelope) Timestamp() (ts time.Time, err error) {
@@ -698,7 +713,8 @@ func (e *Envelope) Timestamp() (ts time.Time, err error) {
 			return ts, &api.Error{Code: api.BadRequest, Message: "could not parse ordering timestamp on secure envelope as RFC3339 timestamp"}
 		}
 	}
-	return ts, err
+
+	return ts.UTC(), err
 }
 
 // Crypto returns the cryptographic method used to encrypt/decrypt the payload.
@@ -769,8 +785,16 @@ func (e *Envelope) ValidateMessage() error {
 		return ErrNoEnvelopeId
 	}
 
+	if _, err := e.UUID(); err != nil {
+		return ErrInvalidEnvelopeId
+	}
+
 	if e.msg.Timestamp == "" {
 		return ErrNoTimestamp
+	}
+
+	if _, err := e.Timestamp(); err != nil {
+		return ErrInvalidTimestamp
 	}
 
 	// The message should have either an error or an encrypted payload

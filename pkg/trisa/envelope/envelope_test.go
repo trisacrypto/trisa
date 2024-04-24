@@ -424,7 +424,26 @@ func TestStatus(t *testing.T) {
 		state := envelope.Status(msg)
 		require.Equal(t, tc.state, state, "test case %d expected %s got %s", i+1, tc.state, state)
 	}
+}
 
+func TestTimestamp(t *testing.T) {
+	testCases := []struct {
+		path     string
+		expected time.Time
+	}{
+		{"testdata/error_envelope.json", time.Time(time.Date(2022, time.January, 27, 8, 21, 43, 0, time.UTC))},
+		{"testdata/unsealed_envelope.json", time.Date(2022, time.March, 29, 14, 16, 27, 453444000, time.UTC)},
+		{"testdata/sealed_envelope.json", time.Date(2022, time.March, 29, 14, 16, 29, 755212000, time.UTC)},
+	}
+
+	for i, tc := range testCases {
+		msg, err := loadEnvelopeFixture(tc.path)
+		require.NoError(t, err, "could not load fixture from %s", tc.path)
+
+		ts, err := envelope.Timestamp(msg)
+		require.NoError(t, err, "timestamp parsing error on test case %d", i)
+		require.True(t, tc.expected.Equal(ts), "timestamp mismatch on test case %d", i)
+	}
 }
 
 const (
