@@ -152,15 +152,19 @@ func Reject(reject *api.Error, opts ...Option) (_ *api.SecureEnvelope, err error
 // if the envelope is in an error state (even if the envelope contains a payload).
 func Check(msg *api.SecureEnvelope) (_ *api.Error, iserr bool) {
 	env := &Envelope{msg: msg}
-	state := env.State()
-	iserr = state == Error || state == ClearError || state == UnsealedError || state == SealedError
-	return env.Error(), iserr
+	return env.Error(), env.IsError()
 }
 
 // Status returns the state the secure envelope is currently in.
 func Status(msg *api.SecureEnvelope) State {
 	env := &Envelope{msg: msg}
 	return env.State()
+}
+
+// Timestamp returns the parsed timestamp from the secure envelope.
+func Timestamp(msg *api.SecureEnvelope) (time.Time, error) {
+	env := &Envelope{msg: msg}
+	return env.Timestamp()
 }
 
 // Envelope is a wrapper for a trisa.SecureEnvelope that adds cryptographic
@@ -660,6 +664,11 @@ func (e *Envelope) ID() string {
 	return e.msg.Id
 }
 
+// UUID returns the envelope ID parsed as a uuid or an error
+func (e *Envelope) UUID() (uuid.UUID, error) {
+	return uuid.Parse(e.msg.Id)
+}
+
 // Proto returns the trisa.SecureEnvelope protocol buffer.
 func (e *Envelope) Proto() *api.SecureEnvelope {
 	return e.msg
@@ -682,6 +691,12 @@ func (e *Envelope) Error() *api.Error {
 		return nil
 	}
 	return e.msg.Error
+}
+
+// IsError returns true if the envelope is in an error state
+func (e *Envelope) IsError() bool {
+	state := e.State()
+	return state == Error || state == ClearError || state == UnsealedError || state == SealedError
 }
 
 // Timestamp returns the ordering timestamp of the secure envelope. If the timestamp is
@@ -769,8 +784,16 @@ func (e *Envelope) ValidateMessage() error {
 		return ErrNoEnvelopeId
 	}
 
+	if _, err := e.UUID(); err != nil {
+		return ErrInvalidEnvelopeId
+	}
+
 	if e.msg.Timestamp == "" {
 		return ErrNoTimestamp
+	}
+
+	if _, err := e.Timestamp(); err != nil {
+		return ErrInvalidTimestamp
 	}
 
 	// The message should have either an error or an encrypted payload

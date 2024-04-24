@@ -5,7 +5,9 @@ import "errors"
 var (
 	ErrNoMessage                = errors.New("invalid envelope: no wrapped message")
 	ErrNoEnvelopeId             = errors.New("invalid envelope: no envelope id")
+	ErrInvalidEnvelopeId        = errors.New("invalid envelope: envelope id is not a uuid")
 	ErrNoTimestamp              = errors.New("invalid envelope: no ordering timestamp")
+	ErrInvalidTimestamp         = errors.New("invalid envelope: could not parse ordering timestamp in RFC3339 format")
 	ErrNoMessageData            = errors.New("invalid envelope: must contain either error or payload")
 	ErrNoEncryptionInfo         = errors.New("invalid envelope: missing encryption key or algorithm")
 	ErrNoHMACInfo               = errors.New("invalid envelope: missing hmac signature, secret, or algorithm")
