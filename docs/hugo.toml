@@ -53,6 +53,8 @@ enableMissingTranslationPlaceholders = false
 
     additionalContentLanguage = ['en']
 
+    disableAssetsBusting = true
+
 [languages]
   [languages.en]
     title = "TRISA Documentation"
