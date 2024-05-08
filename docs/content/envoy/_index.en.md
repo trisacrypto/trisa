@@ -15,7 +15,7 @@ It is important to understand what Envoy is, and also, what Envoy _is not_.
 - **Intuitive UI**: Send and received TRISA & TRP messages with a user-friendly interface.
 - **Efficient Administration**: Simplify setup and maintenance with our admin tools.
 - **Secure Decentralized Messaging**: Protect customer privacy and IVMS101 data with encrypted peer-to-peer communication.
-- **Compliance-Friendly API**: A straightforward JSON REST APIO for seamless TRISA & TRP interactions.
+- **Compliance-Friendly API**: A straightforward JSON REST API for seamless TRISA & TRP interactions.
 
 #### Not Included
 
