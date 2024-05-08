@@ -3,7 +3,7 @@ title: Configuration
 date: 2024-05-08T12:14:45-05:00
 lastmod: 2024-05-08T12:14:45-05:00
 description: "Configuring Envoy"
-weight: 20
+weight: 70
 ---
 
 For the latest and most up to date description of the Envoy configuration, ask Envoy directly! You can do this using the Envoy docker image as follows:
