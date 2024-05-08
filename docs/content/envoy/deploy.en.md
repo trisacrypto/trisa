@@ -110,24 +110,5 @@ Alternative, you can specify which permissions you want the API key to have by l
 $ envoy createapikey users:manage users:view
 ```
 
-The list of the permissions you can add to an API key is:
+The list of the permissions you can add to an API key can be found in the [API guide permissions table]({{< relref "api.en.md#permissions" >}}).
 
-| Permission | Description |
-|---|---|
-| users:manage | Can create, edit, and delete users |
-| users:view | Can view users registered on the node |
-| apikeys:manage | Can create apikeys and view associated secret |
-| apikeys:view | Can view apikeys created on the node |
-| apikeys:revoke | Can revoke apikeys and delete them |
-| counterparties:manage | Can create, edit, and delete counterparties |
-| counterparties:view | Can view counterparty details |
-| accounts:manage | Can create, edit, and delete accounts and crypto addresses |
-| accounts:view | Can view accounts and crypto addresses |
-| travelrule:manage | Can create, accept, reject, and archive transactions and send secure envelopes |
-| travelrule:delete | Can delete transactions and associated secure envelopes |
-| travelrule:view | Can view travel rule transactions and secure envelopes |
-| config:manage | Can manage the configuration of the node |
-| config:view | Can view the configuration of the node |
-| pki:manage | Can create and edit certificates and sealing keys |
-| pki:delete | Can delete certificates and sealing keys |
-| pki:view | Can view certificates and sealing keys |
