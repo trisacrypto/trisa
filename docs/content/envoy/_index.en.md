@@ -1,38 +1,39 @@
 ---
 title: TRISA Envoy
-date: 2021-04-23T01:35:35-04:00
-lastmod: 2022-08-10T13:22:02-04:00
+date: 2024-05-09T10:14:24-04:00
+lastmod: 2024-05-09T10:14:24-04:00
 description: "Using the TRISA Envoy self-hosted node"
 weight: 12
 ---
 
 Built to help compliance teams handle travel rule exchanges efficiently and economically, Envoy is an open source, secure, peer-to-peer messaging platform. Designed by TRISA engineers and compliance experts, Envoy offers a mechanism for Travel Rule compliance by providing [IVMS101](https://www.intervasp.org/) data exchanges using the [TRISA](https://trisa.io) and [TRP](https://www.openvasp.org/) protocols.
 
-It is important to understand what Envoy is, and also, what Envoy _is not_.
-
 #### Key Benefits
 
-- **Intuitive UI**: Send and received TRISA & TRP messages with a user-friendly interface.
+- **Intuitive UI**: Send and receive TRISA & TRP messages with a user-friendly interface.
 - **Efficient Administration**: Simplify setup and maintenance with our admin tools.
 - **Secure Decentralized Messaging**: Protect customer privacy and IVMS101 data with encrypted peer-to-peer communication.
 - **Compliance-Friendly API**: A straightforward JSON REST API for seamless TRISA & TRP interactions.
 
 #### Not Included
 
-- Does not include _on chain analytics or automated KYC/AML checks_.
-- Future plug-ins may be available for on-chain analytics or KYC checks.
-- Strictly a **secure messaging service** designed to meet FATF requirements.
-- Does not solve the **Sunrise** problem (nothing does yet).
+It is important to understand what Envoy is, and also, what Envoy _is not_.
+
+Envoy is strictly a **secure messaging service** designed to meet FATF requirements.
+
+Envoy does not:
+- Include _on chain analytics or automated KYC/AML checks_. Future plug-ins may be available for on-chain analytics or KYC checks.
+- Solve the **Sunrise** problem (nothing does yet).
 
 ## Implementation Options
 
 You have three options to deploy or manage your Envoy node:
 
 1. **DIY**: Envoy is open source ([MIT License](https://github.com/trisacrypto/envoy/blob/main/LICENSE)). You're free to download, install, integrate, host and support your own node. You're also free to fork and modify the node for your own use cases. Provided you have the technical capabilities and availability, you can have complete flexibility and control of your deployment!
-2. **One-time Integration Service**: For a one-time fee, Rotational Labs will install and configure your Envoy node in your environment while you host, maintain, and support the node on an ongoing basis. Rotational will provide some training to get started with your node, and upgrade emails when it is time to update the Envoy version.
-3. **Managed Service**: If you're looking to get something up and running now, Rotational Labs will install, configure, host, maintain, and support an Envoy node for you.
+2. **One-time Integration Service**: For a one-time fee, the Envoy team will install and configure your Envoy node in your environment while you host, maintain, and support the node on an ongoing basis. The Envoy team will provide some training to get started with your node, and upgrade emails when it is time to update the Envoy version.
+3. **Managed Service**: If you're looking to get something up and running now, The Envoy team will install, configure, host, maintain, and support an Envoy node for you.
 
-This documentation is focused on the DIY option. If you'd like more information on the one-time integration service or managed services, please [schedule a demo](https://rtnl.link/p2WzzmXDuSu) with Rotational Labs!
+This documentation is focused on the DIY option. If you'd like more information on the one-time integration service or managed services, please [schedule a demo](https://rtnl.link/p2WzzmXDuSu) with the Envoy team!
 
 ## Data Storage and Security
 
@@ -43,7 +44,7 @@ Because Envoy is intended to exchange and store compliance information that is b
 Nodes must store compliance data locally on disk in a backend store. Currently only sqlite3 is supported, but Postgres and other databases may be options in the future. When configuring an Envoy node, ensure:
 
 1. Enough disk is provisioned for **long-term** travel rule data storage.
-2. Ensure that the disk is independently **secured and encrypted**, particularly if you are hosting your Envoy service on a shared archticture or the cloud.
+2. Ensure that the disk is independently **secured and encrypted**, particularly if you are hosting your Envoy service on a shared architecture or the cloud.
 3. If you're using an external database, ensure it is not accessible from the public Internet.
 
 ### Security
