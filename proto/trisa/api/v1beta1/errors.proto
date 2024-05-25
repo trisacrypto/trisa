@@ -49,11 +49,19 @@ message Error {
 
         // VASP cannot support the fiat currency or coin described in the transaction.
         UNSUPPORTED_CURRENCY = 60;
-        BVRC001 = 60;   // Alias: Sygna BVRC Rejected Code
+        BVRC001 = 60;                     // Alias: Sygna BVRC Rejected Code
+        UNSUPPORTED_NETWORK = 60;         // Alias: helpful if the chain is not a currency
 
         // No longer able to receive more transaction inflows
         EXCEEDED_TRADING_VOLUME = 61;
         BVRC003 = 61;   // Alias: Sygna BVRC Rejected Code
+
+        // VASP will not support the requested confirmation type
+        UNSUPPORTED_ADDRESS_CONFIRMATION = 75;
+
+        // VASP cannot confirm they control the requested address, but doesn't
+        // necessarily indicate that they do not control the address.
+        CANNOT_CONFIRM_CONTROL_OF_ADDRESS = 76;
 
         // An internal compliance check has failed or black listing has occurred
         COMPLIANCE_CHECK_FAIL = 90;

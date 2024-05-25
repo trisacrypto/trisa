@@ -167,9 +167,111 @@ message Payload {
     string received_at = 4;
 }
 
-// TODO: specify the address confirmation protocol.
-message Address {}
-message AddressConfirmation {}
+// Address specifies a crypto address that requires a proof-of-control verification.
+// There are three types of verification: simple, key-based, and on-chain. In simple
+// address confirmation, the counterparty simply replies y/n if they control the
+// address. In key-based control, a token encrypted with the public keys is sent to the
+// counterparty which must decrypt it with the private key and return it. In on-chain
+// proof-of-control, a transaction is placed on the chain for some small random amount
+// of the specified asset, random enough that it can be confirmed by the originator.
+message Address {
+    // Required fields for all address confirmation RPCs that identify the crypto
+    // address and network that needs to be validated as well as the requested type.
+    ConfirmationType confirmation = 1;
+    string crypto_address = 2;
+    string network = 3;
+
+    // Optional details that may be necessary for the specific chain such as the asset
+    // type for chains that support multiple assets or a memo/destination tag.
+    string asset_type = 4;
+    string tag = 5;
+
+    // If the confirmation type is key/token or on-chain then additional details must
+    // be specified for the address confirmation. If the confirmation type is simple,
+    // then this field may be left empty.
+    oneof confirmation_details {
+        KeyTokenQuery key_token = 8;
+        OnChainQuery on_chain = 9;
+    }
+}
+
+// AddressConfirmation is returned by the counterparty after receiving an Address
+// proof-of-control query. The counterparty should echo the address received (updating
+// it as necessary) then specify controlled_by_entity as true if it is controlled by
+// the receiving party or false and include an error if it is not. This is sufficient
+// for simple address confirmation. For other
+message AddressConfirmation {
+    // The address that is being confirmed by the counterparty.
+    Address address = 1;
+
+    // Specify true if the crypto address is controlled by the counterparty; specifying
+    // this as true is sufficient for simple address confirmation. If the counterparty
+    // cannot or will not perform the address confirmation they can mark this field as
+    // false and include an error code and message. Counterparties that will never do
+    // address confirmation should return a gRPC Unimplemented status code to this RPC.
+    bool controlled_by_entity = 2;
+
+    // Rejection errors should be specified in the response if the counterparty cannot
+    // or will not perform an address confirmation. Generally the error codes that are
+    // returned here are UNKNOWN_WALLET_ADDRESS, UNSUPPORTED_NETWORK,
+    // UNSUPPORTED_ADDRESS_CONFIRMATION, or CANNOT_CONFIRM_CONTROL_OF_ADDRESS -- but
+    // other codes may be used if necessary.
+    Error error = 3;
+
+    // If the confirmation type is key/token or on-chain then additional details must
+    // be specified for the address confirmation. If the confirmation type is simple,
+    // then this field may be left empty.
+    oneof confirmation_details {
+        KeyTokenConfirm key_token = 8;
+        OnChainConfirm on_chain = 9;
+    }
+}
+
+enum ConfirmationType {
+    UNKNOWN = 0;
+    SIMPLE = 1;
+    KEYTOKEN = 2;
+    ONCHAIN = 3;
+}
+
+message KeyTokenQuery {
+    // A token encrypted by the public key of the wallet address.
+    bytes token = 1;
+
+    // The algorithm used to encrypt the token.
+    string public_key_algorithm = 4;
+
+    // The signature of the public key, used to identify the key pair.
+    string public_key_signature = 12;
+}
+
+message KeyTokenConfirm {
+    // The decrypted token to confirm to the user that the counterparty has control of
+    // the private keys of the crypto address.
+    bytes decrypted_token = 1;
+}
+
+message OnChainQuery {
+    // The beneficiary address of the wallet to send the proof of control amount to.
+    string beneficiary_address = 1;
+
+    // Amount of the transaction (usually a small amount) - this is the nonce value.
+    double amount = 2;
+
+    // The RFC3339 encoded timestamp of when the transaction must be posted by.
+    string not_after = 3;
+}
+
+message OnChainConfirm {
+    // The RFC3339 encoded timestamp of when transaction will be visible.
+    string not_before = 1;
+
+    // The actual amount posted in the transaction for verification.
+    double amount = 2;
+
+    // The transaction ID of the confirmation, if available
+    string txid = 3;
+}
 
 // SigningKey provides metadata for decoding a PEM encoded PKIX public key for RSA
 // encryption and transaction signing. The SigningKey is a lightweight version of the
