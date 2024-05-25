@@ -30,7 +30,7 @@ func (l *Listener) Close() error {
 
 func (l *Listener) Connect(ctx context.Context, opts ...grpc.DialOption) (cc *grpc.ClientConn, err error) {
 	opts = append([]grpc.DialOption{grpc.WithContextDialer(l.Dialer)}, opts...)
-	if cc, err = grpc.DialContext(ctx, "bufnet", opts...); err != nil {
+	if cc, err = grpc.NewClient("passthrough://bufnet", opts...); err != nil {
 		return nil, err
 	}
 	return cc, nil
