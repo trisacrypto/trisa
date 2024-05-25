@@ -185,7 +185,7 @@ func (p *Peer) connect(opts ...grpc.DialOption) (err error) {
 	}
 
 	var cc *grpc.ClientConn
-	if cc, err = grpc.Dial(p.info.Endpoint, opts...); err != nil {
+	if cc, err = grpc.NewClient(p.info.Endpoint, opts...); err != nil {
 		return err
 	}
 

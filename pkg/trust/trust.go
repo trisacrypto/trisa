@@ -9,7 +9,6 @@ package trust
 
 import (
 	"bytes"
-	"crypto/rand"
 	"crypto/rsa"
 	"crypto/tls"
 	"crypto/x509"
@@ -90,7 +89,8 @@ func (p *Provider) Encrypt(password string) (pfxData []byte, err error) {
 		}
 	}
 
-	return pkcs12.Encode(rand.Reader, p.key, crt, ca, password)
+	// TODO: update to pkcs12.Modern when supported by Sectigo
+	return pkcs12.Legacy.Encode(p.key, crt, ca, password)
 }
 
 // Decode PEM blocks and adds them to the provider. Certificates are appended to the
