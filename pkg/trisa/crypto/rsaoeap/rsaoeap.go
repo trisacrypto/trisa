@@ -4,11 +4,13 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha512"
-	"errors"
 	"fmt"
 
+	"github.com/trisacrypto/trisa/pkg/trisa/crypto"
 	"github.com/trisacrypto/trisa/pkg/trisa/keys/signature"
 )
+
+const Algorithm = "RSA-OAEP-SHA512"
 
 // RSA implements the crypto.Cipher interface using RSA public/private key algorithm
 // as specified in PKCS #1. Messages are encrypted with the public key and can only be
@@ -47,7 +49,7 @@ func (c *RSA) Encrypt(plaintext []byte) (ciphertext []byte, err error) {
 // Decrypt the message using the private key.
 func (c *RSA) Decrypt(ciphertext []byte) (plaintext []byte, err error) {
 	if c.priv == nil {
-		return nil, errors.New("private key required for decryption")
+		return nil, crypto.ErrPrivateKeyRequired
 	}
 
 	hash := sha512.New()
@@ -60,7 +62,7 @@ func (c *RSA) Decrypt(ciphertext []byte) (plaintext []byte, err error) {
 
 // EncryptionAlgorithm returns the name of the algorithm for adding to the Transaction.
 func (c *RSA) EncryptionAlgorithm() string {
-	return "RSA-OAEP-SHA512"
+	return Algorithm
 }
 
 // PublicKeySignature implements KeyIdentifier by computing a base64 encoded SHA-256

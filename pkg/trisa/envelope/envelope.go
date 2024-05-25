@@ -44,6 +44,7 @@ For more details about how to work with envelopes, see the example code.
 package envelope
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -891,4 +892,35 @@ func (e *Envelope) ValidateError() error {
 	}
 
 	return nil
+}
+
+// ValidateHMAC checks if the HMAC signature is valid with respect to the HMAC secret
+// and encrypted payload. This is generally used for non-repudiation purposes.
+func (e *Envelope) ValidateHMAC() (valid bool, err error) {
+	// The payload is required to validate the HMAC signature
+	if len(e.msg.Payload) == 0 {
+		return false, ErrNoPayload
+	}
+
+	// An HMAC signature is required for validating the HMAC signature!
+	if len(e.msg.Hmac) == 0 {
+		return false, ErrNoHMACInfo
+	}
+
+	// The cryptography mechanism must have been created, either from encryption or
+	// decryption. We do not check the state in case crypto has been added by the user.
+	if e.crypto == nil {
+		return false, ErrCannotVerify
+	}
+
+	// Validate the HMAC signature
+	if err = e.crypto.Verify(e.msg.Payload, e.msg.Hmac); err != nil {
+		if errors.Is(err, crypto.ErrHMACSignatureMismatch) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	// HMAC signature is valid
+	return true, nil
 }
