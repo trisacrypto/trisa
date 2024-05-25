@@ -239,6 +239,24 @@ func Wrap(msg *api.SecureEnvelope, opts ...Option) (env *Envelope, err error) {
 	return env, nil
 }
 
+// Wrap error initializes an Envelope from a TRISA error to prepare and validate a
+// rejection response without going directly to the SecureEnvelope.
+func WrapError(reject *api.Error, opts ...Option) (env *Envelope, err error) {
+	if env, err = New(nil, opts...); err != nil {
+		return nil, err
+	}
+
+	if env, err = env.Reject(reject); err != nil {
+		return nil, err
+	}
+
+	if err = env.ValidateMessage(); err != nil {
+		return nil, err
+	}
+
+	return env, nil
+}
+
 // Validate is a one-liner for Wrap(msg).ValidateMessage() and can be used to ensure
 // that a secure envelope has been correctly initialized and can be processed.
 func Validate(msg *api.SecureEnvelope) (err error) {
@@ -802,7 +820,7 @@ func (e *Envelope) ValidateMessage() error {
 		if e.msg.Error == nil || e.msg.Error.IsZero() {
 			return ErrNoMessageData
 		}
-		return nil
+		return e.ValidateError()
 	}
 
 	// If there is a payload then all payload fields should be set
@@ -849,6 +867,27 @@ func (e *Envelope) ValidatePayload() error {
 		if _, err := time.Parse(time.RFC3339, e.payload.ReceivedAt); err != nil {
 			return ErrInvalidReceivedatPayload
 		}
+	}
+
+	return nil
+}
+
+// ValidateError returns an error if the error message is missing details
+func (e *Envelope) ValidateError() error {
+	if e.msg.Error == nil {
+		return ErrNoError
+	}
+
+	if e.msg.Error.Code == api.Unhandled {
+		return ErrMissingErrorCode
+	}
+
+	if _, ok := api.Error_Code_name[int32(e.msg.Error.Code)]; !ok {
+		return ErrInvalidErrorCode
+	}
+
+	if e.msg.Error.Message == "" {
+		return ErrMissingErrorMessage
 	}
 
 	return nil

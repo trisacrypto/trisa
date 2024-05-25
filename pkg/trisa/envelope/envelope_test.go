@@ -446,6 +446,61 @@ func TestTimestamp(t *testing.T) {
 	}
 }
 
+func TestWrapError(t *testing.T) {
+	t.Run("Valid", func(t *testing.T) {
+		testCases := []struct {
+			reject *api.Error
+			opts   []envelope.Option
+		}{
+			{
+				&api.Error{Code: api.BeneficiaryNameUnmatched, Message: "unknown beneficiary, please update your KYC records and try again", Retry: true},
+				nil,
+			},
+			{
+				&api.Error{Code: api.HighRisk, Message: "high risk transaction, do not send or apply transaction to chain", Retry: false},
+				[]envelope.Option{envelope.WithEnvelopeID(uuid.NewString())},
+			},
+		}
+
+		for i, tc := range testCases {
+			env, err := envelope.WrapError(tc.reject, tc.opts...)
+			require.NoError(t, err, "could not correctly wrap error %d", i)
+			require.Equal(t, envelope.Error, env.State(), "incorrect state for test case %d", err)
+			require.Equal(t, tc.reject, env.Error(), "test case %d failed error mismatch", i)
+		}
+	})
+
+	t.Run("Invalid", func(t *testing.T) {
+		testCases := []struct {
+			reject   *api.Error
+			opts     []envelope.Option
+			expected error
+		}{
+			{
+				&api.Error{Code: api.BeneficiaryNameUnmatched, Message: "", Retry: true},
+				nil,
+				envelope.ErrMissingErrorMessage,
+			},
+			{
+				&api.Error{Code: api.Unhandled, Message: "high risk transaction, do not send or apply transaction to chain", Retry: false},
+				[]envelope.Option{envelope.WithEnvelopeID(uuid.NewString())},
+				envelope.ErrMissingErrorCode,
+			},
+			{
+				&api.Error{Code: api.Error_Code(21332122), Message: "this is not a good error", Retry: true},
+				nil,
+				envelope.ErrInvalidErrorCode,
+			},
+		}
+
+		for i, tc := range testCases {
+			_, err := envelope.WrapError(tc.reject, tc.opts...)
+			require.ErrorIs(t, err, tc.expected, "expected validation error on test case %d", i)
+		}
+	})
+
+}
+
 const (
 	expectedEnvelopeId = "2b3b4c95-0a78-4f2a-a9fa-041970f97144"
 )
