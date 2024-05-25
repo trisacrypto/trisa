@@ -120,7 +120,7 @@ func (m *MyProfile) Connect() (_ members.TRISAMembersClient, err error){
     }
 
     var cc *grpc.ClientConn
-    if cc, err = grpc.Dial(m.Endpoint, grpc.WithTransportCredentials(creds)); err != nil {
+    if cc, err = grpc.NewClient(m.Endpoint, grpc.WithTransportCredentials(creds)); err != nil {
         return nil, err
     }
 

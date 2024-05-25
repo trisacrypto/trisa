@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto/aesgcm"
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto/rsaoeap"
@@ -31,6 +32,13 @@ func WithEnvelopeID(id string) Option {
 func WithTimestamp(ts time.Time) Option {
 	return func(e *Envelope) error {
 		e.msg.Timestamp = ts.Format(time.RFC3339Nano)
+		return nil
+	}
+}
+
+func WithTransferState(state api.TransferState) Option {
+	return func(e *Envelope) error {
+		e.msg.TransferState = state
 		return nil
 	}
 }

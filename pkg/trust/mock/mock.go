@@ -64,7 +64,8 @@ func Chain() (data []byte, err error) {
 		return nil, err
 	}
 
-	return pkcs12.Encode(rand.Reader, priv, cert, []*x509.Certificate{ca, rca}, pkcs12.DefaultPassword)
+	// TODO: update to pkcs12.Modern when supported by Sectigo
+	return pkcs12.Legacy.Encode(priv, cert, []*x509.Certificate{ca, rca}, pkcs12.DefaultPassword)
 }
 
 func initCA() {

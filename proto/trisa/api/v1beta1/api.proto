@@ -118,6 +118,21 @@ message SecureEnvelope {
     // can be used for the recipient to identify the key pair required for decryption.
     bool sealed = 11;
     string public_key_signature = 12;
+
+    // The state refers to the condition that the sending party feels that the secure
+    // envelope exchange is in. This can optionally be used to signal to the
+    // counterparty the intent of a transfer message
+    TransferState transfer_state = 13;
+}
+
+enum TransferState {
+    UNSPECIFIED = 0;  // the transfer state is unknown or not specified
+    STARTED = 1;      // this is the first message in the TRISA workflow
+    PENDING = 2;      // action is required by the sending party
+    REPAIR = 3;       // some state of the travel rule exchange requires repair
+    ACCEPTED = 4;     // the travel rule exchange is accepted and waiting the transaction
+    COMPLETED = 5;    // the travel rule and on-chain transaction have been completed
+    REJECTED = 6;     // the travel rule exchange is rejected and should not proceed
 }
 
 // Payload contains the compliance identity information that must be exchanged in a

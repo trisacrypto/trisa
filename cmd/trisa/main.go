@@ -892,7 +892,7 @@ func initClient(c *cli.Context) (err error) {
 	}
 
 	var cc *grpc.ClientConn
-	if cc, err = grpc.Dial(endpoint, creds); err != nil {
+	if cc, err = grpc.NewClient(endpoint, creds); err != nil {
 		return cli.Exit(err, 1)
 	}
 
@@ -919,7 +919,7 @@ func initHealthCheckClient(c *cli.Context) (err error) {
 	}
 
 	var cc *grpc.ClientConn
-	if cc, err = grpc.Dial(endpoint, opts...); err != nil {
+	if cc, err = grpc.NewClient(endpoint, opts...); err != nil {
 		return cli.Exit(err, 1)
 	}
 
@@ -938,7 +938,7 @@ func initDirectoryClient(c *cli.Context) (err error) {
 	}
 
 	var cc *grpc.ClientConn
-	if cc, err = grpc.Dial(endpoint, grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{}))); err != nil {
+	if cc, err = grpc.NewClient(endpoint, grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{}))); err != nil {
 		return cli.Exit(err, 1)
 	}
 

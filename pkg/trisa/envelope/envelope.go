@@ -142,6 +142,15 @@ func Reject(reject *api.Error, opts ...Option) (_ *api.SecureEnvelope, err error
 
 	// Add the error to the envelope and validate
 	env.msg.Error = reject
+
+	// Determine the transfer state from the rejection
+	if reject.Retry {
+		env.msg.TransferState = api.TransferRepair
+	} else {
+		env.msg.TransferState = api.TransferRejected
+	}
+
+	// Validate the message and the error
 	if err = env.ValidateMessage(); err != nil {
 		return nil, err
 	}
@@ -205,6 +214,7 @@ func New(payload *api.Payload, opts ...Option) (env *Envelope, err error) {
 			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
+			TransferState:       api.TransferStateUnspecified,
 		},
 		payload: payload,
 	}
@@ -288,7 +298,14 @@ func (e *Envelope) Reject(reject *api.Error, opts ...Option) (env *Envelope, err
 			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
+			TransferState:       api.TransferStateUnspecified,
 		},
+	}
+
+	if reject.Retry {
+		env.msg.TransferState = api.TransferRepair
+	} else {
+		env.msg.TransferState = api.TransferRejected
 	}
 
 	// Apply the options
@@ -326,6 +343,7 @@ func (e *Envelope) Update(payload *api.Payload, opts ...Option) (env *Envelope, 
 			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
+			TransferState:       e.msg.TransferState,
 		},
 		crypto:  e.crypto,
 		seal:    e.seal,
@@ -371,6 +389,7 @@ func (e *Envelope) Encrypt(opts ...Option) (env *Envelope, reject *api.Error, er
 			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
+			TransferState:       e.msg.TransferState,
 		},
 		crypto: e.crypto,
 		seal:   e.seal,
@@ -461,6 +480,7 @@ func (e *Envelope) Decrypt(opts ...Option) (env *Envelope, reject *api.Error, er
 			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
+			TransferState:       e.msg.TransferState,
 		},
 		crypto: e.crypto,
 		seal:   e.seal,
@@ -563,6 +583,7 @@ func (e *Envelope) Seal(opts ...Option) (env *Envelope, reject *api.Error, err e
 			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
+			TransferState:       e.msg.TransferState,
 		},
 		crypto: e.crypto,
 		seal:   e.seal,
@@ -635,6 +656,7 @@ func (e *Envelope) Unseal(opts ...Option) (env *Envelope, reject *api.Error, err
 			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              e.msg.Sealed,
 			PublicKeySignature:  e.msg.PublicKeySignature,
+			TransferState:       e.msg.TransferState,
 		},
 		crypto: e.crypto,
 		seal:   e.seal,
@@ -710,6 +732,11 @@ func (e *Envelope) Error() *api.Error {
 		return nil
 	}
 	return e.msg.Error
+}
+
+// TransferState returns the TRISA TransferState on the envelope
+func (e *Envelope) TransferState() api.TransferState {
+	return e.msg.TransferState
 }
 
 // IsError returns true if the envelope is in an error state

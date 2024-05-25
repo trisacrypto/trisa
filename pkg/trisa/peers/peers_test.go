@@ -20,6 +20,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/resolver"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -418,8 +419,11 @@ func makePeersCache() (cache *peers.Peers, mgds *gdsmock.GDS, err error) {
 		return nil, nil, err
 	}
 
+	// Set the resolver default scheme to passthrough to avoid DNS while using bufconn
+	resolver.SetDefaultScheme("passthrough")
+
 	// Create the peeers cache with the configured credentials and a mock GDS
-	cache = peers.New(certs, pool, "bufconn")
+	cache = peers.New(certs, pool, "passthrough://bufnet")
 	mgds = gdsmock.New(nil)
 
 	// Connect the peers cache to the mock GDS for testing purposes
