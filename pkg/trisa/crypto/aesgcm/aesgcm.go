@@ -6,10 +6,17 @@ import (
 	"crypto/cipher"
 	"crypto/hmac"
 	"crypto/sha256"
-	"errors"
 	"fmt"
 
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto"
+)
+
+const (
+	Algorithm          = "AES-GCM"
+	SignatureAlgorithm = "HMAC-SHA256"
+	Algorithm256       = "AES256-GCM"
+	Algorithm192       = "AES192-GCM"
+	Algorithm128       = "AES128-GCM"
 )
 
 // AESGCM implements the crypto.Crypto interface using the AES-GCM algorithm for
@@ -29,7 +36,7 @@ type AESGCM struct {
 func New(encryptionKey, hmacSecret []byte) (_ *AESGCM, err error) {
 	if len(encryptionKey) == 0 {
 		if encryptionKey, err = crypto.Random(32); err != nil {
-			return nil, fmt.Errorf("could not generate encryption key: %s", err)
+			return nil, fmt.Errorf("could not generate encryption key: %w", err)
 		}
 	}
 
@@ -66,7 +73,7 @@ func (c *AESGCM) Encrypt(plaintext []byte) (ciphertext []byte, err error) {
 // Decrypt a message using the struct key, extracting the nonce from the end.
 func (c *AESGCM) Decrypt(ciphertext []byte) (plaintext []byte, err error) {
 	if len(ciphertext) < 12 {
-		return nil, errors.New("empty cipher text")
+		return nil, crypto.ErrMissingCiphertext
 	}
 
 	data := ciphertext[:len(ciphertext)-12]
@@ -84,7 +91,7 @@ func (c *AESGCM) Decrypt(ciphertext []byte) (plaintext []byte, err error) {
 
 	plaintext, err = aesgcm.Open(nil, nonce, data, nil)
 	if err != nil {
-		return nil, fmt.Errorf("could not decrypt ciphertext: %s", err)
+		return nil, fmt.Errorf("could not decrypt ciphertext: %w", err)
 	}
 	return plaintext, nil
 }
@@ -93,20 +100,20 @@ func (c *AESGCM) Decrypt(ciphertext []byte) (plaintext []byte, err error) {
 func (c *AESGCM) EncryptionAlgorithm() string {
 	switch len(c.key) {
 	case 32:
-		return "AES256-GCM"
+		return Algorithm256
 	case 24:
-		return "AES192-GCM"
+		return Algorithm192
 	case 16:
-		return "AES128-GCM"
+		return Algorithm128
 	default:
-		return "AES-GCM"
+		return Algorithm
 	}
 }
 
 // Sign the specified data (ususally the ciphertext) using the struct secret.
 func (c *AESGCM) Sign(data []byte) (signature []byte, err error) {
 	if len(data) == 0 {
-		return nil, errors.New("cannot sign empty data")
+		return nil, crypto.ErrCannotSignEmpty
 	}
 
 	hm := hmac.New(sha256.New, c.secret)
@@ -120,7 +127,7 @@ func (c *AESGCM) Verify(data, signature []byte) (err error) {
 	hm.Write(data)
 
 	if !bytes.Equal(signature, hm.Sum(nil)) {
-		return errors.New("hmac signature mismatch")
+		return crypto.ErrHMACSignatureMismatch
 	}
 
 	return nil
@@ -128,7 +135,7 @@ func (c *AESGCM) Verify(data, signature []byte) (err error) {
 
 // SignatureAlgorithm returns the name of the hmac_algorithm for adding to the Transaction.
 func (c *AESGCM) SignatureAlgorithm() string {
-	return "HMAC-SHA256"
+	return SignatureAlgorithm
 }
 
 // EncryptionKey is a read-only getter.

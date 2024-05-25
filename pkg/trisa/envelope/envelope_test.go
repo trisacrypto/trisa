@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
+	"github.com/trisacrypto/trisa/pkg/trisa/crypto/aesgcm"
 	generic "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trisa/envelope"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -498,7 +499,110 @@ func TestWrapError(t *testing.T) {
 			require.ErrorIs(t, err, tc.expected, "expected validation error on test case %d", i)
 		}
 	})
+}
 
+func TestValidateHMAC(t *testing.T) {
+	crypto, err := aesgcm.New(nil, nil)
+	require.NoError(t, err, "could not create cryptographic handler")
+
+	payload, err := loadPayloadFixture("testdata/payload.json")
+	require.NoError(t, err, "could not load payload")
+
+	t.Run("Valid", func(t *testing.T) {
+		env, err := envelope.New(payload, envelope.WithCrypto(crypto))
+		require.NoError(t, err, "could not create envelope")
+
+		env, _, err = env.Encrypt()
+		require.NoError(t, err, "could not encrypt envelope")
+		valid, err := env.ValidateHMAC()
+		require.NoError(t, err, "could not validate hmac signature")
+		require.True(t, valid, "expected hmac signature to be valid")
+	})
+
+	t.Run("PayloadRequired", func(t *testing.T) {
+		env, err := envelope.New(nil, envelope.WithCrypto(crypto))
+		require.NoError(t, err, "could not create envelope")
+
+		valid, err := env.ValidateHMAC()
+		require.False(t, valid)
+		require.ErrorIs(t, err, envelope.ErrNoPayload)
+	})
+
+	t.Run("HMACInfoRequired", func(t *testing.T) {
+		// Encrypt the payload
+		data, err := proto.Marshal(payload)
+		require.NoError(t, err, "could not marshal payload data")
+
+		ciphertext, err := crypto.Encrypt(data)
+		require.NoError(t, err, "could not encrypt payload data")
+
+		// Create a secure envelope without the HMAC info
+		se := &api.SecureEnvelope{
+			Id:        uuid.NewString(),
+			Payload:   ciphertext,
+			Timestamp: time.Now().UTC().Format(time.RFC3339),
+		}
+
+		env, err := envelope.Wrap(se, envelope.WithCrypto(crypto))
+		require.NoError(t, err, "could not create envelope")
+
+		valid, err := env.ValidateHMAC()
+		require.False(t, valid)
+		require.ErrorIs(t, err, envelope.ErrNoHMACInfo)
+	})
+
+	t.Run("CryptoRequired", func(t *testing.T) {
+		// Encrypt the payload
+		data, err := proto.Marshal(payload)
+		require.NoError(t, err, "could not marshal payload data")
+
+		ciphertext, err := crypto.Encrypt(data)
+		require.NoError(t, err, "could not encrypt payload data")
+
+		// Create a secure envelope without the HMAC info
+		se := &api.SecureEnvelope{
+			Id:                  uuid.NewString(),
+			Payload:             ciphertext,
+			EncryptionKey:       crypto.EncryptionKey(),
+			EncryptionAlgorithm: crypto.EncryptionAlgorithm(),
+			HmacSecret:          crypto.HMACSecret(),
+			HmacAlgorithm:       crypto.SignatureAlgorithm(),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339),
+		}
+
+		se.Hmac, err = crypto.Sign([]byte("this is a standin for the data that would be in the real payload"))
+		require.NoError(t, err, "could not sign the message")
+
+		env, err := envelope.Wrap(se)
+		require.NoError(t, err, "could not create envelope")
+
+		valid, err := env.ValidateHMAC()
+		require.False(t, valid)
+		require.ErrorIs(t, err, envelope.ErrCannotVerify)
+	})
+
+	t.Run("InvalidSignature", func(t *testing.T) {
+		// Create a secure envelope with the HMAC info
+		se := &api.SecureEnvelope{
+			Id:                  uuid.NewString(),
+			Payload:             []byte("this is definitely not going to be valid ciphertext"),
+			EncryptionKey:       crypto.EncryptionKey(),
+			EncryptionAlgorithm: crypto.EncryptionAlgorithm(),
+			HmacSecret:          crypto.HMACSecret(),
+			HmacAlgorithm:       crypto.SignatureAlgorithm(),
+			Timestamp:           time.Now().UTC().Format(time.RFC3339),
+		}
+
+		se.Hmac, err = crypto.Sign([]byte("this is a standin for the data that would be in the real payload"))
+		require.NoError(t, err, "could not sign the message")
+
+		env, err := envelope.Wrap(se, envelope.WithCrypto(crypto))
+		require.NoError(t, err, "could not create envelope")
+
+		valid, err := env.ValidateHMAC()
+		require.False(t, valid)
+		require.NoError(t, err)
+	})
 }
 
 const (
