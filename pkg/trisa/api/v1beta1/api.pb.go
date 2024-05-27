@@ -27,9 +27,9 @@ const (
 	TransferState_UNSPECIFIED TransferState = 0 // the transfer state is unknown or not specified
 	TransferState_STARTED     TransferState = 1 // this is the first message in the TRISA workflow
 	TransferState_PENDING     TransferState = 2 // action is required by the sending party
-	TransferState_REVIEW      TransferState = 3 // action is required by the recieving party (rarely used)
+	TransferState_REVIEW      TransferState = 3 // action is required by the receiving party (rarely used)
 	TransferState_REPAIR      TransferState = 4 // some state of the travel rule exchange requires repair
-	TransferState_ACCEPTED    TransferState = 5 // the travel rule exchange is accepted and waiting the transaction
+	TransferState_ACCEPTED    TransferState = 5 // the travel rule exchange is accepted and awaiting the transaction
 	TransferState_COMPLETED   TransferState = 6 // the travel rule and on-chain transaction have been completed
 	TransferState_REJECTED    TransferState = 7 // the travel rule exchange is rejected and should not proceed
 )
