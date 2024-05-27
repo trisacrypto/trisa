@@ -6,6 +6,7 @@ const (
 	TransferStarted          = TransferState_STARTED
 	TransferPending          = TransferState_PENDING
 	TransferRepair           = TransferState_REPAIR
+    TransferReview           = TransferState_REVIEW
 	TransferAccepted         = TransferState_ACCEPTED
 	TransferCompleted        = TransferState_COMPLETED
 	TransferRejected         = TransferState_REJECTED

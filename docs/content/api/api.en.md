@@ -3,7 +3,7 @@ title: TRISA API
 date: 2022-06-29T19:53:56-04:00
 lastmod: 2022-08-10T16:16:40-04:00
 description: "Describing the TRISA API"
-weight: 10
+weight: 20
 ---
 
 The TRISA Network Protocol implementation exposes several RPCs needed to build TRISA into your organization's application, which are defined within [the protocol buffers](https://github.com/trisacrypto/trisa/tree/main/proto). All TRISA members must implement both services described by the TRISA protocol (the `TRISANetwork` service and the `TRISAHealth` service) to ensure that exchanges are conducted correctly and securely.
@@ -14,7 +14,7 @@ The protocol buffers can be compiled into the language of your choice. This sect
 You will need to download and install the protocol buffer compiler if you have not already.
 {{% /notice %}}
 
-## The `TRISANetwork` Service
+## The TRISANetwork Service
 The `TRISANetwork` service defines the peer-to-peer interactions between Virtual Asset Providers (VASPs) necessary to conduct compliance information exchanges.
 
 The `TRISANetwork Service` has two primary RPCs, `Transfer` and `TransferStream`. `Transfer` and `TransferStream` allow VASPs to exchange compliance information before conducting a virtual asset transaction. `KeyExchange` allows public keys to exchange so that transaction envelopes can be encrypted and signed.
@@ -32,13 +32,13 @@ service TRISANetwork {
 The `ConfirmAddress` RPC is not currently implemented.
 {{% /notice %}}
 
-## `Transfer` and `TransferStream` RPCs
+## Transfer and TransferStream RPCs
 
 The `Transfer` and `TransferStream` RPCs conduct the information exchange before a virtual asset transaction. The RPCs enable an originating VASP to send an encrypted transaction envelope to the beneficiary VASP containing a unique ID for the transaction, the encrypted transaction bundle, and metadata associated with the transaction cipher. In response, the beneficiary can validate the transaction request, then return the beneficiary's transaction information using the same unique transaction ID.
 
 The `Transfer` RPC is a unary RPC for simple, single transactions. The `TransferStream` RPC is a bidirectional streaming RPC for high throughput transaction workloads.
 
-### `SecureEnvelope`
+### SecureEnvelope
 
 A `SecureEnvelope` is the encrypted transaction envelope that is the outer layer of the TRISA information exchange protocol and facilitates the secure storage of Know Your Client (KYC) data in a transaction. The envelope specifies a unique id to reference the transaction out-of-band (e.g., in the blockchain layer). It provides the necessary information so only the originator and the beneficiary can decrypt the transaction data. For more information about Secure Envelopes, [this section]({{% relref "data/envelopes" %}}) of the documentation further describes this primary data structure for the TRISA exchange.
 
@@ -57,15 +57,35 @@ message SecureEnvelope {
     string timestamp = 10;
     bool sealed = 11;
     string public_key_signature = 12;
+    TransferState transfer_state = 13;
 ```
 
-## `ConfirmAddress` RPC
+**New in v1.1:** the `TransferState` describes the condition of the transfer the  sending party feels the Transfer of Travel Rule data is in. This can be optionally used to signal to the counterparty the intent of a transfer message. See [TRISA Workflows]({{% relref "protocol" %}}) for more information on how the transfer state works.
+
+```proto
+enum TransferState {
+    UNSPECIFIED = 0;  // the transfer state is unknown or not specified
+    STARTED = 1;      // this is the first message in the TRISA workflow
+    PENDING = 2;      // action is required by the sending party
+    REVIEW = 3;       // action is required by the receiving party (rarely used)
+    REPAIR = 4;       // some state of the travel rule exchange requires repair
+    ACCEPTED = 5;     // the travel rule exchange is accepted and awaiting the transaction
+    COMPLETED = 6;    // the travel rule and on-chain transaction have been completed
+    REJECTED = 7;     // the travel rule exchange is rejected and should not proceed
+}
+```
+
+## ConfirmAddress RPC
 
 {{% notice note %}}
-Address confirmation was initially described in the TRISA whitepaper as a mechanism to allow an originator VASP to establish that a beneficiary VASP has control of a crypto wallet address before sending transaction information with sensitive PII data. However, the details have not yet been defined, so the `ConfirmAddress` RPC is not currently implemented.
+Address confirmation was initially described in the TRISA whitepaper as a mechanism to allow an originator VASP to establish that a beneficiary VASP has control of a crypto wallet address before sending transaction information with sensitive PII data.
+
+Currently, there are three proposed address confirmation methods being tested: simple, key/token, and on-chain. Simple involves a simple yes/no check with the counterparty. Key/Token requires the counterparty to decrypt a token encrypted with the crypto address public keys, and on-chain implements a simple Satoshi test.
+
+All three methods are available in the protocol buffers, but note that these are still being tested and developed, and may change at any time. No backward compatibility is guaranteed for these message types, nor is there any guarantee that any TRISA VASP will implement any of these confirmation methods.
 {{% /notice %}}
 
-## `KeyExchange` RPC
+## KeyExchange RPC
 
 The `KeyExchange` RPC allows VASPs to exchange public signing keys to facilitate transaction signatures if they have not already obtained them from the directory service.
 
@@ -91,7 +111,7 @@ message SigningKey {
 }
 ```
 
-## The `TRISAHealth` Service and `Status` RPC
+## The TRISAHealth Service and Status RPC
 
 The `TRISAHealth` service contains the `Status` RPC, which is optional but highly recommended for VASP members to implement. The Status endpoint allows TRISA members and the TRISA Directory Service to perform health checks with a VASP's TRISA Node and report the service conditions of the TRISA network. Because a down TRISA node will prevent travel rule compliant virtual asset transactions, the health service is intended to quickly identify network problems and notify members as quickly as possible.
 
@@ -104,7 +124,8 @@ service TRISAHealth {
     rpc Status(HealthCheck) returns (ServiceState) {}
 }
 ```
-### `HealthCheck`
+### HealthCheck
+
 `HealthCheck` specifies `attempts`, which is the number of failed health checks that proceeded the current check, and  `last_checked`, which is the timestamp of the last health check, successful or otherwise.
 
 ```proto
@@ -114,7 +135,8 @@ message HealthCheck {
 }
 ```
 
-### `ServiceState`
+### ServiceState
+
 `ServiceState` returns the `status`, which is the Current service status as defined by the receiving system. The system must respond with the closest matching status in a best-effort fashion. Alerts will be triggered on service status changes if the system does not respond and the previous system state was not unknown. `not_before` and `not_after` are also returned; they suggest to the directory service when to recheck the health status.
 
 ```proto
