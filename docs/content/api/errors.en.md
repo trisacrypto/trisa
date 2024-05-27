@@ -48,7 +48,7 @@ See the [error protocol buffers](https://github.com/trisacrypto/trisa/blob/main/
 | 103 | UNVERIFIED | Could not verify certificates with any certificate authority. |
 | 104 | UNTRUSTED | A trusted connection could not be established. |
 | 105 | INVALID_SIGNATURE | An HMAC signature could not be verified. |
-| 106 | INVALID_KEY | The transaction bundle cannot be decrypted with the specified key |
+| 106 | INVALID_KEY | The transaction bundle cannot be decrypted with the specified key. |
 | 107 | ENVELOPE_DECODE_FAIL | Could not decode or decrypt private transaction data. (Alias: Sygna BVRC Rejected Type) |
 | 107 | PRIVATE_INFO_DECODE_FAIL | Could not decode or decrypt private transaction data. (Alias: Sygna BVRC Rejected Code) |
 | 107 | BVRC005 | Could not decode or decrypt private transaction data. |

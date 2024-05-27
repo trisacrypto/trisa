@@ -42,9 +42,9 @@ flowchart LR
 
 ## Workflows
 
-While the flow diagram above does a good job explaining how to transition a Transfer between states, it does not describe how those states might be engaged in practice using the `TransferRPC` and different payloads. This section contains sequence diagrams for standard worklows and exchanges.
+While the flow diagram above does a good job explaining how to transition a Transfer between states, it does not describe how those states might be engaged in practice using the `TransferRPC` and different payloads. This section contains sequence diagrams for standard workflows and exchanges.
 
-Keep in mind that **the goal of a TRISA workflow is ensure that both counterparties have the exact same Travel Rule payload**, stored using a cryptographic method that
+Keep in mind that **the goal of a TRISA workflow is to ensure that both counterparties have the exact same Travel Rule payload**, stored using a cryptographic method that
 only they can decrypt.
 
 In practice, this means that an RPC request may be "echoed" as a response -- e.g. you may receive a secure envelope where the only action you have to take to "accept" the request is to send the same payload back to the requester, encrypted using the requester's public keys. This also means that you should not omit travel rule information payloads from each response as the last message contains the payload in the "final state" ready to be stored for the compliance statute of limitations.
@@ -142,7 +142,7 @@ sequenceDiagram
     end
 ```
 
-Note that the originator VASP should not perform any actions on the blockchain specified after receiving a rejection according to the rules of their jurisdiction. If the beneficary VASP recieves the block chain transaction anyway, they should proceed by quarantining the transaction according to the rules of their jurisdiction. Keep in mind that sending a TRISA rejection message does not prevent any blockchain transactions, it is simply a signal to the counterparty not to proceed.
+Note that the originator VASP should not perform any actions on the blockchain specified after receiving a rejection according to the rules of their jurisdiction. If the beneficiary VASP receives the block chain transaction anyway, they should proceed by quarantining the transaction according to the rules of their jurisdiction. Keep in mind that sending a TRISA rejection message does not prevent any blockchain transactions, it is simply a signal to the counterparty not to proceed.
 
 ### Repair Workflow
 

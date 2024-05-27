@@ -129,9 +129,9 @@ enum TransferState {
     UNSPECIFIED = 0;  // the transfer state is unknown or not specified
     STARTED = 1;      // this is the first message in the TRISA workflow
     PENDING = 2;      // action is required by the sending party
-    REVIEW = 3;       // action is required by the recieving party (rarely used)
+    REVIEW = 3;       // action is required by the receiving party (rarely used)
     REPAIR = 4;       // some state of the travel rule exchange requires repair
-    ACCEPTED = 5;     // the travel rule exchange is accepted and waiting the transaction
+    ACCEPTED = 5;     // the travel rule exchange is accepted and awaiting the transaction
     COMPLETED = 6;    // the travel rule and on-chain transaction have been completed
     REJECTED = 7;     // the travel rule exchange is rejected and should not proceed
 }
