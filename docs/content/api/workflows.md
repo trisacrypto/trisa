@@ -94,3 +94,127 @@ Some VASPs may be willing to "repair" an IVMS101 payload if the beneficiary deta
 2. After performing KYC sanctions checks and confirming that the transfer may proceed, the beneficiary VASP initiates **RPC 2**, sending an accepted envelope with the travel rule payload; the originator VASP echos this acceptance back.
 
 3. The originator VASP may now apply the transaction to the specified chain. After they have performed the on-chain transaction, they will send a final message to the beneficiary VASP, updating the payload with the transaction details and marking the transfer as completed. The beneficiary VASP will echo the payload back to the originator VASP.
+
+### Reject Transfer Workflow
+
+In the case where the counterparty KYC and sanctions checks have identified a high risk entity, the beneficiary VASP must reject the transfer and indicate that the transfer should not continue by sending a _rejection_ back to the originating VASP.
+
+A rejection is a `SecureEnvelope` that _does not contain a payload_ but rather contains an error code with `retry = false`. For example, the following secure envelope might be sent:
+
+```json
+{
+    "id": "envelope-id",
+    "timestamp": "rfc3339 timestamp",
+    "error": {
+        "code": "HIGH_RISK",
+        "message": "We have identified the indicated beneficiary on a sanctions list.",
+        "retry": false
+    },
+    "sealed": false
+}
+```
+
+The workflow for rejection is as follows:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant O as Originator VASP
+    participant B as Beneficiary VASP
+
+    rect rgb(27, 206, 159 )
+        note over O,B: RPC 1
+        O ->> B: Transfer Started
+        B ->> O: Pending
+    end
+    critical
+        B ->> B: KYC and Sanctions Checks Failed
+    end
+
+    rect rgb(240,186,200)
+        note over O,B: RPC 2
+        B ->> O: Rejected
+        O ->> B: Rejected
+    end
+
+    critical
+        O ->> O: Stop transaction
+    end
+```
+
+Note that the originator VASP should not perform any actions on the blockchain specified after receiving a rejection according to the rules of their jurisdiction. If the beneficary VASP recieves the block chain transaction anyway, they should proceed by quarantining the transaction according to the rules of their jurisdiction. Keep in mind that sending a TRISA rejection message does not prevent any blockchain transactions, it is simply a signal to the counterparty not to proceed.
+
+### Repair Workflow
+
+If not enough information has been provided by the originating VASP or something went wrong handling the travel rule information exchange, the beneficiary VASP may indicate that the originating VASP should try again and fix the specified problems by sending a _repair_ message back to the originating VASP.
+
+A repair is a `SecureEnvelope` that _does not contain a payload_ but rather contains an error code with `retry = true`. For example, the following secure envelope might be sent:
+
+```json
+{
+    "id": "envelope-id",
+    "timestamp": "rfc3339 timestamp",
+    "error": {
+        "code": "INCOMPLETE_IDENTITY",
+        "message": "Our jurisdiction requires the date of birth of the originator.",
+        "retry": true
+    },
+    "sealed": false
+}
+```
+
+The repair workflow is as follows:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant O as Originator VASP
+    participant B as Beneficiary VASP
+
+    rect rgb(27, 206, 159 )
+        note over O,B: RPC 1
+        O ->> B: Transfer Started
+        B ->> O: Pending
+    end
+    critical
+        B ->> B: KYC and Sanctions Checks
+    end
+
+    rect rgb(240,186,200)
+        note over O,B: RPC 2
+        B ->> O: Repair
+        O ->> B: Pending
+    end
+
+    critical
+        O ->> O: Review and fix travel rule information
+    end
+
+    rect rgb(240,186,200)
+        note over O,B: RPC 3
+        O ->> B: Review
+        B ->> O: Pending
+    end
+
+    critical
+        B->> B: Validate fixes meet requirements
+    end
+
+    rect rgb(27, 206, 159 )
+        note over O,B: RPC 4
+        B ->> O: Accepted
+        O ->> B: Accepted
+    end
+
+    critical
+        O ->> O: Perform on chain transaction
+    end
+
+    rect rgb(27, 206, 159 )
+        note over O,B: RPC 5
+        O ->> B: Completed
+        B ->> O: Completed
+    end
+```
+
+It's possible that multiple repair and review messages might be sent back and forth in order to resolve a transaction. TRISA encourages all VASPs to recognize the limited resources of compliance teams and to work to minimize exchanges as much as possible by providing as much detail about a repair as possible and directly contacting compliance officers for assistance in ensuring the transaction might be repaired effectively.
