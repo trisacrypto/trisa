@@ -20,7 +20,11 @@ import (
 	tld "github.com/bombsimon/tld-validator"
 )
 
-const scheme = "ta"
+const (
+	scheme    = "ta"
+	localhost = "localhost"
+	localTLD  = "local"
+)
 
 // Make converts a a URI into a travel address string. If the URI contains a scheme such
 // as https:// it is stripped because the https protocol is assumed. If the URI does
@@ -139,7 +143,7 @@ func Parse(rawURL string) (_ *URL, err error) {
 func (u *URL) ValidTLD() error {
 	// localhost is a valid TLD
 	hostname := u.Hostname()
-	if hostname == "localhost" {
+	if hostname == localhost {
 		return nil
 	}
 
@@ -149,7 +153,11 @@ func (u *URL) ValidTLD() error {
 	}
 
 	// Otherwise validate the TLD
-	if !tld.FromDomainName(hostname).IsValid() {
+	if domain := tld.FromDomainName(hostname); !domain.IsValid() {
+		// Allow .local domains for developing and testing.
+		if domain.LowerString() == localTLD {
+			return nil
+		}
 		return fmt.Errorf("%q is an %w", hostname, ErrInvalidTLD)
 	}
 	return nil

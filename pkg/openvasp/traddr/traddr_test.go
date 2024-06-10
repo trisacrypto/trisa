@@ -76,6 +76,22 @@ func TestMake(t *testing.T) {
 			"https://beneficiary.com:8000/x/12345?t=i",
 			"takLQA9MSCjHr3kkHh4fnC5rWNbrySUJhTwQHZsML2anv95kkqe",
 		},
+		{
+			"envoy.local/x/12345?t=i",
+			"taEi7uRVTrhfqLUzffcu7AqS17UJXUjMqhAdZ6p",
+		},
+		{
+			"envoy.local:8100/x/12345?t=i",
+			"ta7pwsXgswc9soxfnDgsBbWpDVsEwXy4G4hhPEN8WkrmaB",
+		},
+		{
+			"envoy.local:8100",
+			"taAFKaTJj4goXwwCKCmdNPtG8zeze5BeZiK",
+		},
+		{
+			"http://envoy.local:8100?t=i",
+			"taAFKaTJj4goXwwCKCmdNPtG8zeze5BeZiK",
+		},
 	}
 
 	for i, tc := range testCases {
@@ -142,6 +158,18 @@ func TestDecodeURL(t *testing.T) {
 			"takLQA9MSCjHr3kkHh4fnC5rWNbrySUJhTwQHZsML2anv95kkqe",
 			"https://beneficiary.com:8000/x/12345?t=i",
 		},
+		{
+			"taEi7uRVTrhfqLUzffcu7AqS17UJXUjMqhAdZ6p",
+			"https://envoy.local/x/12345?t=i",
+		},
+		{
+			"ta7pwsXgswc9soxfnDgsBbWpDVsEwXy4G4hhPEN8WkrmaB",
+			"https://envoy.local:8100/x/12345?t=i",
+		},
+		{
+			"taAFKaTJj4goXwwCKCmdNPtG8zeze5BeZiK",
+			"https://envoy.local:8100?t=i",
+		},
 	}
 
 	for i, tc := range testCases {
@@ -193,6 +221,18 @@ func TestEncoding(t *testing.T) {
 			"ta7eawSJpSSSqZScV8b8hDD6hLMtLKC4S6tfKc3",
 			nil,
 			"ipv4 travel address",
+		},
+		{
+			"envoy.local/x/12345?t=i",
+			"taEi7uRVTrhfqLUzffcu7AqS17UJXUjMqhAdZ6p",
+			nil,
+			".local domain",
+		},
+		{
+			"envoy.local:8100/x/12345?t=i",
+			"ta7pwsXgswc9soxfnDgsBbWpDVsEwXy4G4hhPEN8WkrmaB",
+			nil,
+			".local domain with port",
 		},
 		{
 			"beneficiary.com/x/12345", "",
@@ -320,6 +360,10 @@ func TestValidTLD(t *testing.T) {
 			"beneficiary.us:8000",
 			"trisa.beneficiary.net:8000",
 			"testnet.trisa.beneficiary.io:8000",
+			"envoy.local",
+			"envoy.local:8100",
+			"http://envoy.local",
+			"http://envoy.local:8100",
 		}
 
 		for i, tc := range tests {
