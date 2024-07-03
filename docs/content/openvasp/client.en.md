@@ -31,7 +31,7 @@ type TRPInfo struct {
 }
 ```
 
-The `APIVersion` field is automatically populated with the defeault version, and any extensions are populated from the `Inquiry` itself, so these can be ignored.
+The `APIVersion` field is automatically populated with the default version, and any extensions are populated from the `Inquiry` itself, so these can be ignored.
 
 The `Address` field can be one of:
 
@@ -93,7 +93,7 @@ type TRPInfo struct {
 }
 ```
 
-The `APIVersion` field is automatically populated with the defeault version, and any extensions are populated from the `Confirmation` itself, so these can be ignored.
+The `APIVersion` field is automatically populated with the default version, and any extensions are populated from the `Confirmation` itself, so these can be ignored.
 
 The client returns a `TravelRuleResponse` however, a simple [204 No Content](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204) response is expected for a confirmation, so there is no JSON body to parse.
 
