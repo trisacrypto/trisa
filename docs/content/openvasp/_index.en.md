@@ -31,7 +31,7 @@ Therefore, as you implement your TRP integration, you need to consider the follo
 
 1. **mTLS is a core part of TRP, however, TRP does not specify a Certificate Authority.** Your implementation must consider whether it wants to perform TRP only with TRISA issued certificates or if it is willing to allow other public CAs such as Verisign or Google.
 2. **There is no directory of TRP VASPs, TRP discovery is facilitated by Travel Addresses.** TRP uses [Travel Addresses](https://www.21analytics.ch/blog/how-the-trp-travel-address-solves-the-fatf-travel-rule/) to solve counterparty identification. The TRISA bridge is able to parse both LNURLs and the newer Travel Address format, however for complete TRP integration, you will have to supply your accounts with Travel Addresses so that other TRP implementers can reach you as a beneficiary counterparty.
-3. **TRP only supports transport-level cryptography, not payload-level cryptography.** There are three levels of cryptography supported by the TRISA bridge: no-cryptography, partial, insecure TRISA envelopes (encrypted but not sealed), and full TRISA compatibility. The first level is plain-vanill TRP and the second two levels are implemented using [TRP Extensions](https://gitlab.com/OpenVASP/travel-rule-protocol/-/tree/master/extensions).
+3. **TRP only supports transport-level cryptography, not payload-level cryptography.** There are three levels of cryptography supported by the TRISA bridge: no-cryptography, partial, insecure TRISA envelopes (encrypted but not sealed), and full TRISA compatibility. The first level is plain-vanilla TRP and the second two levels are implemented using [TRP Extensions](https://gitlab.com/OpenVASP/travel-rule-protocol/-/tree/master/extensions).
 
 ### For TRP Implementers
 
