@@ -7,6 +7,311 @@ import (
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 )
 
+func TestEnumParse(t *testing.T) {
+	t.Run("NaturalPersonNameTypeCode", func(t *testing.T) {
+		validTestCases := []struct {
+			input    any
+			expected ivms101.NaturalPersonNameTypeCode
+		}{
+			{"ALIA", ivms101.NaturalPersonAlias},
+			{"BIRT", ivms101.NaturalPersonBirth},
+			{"MAID", ivms101.NaturalPersonMaiden},
+			{"LEGL", ivms101.NaturalPersonLegal},
+			{"MISC", ivms101.NaturalPersonMisc},
+			{"NATURAL_PERSON_NAME_TYPE_CODE_ALIA", ivms101.NaturalPersonAlias},
+			{"NATURAL_PERSON_NAME_TYPE_CODE_BIRT", ivms101.NaturalPersonBirth},
+			{"NATURAL_PERSON_NAME_TYPE_CODE_MAID", ivms101.NaturalPersonMaiden},
+			{"NATURAL_PERSON_NAME_TYPE_CODE_LEGL", ivms101.NaturalPersonLegal},
+			{"NATURAL_PERSON_NAME_TYPE_CODE_MISC", ivms101.NaturalPersonMisc},
+			{"alia", ivms101.NaturalPersonAlias},
+			{"Birt", ivms101.NaturalPersonBirth},
+			{"mAiD", ivms101.NaturalPersonMaiden},
+			{"LegL", ivms101.NaturalPersonLegal},
+			{"misc", ivms101.NaturalPersonMisc},
+			{int32(1), ivms101.NaturalPersonAlias},
+			{int32(2), ivms101.NaturalPersonBirth},
+			{int32(3), ivms101.NaturalPersonMaiden},
+			{int32(4), ivms101.NaturalPersonLegal},
+			{int32(0), ivms101.NaturalPersonMisc},
+		}
+
+		for i, tc := range validTestCases {
+			actual, err := ivms101.ParseNaturalPersonNameTypeCode(tc.input)
+			require.NoError(t, err, "did not expect error on valid test case %d", i)
+			require.Equal(t, tc.expected, actual, "mismatched expectation on valid test case %d", i)
+		}
+
+		invalidTestCases := []struct {
+			input any
+			err   error
+		}{
+			{"alias", ivms101.ErrCouldNotParseEnum},
+			{2, ivms101.ErrCouldNotParseEnum},
+			{"", ivms101.ErrCouldNotParseEnum},
+			{"NATURAL_PERSON_NAME_TYPE_CODE_FOO", ivms101.ErrCouldNotParseEnum},
+			{nil, ivms101.ErrCouldNotParseEnum},
+			{int32(28), ivms101.ErrCouldNotParseEnum},
+		}
+
+		for i, tc := range invalidTestCases {
+			actual, err := ivms101.ParseNaturalPersonNameTypeCode(tc.input)
+			require.ErrorIs(t, err, tc.err, "expected error on invalid test case %d", i)
+			require.Zero(t, actual, "expected zero value for invalid test case %d", i)
+		}
+	})
+
+	t.Run("LegalPersonNameTypeCode", func(t *testing.T) {
+		validTestCases := []struct {
+			input    any
+			expected ivms101.LegalPersonNameTypeCode
+		}{
+			{"MISC", ivms101.LegalPersonMisc},
+			{"LEGL", ivms101.LegalPersonLegal},
+			{"SHRT", ivms101.LegalPersonShort},
+			{"TRAD", ivms101.LegalPersonTrading},
+			{"LEGAL_PERSON_NAME_TYPE_CODE_MISC", ivms101.LegalPersonMisc},
+			{"LEGAL_PERSON_NAME_TYPE_CODE_LEGL", ivms101.LegalPersonLegal},
+			{"LEGAL_PERSON_NAME_TYPE_CODE_SHRT", ivms101.LegalPersonShort},
+			{"LEGAL_PERSON_NAME_TYPE_CODE_TRAD", ivms101.LegalPersonTrading},
+			{"legl", ivms101.LegalPersonLegal},
+			{"Shrt", ivms101.LegalPersonShort},
+			{"TraD", ivms101.LegalPersonTrading},
+			{int32(0), ivms101.LegalPersonMisc},
+			{int32(1), ivms101.LegalPersonLegal},
+			{int32(2), ivms101.LegalPersonShort},
+			{int32(3), ivms101.LegalPersonTrading},
+		}
+
+		for i, tc := range validTestCases {
+			actual, err := ivms101.ParseLegalPersonNameTypeCode(tc.input)
+			require.NoError(t, err, "did not expect error on valid test case %d", i)
+			require.Equal(t, tc.expected, actual, "mismatched expectation on valid test case %d", i)
+		}
+
+		invalidTestCases := []struct {
+			input any
+			err   error
+		}{
+			{"legal", ivms101.ErrCouldNotParseEnum},
+			{2, ivms101.ErrCouldNotParseEnum},
+			{"", ivms101.ErrCouldNotParseEnum},
+			{"LEGAL_PERSON_NAME_TYPE_CODE_FOO", ivms101.ErrCouldNotParseEnum},
+			{nil, ivms101.ErrCouldNotParseEnum},
+			{int32(28), ivms101.ErrCouldNotParseEnum},
+		}
+
+		for i, tc := range invalidTestCases {
+			actual, err := ivms101.ParseLegalPersonNameTypeCode(tc.input)
+			require.ErrorIs(t, err, tc.err, "expected error on invalid test case %d", i)
+			require.Zero(t, actual, "expected zero value for invalid test case %d", i)
+		}
+	})
+
+	t.Run("AddressTypeCode", func(t *testing.T) {
+		validTestCases := []struct {
+			input    any
+			expected ivms101.AddressTypeCode
+		}{
+			{"MISC", ivms101.AddressTypeMisc},
+			{"HOME", ivms101.AddressTypeHome},
+			{"BIZZ", ivms101.AddressTypeBusiness},
+			{"GEOG", ivms101.AddressTypeGeographic},
+			{"ADDRESS_TYPE_CODE_MISC", ivms101.AddressTypeMisc},
+			{"ADDRESS_TYPE_CODE_HOME", ivms101.AddressTypeHome},
+			{"ADDRESS_TYPE_CODE_BIZZ", ivms101.AddressTypeBusiness},
+			{"ADDRESS_TYPE_CODE_GEOG", ivms101.AddressTypeGeographic},
+			{"misc", ivms101.AddressTypeMisc},
+			{"Home", ivms101.AddressTypeHome},
+			{"bIzZ", ivms101.AddressTypeBusiness},
+			{"GeoG", ivms101.AddressTypeGeographic},
+			{int32(0), ivms101.AddressTypeMisc},
+			{int32(1), ivms101.AddressTypeHome},
+			{int32(2), ivms101.AddressTypeBusiness},
+			{int32(3), ivms101.AddressTypeGeographic},
+		}
+
+		for i, tc := range validTestCases {
+			actual, err := ivms101.ParseAddressTypeCode(tc.input)
+			require.NoError(t, err, "did not expect error on valid test case %d", i)
+			require.Equal(t, tc.expected, actual, "mismatched expectation on valid test case %d", i)
+		}
+
+		invalidTestCases := []struct {
+			input any
+			err   error
+		}{
+			{"business", ivms101.ErrCouldNotParseEnum},
+			{2, ivms101.ErrCouldNotParseEnum},
+			{"", ivms101.ErrCouldNotParseEnum},
+			{"ADDRESS_TYPE_CODE_FOO", ivms101.ErrCouldNotParseEnum},
+			{nil, ivms101.ErrCouldNotParseEnum},
+			{int32(28), ivms101.ErrCouldNotParseEnum},
+		}
+
+		for i, tc := range invalidTestCases {
+			actual, err := ivms101.ParseAddressTypeCode(tc.input)
+			require.ErrorIs(t, err, tc.err, "expected error on invalid test case %d", i)
+			require.Zero(t, actual, "expected zero value for invalid test case %d", i)
+		}
+	})
+
+	t.Run("NationalIdentifierTypeCode", func(t *testing.T) {
+		validTestCases := []struct {
+			input    any
+			expected ivms101.NationalIdentifierTypeCode
+		}{
+			{"ARNU", ivms101.NationalIdentifierARNU},
+			{"CCPT", ivms101.NationalIdentifierCCPT},
+			{"RAID", ivms101.NationalIdentifierRAID},
+			{"DRLC", ivms101.NationalIdentifierDRLC},
+			{"FIIN", ivms101.NationalIdentifierFIIN},
+			{"TXID", ivms101.NationalIdentifierTXID},
+			{"SOCS", ivms101.NationalIdentifierSOCS},
+			{"IDCD", ivms101.NationalIdentifierIDCD},
+			{"LEIX", ivms101.NationalIdentifierLEIX},
+			{"MISC", ivms101.NationalIdentifierMISC},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_ARNU", ivms101.NationalIdentifierARNU},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_CCPT", ivms101.NationalIdentifierCCPT},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_RAID", ivms101.NationalIdentifierRAID},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_DRLC", ivms101.NationalIdentifierDRLC},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_FIIN", ivms101.NationalIdentifierFIIN},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_TXID", ivms101.NationalIdentifierTXID},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_SOCS", ivms101.NationalIdentifierSOCS},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_IDCD", ivms101.NationalIdentifierIDCD},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_LEIX", ivms101.NationalIdentifierLEIX},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_MISC", ivms101.NationalIdentifierMISC},
+			{"arnu", ivms101.NationalIdentifierARNU},
+			{"CcPt", ivms101.NationalIdentifierCCPT},
+			{"Raid", ivms101.NationalIdentifierRAID},
+			{"drlc", ivms101.NationalIdentifierDRLC},
+			{"fIIn", ivms101.NationalIdentifierFIIN},
+			{"TxiD", ivms101.NationalIdentifierTXID},
+			{"sOCs", ivms101.NationalIdentifierSOCS},
+			{"Idcd", ivms101.NationalIdentifierIDCD},
+			{"leIX", ivms101.NationalIdentifierLEIX},
+			{"Misc", ivms101.NationalIdentifierMISC},
+			{int32(1), ivms101.NationalIdentifierARNU},
+			{int32(2), ivms101.NationalIdentifierCCPT},
+			{int32(3), ivms101.NationalIdentifierRAID},
+			{int32(4), ivms101.NationalIdentifierDRLC},
+			{int32(5), ivms101.NationalIdentifierFIIN},
+			{int32(6), ivms101.NationalIdentifierTXID},
+			{int32(7), ivms101.NationalIdentifierSOCS},
+			{int32(8), ivms101.NationalIdentifierIDCD},
+			{int32(9), ivms101.NationalIdentifierLEIX},
+			{int32(0), ivms101.NationalIdentifierMISC},
+		}
+
+		for i, tc := range validTestCases {
+			actual, err := ivms101.ParseNationalIdentifierTypeCode(tc.input)
+			require.NoError(t, err, "did not expect error on valid test case %d", i)
+			require.Equal(t, tc.expected, actual, "mismatched expectation on valid test case %d", i)
+		}
+
+		invalidTestCases := []struct {
+			input any
+			err   error
+		}{
+			{"passport", ivms101.ErrCouldNotParseEnum},
+			{2, ivms101.ErrCouldNotParseEnum},
+			{"", ivms101.ErrCouldNotParseEnum},
+			{"NATIONAL_IDENTIFIER_TYPE_CODE_FOO", ivms101.ErrCouldNotParseEnum},
+			{nil, ivms101.ErrCouldNotParseEnum},
+			{int32(28), ivms101.ErrCouldNotParseEnum},
+		}
+
+		for i, tc := range invalidTestCases {
+			actual, err := ivms101.ParseNationalIdentifierTypeCode(tc.input)
+			require.ErrorIs(t, err, tc.err, "expected error on invalid test case %d", i)
+			require.Zero(t, actual, "expected zero value for invalid test case %d", i)
+		}
+	})
+
+	t.Run("TransliterationMethodCode", func(t *testing.T) {
+		validTestCases := []struct {
+			input    any
+			expected ivms101.TransliterationMethodCode
+		}{
+			{"OTHR", ivms101.TransliterationMethodOTHR},
+			{"ARAB", ivms101.TransliterationMethodARAB},
+			{"ARAN", ivms101.TransliterationMethodARAN},
+			{"ARMN", ivms101.TransliterationMethodARMN},
+			{"CYRL", ivms101.TransliterationMethodCYRL},
+			{"DEVA", ivms101.TransliterationMethodDEVA},
+			{"GEOR", ivms101.TransliterationMethodGEOR},
+			{"GREK", ivms101.TransliterationMethodGREK},
+			{"HANI", ivms101.TransliterationMethodHANI},
+			{"HEBR", ivms101.TransliterationMethodHEBR},
+			{"KANA", ivms101.TransliterationMethodKANA},
+			{"KORE", ivms101.TransliterationMethodKORE},
+			{"THAI", ivms101.TransliterationMethodTHAI},
+			{"TRANSLITERATION_METHOD_CODE_OTHR", ivms101.TransliterationMethodOTHR},
+			{"TRANSLITERATION_METHOD_CODE_ARAB", ivms101.TransliterationMethodARAB},
+			{"TRANSLITERATION_METHOD_CODE_ARAN", ivms101.TransliterationMethodARAN},
+			{"TRANSLITERATION_METHOD_CODE_ARMN", ivms101.TransliterationMethodARMN},
+			{"TRANSLITERATION_METHOD_CODE_CYRL", ivms101.TransliterationMethodCYRL},
+			{"TRANSLITERATION_METHOD_CODE_DEVA", ivms101.TransliterationMethodDEVA},
+			{"TRANSLITERATION_METHOD_CODE_GEOR", ivms101.TransliterationMethodGEOR},
+			{"TRANSLITERATION_METHOD_CODE_GREK", ivms101.TransliterationMethodGREK},
+			{"TRANSLITERATION_METHOD_CODE_HANI", ivms101.TransliterationMethodHANI},
+			{"TRANSLITERATION_METHOD_CODE_HEBR", ivms101.TransliterationMethodHEBR},
+			{"TRANSLITERATION_METHOD_CODE_KANA", ivms101.TransliterationMethodKANA},
+			{"TRANSLITERATION_METHOD_CODE_KORE", ivms101.TransliterationMethodKORE},
+			{"TRANSLITERATION_METHOD_CODE_THAI", ivms101.TransliterationMethodTHAI},
+			{"othr", ivms101.TransliterationMethodOTHR},
+			{"Arab", ivms101.TransliterationMethodARAB},
+			{"ARan", ivms101.TransliterationMethodARAN},
+			{"ArmN", ivms101.TransliterationMethodARMN},
+			{"cYRl", ivms101.TransliterationMethodCYRL},
+			{"devA", ivms101.TransliterationMethodDEVA},
+			{"GeOR", ivms101.TransliterationMethodGEOR},
+			{"GreK", ivms101.TransliterationMethodGREK},
+			{"Hani", ivms101.TransliterationMethodHANI},
+			{"hebr", ivms101.TransliterationMethodHEBR},
+			{"kAnA", ivms101.TransliterationMethodKANA},
+			{"Kore", ivms101.TransliterationMethodKORE},
+			{"Thai", ivms101.TransliterationMethodTHAI},
+			{int32(0), ivms101.TransliterationMethodOTHR},
+			{int32(1), ivms101.TransliterationMethodARAB},
+			{int32(2), ivms101.TransliterationMethodARAN},
+			{int32(3), ivms101.TransliterationMethodARMN},
+			{int32(4), ivms101.TransliterationMethodCYRL},
+			{int32(5), ivms101.TransliterationMethodDEVA},
+			{int32(6), ivms101.TransliterationMethodGEOR},
+			{int32(7), ivms101.TransliterationMethodGREK},
+			{int32(8), ivms101.TransliterationMethodHANI},
+			{int32(9), ivms101.TransliterationMethodHEBR},
+			{int32(10), ivms101.TransliterationMethodKANA},
+			{int32(11), ivms101.TransliterationMethodKORE},
+			{int32(12), ivms101.TransliterationMethodTHAI},
+		}
+
+		for i, tc := range validTestCases {
+			actual, err := ivms101.ParseTransliterationMethodCode(tc.input)
+			require.NoError(t, err, "did not expect error on valid test case %d", i)
+			require.Equal(t, tc.expected, actual, "mismatched expectation on valid test case %d", i)
+		}
+
+		invalidTestCases := []struct {
+			input any
+			err   error
+		}{
+			{"arabic", ivms101.ErrCouldNotParseEnum},
+			{2, ivms101.ErrCouldNotParseEnum},
+			{"", ivms101.ErrCouldNotParseEnum},
+			{"TRANSLITERATION_METHOD_CODE_FOO", ivms101.ErrCouldNotParseEnum},
+			{nil, ivms101.ErrCouldNotParseEnum},
+			{int32(28), ivms101.ErrCouldNotParseEnum},
+		}
+
+		for i, tc := range invalidTestCases {
+			actual, err := ivms101.ParseTransliterationMethodCode(tc.input)
+			require.ErrorIs(t, err, tc.err, "expected error on invalid test case %d", i)
+			require.Zero(t, actual, "expected zero value for invalid test case %d", i)
+		}
+	})
+}
+
 func TestMarshalNatNameCode(t *testing.T) {
 	// Test an array of expected ivms101 protocol buffer enums
 	// to inspect whether we correctly marshal them to the correct
