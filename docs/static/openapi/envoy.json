@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "TRISA Node API",
-    "description": "The TRISA Node API allows users to interact with the TRISA Self-Hosted Node\nin a programmatic fashion. This API is a JSON REST API that does not have\nauthentication -- it is intended that this API is served on an internal\nIP address with routing only available to internal services.",
+    "description": "The TRISA Node API allows users to interact with the TRISA Self-Hosted Node in a programmatic fashion.\nIt is intended that this API is served on an internal IP address with routing only available to internal services.",
     "termsOfService": "https://trisa.io/terms/",
     "contact": {
       "email": "support@rotational.io"
@@ -11,13 +11,17 @@
       "name": "MIT Licensed",
       "url": "https://github.com/trisacrypto/trisa/blob/main/LICENSE"
     },
-    "version": "v0.11.0"
+    "version": "v0.1.1"
   },
   "externalDocs": {
     "description": "TRISA Developer Documentation",
     "url": "https://trisa.dev"
   },
   "tags": [
+    {
+      "name": "authentication",
+      "description": "Allow for authentication against Envoy node."
+    },
     {
       "name": "account",
       "description": "Stored information about your user/customer accounts."
@@ -37,6 +41,14 @@
     {
       "name": "secure_envelope",
       "description": "Secure Envelopes provide an audit record of travel rule exchanges with a counterparty."
+    },
+    {
+      "name": "user",
+      "description": "User management."
+    },
+    {
+      "name": "utility",
+      "description": "Other useful methods."
     }
   ],
   "paths": {
@@ -45,6 +57,9 @@
         "summary": "Heartbeat endpoint",
         "description": "Allows users to check the status of the node",
         "operationId": "status",
+        "tags": [
+          "utility"
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -69,6 +84,72 @@
         }
       }
     },
+    "/v1/authenticate": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Authenticate",
+        "operationId": "authenticate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/APIAuthentication"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginReply"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid API credentials"
+          }
+        }
+      }
+    },
+    "/v1/reauthenticate": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Reauthenticate with refresh token",
+        "operationId": "reauthenticate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReauthenticateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginReply"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid reauthentication credentials"
+          }
+        }
+      }
+    },
     "/v1/transactions": {
       "get": {
         "tags": [
@@ -77,6 +158,34 @@
         "summary": "List transactions",
         "description": "Paginated list of all transactions",
         "operationId": "listTransactions",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "next_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prev_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -97,6 +206,11 @@
         "summary": "Create transaction",
         "description": "Create a new transaction",
         "operationId": "createTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "requestBody": {
           "description": "Create a new transaction",
           "content": {
@@ -136,6 +250,11 @@
         "summary": "Find transaction by ID",
         "description": "Returns a single transaction if found",
         "operationId": "transactionDetail",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "transactionID",
@@ -171,11 +290,16 @@
         "summary": "Updates a transaction record",
         "description": "Update a transaction record (does not patch, all fields are required)",
         "operationId": "updateTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "transactionID",
             "in": "path",
-            "description": "ID of transaction to return",
+            "description": "ID of transaction to update",
             "required": true,
             "schema": {
               "type": "string",
@@ -183,6 +307,17 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Updated transaction record",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Transaction"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -209,11 +344,139 @@
         "summary": "Deletes a transaction",
         "description": "Deletes a transaction",
         "operationId": "deleteTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "transactionID",
             "in": "path",
-            "description": "ID of transaction to return",
+            "description": "ID of transaction to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "UUID"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Transaction not found"
+          }
+        }
+      }
+    },
+    "/v1/transactions/prepare": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Prepare transaction data for sending",
+        "description": "Prepare transaction data for sending to a counterparty",
+        "operationId": "prepareTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Transaction data to prepare",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Prepare"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Prepared"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "422": {
+            "description": "Validation exception or missing field"
+          }
+        }
+      }
+    },
+    "/v1/transactions/send-prepared": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Send prepared transaction data to counterparty",
+        "description": "Send prepared transaction data to a counterparty",
+        "operationId": "sendPreparedTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Prepared transaction data to send",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Prepared"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transaction"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "422": {
+            "description": "Validation exception or missing field"
+          }
+        }
+      }
+    },
+    "/v1/transactions/{transactionID}/preview": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Preview transaction envelope",
+        "description": "Preview the transaction envelope for a specific transaction",
+        "operationId": "previewTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionID",
+            "in": "path",
+            "description": "ID of transaction to preview",
             "required": true,
             "schema": {
               "type": "string",
@@ -227,13 +490,164 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Reply"
+                  "$ref": "#/components/schemas/Envelope"
                 }
               }
             }
           },
           "404": {
-            "description": "Account not found"
+            "description": "Transaction not found"
+          }
+        }
+      }
+    },
+    "/v1/transactions/{transactionID}/send": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Send transaction envelope",
+        "description": "Send the transaction envelope for a specific transaction",
+        "operationId": "sendTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionID",
+            "in": "path",
+            "description": "ID of transaction to send",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "UUID"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Transaction envelope to send",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Envelope"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found"
+          }
+        }
+      }
+    },
+    "/v1/transactions/{transactionID}/accept": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Accept incoming transaction envelope",
+        "description": "Accept the incoming transaction envelope for a specific transaction",
+        "operationId": "acceptTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionID",
+            "in": "path",
+            "description": "ID of transaction to accept",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "UUID"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found"
+          },
+          "501": {
+            "description": "Not implemented" 
+          }
+        }
+      }
+    },
+    "/v1/transactions/{transactionID}/reject": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Reject incoming transaction envelope",
+        "description": "Reject the incoming transaction envelope for a specific transaction",
+        "operationId": "rejectTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionID",
+            "in": "path",
+            "description": "ID of transaction to reject",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "UUID"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Reason for rejection",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Rejection"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found"
           }
         }
       }
@@ -246,6 +660,11 @@
         "summary": "List secure envelopes for transaction",
         "description": "Paginated list of all secure envelopes for the specified transaction",
         "operationId": "listSecureEnvelopes",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "transactionID",
@@ -255,6 +674,27 @@
             "schema": {
               "type": "string",
               "format": "UUID"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "next_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prev_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -280,11 +720,16 @@
         "summary": "Lookup a specific secure envelope",
         "description": "Returns detailed information about the specified secure envelope",
         "operationId": "envelopeDetail",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "transactionID",
             "in": "path",
-            "description": "ID of transaction to return secure envelopes for",
+            "description": "ID of transaction to return secure envelope for",
             "required": true,
             "schema": {
               "type": "string",
@@ -314,7 +759,53 @@
             }
           },
           "404": {
-            "description": "Account or crypto address not found"
+            "description": "Secure envelope not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "secure_envelope"
+        ],
+        "summary": "Delete a specific secure envelope",
+        "description": "Deletes the specified secure envelope",
+        "operationId": "deleteSecureEnvelope",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionID",
+            "in": "path",
+            "description": "ID of transaction of the secure envelope to be deleted",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "UUID"
+            }
+          },
+          {
+            "name": "envelopeID",
+            "in": "path",
+            "description": "ID of secure envelope to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Secure envelope not found"
+          },
+          "501": {
+            "description": "Not implemented"
           }
         }
       }
@@ -327,6 +818,34 @@
         "summary": "List customer accounts",
         "description": "Paginated list of all stored customer accounts",
         "operationId": "listAccounts",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "next_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prev_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -347,6 +866,11 @@
         "summary": "Create customer account",
         "description": "Create a new customer account",
         "operationId": "createAccount",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "requestBody": {
           "description": "Create a new customer account",
           "content": {
@@ -386,6 +910,11 @@
         "summary": "Find account by ID",
         "description": "Returns a single account if found",
         "operationId": "accountDetail",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "accountID",
@@ -421,11 +950,16 @@
         "summary": "Updates an account record",
         "description": "Update an account record (does not patch, all fields are required)",
         "operationId": "updateAccount",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "accountID",
             "in": "path",
-            "description": "ID of account to return",
+            "description": "ID of account to update",
             "required": true,
             "schema": {
               "type": "string",
@@ -433,6 +967,17 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Updated account record",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Account"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -459,11 +1004,16 @@
         "summary": "Deletes an account",
         "description": "Deletes an account and associated crypto addresses",
         "operationId": "deleteAccount",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "accountID",
             "in": "path",
-            "description": "ID of account to return",
+            "description": "ID of account to delete",
             "required": true,
             "schema": {
               "type": "string",
@@ -473,14 +1023,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Reply"
-                }
-              }
-            }
+            "description": "Successful operation"
           },
           "404": {
             "description": "Account not found"
@@ -493,18 +1036,44 @@
         "tags": [
           "crypto_address"
         ],
-        "summary": "list all crypto addresses for account",
-        "description": "returns a paginated list of all crypto addresses associated with the account",
+        "summary": "List crypto addresses for account",
+        "description": "Returns a paginated list of all crypto addresses associated with the account",
         "operationId": "listCryptoAddresses",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "accountID",
             "in": "path",
-            "description": "ID of account to return",
+            "description": "ID of account to return crypto addresses for",
             "required": true,
             "schema": {
               "type": "string",
               "format": "ULID"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "next_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prev_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -531,11 +1100,16 @@
         "summary": "Create crypto address",
         "description": "Create a crypto address associated with the specified account",
         "operationId": "createCryptoAddress",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "accountID",
             "in": "path",
-            "description": "ID of account to return",
+            "description": "ID of account to create crypto address for",
             "required": true,
             "schema": {
               "type": "string",
@@ -544,13 +1118,15 @@
           }
         ],
         "requestBody": {
+          "description": "Crypto address to create",
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CryptoAddress"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -582,12 +1158,17 @@
         ],
         "summary": "Lookup a specific crypto address",
         "description": "Returns detailed information about the specified crypto address",
-        "operationId": "cryptoAddressesDetail",
+        "operationId": "cryptoAddressDetail",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "accountID",
             "in": "path",
-            "description": "ID of account to return",
+            "description": "ID of account of crypto address to be returned",
             "required": true,
             "schema": {
               "type": "string",
@@ -627,12 +1208,17 @@
         ],
         "summary": "Update a crypto address",
         "description": "Update a crypto address record (does not patch, all fields are required)",
-        "operationId": "updateCryptoAddresses",
+        "operationId": "updateCryptoAddress",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "accountID",
             "in": "path",
-            "description": "ID of account to return",
+            "description": "ID of account of crypto address to be updated",
             "required": true,
             "schema": {
               "type": "string",
@@ -642,7 +1228,7 @@
           {
             "name": "cryptoAddressID",
             "in": "path",
-            "description": "ID of crypto address to return",
+            "description": "ID of crypto address to update",
             "required": true,
             "schema": {
               "type": "string",
@@ -651,13 +1237,15 @@
           }
         ],
         "requestBody": {
+          "description": "Updated crypto address record",
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CryptoAddress"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -684,12 +1272,17 @@
         ],
         "summary": "Delete a crypto address",
         "description": "Delete a crypto address record associated with account",
-        "operationId": "deleteCryptoAddresses",
+        "operationId": "deleteCryptoAddress",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "accountID",
             "in": "path",
-            "description": "ID of account to return",
+            "description": "ID of account of crypto address to be deleted",
             "required": true,
             "schema": {
               "type": "string",
@@ -699,7 +1292,7 @@
           {
             "name": "cryptoAddressID",
             "in": "path",
-            "description": "ID of crypto address to return",
+            "description": "ID of crypto address to delete",
             "required": true,
             "schema": {
               "type": "string",
@@ -709,14 +1302,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Reply"
-                }
-              }
-            }
+            "description": "Successful operation"
           },
           "404": {
             "description": "Account or crypto address not found"
@@ -732,6 +1318,34 @@
         "summary": "List counterparties",
         "description": "Paginated list of all stored counterparties",
         "operationId": "listCounterparties",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "next_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prev_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -752,6 +1366,11 @@
         "summary": "Create counterparty",
         "description": "Create a new counterparty",
         "operationId": "createCounterparty",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "requestBody": {
           "description": "Create a new counterparty",
           "content": {
@@ -764,7 +1383,7 @@
           "required": true
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Counterparty created",
             "content": {
               "application/json": {
@@ -791,6 +1410,11 @@
         "summary": "Find counterparty by ID",
         "description": "Returns a single counterparty if found",
         "operationId": "counterpartyDetail",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "counterpartyID",
@@ -826,11 +1450,16 @@
         "summary": "Updates a counterparty record",
         "description": "Update a counterparty record (does not patch, all fields are required)",
         "operationId": "updateCounterparty",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "counterpartyID",
             "in": "path",
-            "description": "ID of counterparty to return",
+            "description": "ID of counterparty to update",
             "required": true,
             "schema": {
               "type": "string",
@@ -838,6 +1467,17 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "Updated counterparty record",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Counterparty"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -864,11 +1504,143 @@
         "summary": "Deletes a counterparty",
         "description": "Deletes a counterparty",
         "operationId": "deleteCounterparty",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
         "parameters": [
           {
             "name": "counterpartyID",
             "in": "path",
-            "description": "ID of counterparty to return",
+            "description": "ID of counterparty to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "Counterparty not found"
+          }
+        }
+      }
+    },
+    "/v1/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "List users",
+        "description": "Paginated list of all users",
+        "operationId": "listUsers",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "next_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prev_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags":[
+          "user"
+        ],
+        "summary": "Create user",
+        "description": "Create a new user",
+        "operationId": "createUser",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Create a new user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "422": {
+            "description": "Validation exception or missing field"
+          }
+        }
+      }
+    },
+    "/v1/users/{userID}": {
+      "get": {
+        "tags":[
+          "user"
+        ],
+        "summary": "Find user by ID",
+        "description": "Returns a single user if found",
+        "operationId": "userDetail",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "description": "ID of user to return",
             "required": true,
             "schema": {
               "type": "string",
@@ -882,13 +1654,229 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Reply"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
           },
           "404": {
-            "description": "Account not found"
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Updates a user record",
+        "description": "Update a user record (does not patch, all fields are required)",
+        "operationId": "updateUser",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "description": "ID of user to update",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated user record",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "422": {
+            "description": "Validation exception or missing field"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Deletes a user",
+        "description": "Deletes a user",
+        "operationId": "deleteUser",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "description": "ID of user to delete",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/v1/users/{userID}/password": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Change user password",
+        "description": "Change the password for a user",
+        "operationId": "changeUserPassword",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "description": "ID of user to change password for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "New password",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPassword"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User password changed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "description": "The new password for the user."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/v1/utilities/travel-address/encode": {
+      "post": {
+        "tags": [
+          "utility"
+        ],
+        "summary": "Encode travel address",
+        "description": "Encodes a travel address into a TRP-formatted string",
+        "operationId": "encodeTravelAddress",
+        "requestBody": {
+          "description": "Travel address to encode",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TravelAddress"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TravelAddress"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/v1/utilities/travel-address/decode": {
+      "post": {
+        "tags": [
+          "utility"
+        ],
+        "summary": "Decode travel address",
+        "description": "Decodes a TRP-formatted travel address into its component parts",
+        "operationId": "decodeTravelAddress",
+        "requestBody": {
+          "description": "TRP-formatted travel address to decode",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TravelAddress"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TravelAddress"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
           }
         }
       }
@@ -896,329 +1884,122 @@
   },
   "components": {
     "schemas": {
-      "Transaction": {
+      "StatusReply": {
         "type": "object",
+        "description": "The response object for the status endpoint.",
         "properties": {
-          "id": {
+          "status": {
             "type": "string",
-            "format": "UUID",
-            "example": "c44d81ec-7c2d-4372-8844-28fdb6b1c664"
-          }
-        }
-      },
-      "TransactionsList": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "$ref": "#/components/schemas/PageQuery"
-          },
-          "transactions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Transaction"
-            }
-          }
-        }
-      },
-      "SecureEnvelope": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "ULID"
-          },
-          "direction": {
-            "type": "string",
+            "example": "ok",
             "enum": [
-              "incoming",
-              "outgoing"
-            ]
+              "ok",
+              "not ready",
+              "unhealthy",
+              "maintenance"
+            ],
+            "description": "The status of the node."
           },
-          "envelope_id": {
+          "uptime": {
             "type": "string",
-            "format": "UUID"
+            "format": "duration",
+            "example": "25h33m29.4860s",
+            "description": "The duration since the node was last started."
           },
-          "payload": {
+          "version": {
             "type": "string",
-            "format": "base64"
-          },
-          "encryption_key": {
-            "type": "string",
-            "format": "base64"
-          },
-          "encryption_algorithm": {
-            "type": "string",
-            "example": "AES-GCM-256"
-          },
-          "valid_hmac": {
-            "type": "boolean"
-          },
-          "hmac": {
-            "type": "string",
-            "format": "base64"
-          },
-          "hmac_secret": {
-            "type": "string",
-            "format": "base64"
-          },
-          "hmac_algorithm": {
-            "type": "string",
-            "example": "HMAC-SHA-256"
-          },
-          "is_error": {
-            "type": "boolean"
-          },
-          "error": {
-            "type": "object"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "datetime"
-          },
-          "sealed": {
-            "type": "boolean"
-          },
-          "public_key_signature": {
-            "type": "string"
-          },
-          "original": {
-            "type": "string",
-            "format": "base64"
+            "format": "semver",
+            "example": "1.0.0",
+            "description": "The version of the node."
           }
         }
       },
-      "DecryptedEnvelope": {
+      "APIAuthentication": {
         "type": "object",
+        "description": "The request object for the authentication endpoint.",
         "properties": {
-          "identity": {
-            "type": "object"
-          },
-          "transaction": {
-            "type": "object"
-          },
-          "pending": {
-            "type": "object"
-          },
-          "sent_at": {
+          "client_id": {
             "type": "string",
-            "format": "datetime"
+            "description": "The client ID for authentication."
           },
-          "received_at": {
+          "client_secret": {
             "type": "string",
-            "format": "datetime"
+            "description": "The client secret for authentication."
           }
         }
       },
-      "EnvelopeQuery": {
+      "LoginReply": {
         "type": "object",
+        "description": "The response object for the authentication endpoint.",
         "properties": {
-          "decrypt": {
-            "type": "boolean",
-            "default": false
+          "access_token": {
+            "type": "string",
+            "description": "The access token for the authenticated session."
           },
-          "archives": {
-            "type": "boolean",
-            "default": false
+          "refresh_token": {
+            "type": "string",
+            "description": "The refresh token for obtaining a new access token."
           }
         }
       },
-      "EnvelopesList": {
+      "ReauthenticateRequest": {
         "type": "object",
+        "description": "The request object for the reauthentication endpoint.",
         "properties": {
-          "page": {
-            "$ref": "#/components/schemas/PageQuery"
-          },
-          "is_decrypted": {
-            "type": "boolean"
-          },
-          "secure_envelopes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SecureEnvelope"
-            }
-          },
-          "decrypted_envelopes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DecryptedEnvelope"
-            }
+          "refresh_token": {
+            "type": "string",
+            "description": "The refresh token for reauthentication."
           }
         }
       },
-      "Counterparty": {
+      "PageQuery": {
         "type": "object",
+        "description": "The request object for paginated endpoints.",
         "properties": {
-          "id": {
+          "page_size": {
+            "type": "integer",
+            "example": 50,
+            "description": "The number of items to return per page."
+          },
+          "next_page_token": {
             "type": "string",
-            "format": "ULID",
-            "example": "01HV1GBK4JG9KF8RHJG2KF0B9M"
+            "format": "base64",
+            "description": "The token for retrieving the next page of results."
           },
-          "source": {
+          "prev_page_token": {
             "type": "string",
-            "readOnly": true,
-            "enum": [
-              "user",
-              "gds"
-            ]
-          },
-          "directory_id": {
-            "type": "string",
-            "format": "UUID",
-            "example": "af0e1286-a2a1-40b1-989a-dd5b75fdfbf3",
-            "readOnly": true
-          },
-          "registered_directory": {
-            "type": "string",
-            "example": "trisatest.net",
-            "readOnly": true
-          },
-          "protocol": {
-            "type": "string",
-            "example": "trisa",
-            "enum": [
-              "trisa",
-              "trp"
-            ]
-          },
-          "common_name": {
-            "type": "string",
-            "format": "hostname",
-            "example": "trisa.example.com"
-          },
-          "endpoint": {
-            "type": "string",
-            "format": "uri",
-            "example": "trisa.example.com:443"
-          },
-          "name": {
-            "type": "string",
-            "example": "AliceVASP"
-          },
-          "website": {
-            "type": "string",
-            "format": "uri"
-          },
-          "country": {
-            "type": "string",
-            "format": "ISO-3166-1 ALPHA-2"
-          },
-          "business_category": {
-            "type": "string"
-          },
-          "vasp_categories": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "verified_on": {
-            "type": "string",
-            "format": "datetime"
-          },
-          "ivms101": {
-            "type": "object"
-          },
-          "created": {
-            "type": "string",
-            "format": "datetime",
-            "readOnly": true
-          },
-          "modified": {
-            "type": "string",
-            "format": "datetime",
-            "readOnly": true
-          }
-        }
-      },
-      "CounterpartyList": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "$ref": "#/components/schemas/PageQuery"
-          },
-          "counterparties": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Counterparty"
-            }
-          }
-        }
-      },
-      "CryptoAddress": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "ULID",
-            "example": "01HSNQWH856KKB2PFXEF4XJQWY"
-          },
-          "crypto_address": {
-            "type": "string",
-            "example": "18dlice0aYQesEaFs3XuLHBXGoCyhjjHin"
-          },
-          "network": {
-            "type": "string",
-            "format": "SLIP-0044",
-            "example": "BTC",
-            "externalDocs": {
-              "description": "SLIP-0044 Definitions",
-              "url": "https://github.com/satoshilabs/slips/blob/master/slip-0044.md"
-            }
-          },
-          "asset_type": {
-            "type": "string",
-            "description": "crypto asset type for multi-asset chains"
-          },
-          "tag": {
-            "type": "string",
-            "description": "tag or memo for chains that require one"
-          },
-          "created": {
-            "type": "string",
-            "format": "datetime"
-          },
-          "modified": {
-            "type": "string",
-            "format": "datetime"
-          }
-        }
-      },
-      "CryptoAddressList": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "$ref": "#/components/schemas/PageQuery"
-          },
-          "crypto_addresses": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CryptoAddress"
-            }
+            "format": "base64",
+            "description": "The token for retrieving the previous page of results."
           }
         }
       },
       "Account": {
         "type": "object",
+        "description": "The account object.",
         "properties": {
           "id": {
             "type": "string",
             "format": "ULID",
-            "example": "01HSNQWH856KKB2PFXEF4XJQWY",
-            "description": "node-specific identifier"
+            "description": "The unique identifier of the account."
           },
           "customer_id": {
             "type": "string",
-            "description": "VASP identifier for customer account"
+            "description": "The customer ID associated with the account."
           },
           "first_name": {
             "type": "string",
-            "example": "Jane",
-            "description": "Given or first name of customer"
+            "description": "The first name of the account."
           },
           "last_name": {
             "type": "string",
-            "example": "Doe",
-            "description": "Family or last name of customer"
+            "description": "The last name of the account."
+          },
+          "travel_address": {
+            "type": "string",
+            "description": "The travel address for this account."
+          },
+          "ivms101": {
+            "type": "string",
+            "description": "The IVMS101 certificate of the counterparty."
           },
           "crypto_addresses": {
             "type": "array",
@@ -1228,16 +2009,19 @@
           },
           "created": {
             "type": "string",
-            "format": "datetime"
+            "format": "date-time",
+            "description": "The date and time when the transaction was created."
           },
           "modified": {
             "type": "string",
-            "format": "datetime"
+            "format": "date-time",
+            "description": "The date and time when the transaction was last modified."
           }
         }
       },
       "AccountList": {
         "type": "object",
+        "description": "The response object for the accounts endpoint.",
         "properties": {
           "page": {
             "$ref": "#/components/schemas/PageQuery"
@@ -1250,97 +2034,804 @@
           }
         }
       },
-      "Reply": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean",
-            "example": false
-          },
-          "error": {
-            "type": "string",
-            "example": "could not complete requested operation"
-          },
-          "version": {
-            "type": "string",
-            "format": "semver",
-            "example": "1.0.0"
-          }
-        }
-      },
-      "StatusReply": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "ok",
-            "enum": [
-              "ok",
-              "not ready",
-              "unhealthy",
-              "maintenance"
-            ]
-          },
-          "uptime": {
-            "type": "string",
-            "format": "duration",
-            "example": "25h33m29.4860s"
-          },
-          "version": {
-            "type": "string",
-            "format": "semver",
-            "example": "1.0.0"
-          }
-        }
-      },
-      "PageQuery": {
-        "type": "object",
-        "properties": {
-          "page_size": {
-            "type": "integer",
-            "format": "int32",
-            "example": 50,
-            "default": 100
-          },
-          "next_page_token": {
-            "type": "string",
-            "format": "base64"
-          },
-          "prev_page_token": {
-            "type": "string",
-            "format": "base64"
-          }
-        }
-      }
-    },
-    "requestBodies": {
-      "Account": {
-        "description": "Account that needs to be added or updated",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Account"
-            }
-          }
-        }
-      },
       "CryptoAddress": {
-        "description": "CryptoAddress associated with account that needs to be added or updated",
-        "content": {
-          "application/json": {
-            "schema": {
+        "type": "object",
+        "description": "The crypto address object.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ULID",
+            "description": "The unique identifier of the crypto address."
+          },
+          "crypto_address": {
+            "type": "string",
+            "description": "The crypto address itself."
+          },
+          "network": {
+            "type": "string",
+            "description": "The network associated with the crypto address in SIP0044 encoding."
+          },
+          "asset_type": {
+            "type": "string",
+            "description": "The asset type with the crypto address."
+          },
+          "tag": {
+            "type": "string",
+            "description": "The memo or destination tag associated with the address."
+          },
+          "travel_address": {
+            "type": "string",
+            "description": "The travel address of the crypto address."
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the crypto address was created."
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the crypto address was last modified."
+          }
+        }
+      },
+      "CryptoAddressList": {
+        "type": "object",
+        "description": "The response object for the crypto addresses endpoint.",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageQuery"
+          },
+          "crypto_addresses": {
+            "type": "array",
+            "items": {
               "$ref": "#/components/schemas/CryptoAddress"
             }
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "description": "The transaction object.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "UUID",
+            "description": "The unique identifier of the transaction."
+          },
+          "source": {
+            "type": "string",
+            "description": "The source of the transaction. It may be 'local' meaning the transaction was created by the user, or 'remote' meaning it is an incoming message."
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the transaction."
+          },
+          "counterparty": {
+            "type": "string",
+            "description": "The counterparty of the transaction."
+          },
+          "counterparty_id": {
+            "type": "string",
+            "format": "ULID",
+            "description": "The unique identifier of the counterparty."
+          },
+          "originator": {
+            "type": "string",
+            "description": "The full name of the originator of the transaction."
+          },
+          "originator_address": {
+            "type": "string",
+            "description": "The originator's crypto address."
+          },
+          "beneficiary": {
+            "type": "string",
+            "description": "The full name of the beneficiary of the transaction."
+          },
+          "beneficiary_address": {
+            "type": "string",
+            "description": "The beneficiary's crypto address."
+          },
+          "virtual_asset": {
+            "type": "string",
+            "description": "The virtual asset involved in the transaction. This may be a representation of the network or asset type."
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "The amount of the transaction."
+          },
+          "last_update": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the transaction was last updated."
+          },
+          "envelope_count": {
+            "type": "integer",
+            "description": "The number of secure envelopes associated with the transaction."
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the transaction was created."
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the transaction was last modified."
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "description": "The user object.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ULID",
+            "description": "The unique identifier of the user."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the user."
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the user."
+          },
+          "password": {
+            "type": "string",
+            "description": "The password of the user."
+          },
+          "role": {
+            "type": "string",
+            "description": "The role of the user."
+          },
+          "last_login": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the user last logged in."
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the user was created."
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the user was last modified."
+          }
+        }
+      },
+      "UserList": {
+        "type": "object",
+        "description": "The response object for the users endpoint.",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageQuery"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "UserPassword": {
+        "type": "object",
+        "description": "The request object for changing a user's password.",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "The new password for the user."
+          },
+          "send_email": {
+            "type": "boolean",
+            "description": "Indicates whether an email should be sent to the user."
+          }
+        }
+      },
+      "Envelope": {
+        "type": "object",
+        "description": "The envelope object.",
+        "properties": {
+          "envelope_id": {
+            "type": "string",
+            "description": "The unique identifier of the envelope."
+          },
+          "error": {
+            "$ref": "#/components/schemas/Rejection"
+          },
+          "identity": {
+            "$ref": "#/components/schemas/IdentityPayload"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/Transaction"
+          },
+          "pending": {
+            "$ref": "#/components/schemas/Pending"
+          },
+          "sent_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the envelope was sent."
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the envelope was received."
+          }
+        }
+      },
+      "Pending": {
+        "type": "object",
+        "description": "The pending envelope object.",
+        "properties": {
+          "envelope_id": {
+            "type": "string",
+            "description": "The unique identifier of the pending envelope."
+          },
+          "received_by": {
+            "type": "string",
+            "description": "The recipient of the pending envelope."
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the pending envelope was received."
+          },
+          "message": {
+            "type": "string",
+            "description": "The message associated with the pending envelope."
+          },
+          "reply_not_after": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when a reply will be returned by."
+          },
+          "reply_not_before": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time that the response will not be sent before."
+          },
+          "extra_json": {
+            "type": "string",
+            "description": "Additional JSON data associated with the pending envelope."
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/Transaction"
+          }
+        }
+      },
+      "SecureEnvelope": {
+        "type": "object",
+        "description": "The secure envelope object.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ULID",
+            "description": "The unique identifier of the secure envelope."
+          },
+          "direction": {
+            "type": "string",
+            "description": "The direction of the secure envelope (incoming or outgoing)."
+          },
+          "envelope_id": {
+            "type": "string",
+            "format": "UUID",
+            "description": "The unique identifier of the envelope associated with the secure envelope."
+          },
+          "payload": {
+            "type": "string",
+            "format": "byte",
+            "description": "The encrypted payload of the secure envelope."
+          },
+          "encryption_key": {
+            "type": "string",
+            "format": "byte",
+            "description": "The encryption key used to encrypt the secure envelope."
+          },
+          "encryption_algorithm": {
+            "type": "string",
+            "description": "The encryption algorithm used to encrypt the secure envelope."
+          },
+          "valid_hmac": {
+            "type": "boolean",
+            "description": "Indicates whether the HMAC of the secure envelope is valid."
+          },
+          "hmac": {
+            "type": "string",
+            "format": "byte",
+            "description": "The HMAC of the secure envelope."
+          },
+          "hmac_secret": {
+            "type": "string",
+            "format": "byte",
+            "description": "The HMAC secret used to generate the HMAC of the secure envelope."
+          },
+          "hmac_algorithm": {
+            "type": "string",
+            "description": "The HMAC algorithm used to generate the HMAC of the secure envelope."
+          },
+          "is_error": {
+            "type": "boolean",
+            "description": "Indicates whether the secure envelope contains an error."
+          },
+          "error": {
+            "type": "object",
+            "description": "The error object associated with the secure envelope, if any."
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp of the secure envelope."
+          },
+          "sealed": {
+            "type": "boolean",
+            "description": "Indicates whether the secure envelope is sealed."
+          },
+          "public_key_signature": {
+            "type": "string",
+            "description": "The public key signature of the secure envelope."
+          },
+          "original": {
+            "type": "string",
+            "format": "byte",
+            "description": "The original payload of the secure envelope."
+          }
+        }
+      },
+      "EnvelopesList": {
+        "type": "object",
+        "description": "The response object for the secure envelopes endpoint.",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageQuery"
+          },
+          "is_decrypted": {
+            "type": "boolean",
+            "description": "Indicates whether the secure envelopes in the list are decrypted."
+          },
+          "secure_envelopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SecureEnvelope"
+            },
+            "description": "The list of secure envelopes."
+          },
+          "decrypted_envelopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Envelope"
+            },
+            "description": "The list of decrypted envelopes."
+          }
+        }
+      },
+      "Rejection": {
+        "type": "object",
+        "description": "The rejection object.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "REJECTED",
+              "UNKNOWN_WALLET_ADDRESS",
+              "UNKNOWN_IDENTITY",
+              "UNKNOWN_ORIGINATOR",
+              "UNKNOWN_BENEFICIARY",
+              "UNSUPPORTED_CURRENCY",
+              "EXCEEDED_TRADING_VOLUME",
+              "COMPLIANCE_CHECK_FAIL",
+              "NO_COMPLIANCE",
+              "HIGH_RISK",
+              "OUT_OF_NETWORK",
+              "UNPARSEABLE_IDENTITY",
+              "UNPARSEABLE_TRANSACTION",
+              "MISSING_FIELDS",
+              "INCOMPLETE_IDENTITY"
+            ],
+            "description": "TRISA error codes. For a complete list of error codes, visit https://trisa.dev/api/errors/index.html"
+          },
+          "message": {
+            "type": "string",
+            "description": "The error message of the rejection."
+          },
+          "request_retry": {
+            "type": "boolean",
+            "description": "Indicates whether the request should be retried."
+          }
+        }
+      },
+      "TransactionsList": {
+        "type": "object",
+        "description": "The response object for the transactions endpoint.",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageQuery"
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            }
+          }
+        }
+      },
+      "Prepare": {
+        "type": "object",
+        "description": "The request object for the prepare transaction endpoint.",
+        "properties": {
+          "travel_address": {
+            "type": "string",
+            "description": "The travel address of the transaction."
+          },
+          "originator": {
+            "$ref": "#/components/schemas/Person"
+          },
+          "beneficiary": {
+            "$ref": "#/components/schemas/Person"
+          },
+          "transfer": {
+            "$ref": "#/components/schemas/Transfer"
+          }
+        }
+      },
+      "Prepared": {
+        "type": "object",
+        "description": "The response object for the prepare transaction endpoint.",
+        "properties": {
+          "travel_address": {
+            "type": "string",
+            "description": "The travel address of the prepared transaction."
+          },
+          "identity": {
+            "$ref": "#/components/schemas/IdentityPayload"
+          },
+          "transaction": {
+            "$ref": "#/components/schemas/Transaction"
+          }
+        }
+      },
+      "Person": {
+        "type": "object",
+        "description": "The person object.",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "The first name of the person."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "The last name of the person."
+          },
+          "customer_id": {
+            "type": "string",
+            "description": "The customer ID of the person."
+          },
+          "addr_line_1": {
+            "type": "string",
+            "description": "The first line of the person's address."
+          },
+          "addr_line_2": {
+            "type": "string",
+            "description": "The second line of the person's address."
+          },
+          "city": {
+            "type": "string",
+            "description": "The city of the person's address."
+          },
+          "state": {
+            "type": "string",
+            "description": "The state of the person's address."
+          },
+          "post_code": {
+            "type": "string",
+            "description": "The postal code of the person's address."
+          },
+          "country": {
+            "type": "string",
+            "description": "The country of the person's address."
+          },
+          "crypto_address": {
+            "type": "string",
+            "description": "The crypto address of the person."
+          }
+        }
+      },
+      "Transfer": {
+        "type": "object",
+        "description": "The transfer object.",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "The amount of the transfer."
+          },
+          "network": {
+            "type": "string",
+            "description": "The network of the transfer."
+          },
+          "asset_type": {
+            "type": "string",
+            "description": "The type of the virtual asset involved in the transfer."
+          },
+          "transaction_id": {
+            "type": "string",
+            "description": "The unique identifier of the transfer transaction."
+          },
+          "tag": {
+            "type": "string",
+            "description": "The tag associated with the transfer."
+          }
+        }
+      },
+      "IdentityPayload": {
+        "type": "object",
+        "description": "The identity payload object.",
+        "properties": {
+          "originator": {
+            "$ref": "#/components/schemas/Originator"
+          },
+          "beneficiary": {
+            "$ref": "#/components/schemas/Beneficiary"
+          },
+          "originating_vasp": {
+            "$ref": "#/components/schemas/OriginatingVasp"
+          },
+          "beneficiary_vasp": {
+            "$ref": "#/components/schemas/BeneficiaryVasp"
+          },
+          "transfer_path": {
+            "$ref": "#/components/schemas/TransferPath"
+          },
+          "payload_metadata": {
+            "$ref": "#/components/schemas/PayloadMetadata"
+          }
+        }
+      },
+      "Originator": {
+        "type": "object",
+        "description": "The originator object.",
+        "properties": {
+          "originator_persons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            },
+            "description": "The list of originator persons."
+          },
+          "account_numbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The list of account numbers associated with the originator."
+          }
+        }
+      },
+      "Beneficiary": {
+        "type": "object",
+        "description": "The beneficiary object.",
+        "properties": {
+          "beneficiary_persons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Person"
+            },
+            "description": "The list of beneficiary persons."
+          },
+          "account_numbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The list of account numbers associated with the beneficiary."
+          }
+        }
+      },
+      "OriginatingVasp": {
+        "type": "object",
+        "description": "The originating VASP object.",
+        "properties": {
+          "originating_vasp": {
+            "$ref": "#/components/schemas/Person"
+          }
+        }
+      },
+      "BeneficiaryVasp": {
+        "type": "object",
+        "description": "The beneficiary VASP object.",
+        "properties": {
+          "beneficiary_vasp": {
+            "$ref": "#/components/schemas/Person"
+          }
+        }
+      },
+      "IntermediaryVasp": {
+        "type": "object",
+        "description": "The intermediary VASP object.",
+        "properties": {
+          "intermediary_vasp": {
+            "$ref": "#/components/schemas/Person"
+          },
+          "sequence": {
+            "type": "integer",
+            "description": "The sequence number of the intermediary VASP in the transfer path."
+          }
+        }
+      },
+      "TransferPath": {
+        "type": "object",
+        "description": "The transfer path object.",
+        "properties": {
+          "transfer_path": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntermediaryVasp"
+            },
+            "description": "The list of intermediary VASPs in the transfer path."
+          }
+        }
+      },
+      "PayloadMetadata": {
+        "type": "object",
+        "description": "The metadata object for the identity payload.",
+        "properties": {
+          "transliteration_method": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransliterationMethodCode"
+            },
+            "description": "The list of transliteration methods used in the identity payload."
+          }
+        }
+      },
+      "TransliterationMethodCode": {
+        "type": "string",
+        "enum": [
+          "TRANSLITERATION_METHOD_CODE_OTHR",
+          "TRANSLITERATION_METHOD_CODE_ARAB",
+          "TRANSLITERATION_METHOD_CODE_ARAN",
+          "TRANSLITERATION_METHOD_CODE_ARMN",
+          "TRANSLITERATION_METHOD_CODE_CYRL",
+          "TRANSLITERATION_METHOD_CODE_DEVA",
+          "TRANSLITERATION_METHOD_CODE_GEOR",
+          "TRANSLITERATION_METHOD_CODE_GREK",
+          "TRANSLITERATION_METHOD_CODE_HANI",
+          "TRANSLITERATION_METHOD_CODE_HEBR",
+          "TRANSLITERATION_METHOD_CODE_KANA",
+          "TRANSLITERATION_METHOD_CODE_KORE",
+          "TRANSLITERATION_METHOD_CODE_THAI"
+        ],
+        "description": "Identifies the national script from which transliteration to Latin script is applied."
+      },
+      "Counterparty": {
+        "type": "object",
+        "description": "The counterparty object.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ULID",
+            "description": "The unique identifier of the counterparty."
+          },
+          "source": {
+            "type": "string",
+            "description": "The source of the counterparty."
+          },
+          "directory_id": {
+            "type": "string",
+            "description": "The unique identifier of the directory that contains the counterparty."
+          },
+          "registered_directory": {
+            "type": "string",
+            "description": "The name of the registered directory that contains the counterparty."
+          },
+          "protocol": {
+            "type": "string",
+            "description": "The protocol used to communicate with the counterparty."
+          },
+          "common_name": {
+            "type": "string",
+            "description": "The common name of the counterparty."
+          },
+          "endpoint": {
+            "type": "string",
+            "description": "The endpoint URL of the counterparty."
+          },
+          "travel_address": {
+            "type": "string",
+            "description": "The travel address of the counterparty."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the counterparty."
+          },
+          "website": {
+            "type": "string",
+            "description": "The website URL of the counterparty."
+          },
+          "country": {
+            "type": "string",
+            "description": "The country of the counterparty."
+          },
+          "business_category": {
+            "type": "string",
+            "description": "The business category of the counterparty."
+          },
+          "vasp_categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The list of VASP categories that the counterparty belongs to."
+          },
+          "verified_on": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the counterparty was verified."
+          },
+          "ivms101": {
+            "type": "string",
+            "description": "The IVMS101 certificate of the counterparty."
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the counterparty was created."
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the counterparty was last modified."
+          }
+        }
+      },
+      "CounterpartyList": {
+        "type": "object",
+        "description": "The response object for the counterparties endpoint.",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageQuery"
+          },
+          "counterparties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Counterparty"
+            }
+          }
+        }
+      },
+      "TravelAddress": {
+        "type": "object",
+        "description": "The travel address object.",
+        "properties": {
+          "encoded": {
+            "type": "string",
+            "description": "The encoded travel address."
+          },
+          "decoded": {
+            "type": "string",
+            "description": "The decoded travel address."
           }
         }
       }
     },
     "securitySchemes": {
-      "api_key": {
-        "type": "apiKey",
-        "name": "api_key",
-        "in": "header"
+      "bearer-auth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
-  }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "variables": {},
+      "description": "Local Development Server"
+    }
+  ]
 }
