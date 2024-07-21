@@ -5,47 +5,9 @@ import (
 	"fmt"
 	"net"
 	"net/mail"
-	"strings"
 
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 )
-
-// Business Category Enumeration Helpers
-const (
-	BusinessCategoryUnknown       = BusinessCategory_UNKNOWN_ENTITY
-	BusinessCategoryPrivate       = BusinessCategory_PRIVATE_ORGANIZATION
-	BusinessCategoryGovernment    = BusinessCategory_GOVERNMENT_ENTITY
-	BusinessCategoryBusiness      = BusinessCategory_BUSINESS_ENTITY
-	BusinessCategoryNonCommercial = BusinessCategory_NON_COMMERCIAL_ENTITY
-)
-
-// VASP Category Enumeration Helpers
-const (
-	VASPCategoryUnknown    = "Unknown"
-	VASPCategoryExchange   = "Exchange"
-	VASPCategoryDEX        = "DEX"
-	VASPCategoryP2P        = "P2P"
-	VASPCategoryKiosk      = "Kiosk"
-	VASPCategoryCustodian  = "Custodian"
-	VASPCategoryOTC        = "OTC"
-	VASPCategoryFund       = "Fund"
-	VASPCategoryProject    = "Project"
-	VASPCategoryGambling   = "Gambling"
-	VASPCategoryMiner      = "Miner"
-	VASPCategoryMixer      = "Mixer"
-	VASPCategoryIndividual = "Individual"
-	VASPCategoryOther      = "Other"
-)
-
-// ParseBusinessCategory from text representation.
-func ParseBusinessCategory(s string) (BusinessCategory, error) {
-	s = strings.ToUpper(strings.ReplaceAll(s, " ", "_"))
-	code, ok := BusinessCategory_value[s]
-	if ok {
-		return BusinessCategory(code), nil
-	}
-	return BusinessCategoryUnknown, fmt.Errorf("could not parse %q into a business category", s)
-}
 
 // Name searches the IVMS 101 LegalPerson record for the best name to use to represent
 // the VASP entity in text. The resolution order is trading name, short name, finally
