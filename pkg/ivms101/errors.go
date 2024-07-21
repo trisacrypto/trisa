@@ -26,4 +26,5 @@ var (
 	ErrValidAddress                             = errors.New("address must have at least one address line or street name + building name or number")
 	ErrInvalidAddressTypeCode                   = errors.New("invalid address type code")
 	ErrInvalidAddressLines                      = errors.New("an address can contain at most 7 address lines")
+	ErrCouldNotParseEnum                        = errors.New("unknown enum value or type")
 )

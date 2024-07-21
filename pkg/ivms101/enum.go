@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-//
-// Constant Code Helpers
-//
+//===========================================================================
+// ENUM Constant Code Helpers
+//===========================================================================
 
 // Short form natural person name type codes.
 const (
@@ -21,6 +21,7 @@ const (
 
 // Short form legal person name type codes.
 const (
+	LegalPersonMisc    = LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_MISC
 	LegalPersonLegal   = LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_LEGL
 	LegalPersonShort   = LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_SHRT
 	LegalPersonTrading = LegalPersonNameTypeCode_LEGAL_PERSON_NAME_TYPE_CODE_TRAD
@@ -28,6 +29,7 @@ const (
 
 // Short form address type codes.
 const (
+	AddressTypeMisc       = AddressTypeCode_ADDRESS_TYPE_CODE_MISC
 	AddressTypeHome       = AddressTypeCode_ADDRESS_TYPE_CODE_HOME
 	AddressTypeBusiness   = AddressTypeCode_ADDRESS_TYPE_CODE_BIZZ
 	AddressTypeGeographic = AddressTypeCode_ADDRESS_TYPE_CODE_GEOG
@@ -46,6 +48,27 @@ const (
 	NationalIdentifierLEIX = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_LEIX
 	NationalIdentifierMISC = NationalIdentifierTypeCode_NATIONAL_IDENTIFIER_TYPE_CODE_MISC
 )
+
+// Short form transliteration method codes.
+const (
+	TransliterationMethodOTHR = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_OTHR
+	TransliterationMethodARAB = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_ARAB
+	TransliterationMethodARAN = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_ARAN
+	TransliterationMethodARMN = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_ARMN
+	TransliterationMethodCYRL = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_CYRL
+	TransliterationMethodDEVA = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_DEVA
+	TransliterationMethodGEOR = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_GEOR
+	TransliterationMethodGREK = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_GREK
+	TransliterationMethodHANI = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_HANI
+	TransliterationMethodHEBR = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_HEBR
+	TransliterationMethodKANA = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_KANA
+	TransliterationMethodKORE = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_KORE
+	TransliterationMethodTHAI = TransliterationMethodCode_TRANSLITERATION_METHOD_CODE_THAI
+)
+
+//===========================================================================
+// ENUM JSON Marshal and Unmarshal
+//===========================================================================
 
 //
 // NaturalPersonNameTypeCode JSON
@@ -180,4 +203,108 @@ func (t *TransliterationMethodCode) UnmarshalJSON(data []byte) error {
 	}
 	*t = TransliterationMethodCode(code)
 	return nil
+}
+
+//===========================================================================
+// Enum Parsing
+//===========================================================================
+
+func ParseNaturalPersonNameTypeCode(in any) (NaturalPersonNameTypeCode, error) {
+	switch val := in.(type) {
+	case string:
+		val = strings.ToUpper(val)
+		if !strings.HasPrefix(val, naturalPersonTypeCodePrefix) {
+			val = naturalPersonTypeCodePrefix + val
+		}
+
+		if i, ok := NaturalPersonNameTypeCode_value[val]; ok {
+			return NaturalPersonNameTypeCode(i), nil
+		}
+	case int32:
+		if _, ok := NaturalPersonNameTypeCode_name[val]; ok {
+			return NaturalPersonNameTypeCode(val), nil
+		}
+	}
+
+	return 0, ErrCouldNotParseEnum
+}
+
+func ParseLegalPersonNameTypeCode(in any) (LegalPersonNameTypeCode, error) {
+	switch val := in.(type) {
+	case string:
+		val = strings.ToUpper(val)
+		if !strings.HasPrefix(val, legalPersonNameTypeCodePrefix) {
+			val = legalPersonNameTypeCodePrefix + val
+		}
+
+		if i, ok := LegalPersonNameTypeCode_value[val]; ok {
+			return LegalPersonNameTypeCode(i), nil
+		}
+	case int32:
+		if _, ok := LegalPersonNameTypeCode_name[val]; ok {
+			return LegalPersonNameTypeCode(val), nil
+		}
+	}
+
+	return 0, ErrCouldNotParseEnum
+}
+
+func ParseAddressTypeCode(in any) (AddressTypeCode, error) {
+	switch val := in.(type) {
+	case string:
+		val = strings.ToUpper(val)
+		if !strings.HasPrefix(val, addressTypeCodePrefix) {
+			val = addressTypeCodePrefix + val
+		}
+
+		if i, ok := AddressTypeCode_value[val]; ok {
+			return AddressTypeCode(i), nil
+		}
+	case int32:
+		if _, ok := AddressTypeCode_name[val]; ok {
+			return AddressTypeCode(val), nil
+		}
+	}
+
+	return 0, ErrCouldNotParseEnum
+}
+
+func ParseNationalIdentifierTypeCode(in any) (NationalIdentifierTypeCode, error) {
+	switch val := in.(type) {
+	case string:
+		val = strings.ToUpper(val)
+		if !strings.HasPrefix(val, nationalIdentifierTypeCodePrefix) {
+			val = nationalIdentifierTypeCodePrefix + val
+		}
+
+		if i, ok := NationalIdentifierTypeCode_value[val]; ok {
+			return NationalIdentifierTypeCode(i), nil
+		}
+	case int32:
+		if _, ok := NationalIdentifierTypeCode_name[val]; ok {
+			return NationalIdentifierTypeCode(val), nil
+		}
+	}
+
+	return 0, ErrCouldNotParseEnum
+}
+
+func ParseTransliterationMethodCode(in any) (TransliterationMethodCode, error) {
+	switch val := in.(type) {
+	case string:
+		val = strings.ToUpper(val)
+		if !strings.HasPrefix(val, transliterationMethodCodePrefix) {
+			val = transliterationMethodCodePrefix + val
+		}
+
+		if i, ok := TransliterationMethodCode_value[val]; ok {
+			return TransliterationMethodCode(i), nil
+		}
+	case int32:
+		if _, ok := TransliterationMethodCode_name[val]; ok {
+			return TransliterationMethodCode(val), nil
+		}
+	}
+
+	return 0, ErrCouldNotParseEnum
 }
