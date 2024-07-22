@@ -16,13 +16,13 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.20.x
+          go-version: 1.22.x
 
       - name: Install Staticcheck
-        run: go install honnef.co/go/tools/cmd/staticcheck@2023.1.3
+        run: go install honnef.co/go/tools/cmd/staticcheck@2023.1.7
 
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Lint Go Code
         run: staticcheck ./...
@@ -33,7 +33,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        go-version: [1.19.x, 1.20.x, 1.21.x]
+        go-version: [1.20.x, 1.21.x, 1.22.x]
     env:
       GOPATH: ${{ github.workspace }}/go
       GOBIN: ${{ github.workspace }}/go/bin
@@ -56,21 +56,21 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ${{ env.GOPATH }}/src/github.com/trisacrypto/trisa
 
       - name: Install Protoc
-        uses: arduino/setup-protoc@v2
+        uses: arduino/setup-protoc@v3
         with:
-          version: '23.x'
+          version: '27.x'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         run: |
           go version
-          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31
-          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.2
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.4.0
 
       - name: Code Generation
         run: go generate ./...
@@ -92,7 +92,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.20.x
+          go-version: 1.22.x
 
       - name: Cache Speedup
         uses: actions/cache@v3
@@ -103,21 +103,21 @@ jobs:
             ${{ runner.os }}-go-
 
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ${{ env.GOPATH }}/src/github.com/trisacrypto/trisa
 
       - name: Install Protoc
-        uses: arduino/setup-protoc@v2
+        uses: arduino/setup-protoc@v3
         with:
-          version: '23.x'
+          version: '27.x'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         run: |
           go version
-          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31
-          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.2
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.4.0
 
       - name: Code Generation
         run: go generate ./...
