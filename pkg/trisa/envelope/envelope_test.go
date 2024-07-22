@@ -18,40 +18,12 @@ import (
 	"github.com/trisacrypto/trisa/pkg/trisa/crypto/aesgcm"
 	generic "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trisa/envelope"
+	"github.com/trisacrypto/trisa/pkg/trisa/keys"
+	"github.com/trisacrypto/trisa/pkg/trust"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 )
-
-func ExampleSeal() {
-	// Create compliance payload to send to counterparty. Use key exchange or GDS to
-	// fetch the public sealing key of the recipient. See the testdata fixtures for
-	// example data. Note: we're loading an RSA private key and extracting its public
-	// key for example and testing purposes.
-	payload, _ := loadPayloadFixture("testdata/payload.json")
-	key, _ := loadPrivateKey("testdata/sealing_key.pem")
-
-	// Seal the payload: encrypting and digitally signing the marshaled protocol buffers
-	// with a randomly generated encryption key and HMAC secret, then encrypting those
-	// secrets with the public key of the recipient.
-	msg, reject, err := envelope.Seal(payload, envelope.WithRSAPublicKey(&key.PublicKey))
-
-	// Two types errors may be returned from envelope.Seal
-	if err != nil {
-		if reject != nil {
-			// If both err and reject are non-nil, then a TRISA protocol error occurred
-			// and the rejection error can be sent back to the originator if you're
-			// sealing the envelope in response to a transfer request
-			log.Println(reject.String())
-		} else {
-			// Otherwise log the error and handle with user-specific code
-			log.Fatal(err)
-		}
-	}
-
-	// Otherwise send the secure envelope to the recipient
-	log.Printf("sending secure envelope with id %s", msg.Id)
-}
 
 func Example_create() {
 	// Create compliance payload to send to counterparty. Use key exchange or GDS to
@@ -91,38 +63,6 @@ func Example_create() {
 	// Fetch the secure envelope and send it.
 	msg := env.Proto()
 	log.Printf("sending secure envelope with id %s", msg.Id)
-}
-
-func ExampleOpen() {
-	// Receive a sealed secure envelope from the counterparty. Ensure you have the
-	// private key paired with the public key identified by the public key signature on
-	// the secure envelope in order to unseal and decrypt the payload. See testdata
-	// fixtures for example data. Note: we're loading an RSA private key used in other
-	// examples for demonstration and testing purposes.
-	msg, _ := loadEnvelopeFixture("testdata/sealed_envelope.json")
-	key, _ := loadPrivateKey("testdata/sealing_key.pem")
-
-	// Open the secure envelope, unsealing the encryption key and hmac secret with the
-	// supplied private key, then decrypting, verifying, and unmarshaling the payload
-	// using those secrets.
-	payload, reject, err := envelope.Open(msg, envelope.WithRSAPrivateKey(key))
-
-	// Two types errors may be returned from envelope.Open
-	if err != nil {
-		if reject != nil {
-			// If both err and reject are non-nil, then a TRISA protocol error occurred
-			// and the rejection error can be sent back to the originator if you're
-			// opening the envelope in response to a transfer request
-			out, _ := envelope.Reject(reject, envelope.WithEnvelopeID(msg.Id))
-			log.Printf("sending TRISA rejection for envelope %s: %s", out.Id, reject)
-		} else {
-			// Otherwise log the error and handle with user-specific code
-			log.Fatal(err)
-		}
-	}
-
-	// Handle the payload with your interal compliance processing mechanism.
-	log.Printf("received payload sent at %s", payload.SentAt)
 }
 
 func Example_parse() {
@@ -178,18 +118,21 @@ func TestSendEnvelopeWorkflow(t *testing.T) {
 	env, err := envelope.New(payload, envelope.WithRSAPublicKey(&key.PublicKey))
 	require.NoError(t, err, "could not create envelope with no payload and no options")
 	require.Equal(t, envelope.Clear, env.State(), "expected clear state not %q", env.State())
+	require.Nil(t, env.Parent(), "expected new envelope parent to be nil")
 
 	eenv, reject, err := env.Encrypt()
 	require.NoError(t, err, "could not encrypt envelope")
 	require.Nil(t, reject, "expected no API error returned from encryption")
 	require.NotSame(t, env, eenv, "Encrypt should return a clone of the original envelope")
 	require.Equal(t, envelope.Unsealed, eenv.State(), "expected unsealed state not %q", eenv.State())
+	require.Same(t, env, eenv.Parent(), "expected encrypted env parent to be the original env")
 
 	senv, reject, err := eenv.Seal()
 	require.NoError(t, err, "could not seal envelope")
 	require.Nil(t, reject, "expected no API error returned from sealing")
 	require.NotSame(t, eenv, senv, "Seal should return a clone of the original envelope")
 	require.Equal(t, envelope.Sealed, senv.State(), "expected sealed state not %q", senv.State())
+	require.Same(t, eenv, senv.Parent(), "expected sealed env parent to be encrypted env")
 
 	// Fetch the message and check that it is ready to send
 	msg := senv.Proto()
@@ -220,6 +163,7 @@ func TestRecvEnvelopeWorkflow(t *testing.T) {
 	require.NoError(t, err, "could not wrap the envelope")
 	require.NoError(t, senv.ValidateMessage(), "secure envelope fixture is invalid")
 	require.Equal(t, envelope.Sealed, senv.State(), "expected sealed state not %q", senv.State())
+	require.Nil(t, senv.Parent(), "expected wrapped envelope parent to be nil")
 
 	// Unseal the envelope
 	eenv, reject, err := senv.Unseal()
@@ -227,6 +171,7 @@ func TestRecvEnvelopeWorkflow(t *testing.T) {
 	require.Nil(t, reject, "a rejection error was unexpectedly returned")
 	require.NotSame(t, senv, eenv, "Unseal should return a clone of the original envelope")
 	require.Equal(t, envelope.Unsealed, eenv.State(), "expected unsealed state not %q", eenv.State())
+	require.Same(t, senv, eenv.Parent(), "expected unsealed envelope parent to be sealed envelope")
 
 	// Decrypt the envelope
 	env, reject, err := eenv.Decrypt()
@@ -236,6 +181,7 @@ func TestRecvEnvelopeWorkflow(t *testing.T) {
 	require.Equal(t, envelope.Clear, env.State(), "expected clear state not %q", eenv.State())
 	require.NotNil(t, env.Crypto(), "decrypted envelopes should maintain crytpo context")
 	require.NotNil(t, env.Sealer(), "decrypted envelopes should maintain sealer context")
+	require.Same(t, eenv, env.Parent(), "expected decrypted envelope parent to be unsealed envelope")
 
 	// Get the payload from the envelope
 	payload, err := env.Payload()
@@ -280,43 +226,27 @@ func TestRecvEnvelopeWorkflow(t *testing.T) {
 	require.Equal(t, msg.PublicKeySignature, out.PublicKeySignature, "public key signature mismatch")
 }
 
-func TestOneLiners(t *testing.T) {
-	payload, err := loadPayloadFixture("testdata/pending_payload.json")
-	require.NoError(t, err, "could not load pending payload")
+func TestSealAndOpen(t *testing.T) {
+	payload, err := loadPayloadFixture("testdata/payload.json")
+	require.NoError(t, err, "could not load payload")
 
-	key, err := loadPrivateKey("testdata/sealing_key.pem")
-	require.NoError(t, err, "could not load sealing key")
+	certs, err := loadCerts("testdata/alice.vaspbot.net.pem")
+	require.NoError(t, err, "could not load certificates from disk")
 
-	// Create an envelope from the payload and the key
-	msg, reject, err := envelope.Seal(payload, envelope.WithRSAPublicKey(&key.PublicKey))
+	env, reject, err := envelope.Seal(payload, envelope.WithSealingKey(certs))
 	require.NoError(t, err, "could not seal envelope")
-	require.Nil(t, reject, "unexpected rejection error")
+	require.Nil(t, reject, "no rejection should have been returned on seal")
+	require.Equal(t, envelope.Sealed, env.State())
 
-	// Ensure the msg is valid
-	require.NotEmpty(t, msg.Id, "no envelope id on the message")
-	require.NotEmpty(t, msg.Payload, "no payload on the message")
-	require.NotEmpty(t, msg.EncryptionKey, "no encryption key on the message")
-	require.NotEmpty(t, msg.EncryptionAlgorithm, "no encryption algorithm on the message")
-	require.NotEmpty(t, msg.Hmac, "no hmac signature on the message")
-	require.NotEmpty(t, msg.HmacSecret, "no hmac secret on the message")
-	require.NotEmpty(t, msg.HmacAlgorithm, "no hmac algorithm on the message")
-	require.Empty(t, msg.Error, "unexpected error on the message")
-	require.NotEmpty(t, msg.Timestamp, "no timestamp on the message")
-	require.True(t, msg.Sealed, "message not marked as sealed")
-	require.NotEmpty(t, msg.PublicKeySignature, "no public key signature on the message")
-
-	// Serialize and Deserialize the message
-	data, err := proto.Marshal(msg)
-	require.NoError(t, err, "could not marshal outgoing message")
-
-	in := &api.SecureEnvelope{}
-	require.NoError(t, proto.Unmarshal(data, in), "could not unmarshal incoming message")
-
-	// Open the envelope with the private key
-	decryptedPayload, reject, err := envelope.Open(in, envelope.WithRSAPrivateKey(key))
+	msg, reject, err := envelope.Open(env.Proto(), envelope.WithUnsealingKey(certs))
 	require.NoError(t, err, "could not open envelope")
-	require.Nil(t, reject, "unexpected rejection error")
-	require.True(t, proto.Equal(payload, decryptedPayload), "payloads do not match")
+	require.Nil(t, reject, "no rejection should have been returned on open")
+	require.Equal(t, envelope.Clear, msg.State())
+
+	decrypted, err := msg.Payload()
+	require.NoError(t, err, "could not fetch payload")
+
+	require.True(t, proto.Equal(payload, decrypted))
 }
 
 func TestEnvelopeAccessors(t *testing.T) {
@@ -386,65 +316,6 @@ func TestEnvelopeAccessors(t *testing.T) {
 	actualTS, err := env.Timestamp()
 	require.NoError(t, err, "could not fetch timestamp")
 	require.True(t, ts.Equal(actualTS), "timestamp did not match expected timestamp")
-}
-
-func TestCheck(t *testing.T) {
-	emsg, err := loadEnvelopeFixture("testdata/error_envelope.json")
-	require.NoError(t, err, "could not load error envelope fixture")
-
-	terr, iserr := envelope.Check(emsg)
-	require.True(t, iserr, "expected error envelope to return iserr true")
-	require.Equal(t, api.ComplianceCheckFail, terr.Code)
-	require.Equal(t, "specified account has been frozen temporarily", terr.Message)
-	require.False(t, terr.Retry)
-
-	for _, path := range []string{"testdata/unsealed_envelope.json", "testdata/sealed_envelope.json"} {
-		msg, err := loadEnvelopeFixture(path)
-		require.NoError(t, err, "could not load %s", path)
-
-		terr, iserr = envelope.Check(msg)
-		require.False(t, iserr)
-		require.Nil(t, terr)
-	}
-}
-
-func TestStatus(t *testing.T) {
-	testCases := []struct {
-		path  string
-		state envelope.State
-	}{
-		{"testdata/error_envelope.json", envelope.Error},
-		{"testdata/unsealed_envelope.json", envelope.Unsealed},
-		{"testdata/sealed_envelope.json", envelope.Sealed},
-	}
-
-	for i, tc := range testCases {
-		msg, err := loadEnvelopeFixture(tc.path)
-		require.NoError(t, err, "could not load fixture from %s", tc.path)
-
-		state := envelope.Status(msg)
-		require.Equal(t, tc.state, state, "test case %d expected %s got %s", i+1, tc.state, state)
-	}
-}
-
-func TestTimestamp(t *testing.T) {
-	testCases := []struct {
-		path     string
-		expected time.Time
-	}{
-		{"testdata/error_envelope.json", time.Time(time.Date(2022, time.January, 27, 8, 21, 43, 0, time.UTC))},
-		{"testdata/unsealed_envelope.json", time.Date(2022, time.March, 29, 14, 16, 27, 453444000, time.UTC)},
-		{"testdata/sealed_envelope.json", time.Date(2022, time.March, 29, 14, 16, 29, 755212000, time.UTC)},
-	}
-
-	for i, tc := range testCases {
-		msg, err := loadEnvelopeFixture(tc.path)
-		require.NoError(t, err, "could not load fixture from %s", tc.path)
-
-		ts, err := envelope.Timestamp(msg)
-		require.NoError(t, err, "timestamp parsing error on test case %d", i)
-		require.True(t, tc.expected.Equal(ts), "timestamp mismatch on test case %d", i)
-	}
 }
 
 func TestWrapError(t *testing.T) {
@@ -753,7 +624,7 @@ func generateFixtures() (err error) {
 		return err
 	}
 
-	if env, _, err = envelope.Seal(pendingPayload, envelope.WithRSAPublicKey(&key.PublicKey)); err != nil {
+	if env, _, err = envelope.SealPayload(pendingPayload, envelope.WithRSAPublicKey(&key.PublicKey)); err != nil {
 		return err
 	}
 	if err = dumpFixture("testdata/sealed_envelope.json", env); err != nil {
@@ -801,4 +672,18 @@ func loadPrivateKey(path string) (key *rsa.PrivateKey, err error) {
 	}
 
 	return keyt.(*rsa.PrivateKey), nil
+}
+
+func loadCerts(path string) (_ keys.Key, err error) {
+	var sz *trust.Serializer
+	if sz, err = trust.NewSerializer(false); err != nil {
+		return nil, err
+	}
+
+	var certs *trust.Provider
+	if certs, err = sz.ReadFile(path); err != nil {
+		return nil, err
+	}
+
+	return keys.FromProvider(certs)
 }

@@ -71,9 +71,9 @@ func WithSealingKey(key interface{}) Option {
 	if ikey, ok := key.(keys.PublicKey); ok {
 		var err error
 		if key, err = ikey.SealingKey(); err != nil {
-			return WithSealingKey(key)
+			return errorOption(err)
 		}
-		return errorOption(err)
+		return WithSealingKey(key)
 	}
 
 	return func(e *Envelope) (err error) {
@@ -94,9 +94,9 @@ func WithUnsealingKey(key interface{}) Option {
 	if ikey, ok := key.(keys.PrivateKey); ok {
 		var err error
 		if key, err = ikey.UnsealingKey(); err != nil {
-			return WithUnsealingKey(key)
+			return errorOption(err)
 		}
-		return errorOption(err)
+		return WithUnsealingKey(key)
 	}
 
 	return func(e *Envelope) (err error) {
