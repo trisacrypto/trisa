@@ -246,7 +246,7 @@ func (e *Envelope) Reject(reject *api.Error, opts ...Option) (env *Envelope, err
 // originator. Most often, this method is also used with the WithSealingKey option so
 // that the envelope workflow for sealing an envelope can be applied completely.
 // The original envelope is not modified, the secure envelope is cloned.
-func (e *Envelope) Update(payload *api.Payload, opts ...Option) (env *Envelope, err error) {
+func (e *Envelope) Update(payload *api.Payload, transferState api.TransferState, opts ...Option) (env *Envelope, err error) {
 	state := e.State()
 	if state != Clear && state != ClearError {
 		return nil, fmt.Errorf("cannot update envelope from %q state", state)
@@ -266,7 +266,7 @@ func (e *Envelope) Update(payload *api.Payload, opts ...Option) (env *Envelope, 
 			Timestamp:           time.Now().UTC().Format(time.RFC3339Nano),
 			Sealed:              false,
 			PublicKeySignature:  "",
-			TransferState:       e.msg.TransferState,
+			TransferState:       transferState,
 		},
 		crypto:  e.crypto,
 		seal:    e.seal,
@@ -824,6 +824,10 @@ func (e *Envelope) ValidateMessage() error {
 		return ErrNoHMACInfo
 	}
 
+	if e.msg.TransferState == api.TransferRejected || e.msg.TransferState == api.TransferRepair {
+		return ErrMessageWithErrorState
+	}
+
 	// Note: not validating public_key_signature or sealed fields
 	return nil
 }
@@ -880,6 +884,10 @@ func (e *Envelope) ValidateError() error {
 
 	if e.msg.Error.Message == "" {
 		return ErrMissingErrorMessage
+	}
+
+	if e.msg.TransferState != api.TransferRejected && e.msg.TransferState != api.TransferRepair {
+		return ErrInvalidErrorTransferState
 	}
 
 	return nil

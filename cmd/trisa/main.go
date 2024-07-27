@@ -199,6 +199,12 @@ func main() {
 					DefaultText: "original or empty",
 				},
 				&cli.StringFlag{
+					Name:        "transfer-state",
+					Aliases:     []string{"state", "T"},
+					Usage:       "specify a transfer state to set on the envelope",
+					DefaultText: "unspecified",
+				},
+				&cli.StringFlag{
 					Name:    "error-code",
 					Aliases: []string{"C"},
 					Usage:   "add an error with the specified code to the outgoing envelope",
@@ -295,6 +301,12 @@ func main() {
 					Aliases:     []string{"recv", "R"},
 					Usage:       "specify a received at timestamp for the payload in RFC3339 format or the keyword \"now\"",
 					DefaultText: "original",
+				},
+				&cli.StringFlag{
+					Name:        "transfer-state",
+					Aliases:     []string{"state", "T"},
+					Usage:       "specify a transfer state to set on the envelope",
+					DefaultText: "unspecified",
 				},
 				&cli.StringFlag{
 					Name:    "error-code",
@@ -1324,7 +1336,14 @@ func updateEnvelope(in *api.SecureEnvelope, c *cli.Context) (out *api.SecureEnve
 		payload.ReceivedAt = ts
 	}
 
-	if handler, err = handler.Update(payload); err != nil {
+	var transferState api.TransferState
+	if ts := c.String("transfer-state"); ts != "" {
+		if transferState, err = api.ParseTransferState(ts); err != nil {
+			return nil, err
+		}
+	}
+
+	if handler, err = handler.Update(payload, transferState); err != nil {
 		return nil, err
 	}
 
