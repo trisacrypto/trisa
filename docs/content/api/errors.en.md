@@ -21,7 +21,7 @@ See the [error protocol buffers](https://github.com/trisacrypto/trisa/blob/main/
 | 2 | MAINTENANCE | The service is currently in maintenance mode and cannot respond. |
 | 3 | UNIMPLEMENTED | The RPC is not currently implemented by the TRISA node. |
 | 49 | INTERNAL_ERROR | Request could not be processed by recipient. |
-| 49 | BVRC999 | Request could not be processed by recipient.( Alias: Sygna BVRC Rejected Code) |
+| 49 | BVRC999 | Request could not be processed by recipient. (Alias: Sygna BVRC Rejected Code) |
 | 50 | REJECTED | Default rejection - no specified reason for rejecting the transaction. |
 | 51 | UNKNOWN_WALLET_ADDRESS | VASP does not control the specified wallet address. |
 | 52 | UNKNOWN_IDENTITY | VASP does not have KYC information for the specified wallet address. |
@@ -61,3 +61,6 @@ See the [error protocol buffers](https://github.com/trisacrypto/trisa/blob/main/
 | 153 | MISSING_FIELDS | There are missing required fields in the transaction data, a list of these fields is specified in extra. |
 | 154 | INCOMPLETE_IDENTITY | The identity record is not complete enough for compliance purposes of the receiving VASPs. Required fields or format specified in extra. |
 | 155 | VALIDATION_ERROR | There was an error validating a field in the transaction data (specified in extra). |
+| 198 | COMPLIANCE_PERIOD_EXCEEDED | Send by originating party if the review period has exceeded the required compliance timeline. |
+| 199 | CANCELED | Cancel the ongoing TRISA exchange and do not send funds. |
+| 199 | CANCEL_TRANSACTION | Cancel the ongoing TRISA exchange and do not send funds. (Alias: CANCELED) |

@@ -128,6 +128,14 @@ message Error {
 
         // There was an error validating a field in the transaction data (specified in extra)
         VALIDATION_ERROR = 155;
+
+        // If the review period has exceeded the required compliance timeline
+        COMPLIANCE_PERIOD_EXCEEDED = 198;
+
+        // Cancel the ongoing TRISA exchange as no longer required or no longer able to
+        // send funds on the chain. No further response expected.
+        CANCELED = 199;
+        CANCEL_TRANSACTION = 199;
     }
 
     // Error codes are standardized in the TRISA network to prevent confusion and to
