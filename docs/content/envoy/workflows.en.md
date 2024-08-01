@@ -30,11 +30,11 @@ sequenceDiagram
     participant B as Beneficiary Envoy
     participant Bc as Beneficiary User
 
-    rect rgb(27, 206, 159 )
-        note over O,B: RPC 1
+    rect rgb(236, 250, 220)
+        note over Oc,Bc: Travel Rule Information Exchange Started
         Oc ->> O: Transaction Draft
-        O ->> B: Started
-        B ->> O: Pending
+        O ->> B: envelope started
+        B ->> O: envelope pending
         O ->> Oc: Transaction Pending
         B ->> Bc: Transaction Review
     end
@@ -45,10 +45,10 @@ sequenceDiagram
 
 
     rect rgb(27, 206, 159 )
-        note over O,B: RPC 2
+        note over Oc,Bc: Accept IVMS101 with or without Modifications
         Bc ->> B: Accept Transaction
-        B ->> O: Accepted
-        O ->> B: Accepted
+        B ->> O: envelope accepted
+        O ->> B: echo envelope accepted
         B ->> Bc: Transaction Accepted
         O ->> Oc: Transaction Accepted
     end
@@ -57,11 +57,11 @@ sequenceDiagram
         Oc ->> Oc: Perform on chain transaction
     end
 
-    rect rgb(27, 206, 159 )
-        note over O,B: RPC 3
+    rect rgb(236, 250, 220)
+        note over Oc,Bc: Complete the On-Chain Transaction
         Oc ->> O: Complete Transaction
-        O ->> B: Completed
-        B ->> O: Completed
+        O ->> B: envelope completed
+        B ->> O: echo envelope completed
         O ->> Oc: Transaction Completed
         B ->> Bc: Transaction Completed
     end
@@ -77,11 +77,11 @@ sequenceDiagram
     participant B as Beneficiary Envoy
     participant Bc as Beneficiary User
 
-    rect rgb(27, 206, 159 )
-        note over O,B: RPC 1
+    rect rgb(236, 250, 220)
+        note over Oc,Bc: Travel Rule Information Exchange Started
         Oc ->> O: Transaction Draft
-        O ->> B: Started
-        B ->> O: Pending
+        O ->> B: envelope started
+        B ->> O: envelope pending
         O ->> Oc: Transaction Pending
         B ->> Bc: Transaction Review
     end
@@ -91,9 +91,10 @@ sequenceDiagram
     end
 
     rect rgb(240,186,200)
-        note over O,B: RPC 2
-        B ->> O: Repair
-        O ->> B: Pending
+        note over Oc,Bc: Originator did not Provide Sufficient Information for Jursidiction
+        Bc ->> B: Reject with retry
+        B ->> O: envelope repair
+        O ->> B: envelope pending
         B ->> Bc: Transaction Pending
         O ->> Oc: Transaction Repair
     end
@@ -102,10 +103,11 @@ sequenceDiagram
         Oc ->> Oc: Required KYC and Repair
     end
 
-    rect rgb(240,186,200)
-        note over O,B: RPC 3
-        O ->> B: Review
-        B ->> O: Pending
+    rect rgb(236, 250, 220)
+        note over Oc,Bc: Originator Repairs Payload with Requested Information
+        Oc ->> O: Transaction Repaired
+        O ->> B: envelope review
+        B ->> O: envelope pending
         O ->> Oc: Transaction Pending
         B ->> Bc: Transaction Review
     end
@@ -115,10 +117,10 @@ sequenceDiagram
     end
 
     rect rgb(27, 206, 159 )
-        note over O,B: RPC 4
+        note over Oc,Bc: Repair now meets Jurisdictional Requirements
         Bc ->> B: Accept Transaction
-        B ->> O: Accepted
-        O ->> B: Accepted
+        B ->> O: envelope accepted
+        O ->> B: echo envelope accepted
         B ->> Bc: Transaction Accepted
         O ->> Oc: Transaction Accepted
     end
@@ -127,11 +129,11 @@ sequenceDiagram
         Oc ->> Oc: Perform on chain transaction
     end
 
-    rect rgb(27, 206, 159 )
-        note over O,B: RPC 5
+    rect rgb(236, 250, 220)
+        note over Oc,Bc: Complete the On-Chain Transaction
         Oc ->> O: Complete Transaction
-        O ->> B: Completed
-        B ->> O: Completed
+        O ->> B: envelope ompleted
+        B ->> O: echo envelope completed
         O ->> Oc: Transaction Completed
         B ->> Bc: Transaction Completed
     end
@@ -147,11 +149,11 @@ sequenceDiagram
     participant B as Beneficiary Envoy
     participant Bc as Beneficiary User
 
-    rect rgb(27, 206, 159 )
-        note over O,B: RPC 1
+    rect rgb(236, 250, 220)
+        note over Oc,Bc: Travel Rule Information Exchange Started
         Oc ->> O: Transaction Draft
-        O ->> B: Started
-        B ->> O: Pending
+        O ->> B: envelope started
+        B ->> O: envelope pending
         O ->> Oc: Transaction Pending
         B ->> Bc: Transaction Review
     end
@@ -161,10 +163,10 @@ sequenceDiagram
     end
 
     rect rgb(240,186,200)
-        note over O,B: RPC 2
+        note over Oc,Bc: The On-Chain Transaction is not Possible after Compliance Checks
         Bc ->> B: Reject Transaction (no retry/repair)
-        B ->> O: Reject
-        O ->> B: Reject
+        B ->> O: envelope reject
+        O ->> B: echo envelope reject
         B ->> Bc: Transaction Rejected
         O ->> Oc: Transaction Rejected
     end
