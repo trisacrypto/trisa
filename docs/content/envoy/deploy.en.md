@@ -3,7 +3,7 @@ title: Deploying Envoy
 date: 2024-05-08T13:56:37-05:00
 lastmod: 2024-05-08T13:56:37-05:00
 description: "A quick guide on deploying your Envoy node"
-weight: 60
+weight: 10
 ---
 
 This guide assumes that you're ready to deploy your Envoy node and that you've already obtained either TRISA TestNet or MainNet certificates as described by [the Joining TRISA guide]({{< ref "joining-trisa" >}}). If you haven't already, please go to the [TRISA Global Directory Service (vaspdirectory.net)](https://vaspdirectory.net/) to register for your certificates!

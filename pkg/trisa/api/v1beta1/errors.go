@@ -46,6 +46,9 @@ const (
 	MissingFields            = Error_MISSING_FIELDS
 	IncompleteIdentity       = Error_INCOMPLETE_IDENTITY
 	ValidationError          = Error_VALIDATION_ERROR
+	CompliancePeriodExceeded = Error_COMPLIANCE_PERIOD_EXCEEDED
+	Canceled                 = Error_CANCELED
+	CancelTransaction        = Error_CANCEL_TRANSACTION
 )
 
 // Sygna BVRC rejected error codes
@@ -147,8 +150,10 @@ func (e *Error) Err() (err error) {
 		code = codes.Aborted
 	case e.Code >= 100 && e.Code < 105:
 		code = codes.FailedPrecondition
-	case e.Code > 105:
+	case e.Code > 105 && e.Code < 198:
 		code = codes.InvalidArgument
+	case e.Code >= 198 && e.Code < 200:
+		code = codes.FailedPrecondition
 	}
 
 	st := status.New(code, fmt.Sprintf("[%s] %s", e.Code, e.Message))
