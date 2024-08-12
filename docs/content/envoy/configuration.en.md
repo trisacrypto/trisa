@@ -27,11 +27,14 @@ A list of the primary environment variables and their configuration are as follo
 | EnvVar | Type | Default | Description |
 |---|---|---|---|
 | TRISA_MAINTENANCE | bool | false | If true, the node will start in maintenance mode and will respond Unavailable to requests |
+| TRISA_ORGANIZATION | string | Envoy | Specify the display name of the organization using the Envoy node for the web UI and interactive docs |
 | TRISA_MODE | string | release | Specify the mode of the API/UI server (release, debug, or testing) |
 | TRISA_LOG_LEVEL | string | info | Specify the verbosity of logging (trace, debug, info, warn, error, fatal, panic) |
 | TRISA_CONSOLE_LOG | bool | false | If true, logs colorized human readable output instead of json |
 | TRISA_DATABASE_URL | string | sqlite3:///trisa.db | DSN containing the backend database configuration |
+| TRISA_WEBHOOK_URL | string |  | Specify a callback webhook so that incoming travel rule messages can be handled by a different system |
 | TRISA_ENDPOINT | string |  | The endpoint of the TRISA node as defined by the mTLS certificates (to create travel addresses) |
+| TRISA_TRP_ENDPOINT | string |  | If enabled, the endpoint of the TRP node as assigned by the mTLS certificates (to create travel addresses) |
 
 ### Web UI/API Configuration
 
@@ -40,8 +43,11 @@ These configuration values influence the behavior of the internal web UI and API
 | EnvVar | Type | Default | Description |
 |---|---|---|---|
 | TRISA_WEB_ENABLED | bool | true | If false, both the web UI and API are disabled |
+| TRISA_WEB_API_ENABLED | bool | true | If false, the API will return unavailable when accessed |
+| TRISA_WEB_UI_ENABLED | bool | true | If false, the web UI will return unavailable when accessed |
 | TRISA_WEB_BIND_ADDR | string | :8000 | The IP address and port to bind the web server on |
 | TRISA_WEB_ORIGIN | string | http://localhost:8000 | The origin (url) of the web UI for creating API endpoints |
+| TRISA_WEB_DOCS_NAME | string |  | The display name for the API docs server in the Swagger app (by default the organization name) |
 | TRISA_WEB_AUTH_KEYS | map |  | Optional static RSA key configuration for signing access and refresh tokens. Should be a comma separated map of keyID:path. |
 | TRISA_WEB_AUTH_AUDIENCE | string | http://localhost:8000 | The value for the `aud` (audience) claim in JWT tokens issued by the API |
 | TRISA_WEB_AUTH_ISSUER | string | http://localhost:8000 | The value for the `iss` (issuer) claim in JWT tokens issued by the API |
@@ -75,3 +81,27 @@ If you're running a TestNet node, then ensure the values point to `trisatest.net
 | TRISA_NODE_DIRECTORY_MEMBERS_ENDPOINT | string | members.vaspdirectory.net:443 | The endpoint of the private members GDS service |
 | TRISA_DIRECTORY_SYNC_ENABLED | bool | true | If false, then the background directory sync service will not run |
 | TRISA_DIRECTORY_SYNC_INTERVAL | duration | 6h | The interval that the node will synchronize counterparties with the GDS |
+
+### TRP Node Configuration
+
+Configuration values for the publically facing TRP server.
+
+| EnvVar | Type | Default | Description |
+|---|---|---|---|
+| TRISA_TRP_ENABLED | bool | true | If false, the TRP node server will not be run |
+| TRISA_TRP_BIND_ADDR | string | :8200 | The ip address and port to bind the TRISA node server on |
+| TRISA_TRP_USE_MTLS | bool | true | If true, the TRP server will require mTLS authentication |
+| TRISA_TRP_POOL | path |  | The path to TRP x509 certificate pool; this allows you to define what certificate authorities you're willing to accept using mTLS (optional) |
+| TRISA_TRP_CERTS | path |  | The path to your TRP identify certificates and private key for establishing mTLS connections to TRISA peer counterparties |
+
+### Region Info
+
+Envoy nodes support some provenance features when deployed in a geographically replicated fashion. If you would like to configure your node with hosting information (even just for debugging using the about page on the node), you may set the following environment variables:
+
+| EnvVar | Type | Default | Description |
+|---|---|---|---|
+| REGION_INFO_ID | int32 |  | the 7 digit region identifier code |
+| REGION_INFO_NAME | string |  | the name of the region |
+| REGION_INFO_COUNTRY | string |  | the alpha-2 country code of the region |
+| REGION_INFO_CLOUD | string |  | the cloud service provider |
+| REGION_INFO_CLUSTER | string |  | the name of the cluster the node is hosted in |
