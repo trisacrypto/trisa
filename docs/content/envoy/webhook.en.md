@@ -102,9 +102,57 @@ This section describes nested objects in the request and reply.
 
 ### Error
 
+Errors are mutually exclusive with payloads, meaning a response or reply to the webhook will have either an `error` field or a `payload` field but should not have both.
+
+An error describes either a _repair_ or a _rejection_ (determined by the `retry` boolean flag). A rejection (`retry=false`) implies that the counterparty should stop the on-chain transaction as the compliance exchange has not been satisfied. A repair (`retry=true`) implies that the counterparty needs to amend the identity payload, e.g. because there are missing fields that are required for compliance in your jurisdiction.
+
+The fields for the error are as follows:
+
+```json
+{
+    "code": 0,
+    "message": "",
+    "retry": false
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| code | int32 | the error code from the TRISA api package |
+| message | string | a detailed message about why the request is being rejected or what needs to be repaired |
+| retry | bool | should be false if this is a rejection, true if a repair is being requested |
+
+View the available [error codes in the TRISA API docs]({{< relref "../api/errors.md" >}}).
 
 ### Payload
 
+Payloads are mutually exclusive with errors, meaning a response or reply to the webhook will have either a `payload` field or an `error` field but should not have both.
+
+Additionally, payloads have mutually exclusive fields `pending` and `transaction` - a payload can have one or the other, but not both.
+
+The payload fields are as follows:
+
+```json
+{
+    "identity": {},
+    "pending": {},
+    "transaction": {},
+    "sent_at": "",
+    "received_at": ""
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| identity | object | an IVMS101 payload, see IVMS101 docs for more information |
+| pending | object | a TRISA pending message, see TRISA docs for more information |
+| transaction | object | a TRISA generic transaction, see TRISA docs for more information |
+| sent_at | string | the RFC3339 encoded timestamp of when the compliance exchange was initiated |
+| received_at | string | the RFC3339 encoded timestamp of when the compliance exchange was approved by the counterparty |
+
+For more information about IVMS101, please see: [Working with IVMS101]({{< relref "../data/ivms.md" >}}).
+
+For more information about the pending and transaction generic payloads, please see: [TRISA Data Payloads]({{< relref "../data/payloads.md" >}}).
 
 ### Counterparty
 
