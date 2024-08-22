@@ -1,42 +1,41 @@
 {
-  "openapi": "3.0.3",
+  "openapi": "3.1.0",
   "info": {
-    "title": "TRISA Node API",
-    "description": "The TRISA Node API allows users to interact with the TRISA Self-Hosted Node in a programmatic fashion.\nIt is intended that this API is served on an internal IP address with routing only available to internal services.",
-    "termsOfService": "https://trisa.io/terms/",
+    "title": "TRISA Envoy API",
+    "description": "The TRISA Envoy API allows users to interact with their TRISA open source Envoy node in a programmatic fashion. The API allows users to manage server objects such as accounts and counterparties and to send and manage Travel Rule transactions without having to know the details of the TRISA or TRP protocols.\n\n[Rotational Labs](https://rotational.io)",
     "contact": {
       "email": "support@rotational.io"
     },
     "license": {
       "name": "MIT Licensed",
-      "url": "https://github.com/trisacrypto/trisa/blob/main/LICENSE"
+      "url": "https://github.com/trisacrypto/envoy/blob/main/LICENSE"
     },
-    "version": "v0.1.1"
+    "version": "v0.24.0"
   },
   "externalDocs": {
-    "description": "TRISA Developer Documentation",
+    "description": "TRISA Documentation",
     "url": "https://trisa.dev"
   },
   "tags": [
     {
       "name": "authentication",
-      "description": "Allow for authentication against Envoy node."
+      "description": "Authenticate with client ID and secret to receive a JWT Bearer token."
     },
     {
-      "name": "account",
+      "name": "accounts",
       "description": "Stored information about your user/customer accounts."
     },
     {
-      "name": "crypto_address",
-      "description": "Associate crypto addresses with user accounts."
-    },
-    {
-      "name": "transaction",
-      "description": "Travel Rule information exchanges for specific crypto asset transactions."
+      "name": "crypto addresses",
+      "description": "Associate crypto addresses with customer accounts."
     },
     {
       "name": "counterparty",
       "description": "Counterparties to exchange travel rule information with using TRISA or TRP protocols."
+    },
+    {
+      "name": "transaction",
+      "description": "Travel Rule information exchanges for specific crypto asset transactions."
     },
     {
       "name": "secure_envelope",
@@ -44,11 +43,15 @@
     },
     {
       "name": "user",
-      "description": "User management."
+      "description": "Envoy user access management."
+    },
+    {
+      "name": "API Key",
+      "description": "Envoy api key credentials and access management."
     },
     {
       "name": "utility",
-      "description": "Other useful methods."
+      "description": "Other useful methods and helpers."
     }
   ],
   "paths": {
@@ -459,48 +462,6 @@
         }
       }
     },
-    "/v1/transactions/{transactionID}/preview": {
-      "get": {
-        "tags": [
-          "transaction"
-        ],
-        "summary": "Preview transaction envelope",
-        "description": "Preview the transaction envelope for a specific transaction",
-        "operationId": "previewTransaction",
-        "security": [
-          {
-            "bearer-auth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "transactionID",
-            "in": "path",
-            "description": "ID of transaction to preview",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "UUID"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Envelope"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Transaction not found"
-          }
-        }
-      }
-    },
     "/v1/transactions/{transactionID}/send": {
       "post": {
         "tags": [
@@ -555,6 +516,46 @@
       }
     },
     "/v1/transactions/{transactionID}/accept": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Preview envelope to accept a transaction",
+        "description": "Preview envelope that can be sent to accept a travel rule exchange",
+        "operationId": "previewAccept",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionID",
+            "in": "path",
+            "description": "ID of transaction to preview",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "UUID"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found"
+          }
+        }
+      },
       "post": {
         "tags": [
           "transaction"
@@ -592,9 +593,6 @@
           },
           "404": {
             "description": "Transaction not found"
-          },
-          "501": {
-            "description": "Not implemented" 
           }
         }
       }
@@ -652,6 +650,88 @@
         }
       }
     },
+    "/v1/transactions/{transactionID}/repair": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Preview envelope to repair a transaction",
+        "description": "Preview envelope that can be sent to repair a travel rule exchange after rejection.",
+        "operationId": "previewRepair",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionID",
+            "in": "path",
+            "description": "ID of transaction to preview",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "UUID"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Send repair transaction envelope",
+        "description": "Repair the incoming transaction envelope for a specific transaction",
+        "operationId": "repairTransaction",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transactionID",
+            "in": "path",
+            "description": "ID of transaction to repair",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "UUID"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found"
+          }
+        }
+      }
+    },
     "/v1/transactions/{transactionID}/secure-envelopes": {
       "get": {
         "tags": [
@@ -674,6 +754,14 @@
             "schema": {
               "type": "string",
               "format": "UUID"
+            }
+          },
+          {
+            "name": "decrypt",
+            "in": "query",
+            "description": "If specified, Envoy will decrypt the secure envelope before returning the response in the clear. This operation will only succeed if the keys are available for decryption.",
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -701,6 +789,16 @@
         "responses": {
           "200": {
             "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopesList"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Not all envelopes were able to be decrypted",
             "content": {
               "application/json": {
                 "schema": {
@@ -745,11 +843,29 @@
               "type": "string",
               "format": "ULID"
             }
+          },
+          {
+            "name": "decrypt",
+            "in": "query",
+            "description": "If specified, Envoy will decrypt the secure envelope before returning the response in the clear. This operation will only succeed if the keys are available for decryption.",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecureEnvelope"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Partial content returned (could not decrypt secure envelope)",
             "content": {
               "application/json": {
                 "schema": {
@@ -1034,7 +1150,7 @@
     "/v1/accounts/{accountID}/crypto-addresses": {
       "get": {
         "tags": [
-          "crypto_address"
+          "crypto addresses"
         ],
         "summary": "List crypto addresses for account",
         "description": "Returns a paginated list of all crypto addresses associated with the account",
@@ -1095,7 +1211,7 @@
       },
       "post": {
         "tags": [
-          "crypto_address"
+          "crypto addresses"
         ],
         "summary": "Create crypto address",
         "description": "Create a crypto address associated with the specified account",
@@ -1154,7 +1270,7 @@
     "/v1/accounts/{accountID}/crypto-addresses/{cryptoAddressID}": {
       "get": {
         "tags": [
-          "crypto_address"
+          "crypto addresses"
         ],
         "summary": "Lookup a specific crypto address",
         "description": "Returns detailed information about the specified crypto address",
@@ -1204,7 +1320,7 @@
       },
       "put": {
         "tags": [
-          "crypto_address"
+          "crypto addresses"
         ],
         "summary": "Update a crypto address",
         "description": "Update a crypto address record (does not patch, all fields are required)",
@@ -1268,7 +1384,7 @@
       },
       "delete": {
         "tags": [
-          "crypto_address"
+          "crypto addresses"
         ],
         "summary": "Delete a crypto address",
         "description": "Delete a crypto address record associated with account",
@@ -1398,6 +1514,57 @@
           },
           "422": {
             "description": "Validation exception or missing field"
+          }
+        }
+      }
+    },
+    "/v1/counterparties/search": {
+      "get": {
+        "tags": [
+          "counterparty"
+        ],
+        "summary": "Search for a counterparty by name",
+        "description": "Performs a fuzzy string matching search of the query against all of the counterparty names in the database, returning a ranked list of search results that can be limited by the number of items returned.",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Search query to execute against counterparty names",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit the number of search results to return in the query",
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 0,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CounterpartyList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
           }
         }
       }
@@ -1537,7 +1704,7 @@
           "user"
         ],
         "summary": "List users",
-        "description": "Paginated list of all users",
+        "description": "Paginated list of all  users",
         "operationId": "listUsers",
         "security": [
           {
@@ -1581,7 +1748,7 @@
         }
       },
       "post": {
-        "tags":[
+        "tags": [
           "user"
         ],
         "summary": "Create user",
@@ -1625,7 +1792,7 @@
     },
     "/v1/users/{userID}": {
       "get": {
-        "tags":[
+        "tags": [
           "user"
         ],
         "summary": "Find user by ID",
@@ -1790,12 +1957,12 @@
         },
         "responses": {
           "200": {
-            "description": "User password changed.",
+            "description": "User password changed",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string",
-                  "description": "The new password for the user."
+                  "description": "The new password for the user"
                 }
               }
             }
@@ -1805,6 +1972,225 @@
           },
           "404": {
             "description": "User not found"
+          }
+        }
+      }
+    },
+    "/v1/apikeys": {
+      "get": {
+        "tags": [
+          "API Key"
+        ],
+        "summary": "List API Keys",
+        "description": "Returns a paginated list of all api keys that have been issued",
+        "operationId": "listAPIKeys",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "next_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "prev_page_token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIKeyList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "API Key"
+        ],
+        "summary": "Create a new API Key",
+        "description": "Request a new api key to be generated with the specified description and permissions",
+        "operationId": "createAPIKey",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Only description and permissions are allowed to be posted",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/APIKey"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "API Key created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIKey"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "422": {
+            "description": "Validation error or missing fields"
+          }
+        }
+      }
+    },
+    "/v1/apikeys/{keyID}": {
+      "get": {
+        "tags": [
+          "API Key"
+        ],
+        "summary": "Request API Key detail",
+        "description": "Returns detailed response about an API Key",
+        "operationId": "apikeyDetail",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "keyID",
+            "in": "path",
+            "description": "id or client id of api key to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIKey"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "API Key"
+        ],
+        "summary": "Update an api key record",
+        "description": "Update an api key description (note this is the only field that can be updated)",
+        "operationId": "updateAPIKey",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "keyID",
+            "in": "path",
+            "description": "id or client id of api key to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "update API Key data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/APIKey"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIKey"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation exception or missing fields"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "API Key"
+        ],
+        "summary": "Revoke an api key",
+        "description": "Revoke an api key",
+        "operationId": "revokeAPIKey",
+        "security": [
+          {
+            "bearer-auth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "keyID",
+            "in": "path",
+            "description": "id or client id of api key to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "API Key not found"
           }
         }
       }
@@ -2159,77 +2545,6 @@
             "type": "string",
             "format": "date-time",
             "description": "The date and time when the transaction was last modified."
-          }
-        }
-      },
-      "User": {
-        "type": "object",
-        "description": "The user object.",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "ULID",
-            "description": "The unique identifier of the user."
-          },
-          "name": {
-            "type": "string",
-            "description": "The name of the user."
-          },
-          "email": {
-            "type": "string",
-            "description": "The email address of the user."
-          },
-          "password": {
-            "type": "string",
-            "description": "The password of the user."
-          },
-          "role": {
-            "type": "string",
-            "description": "The role of the user."
-          },
-          "last_login": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The date and time when the user last logged in."
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The date and time when the user was created."
-          },
-          "modified": {
-            "type": "string",
-            "format": "date-time",
-            "description": "The date and time when the user was last modified."
-          }
-        }
-      },
-      "UserList": {
-        "type": "object",
-        "description": "The response object for the users endpoint.",
-        "properties": {
-          "page": {
-            "$ref": "#/components/schemas/PageQuery"
-          },
-          "users": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/User"
-            }
-          }
-        }
-      },
-      "UserPassword": {
-        "type": "object",
-        "description": "The request object for changing a user's password.",
-        "properties": {
-          "password": {
-            "type": "string",
-            "description": "The new password for the user."
-          },
-          "send_email": {
-            "type": "boolean",
-            "description": "Indicates whether an email should be sent to the user."
           }
         }
       },
@@ -2804,6 +3119,77 @@
           }
         }
       },
+      "User": {
+        "type": "object",
+        "description": "The user object.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ULID",
+            "description": "The unique identifier of the user."
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the user."
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the user."
+          },
+          "password": {
+            "type": "string",
+            "description": "The password of the user."
+          },
+          "role": {
+            "type": "string",
+            "description": "The role of the user."
+          },
+          "last_login": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the user last logged in."
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the user was created."
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the user was last modified."
+          }
+        }
+      },
+      "UserList": {
+        "type": "object",
+        "description": "The response object for the users endpoint.",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageQuery"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "UserPassword": {
+        "type": "object",
+        "description": "The request object for changing a user's password.",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "The new password for the user."
+          },
+          "send_email": {
+            "type": "boolean",
+            "description": "Indicates whether to send an email to the user."
+          }
+        }
+      },
       "TravelAddress": {
         "type": "object",
         "description": "The travel address object.",
@@ -2817,6 +3203,65 @@
             "description": "The decoded travel address."
           }
         }
+      },
+      "APIKey": {
+        "type": "object",
+        "description": "A complete APIKey representation",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ULID",
+            "description": "The unique identifier of the API key"
+          },
+          "description": {
+            "type": "string",
+            "description": "A textual description to help users identity the API key"
+          },
+          "client_id": {
+            "type": "string",
+            "description": "The client id of the API key used for authentication"
+          },
+          "secret": {
+            "type": "string",
+            "description": "The client secret of the API key used for authentication; only shown on create."
+          },
+          "last_seen": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The last timestamp that the API key was used for authentication"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the API key was created."
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the API key was last modified."
+          }
+        }
+      },
+      "APIKeyList": {
+        "type": "object",
+        "description": "A list of API key summaries",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageQuery"
+          },
+          "api_keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/APIKey"
+            }
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -2826,12 +3271,5 @@
         "bearerFormat": "JWT"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "http://localhost:8000",
-      "variables": {},
-      "description": "Local Development Server"
-    }
-  ]
+  }
 }
