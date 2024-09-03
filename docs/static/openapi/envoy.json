@@ -11,16 +11,10 @@
       "name": "MIT Licensed",
       "url": "https://github.com/trisacrypto/envoy/blob/main/LICENSE"
     },
-    "version": "v{{ .Version }}"
+    "version": "v0.25.0"
   },
   "openapi": "3.1.0",
-  "servers": [
-    {
-      "url": "{{ .Origin }}",
-      "variables": {},
-      "description": "{{ .Description }}"
-    }
-  ],
+  "servers": [],
   "tags": [
     {
       "name": "Authentication",
