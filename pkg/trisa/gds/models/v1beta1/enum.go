@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
 	"strings"
 )
@@ -87,6 +88,22 @@ var (
 	ErrUnknownServiceState      = errors.New("could not parse service state from input")
 )
 
+func (b BusinessCategory) MarshalJSON() ([]byte, error) {
+	return json.Marshal(b.String())
+}
+
+func (b *BusinessCategory) UnmarshalJSON(data []byte) (err error) {
+	var val interface{}
+	if err = json.Unmarshal(data, &val); err != nil {
+		return err
+	}
+
+	if *b, err = ParseBusinessCategory(val); err != nil {
+		return err
+	}
+	return nil
+}
+
 // ParseBusinessCategory from text representation.
 func ParseBusinessCategory(in any) (BusinessCategory, error) {
 	switch val := in.(type) {
@@ -98,6 +115,18 @@ func ParseBusinessCategory(in any) (BusinessCategory, error) {
 	case int32:
 		if _, ok := BusinessCategory_name[val]; ok {
 			return BusinessCategory(val), nil
+		}
+	case float64:
+		if _, ok := BusinessCategory_name[int32(val)]; ok {
+			return BusinessCategory(val), nil
+		}
+	case json.Number:
+		i, err := val.Int64()
+		if err != nil {
+			return 0, err
+		}
+		if _, ok := BusinessCategory_name[int32(i)]; ok {
+			return BusinessCategory(i), nil
 		}
 	}
 
@@ -116,6 +145,22 @@ func ValidVASPCategory(in string) (string, error) {
 	return "", ErrUnknownVASPCategory
 }
 
+func (b VerificationState) MarshalJSON() ([]byte, error) {
+	return json.Marshal(b.String())
+}
+
+func (b *VerificationState) UnmarshalJSON(data []byte) (err error) {
+	var val interface{}
+	if err = json.Unmarshal(data, &val); err != nil {
+		return err
+	}
+
+	if *b, err = ParseVerificationState(val); err != nil {
+		return err
+	}
+	return nil
+}
+
 func ParseVerificationState(in any) (VerificationState, error) {
 	switch val := in.(type) {
 	case string:
@@ -127,8 +172,36 @@ func ParseVerificationState(in any) (VerificationState, error) {
 		if _, ok := VerificationState_name[val]; ok {
 			return VerificationState(val), nil
 		}
+	case float64:
+		if _, ok := VerificationState_name[int32(val)]; ok {
+			return VerificationState(val), nil
+		}
+	case json.Number:
+		i, err := val.Int64()
+		if err != nil {
+			return 0, err
+		}
+		if _, ok := VerificationState_name[int32(i)]; ok {
+			return VerificationState(i), nil
+		}
 	}
 	return 0, ErrUnknownVerificationState
+}
+
+func (b ServiceState) MarshalJSON() ([]byte, error) {
+	return json.Marshal(b.String())
+}
+
+func (b *ServiceState) UnmarshalJSON(data []byte) (err error) {
+	var val interface{}
+	if err = json.Unmarshal(data, &val); err != nil {
+		return err
+	}
+
+	if *b, err = ParseServiceState(val); err != nil {
+		return err
+	}
+	return nil
 }
 
 func ParseServiceState(in any) (ServiceState, error) {
@@ -141,6 +214,18 @@ func ParseServiceState(in any) (ServiceState, error) {
 	case int32:
 		if _, ok := ServiceState_name[val]; ok {
 			return ServiceState(val), nil
+		}
+	case float64:
+		if _, ok := ServiceState_name[int32(val)]; ok {
+			return ServiceState(val), nil
+		}
+	case json.Number:
+		i, err := val.Int64()
+		if err != nil {
+			return 0, err
+		}
+		if _, ok := ServiceState_name[int32(i)]; ok {
+			return ServiceState(i), nil
 		}
 	}
 

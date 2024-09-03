@@ -2,7 +2,6 @@ package ivms101
 
 import (
 	"encoding/json"
-	"errors"
 	"strings"
 )
 
@@ -83,17 +82,18 @@ func (n NaturalPersonNameTypeCode) MarshalJSON() ([]byte, error) {
 }
 
 // Must be a pointer receiver so that we can indirect back to the correct variable
-func (n *NaturalPersonNameTypeCode) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return errors.New("could not parse NaturalPersonNameTypeCode from value")
+func (n *NaturalPersonNameTypeCode) UnmarshalJSON(data []byte) (err error) {
+	var val interface{}
+	if err = json.Unmarshal(data, &val); err != nil {
+		return Wrap(ErrParseNaturalPersonNameTypeCode, err)
 	}
-	s = naturalPersonTypeCodePrefix + strings.ToUpper(s)
-	code, ok := NaturalPersonNameTypeCode_value[s]
-	if !ok {
-		return errors.New("invalid NaturalPersonNameTypeCode alias")
+
+	var code NaturalPersonNameTypeCode
+	if code, err = ParseNaturalPersonNameTypeCode(val); err != nil {
+		return err
 	}
-	*n = NaturalPersonNameTypeCode(code)
+
+	*n = code
 	return nil
 }
 
@@ -110,16 +110,17 @@ func (l LegalPersonNameTypeCode) MarshalJSON() ([]byte, error) {
 }
 
 // Must be a pointer receiver so that we can indirect back to the correct variable
-func (l *LegalPersonNameTypeCode) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return errors.New("could not parse LegalPersonNameTypeCode from value")
+func (l *LegalPersonNameTypeCode) UnmarshalJSON(data []byte) (err error) {
+	var val interface{}
+	if err = json.Unmarshal(data, &val); err != nil {
+		return Wrap(ErrParseLegalPersonNameTypeCode, err)
 	}
-	s = legalPersonNameTypeCodePrefix + strings.ToUpper(s)
-	code, ok := LegalPersonNameTypeCode_value[s]
-	if !ok {
-		return errors.New("invalid LegalPersonNameTypeCode alias")
+
+	var code LegalPersonNameTypeCode
+	if code, err = ParseLegalPersonNameTypeCode(val); err != nil {
+		return err
 	}
+
 	*l = LegalPersonNameTypeCode(code)
 	return nil
 }
@@ -137,16 +138,17 @@ func (a AddressTypeCode) MarshalJSON() ([]byte, error) {
 }
 
 // Must be a pointer receiver so that we can indirect back to the correct variable
-func (a *AddressTypeCode) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return errors.New("could not parse AddressTypeCode from value")
+func (a *AddressTypeCode) UnmarshalJSON(data []byte) (err error) {
+	var val interface{}
+	if err = json.Unmarshal(data, &val); err != nil {
+		return Wrap(ErrParseAddressTypeCode, err)
 	}
-	s = addressTypeCodePrefix + strings.ToUpper(s)
-	code, ok := AddressTypeCode_value[s]
-	if !ok {
-		return errors.New("invalid AddressTypeCode alias")
+
+	var code AddressTypeCode
+	if code, err = ParseAddressTypeCode(val); err != nil {
+		return err
 	}
+
 	*a = AddressTypeCode(code)
 	return nil
 }
@@ -164,16 +166,17 @@ func (i NationalIdentifierTypeCode) MarshalJSON() ([]byte, error) {
 }
 
 // Must be a pointer receiver so that we can indirect back to the correct variable
-func (i *NationalIdentifierTypeCode) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return errors.New("could not parse NationalIdentifierTypeCode from value")
+func (i *NationalIdentifierTypeCode) UnmarshalJSON(data []byte) (err error) {
+	var val interface{}
+	if err = json.Unmarshal(data, &val); err != nil {
+		return Wrap(ErrParseNationalIdentifierTypeCode, err)
 	}
-	s = nationalIdentifierTypeCodePrefix + strings.ToUpper(s)
-	code, ok := NationalIdentifierTypeCode_value[s]
-	if !ok {
-		return errors.New("invalid NationalIdentifierTypeCode alias")
+
+	var code NationalIdentifierTypeCode
+	if code, err = ParseNationalIdentifierTypeCode(val); err != nil {
+		return err
 	}
+
 	*i = NationalIdentifierTypeCode(code)
 	return nil
 }
@@ -191,16 +194,17 @@ func (t TransliterationMethodCode) MarshalJSON() ([]byte, error) {
 }
 
 // Must be a pointer receiver so that we can indirect back to the correct variable
-func (t *TransliterationMethodCode) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return errors.New("could not parse TransliterationMethodCode from value")
+func (t *TransliterationMethodCode) UnmarshalJSON(data []byte) (err error) {
+	var val interface{}
+	if err = json.Unmarshal(data, &val); err != nil {
+		return Wrap(ErrParseTransliterationMethodCode, err)
 	}
-	s = transliterationMethodCodePrefix + strings.ToUpper(s)
-	code, ok := TransliterationMethodCode_value[s]
-	if !ok {
-		return errors.New("invalid TransliterationMethodCode alias")
+
+	var code TransliterationMethodCode
+	if code, err = ParseTransliterationMethodCode(val); err != nil {
+		return err
 	}
+
 	*t = TransliterationMethodCode(code)
 	return nil
 }
@@ -224,9 +228,21 @@ func ParseNaturalPersonNameTypeCode(in any) (NaturalPersonNameTypeCode, error) {
 		if _, ok := NaturalPersonNameTypeCode_name[val]; ok {
 			return NaturalPersonNameTypeCode(val), nil
 		}
+	case float64:
+		if _, ok := NaturalPersonNameTypeCode_name[int32(val)]; ok {
+			return NaturalPersonNameTypeCode(val), nil
+		}
+	case json.Number:
+		i, err := val.Int64()
+		if err != nil {
+			return 0, Wrap(ErrParseNaturalPersonNameTypeCode, err)
+		}
+		if _, ok := NaturalPersonNameTypeCode_name[int32(i)]; ok {
+			return NaturalPersonNameTypeCode(i), nil
+		}
 	}
 
-	return 0, ErrCouldNotParseEnum
+	return 0, ErrInvalidNaturalPersonNameTypeCode
 }
 
 func ParseLegalPersonNameTypeCode(in any) (LegalPersonNameTypeCode, error) {
@@ -244,9 +260,21 @@ func ParseLegalPersonNameTypeCode(in any) (LegalPersonNameTypeCode, error) {
 		if _, ok := LegalPersonNameTypeCode_name[val]; ok {
 			return LegalPersonNameTypeCode(val), nil
 		}
+	case float64:
+		if _, ok := LegalPersonNameTypeCode_name[int32(val)]; ok {
+			return LegalPersonNameTypeCode(val), nil
+		}
+	case json.Number:
+		i, err := val.Int64()
+		if err != nil {
+			return 0, Wrap(ErrInvalidLegalPersonNameTypeCode, err)
+		}
+		if _, ok := LegalPersonNameTypeCode_name[int32(i)]; ok {
+			return LegalPersonNameTypeCode(i), nil
+		}
 	}
 
-	return 0, ErrCouldNotParseEnum
+	return 0, ErrInvalidLegalPersonNameTypeCode
 }
 
 func ParseAddressTypeCode(in any) (AddressTypeCode, error) {
@@ -264,9 +292,21 @@ func ParseAddressTypeCode(in any) (AddressTypeCode, error) {
 		if _, ok := AddressTypeCode_name[val]; ok {
 			return AddressTypeCode(val), nil
 		}
+	case float64:
+		if _, ok := AddressTypeCode_name[int32(val)]; ok {
+			return AddressTypeCode(val), nil
+		}
+	case json.Number:
+		i, err := val.Int64()
+		if err != nil {
+			return 0, Wrap(ErrInvalidAddressTypeCode, err)
+		}
+		if _, ok := AddressTypeCode_name[int32(i)]; ok {
+			return AddressTypeCode(i), nil
+		}
 	}
 
-	return 0, ErrCouldNotParseEnum
+	return 0, ErrInvalidAddressTypeCode
 }
 
 func ParseNationalIdentifierTypeCode(in any) (NationalIdentifierTypeCode, error) {
@@ -284,9 +324,21 @@ func ParseNationalIdentifierTypeCode(in any) (NationalIdentifierTypeCode, error)
 		if _, ok := NationalIdentifierTypeCode_name[val]; ok {
 			return NationalIdentifierTypeCode(val), nil
 		}
+	case float64:
+		if _, ok := NationalIdentifierTypeCode_name[int32(val)]; ok {
+			return NationalIdentifierTypeCode(val), nil
+		}
+	case json.Number:
+		i, err := val.Int64()
+		if err != nil {
+			return 0, Wrap(ErrInvalidNationalIdentifierTypeCode, err)
+		}
+		if _, ok := NationalIdentifierTypeCode_name[int32(i)]; ok {
+			return NationalIdentifierTypeCode(i), nil
+		}
 	}
 
-	return 0, ErrCouldNotParseEnum
+	return 0, ErrInvalidNationalIdentifierTypeCode
 }
 
 func ParseTransliterationMethodCode(in any) (TransliterationMethodCode, error) {
@@ -304,7 +356,19 @@ func ParseTransliterationMethodCode(in any) (TransliterationMethodCode, error) {
 		if _, ok := TransliterationMethodCode_name[val]; ok {
 			return TransliterationMethodCode(val), nil
 		}
+	case float64:
+		if _, ok := TransliterationMethodCode_name[int32(val)]; ok {
+			return TransliterationMethodCode(val), nil
+		}
+	case json.Number:
+		i, err := val.Int64()
+		if err != nil {
+			return 0, Wrap(ErrInvalidTransliterationMethodCode, err)
+		}
+		if _, ok := TransliterationMethodCode_name[int32(i)]; ok {
+			return TransliterationMethodCode(i), nil
+		}
 	}
 
-	return 0, ErrCouldNotParseEnum
+	return 0, ErrInvalidTransliterationMethodCode
 }
