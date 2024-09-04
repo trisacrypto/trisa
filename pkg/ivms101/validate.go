@@ -5,78 +5,335 @@ package with JSON loading utilities, validation helpers, short constants, etc.
 package ivms101
 
 import (
+	"fmt"
 	"strings"
 	"time"
+
+	"github.com/trisacrypto/trisa/pkg/iso3166"
 )
 
-// Person converts a NaturalPerson into a Person protobuf message type.
-func (p *NaturalPerson) Person() *Person {
-	return &Person{
-		Person: &Person_NaturalPerson{
-			NaturalPerson: p,
-		},
-	}
+type Validator interface {
+	Validate() error
 }
 
-// Person converts a LegalPerson into a Person protobuf message type.
-func (p *LegalPerson) Person() *Person {
-	return &Person{
-		Person: &Person_LegalPerson{
-			LegalPerson: p,
-		},
-	}
+func Validate(v Validator) error {
+	return v.Validate()
 }
+
+//===========================================================================
+// Identity Payload Validation
+//===========================================================================
+
+func (p *IdentityPayload) Validate() (err error) {
+	if p.Originator == nil {
+		err = ValidationError("", err, MissingField("originator"))
+	} else {
+		if serr := p.Originator.Validate(); serr != nil {
+			err = ValidationError("originator", err, serr)
+		}
+	}
+
+	if p.Beneficiary == nil {
+		err = ValidationError("", err, MissingField("beneficiary"))
+	} else {
+		if serr := p.Beneficiary.Validate(); serr != nil {
+			err = ValidationError("beneficiary", err, serr)
+		}
+	}
+
+	if p.OriginatingVasp == nil {
+		err = ValidationError("", err, MissingField("originatingVASP"))
+	} else {
+		if serr := p.OriginatingVasp.Validate(); serr != nil {
+			err = ValidationError("originatingVASP", err, serr)
+		}
+	}
+
+	if p.BeneficiaryVasp == nil {
+		err = ValidationError("", err, MissingField("beneficiaryVASP"))
+	} else {
+		if serr := p.BeneficiaryVasp.Validate(); serr != nil {
+			err = ValidationError("beneficiaryVASP", err, serr)
+		}
+	}
+
+	if p.TransferPath != nil {
+		if serr := p.TransferPath.Validate(); serr != nil {
+			err = ValidationError("transferPath", err, serr)
+		}
+	}
+
+	if p.PayloadMetadata != nil {
+		if serr := p.TransferPath.Validate(); serr != nil {
+			err = ValidationError("payloadMetadata", err, serr)
+		}
+	}
+
+	return err
+}
+
+func (o *Originator) Validate() (err error) {
+	if len(o.OriginatorPersons) == 0 {
+		err = ValidationError("", err, IncorrectField("originatorPersons", "at least one originator person is required"))
+	}
+
+	for i, person := range o.OriginatorPersons {
+		if serr := person.Validate(); serr != nil {
+			err = ValidationError(fmt.Sprintf("originatorPersons[%d]", i), err, serr)
+		}
+	}
+
+	for i, acct := range o.AccountNumbers {
+		if l := len(acct); l > 100 {
+			err = ValidationError("", err, MaxNText(fmt.Sprintf("accountNumber[%d]", i), 100, l))
+		}
+	}
+
+	return err
+}
+
+func (b *Beneficiary) Validate() (err error) {
+	if len(b.BeneficiaryPersons) == 0 {
+		err = ValidationError("", err, IncorrectField("beneficiaryPersons", "at least one beneficiary person is required"))
+	}
+
+	for i, person := range b.BeneficiaryPersons {
+		if serr := person.Validate(); serr != nil {
+			err = ValidationError(fmt.Sprintf("beneficiaryPersons[%d]", i), err, serr)
+		}
+	}
+
+	for i, acct := range b.AccountNumbers {
+		if l := len(acct); l > 100 {
+			err = ValidationError("", err, MaxNText(fmt.Sprintf("accountNumber[%d]", i), 100, l))
+		}
+	}
+
+	return err
+}
+
+func (o *OriginatingVasp) Validate() (err error) {
+	if o.OriginatingVasp != nil {
+		if serr := o.OriginatingVasp.Validate(); serr != nil {
+			err = ValidationError("originatingVASP", err, serr)
+		}
+	}
+	return err
+}
+
+func (b *BeneficiaryVasp) Validate() (err error) {
+	if b.BeneficiaryVasp != nil {
+		if serr := b.BeneficiaryVasp.Validate(); serr != nil {
+			err = ValidationError("beneficiaryVASP", err, serr)
+		}
+	}
+	return err
+}
+
+func (t *TransferPath) Validate() (err error) {
+	for i, intermediary := range t.TransferPath {
+		if serr := intermediary.Validate(); serr != nil {
+			err = ValidationError(fmt.Sprintf("transferPath[%d]", i), err, serr)
+		}
+	}
+	return err
+}
+
+func (v *IntermediaryVasp) Validate() (err error) {
+	if v.IntermediaryVasp == nil {
+		err = ValidationError("", err, MissingField("intermediaryVASP"))
+	} else {
+		if serr := v.IntermediaryVasp.Validate(); serr != nil {
+			err = ValidationError("intermediaryVASP", err, serr)
+		}
+	}
+
+	if v.Sequence == 0 {
+		err = ValidationError("", err, MissingField("sequence"))
+	}
+
+	return err
+}
+
+func (p *PayloadMetadata) Validate() (err error) {
+	for i, code := range p.TransliterationMethod {
+		if _, ok := TransliterationMethodCode_name[int32(code)]; !ok {
+			err = ValidationError("", err, InvalidEnum(fmt.Sprintf("transliterationMethod[%d]", i), fmt.Sprintf("%d", code), "TransliterationMethodCode"))
+		}
+	}
+	return err
+}
+
+//===========================================================================
+// Person Validation
+//===========================================================================
+
+func (p *Person) Validate() (err error) {
+	if p.Person == nil {
+		return ValidationError("", err, OneOfMissing("naturalPerson", "legalPerson"))
+	}
+
+	switch person := p.Person.(type) {
+	case *Person_NaturalPerson:
+		if serr := person.NaturalPerson.Validate(); serr != nil {
+			err = ValidationError("naturalPerson", err, serr)
+		}
+	case *Person_LegalPerson:
+		if serr := person.LegalPerson.Validate(); serr != nil {
+			err = ValidationError("legalPerson", err, serr)
+		}
+	}
+
+	return err
+}
+
+//===========================================================================
+// NaturalPerson Validation
+//===========================================================================
 
 // Validate the IVMS101 constraints for a natural person data definition. ON the first
 // invalid constraint found an error is returned.  No error is returned for valid data.
 func (p *NaturalPerson) Validate() (err error) {
 	// Constraint: required ValidNaturalPersonName
 	if p.Name == nil {
-		return ErrNoNaturalPersonNameIdentifiers
-	}
-	if err = p.Name.Validate(); err != nil {
-		return err
+		err = ValidationError("", err, MissingField("name"))
+	} else {
+		// Validate NaturalPersonName
+		if serr := p.Name.Validate(); serr != nil {
+			err = ValidationError("name", err, serr)
+		}
 	}
 
-	// Constraint: ValidAddresses
+	// Constraint: ValidAddresses: Zero or More
 	for _, addr := range p.GeographicAddresses {
-		if err = addr.Validate(); err != nil {
-			return err
+		if serr := addr.Validate(); serr != nil {
+			err = ValidationError("geographicAddress", err, serr)
 		}
 	}
 
 	// Constraint: Optional ValidNationalIdentification
 	if p.NationalIdentification != nil {
-		if err = p.NationalIdentification.Validate(); err != nil {
-			return err
+		if serr := p.NationalIdentification.Validate(); serr != nil {
+			err = ValidationError("nationalIdentification", err, serr)
 		}
 	}
 
 	// Constraint: optional Max50Text
-	if len(p.CustomerIdentification) > 50 {
-		return ErrInvalidCustomerIdentification
+	if l := len(p.CustomerIdentification); l > 50 {
+		err = ValidationError("", err, MaxNText("customerIdentification", 50, l))
 	}
 
 	// Constraint: Optional Valid DateAndPlaceOfBirth
 	if p.DateAndPlaceOfBirth != nil {
-		if err = p.DateAndPlaceOfBirth.Validate(); err != nil {
-			return err
+		if serr := p.DateAndPlaceOfBirth.Validate(); serr != nil {
+			err = ValidationError("dateAndPlaceOfBirth", err, serr)
 		}
 	}
 
 	// Constraint: Optional ISO-3166-1 alpha-2 codes or XX
 	if p.CountryOfResidence != "" {
-		// TODO: ensure the code is valid; for now just checking length
-		if len(p.CountryOfResidence) != 2 {
-			return ErrInvalidCountryCode
+		if p.CountryOfResidence != "" && p.CountryOfResidence != "XX" {
+			if serr := iso3166.ValidateAlpha2(p.CountryOfResidence); serr != nil {
+				err = ValidationError("", err, IncorrectField("countryOfResidence", serr.Error()))
+			}
 		}
-
-		// Ensure that country code is all upper case
-		p.CountryOfResidence = strings.ToUpper(p.CountryOfResidence)
 	}
 
-	return nil
+	return err
 }
+
+// Validate the IVMS101 constraints for natural person name
+func (n *NaturalPersonName) Validate() (err error) {
+	// Constraint one or more
+	if len(n.NameIdentifiers) == 0 {
+		err = ValidationError("", err, MissingField("name"))
+	} else {
+		// Constraint: valid name identifiers
+		var legalNames int
+		for i, name := range n.NameIdentifiers {
+			if serr := name.Validate(); serr != nil {
+				err = ValidationError(fmt.Sprintf("nameIdentifier[%d]", i), err, serr)
+			}
+
+			if name.NameIdentifierType == NaturalPersonLegal {
+				legalNames++
+			}
+		}
+
+		// Constraint: LegalNamePresent
+		if legalNames == 0 {
+			err = ValidationError("", err, IncorrectField("name", "at least one name identifier must have a LEGL name identifier type"))
+		}
+	}
+
+	// Constraint: valid local name identifiers
+	for i, name := range n.LocalNameIdentifiers {
+		if serr := name.Validate(); serr != nil {
+			err = ValidationError(fmt.Sprintf("localNameIdentifier[%d]", i), err, serr)
+		}
+	}
+
+	// Constraint: valid phonetic name identifiers
+	for i, name := range n.PhoneticNameIdentifiers {
+		if serr := name.Validate(); serr != nil {
+			err = ValidationError(fmt.Sprintf("phoneticNameIdentifier[%d]", i), err, serr)
+		}
+	}
+
+	return err
+}
+
+// Validate the IVMS101 constraints for natural person name identifiers
+func (n *NaturalPersonNameId) Validate() (err error) {
+	if strings.TrimSpace(n.PrimaryIdentifier) == "" {
+		err = ValidationError("", err, MissingField("primaryIdentifier"))
+	} else if l := len(n.PrimaryIdentifier); l > 100 {
+		err = ValidationError("", err, MaxNText("primaryIdentifier", 100, l))
+	}
+
+	if l := len(n.SecondaryIdentifier); l > 100 {
+		err = ValidationError("", err, MaxNText("secondaryIdentifier", 100, l))
+	}
+
+	if n.NameIdentifierType == NaturalPersonMisc {
+		err = ValidationError("", err, MissingField("nameIdentifierType"))
+	} else {
+		typeCode := int32(n.NameIdentifierType)
+		if _, ok := NaturalPersonNameTypeCode_name[typeCode]; !ok {
+			err = ValidationError("", err, InvalidEnum("nameIdentifierType", fmt.Sprintf("%d", typeCode), "NaturalPersonNameTypeCode"))
+		}
+	}
+
+	return err
+}
+
+// Validate the IVMS101 constraints for local natural person name identifiers
+func (n *LocalNaturalPersonNameId) Validate() (err error) {
+	if strings.TrimSpace(n.PrimaryIdentifier) == "" {
+		err = ValidationError("", err, MissingField("primaryIdentifier"))
+	} else if l := len(n.PrimaryIdentifier); l > 100 {
+		err = ValidationError("", err, MaxNText("primaryIdentifier", 100, l))
+	}
+
+	if l := len(n.SecondaryIdentifier); l > 100 {
+		err = ValidationError("", err, MaxNText("secondaryIdentifier", 100, l))
+	}
+
+	if n.NameIdentifierType == NaturalPersonMisc {
+		err = ValidationError("", err, MissingField("nameIdentifierType"))
+	} else {
+		typeCode := int32(n.NameIdentifierType)
+		if _, ok := NaturalPersonNameTypeCode_name[typeCode]; !ok {
+			err = ValidationError("", err, InvalidEnum("nameIdentifierType", fmt.Sprintf("%d", typeCode), "NaturalPersonNameTypeCode"))
+		}
+	}
+
+	return err
+}
+
+//===========================================================================
+// LegalPerson Validation
+//===========================================================================
 
 // Validate the IVMS101 constraints for a legal person data definition. On the first
 // invalid constraint found an error is returned. No error is returned for valid data.
@@ -143,83 +400,6 @@ func (p *LegalPerson) Validate() (err error) {
 
 		// Ensure that country code is all upper case
 		p.CountryOfRegistration = strings.ToUpper(p.CountryOfRegistration)
-	}
-
-	return nil
-}
-
-// Validate the IVMS101 constraints for natural person name
-func (n *NaturalPersonName) Validate() (err error) {
-	// Constraint one or more
-	if len(n.NameIdentifiers) < 1 {
-		return ErrNoNaturalPersonNameIdentifiers
-	}
-
-	// Constraint: valid name identifiers
-	var legalNames int
-	for _, name := range n.NameIdentifiers {
-		if err = name.Validate(); err != nil {
-			return err
-		}
-
-		if name.NameIdentifierType == NaturalPersonLegal {
-			legalNames++
-		}
-	}
-
-	// Constraint: LegalNamePresent
-	if legalNames == 0 {
-		return ErrLegalNamesPresent
-	}
-
-	// Constraint: valid local name identifiers
-	for _, name := range n.LocalNameIdentifiers {
-		if err = name.Validate(); err != nil {
-			return err
-		}
-	}
-
-	// Constraint: valid phonetic name identifiers
-	for _, name := range n.PhoneticNameIdentifiers {
-		if err = name.Validate(); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-// Validate the IVMS101 constraints for natural person name identifiers
-func (n *NaturalPersonNameId) Validate() (err error) {
-	if n.PrimaryIdentifier == "" || len(n.PrimaryIdentifier) > 100 {
-		return ErrInvalidNaturalPersonName
-	}
-
-	if len(n.SecondaryIdentifier) > 100 {
-		return ErrInvalidNaturalPersonName
-	}
-
-	typeCode := int32(n.NameIdentifierType)
-	if _, ok := NaturalPersonNameTypeCode_name[typeCode]; !ok {
-		return ErrInvalidNaturalPersonNameTypeCode
-	}
-
-	return nil
-}
-
-// Validate the IVMS101 constraints for local natural person name identifiers
-func (n *LocalNaturalPersonNameId) Validate() (err error) {
-	if n.PrimaryIdentifier == "" || len(n.PrimaryIdentifier) > 100 {
-		return ErrInvalidNaturalPersonName
-	}
-
-	if len(n.SecondaryIdentifier) > 100 {
-		return ErrInvalidNaturalPersonName
-	}
-
-	typeCode := int32(n.NameIdentifierType)
-	if _, ok := NaturalPersonNameTypeCode_name[typeCode]; !ok {
-		return ErrInvalidNaturalPersonNameTypeCode
 	}
 
 	return nil

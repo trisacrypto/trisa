@@ -73,7 +73,7 @@ message Beneficiary {
     // Definition: the natural or legal person or legal arrangement who is identified
     // by the originator as the receiver of the requested VA transfer.
     // One or More
-    repeated Person beneficiary_persons = 1 [json_name = "beneficiaryPerson"];
+    repeated Person beneficiary_persons = 1 [json_name = "beneficiaryPersons"];
 
     // Definition: Identifier of an account that is used to process the transaction.
     // The value for this element is case-sensitive.

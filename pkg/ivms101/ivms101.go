@@ -65,6 +65,15 @@ func (p *Person) UnmarshalJSON(data []byte) (err error) {
 // NaturalPerson Methods
 //===========================================================================
 
+// Person converts a NaturalPerson into a Person protobuf message type.
+func (p *NaturalPerson) Person() *Person {
+	return &Person{
+		Person: &Person_NaturalPerson{
+			NaturalPerson: p,
+		},
+	}
+}
+
 type serialNaturalPerson struct {
 	Name               *NaturalPersonName      `json:"name,omitempty"`
 	Address            []*Address              `json:"geographicAddress,omitempty"`
@@ -601,6 +610,15 @@ func (l *LegalPerson) UnmarshalJSON(data []byte) (err error) {
 //===========================================================================
 // LegalPersonName Methods
 //===========================================================================
+
+// Person converts a LegalPerson into a Person protobuf message type.
+func (p *LegalPerson) Person() *Person {
+	return &Person{
+		Person: &Person_LegalPerson{
+			LegalPerson: p,
+		},
+	}
+}
 
 type serialLegalPersonName struct {
 	NameIdentifiers         []*LegalPersonNameId      `json:"nameIdentifier,omitempty"`
