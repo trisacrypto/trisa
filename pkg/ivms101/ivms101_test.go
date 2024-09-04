@@ -35,7 +35,7 @@ func TestPersonMarshaling(t *testing.T) {
 	require.NoError(t, err, "could not load person with both persons json fixture")
 
 	person = &ivms101.Person{}
-	require.EqualError(t, json.Unmarshal(data, person), "person object cannot be both a natural and legal person")
+	require.ErrorIs(t, json.Unmarshal(data, person), ivms101.ErrPersonOneOfViolation)
 }
 
 //
@@ -85,10 +85,10 @@ func TestMarshalNatName(t *testing.T) {
 		NameIdentifiers:      []*ivms101.NaturalPersonNameId{name},
 		LocalNameIdentifiers: []*ivms101.LocalNaturalPersonNameId{birthname},
 	}
-	expected := []byte(`{"localNameIdentifier":[{"primaryIdentifier":"kal","secondaryIdentifier":"el","nameIdentifierType":"BIRT"}],"nameIdentifier":[{"primaryIdentifier":"superman","nameIdentifierType":"LEGL"}]}`)
+	expected := `{"localNameIdentifier":[{"primaryIdentifier":"kal","secondaryIdentifier":"el","nameIdentifierType":"BIRT"}],"nameIdentifier":[{"primaryIdentifier":"superman","nameIdentifierType":"LEGL"}]}`
 	compat, err := json.Marshal(n)
 	require.Nil(t, err)
-	require.Equal(t, expected, compat)
+	require.JSONEq(t, expected, string(compat))
 }
 
 func TestUnmarshalNatName(t *testing.T) {
@@ -293,10 +293,10 @@ func TestMarshalLegName(t *testing.T) {
 		NameIdentifiers:      []*ivms101.LegalPersonNameId{name},
 		LocalNameIdentifiers: []*ivms101.LocalLegalPersonNameId{tradename},
 	}
-	expected := []byte(`{"localNameIdentifier":[{"legalPersonName":"animaniacs","legalPersonNameIdentifierType":"TRAD"}],"nameIdentifier":[{"legalPersonName":"acme labs","legalPersonNameIdentifierType":"LEGL"}]}`)
+	expected := `{"localNameIdentifier":[{"legalPersonName":"animaniacs","legalPersonNameIdentifierType":"TRAD"}],"nameIdentifier":[{"legalPersonName":"acme labs","legalPersonNameIdentifierType":"LEGL"}]}`
 	compat, err := json.Marshal(n)
 	require.Nil(t, err)
-	require.Equal(t, expected, compat)
+	require.JSONEq(t, expected, string(compat))
 }
 
 func TestUnmarshalLegName(t *testing.T) {

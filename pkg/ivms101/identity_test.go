@@ -2,11 +2,9 @@ package ivms101_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"testing"
 
-	"github.com/nsf/jsondiff"
 	"github.com/stretchr/testify/require"
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -26,10 +24,7 @@ func TestIdentityPayloadSerialization(t *testing.T) {
 	out, err := json.Marshal(identity)
 	require.NoError(t, err, "could not marshal identity payload to JSON")
 
-	fmt.Println(string(out))
-	diffOpts := jsondiff.DefaultConsoleOptions()
-	res, _ := jsondiff.Compare(in, out, &diffOpts)
-	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+	require.JSONEq(t, string(in), string(out))
 }
 
 func TestIdentityPayloadSerializationFromPB(t *testing.T) {
