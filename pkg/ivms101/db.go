@@ -7,12 +7,9 @@ import (
 )
 
 func (i *IdentityPayload) Scan(src interface{}) error {
-	p := IdentityPayload{}
-	if err := ScanJSON(src, &p); err != nil {
+	if err := ScanJSON(src, i); err != nil {
 		return err
 	}
-
-	*i = p
 	return nil
 }
 
@@ -21,12 +18,9 @@ func (i *IdentityPayload) Value() (_ driver.Value, err error) {
 }
 
 func (p *Person) Scan(src interface{}) error {
-	o := Person{}
-	if err := ScanJSON(src, &o); err != nil {
+	if err := ScanJSON(src, p); err != nil {
 		return err
 	}
-
-	*p = o
 	return nil
 }
 
@@ -35,12 +29,9 @@ func (p *Person) Value() (_ driver.Value, err error) {
 }
 
 func (p *NaturalPerson) Scan(src interface{}) error {
-	o := NaturalPerson{}
-	if err := ScanJSON(src, &o); err != nil {
+	if err := ScanJSON(src, p); err != nil {
 		return err
 	}
-
-	*p = o
 	return nil
 }
 
@@ -49,12 +40,9 @@ func (p *NaturalPerson) Value() (_ driver.Value, err error) {
 }
 
 func (p *LegalPerson) Scan(src interface{}) error {
-	o := LegalPerson{}
-	if err := ScanJSON(src, &o); err != nil {
+	if err := ScanJSON(src, p); err != nil {
 		return err
 	}
-
-	*p = o
 	return nil
 }
 
@@ -63,12 +51,9 @@ func (p *LegalPerson) Value() (_ driver.Value, err error) {
 }
 
 func (a *Address) Scan(src interface{}) error {
-	o := Address{}
-	if err := ScanJSON(src, &o); err != nil {
+	if err := ScanJSON(src, a); err != nil {
 		return err
 	}
-
-	*a = o
 	return nil
 }
 

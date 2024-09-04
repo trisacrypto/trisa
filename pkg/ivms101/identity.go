@@ -2,9 +2,9 @@ package ivms101
 
 import "encoding/json"
 
-//
-// IdentityPayload JSON
-//
+//===========================================================================
+// IdentityPayload Methods
+//===========================================================================
 
 type serialIdentityPayload struct {
 	Originator      *Originator      `json:"originator,omitempty"`
@@ -13,6 +13,21 @@ type serialIdentityPayload struct {
 	BeneficiaryVASP *BeneficiaryVasp `json:"beneficiaryVASP,omitempty"`
 	TransferPath    *TransferPath    `json:"transferPath,omitempty"`
 	PayloadMetadata *PayloadMetadata `json:"payloadMetadata,omitempty"`
+}
+
+var serialIdentityPayloadFields = map[string]string{
+	"originator":       "originator",
+	"originators":      "originator",
+	"beneficiary":      "beneficiary",
+	"beneficiaries":    "beneficiary",
+	"originatingVASP":  "originatingVASP",
+	"originating_vasp": "originatingVASP",
+	"beneficiaryVASP":  "beneficiaryVASP",
+	"beneficiary_vasp": "beneficiaryVASP",
+	"transferPath":     "transferPath",
+	"transfer_path":    "transferPath",
+	"payloadMetadata":  "payloadMetadata",
+	"payload_metadata": "payloadMetadata",
 }
 
 func (i *IdentityPayload) MarshalJSON() ([]byte, error) {
@@ -27,33 +42,51 @@ func (i *IdentityPayload) MarshalJSON() ([]byte, error) {
 	return json.Marshal(middle)
 }
 
-func (i *IdentityPayload) UnmarshalJSON(data []byte) error {
+func (i *IdentityPayload) UnmarshalJSON(data []byte) (err error) {
+	// Perform rekeying operation
+	if allowRekeying {
+		if data, err = Rekey(data, serialIdentityPayloadFields); err != nil {
+			return err
+		}
+	}
+
+	// Unmarshal middle data structure
 	middle := serialIdentityPayload{}
 	if err := json.Unmarshal(data, &middle); err != nil {
 		return err
 	}
 
-	p := IdentityPayload{
-		Originator:      middle.Originator,
-		Beneficiary:     middle.Beneficiary,
-		OriginatingVasp: middle.OriginatingVASP,
-		BeneficiaryVasp: middle.BeneficiaryVASP,
-		TransferPath:    middle.TransferPath,
-		PayloadMetadata: middle.PayloadMetadata,
-	}
+	// Populate the identity payload value
+	i.Originator = middle.Originator
+	i.Beneficiary = middle.Beneficiary
+	i.OriginatingVasp = middle.OriginatingVASP
+	i.BeneficiaryVasp = middle.BeneficiaryVASP
+	i.TransferPath = middle.TransferPath
+	i.PayloadMetadata = middle.PayloadMetadata
 
-	// TODO warning: assignment copies lock value to *n
-	*i = p
 	return nil
 }
 
-//
-// Identity Natural Persons JSON
-//
+//===========================================================================
+// Originator Methods
+//===========================================================================
 
 type serialOriginator struct {
 	Originator     []*Person `json:"originatorPersons,omitempty"`
 	AccountNumbers []string  `json:"accountNumber,omitempty"`
+}
+
+var serialOriginatorFields = map[string]string{
+	"originatorPersons":  "originatorPersons",
+	"originatorPerson":   "originatorPersons",
+	"originator_persons": "originatorPersons",
+	"originator_person":  "originatorPersons",
+	"originator":         "originatorPersons",
+	"originators":        "originatorPersons",
+	"accountNumber":      "accountNumber",
+	"accountNumbers":     "accountNumber",
+	"account_number":     "accountNumber",
+	"account_numbers":    "accountNumber",
 }
 
 func (o *Originator) MarshalJSON() ([]byte, error) {
@@ -64,25 +97,47 @@ func (o *Originator) MarshalJSON() ([]byte, error) {
 	return json.Marshal(middle)
 }
 
-func (o *Originator) UnmarshalJSON(data []byte) error {
+func (o *Originator) UnmarshalJSON(data []byte) (err error) {
+	// Perform rekeying operation
+	if allowRekeying {
+		if data, err = Rekey(data, serialOriginatorFields); err != nil {
+			return err
+		}
+	}
+
+	// Unmarshal middle data structure
 	middle := serialOriginator{}
 	if err := json.Unmarshal(data, &middle); err != nil {
 		return err
 	}
 
-	i := Originator{
-		OriginatorPersons: middle.Originator,
-		AccountNumbers:    middle.AccountNumbers,
-	}
+	// Populate originator values
+	o.OriginatorPersons = middle.Originator
+	o.AccountNumbers = middle.AccountNumbers
 
-	// TODO warning: assignment copies lock value to *n
-	*o = i
 	return nil
 }
+
+//===========================================================================
+// Beneficiary Methods
+//===========================================================================
 
 type serialBeneficiary struct {
 	Beneficiary    []*Person `json:"beneficiaryPersons,omitempty"`
 	AccountNumbers []string  `json:"accountNumber,omitempty"`
+}
+
+var serialBeneficiaryFields = map[string]string{
+	"beneficiaryPersons":  "beneficiaryPersons",
+	"beneficiaryPerson":   "beneficiaryPersons",
+	"beneficiary_persons": "beneficiaryPersons",
+	"beneficiary_person":  "beneficiaryPersons",
+	"beneficiary":         "beneficiaryPersons",
+	"beneficiaries":       "beneficiaryPersons",
+	"accountNumber":       "accountNumber",
+	"accountNumbers":      "accountNumber",
+	"account_number":      "accountNumber",
+	"account_numbers":     "accountNumber",
 }
 
 func (b *Beneficiary) MarshalJSON() ([]byte, error) {
@@ -93,28 +148,38 @@ func (b *Beneficiary) MarshalJSON() ([]byte, error) {
 	return json.Marshal(middle)
 }
 
-func (b *Beneficiary) UnmarshalJSON(data []byte) error {
+func (b *Beneficiary) UnmarshalJSON(data []byte) (err error) {
+	// Perform rekeying operation
+	if allowRekeying {
+		if data, err = Rekey(data, serialBeneficiaryFields); err != nil {
+			return err
+		}
+	}
+
+	// Unmarshal middle data structure
 	middle := serialBeneficiary{}
 	if err := json.Unmarshal(data, &middle); err != nil {
 		return err
 	}
 
-	i := Beneficiary{
-		BeneficiaryPersons: middle.Beneficiary,
-		AccountNumbers:     middle.AccountNumbers,
-	}
+	// Populate originator values
+	b.BeneficiaryPersons = middle.Beneficiary
+	b.AccountNumbers = middle.AccountNumbers
 
-	// TODO warning: assignment copies lock value to *n
-	*b = i
 	return nil
 }
 
-//
-// Identity Legal Persons JSON
-//
+//===========================================================================
+// OriginatorVASP Methods
+//===========================================================================
 
 type serialOriginatorVASP struct {
 	Originator *Person `json:"originatingVASP,omitempty"`
+}
+
+var serialOriginatorVASPFields = map[string]string{
+	"originatingVASP":  "originatingVASP",
+	"originating_vasp": "originatingVASP",
 }
 
 func (o *OriginatingVasp) MarshalJSON() ([]byte, error) {
@@ -124,23 +189,37 @@ func (o *OriginatingVasp) MarshalJSON() ([]byte, error) {
 	return json.Marshal(middle)
 }
 
-func (o *OriginatingVasp) UnmarshalJSON(data []byte) error {
+func (o *OriginatingVasp) UnmarshalJSON(data []byte) (err error) {
+	// Perform rekeying operation
+	if allowRekeying {
+		if data, err = Rekey(data, serialOriginatorVASPFields); err != nil {
+			return err
+		}
+	}
+
+	// Unmarshal middle data structure
 	middle := serialOriginatorVASP{}
 	if err := json.Unmarshal(data, &middle); err != nil {
 		return err
 	}
 
-	i := OriginatingVasp{
-		OriginatingVasp: middle.Originator,
-	}
+	// Populate originator vasp values.
+	o.OriginatingVasp = middle.Originator
 
-	// TODO warning: assignment copies lock value to *n
-	*o = i
 	return nil
 }
 
+//===========================================================================
+// BeneficiaryVASP Methods
+//===========================================================================
+
 type serialBeneficiaryVASP struct {
 	Beneficiary *Person `json:"beneficiaryVASP,omitempty"`
+}
+
+var serialBeneficiaryVASPFields = map[string]string{
+	"beneficiaryVASP":  "beneficiaryVASP",
+	"beneficiary_vasp": "beneficiaryVASP",
 }
 
 func (b *BeneficiaryVasp) MarshalJSON() ([]byte, error) {
@@ -150,28 +229,41 @@ func (b *BeneficiaryVasp) MarshalJSON() ([]byte, error) {
 	return json.Marshal(middle)
 }
 
-func (b *BeneficiaryVasp) UnmarshalJSON(data []byte) error {
+func (b *BeneficiaryVasp) UnmarshalJSON(data []byte) (err error) {
+	// Perform rekeying operation
+	if allowRekeying {
+		if data, err = Rekey(data, serialBeneficiaryVASPFields); err != nil {
+			return err
+		}
+	}
+
+	// Unmarshal middle data structure
 	middle := serialBeneficiaryVASP{}
 	if err := json.Unmarshal(data, &middle); err != nil {
 		return err
 	}
 
-	i := BeneficiaryVasp{
-		BeneficiaryVasp: middle.Beneficiary,
-	}
+	// Populate beneficiary vasp values
+	b.BeneficiaryVasp = middle.Beneficiary
 
-	// TODO warning: assignment copies lock value to *n
-	*b = i
 	return nil
 }
 
-//
-// Transfer Path JSON
-//
+//===========================================================================
+// IntermediaryVASP Methods
+//===========================================================================
 
 type serialIntermediaryVASP struct {
 	Intermediary *Person `json:"intermediaryVASP,omitempty"`
 	Sequence     uint64  `json:"sequence,omitempty"`
+}
+
+var serialIntermediaryVASPFields = map[string]string{
+	"intermediaryVASP":   "intermediaryVASP",
+	"intermediaryVASPs":  "intermediaryVASP",
+	"intermediary_vasp":  "intermediaryVASP",
+	"intermediary_vasps": "intermediaryVASP",
+	"sequence":           "sequence",
 }
 
 func (v *IntermediaryVasp) MarshalJSON() ([]byte, error) {
@@ -182,24 +274,38 @@ func (v *IntermediaryVasp) MarshalJSON() ([]byte, error) {
 	return json.Marshal(middle)
 }
 
-func (v *IntermediaryVasp) UnmarshalJSON(data []byte) error {
+func (v *IntermediaryVasp) UnmarshalJSON(data []byte) (err error) {
+	// Perform rekeying operation
+	if allowRekeying {
+		if data, err = Rekey(data, serialIntermediaryVASPFields); err != nil {
+			return err
+		}
+	}
+
+	// Unmarshal middle data structure
 	middle := serialIntermediaryVASP{}
 	if err := json.Unmarshal(data, &middle); err != nil {
 		return err
 	}
 
-	i := IntermediaryVasp{
-		IntermediaryVasp: middle.Intermediary,
-		Sequence:         middle.Sequence,
-	}
+	// Populate intermediary vasp values
+	v.IntermediaryVasp = middle.Intermediary
+	v.Sequence = middle.Sequence
 
-	// TODO warning: assignment copies lock value to *n
-	*v = i
 	return nil
 }
 
+//===========================================================================
+// TransferPath Methods
+//===========================================================================
+
 type serialTransferPath struct {
 	TransferPath []*IntermediaryVasp `json:"transferPath,omitempty"`
+}
+
+var serialTransferPathFields = map[string]string{
+	"transferPath":  "transferPath",
+	"transfer_path": "transferPath",
 }
 
 func (p *TransferPath) MarshalJSON() ([]byte, error) {
@@ -209,27 +315,40 @@ func (p *TransferPath) MarshalJSON() ([]byte, error) {
 	return json.Marshal(middle)
 }
 
-func (p *TransferPath) UnmarshalJSON(data []byte) error {
+func (p *TransferPath) UnmarshalJSON(data []byte) (err error) {
+	// Perform rekeying operation
+	if allowRekeying {
+		if data, err = Rekey(data, serialTransferPathFields); err != nil {
+			return err
+		}
+	}
+
+	// Unmarshal middle data structure
 	middle := serialTransferPath{}
 	if err := json.Unmarshal(data, &middle); err != nil {
 		return err
 	}
 
-	i := TransferPath{
-		TransferPath: middle.TransferPath,
-	}
+	// Populate transfer path values
+	p.TransferPath = middle.TransferPath
 
-	// TODO warning: assignment copies lock value to *n
-	*p = i
 	return nil
 }
 
-//
-// Payload Metadata JSON
-//
+//===========================================================================
+// PayloadMetadata Methods
+//===========================================================================
 
 type serialPayloadMetadata struct {
 	TransliterationMethod []TransliterationMethodCode `json:"transliterationMethod,omitempty"`
+}
+
+var serialPayloadMetadataFields = map[string]string{
+	"transliterationMethod":   "transliterationMethod",
+	"transliteration_method":  "transliterationMethod",
+	"transliterationMethods":  "transliterationMethod",
+	"transliteration_methods": "transliterationMethod",
+	"methods":                 "transliterationMethod",
 }
 
 func (p *PayloadMetadata) MarshalJSON() ([]byte, error) {
@@ -239,17 +358,22 @@ func (p *PayloadMetadata) MarshalJSON() ([]byte, error) {
 	return json.Marshal(middle)
 }
 
-func (p *PayloadMetadata) UnmarshalJSON(data []byte) error {
+func (p *PayloadMetadata) UnmarshalJSON(data []byte) (err error) {
+	// Perform rekeying operation
+	if allowRekeying {
+		if data, err = Rekey(data, serialPayloadMetadataFields); err != nil {
+			return err
+		}
+	}
+
+	// Unmarshal middle data structure
 	middle := serialPayloadMetadata{}
 	if err := json.Unmarshal(data, &middle); err != nil {
 		return err
 	}
 
-	i := PayloadMetadata{
-		TransliterationMethod: middle.TransliterationMethod,
-	}
+	// Populate payload metadata values
+	p.TransliterationMethod = middle.TransliterationMethod
 
-	// TODO warning: assignment copies lock value to *n
-	*p = i
 	return nil
 }
