@@ -1,0 +1,153 @@
+{
+	"originator": {
+		"originatorPersons": [{
+			"naturalPerson": {
+				"name": {
+					"nameIdentifiers": [{
+							"primaryIdentifier": "Howard",
+							"secondaryIdentifier": "Jane",
+							"nameIdentifierType": "LEGL"
+						},
+						{
+							"lastName": "Price",
+							"firstName": "Jane",
+							"nameIdentifierType": "MAID"
+						}
+					]
+				},
+				"geographicAddresses": [{
+					"addressType": "HOME",
+					"street": "Greystone Street",
+					"number": "28",
+					"postalCode": "38017",
+					"town": "Collierville",
+					"state": "TN",
+					"country": "US"
+				}],
+				"nationalIdentification": {
+					"nationalIdentifier": "112502920",
+					"nationalIdentifierType": "SOCS",
+					"countryOfIssue": "US",
+					"ra": "RA777777"
+				},
+				"customerIdentification": "2642",
+				"dateAndPlaceOfBirth": {
+					"dob": "1992-10-04",
+					"pob": "West Islip, NY"
+				},
+				"country_of_residence": "US"
+			}
+		}],
+		"accountNumber": [
+			"14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v"
+		]
+	},
+	"beneficiary": {
+		"beneficiaryPersons": [{
+			"naturalPerson": {
+				"name": {
+					"nameIdentifiers": [{
+							"primaryIdentifier": "Clark",
+							"secondaryIdentifier": "Lawrence",
+							"nameIdentifierType": "LEGL"
+						},
+						{
+							"surname": "Clark",
+							"firstName": "Larry",
+							"nameIdentifierType": "ALIA"
+						}
+					]
+				},
+				"geographic_addresses": [{
+					"addressType": "HOME",
+					"street_name": "Watling St",
+					"building_number": "249",
+					"zip_code": "WD7 7AL",
+					"city": "Radlett",
+					"country": "GB"
+				}],
+				"national_identification": {
+					"nationalIdentifier": "319560446",
+					"nationalIdentifierType": "DRLC",
+					"country": "GB",
+					"registrationAuthority": "RA777777"
+				},
+				"customer_identification": "5610",
+				"date_and_place_of_birth": {
+					"date_of_birth": "1986-12-13",
+					"place_of_birth": "Leeds, United Kingdom"
+				},
+				"countryOfResidence": "GB"
+			}
+		}],
+		"accountNumber": [
+			"14WU745djqecaJ1gmtWQGeMCFim1W5MNp3"
+		]
+	},
+	"originatingVASP": {
+		"originatingVASP": {
+			"legalPerson": {
+				"name": {
+					"name_identifiers": [{
+							"name": "AliceCoin, Inc.",
+							"legalPersonNameIdentifierType": "LEGL"
+						},
+						{
+							"legal_person_name": "Alice VASP",
+							"legal_person_name_identifier_type": "SHRT"
+						},
+						{
+							"legalPersonName": "AliceCoin",
+							"legalPersonNameIdentifierType": "TRAD"
+						}
+					]
+				},
+				"addresses": [{
+					"address_type": "BIZZ",
+					"streetName": "Roosevelt Place",
+					"buildingNumber": "23",
+					"postCode": "02151",
+					"townName": "Boston",
+					"countrySubDivision": "MA",
+					"country": "US"
+				}],
+				"nationalIdentification": {
+					"national_identifier": "506700T7Z685VUOZL877",
+					"national_identifier_type": "LEIX"
+				},
+				"countryOfRegistration": "US"
+			}
+		}
+	},
+	"beneficiaryVASP": {
+		"beneficiaryVASP": {
+			"legalPerson": {
+				"name": {
+					"nameIdentifiers": [{
+							"legalPersonName": "Bob's Discount VASP, PLC",
+							"legalPersonNameIdentifierType": "LEGL"
+						},
+						{
+							"legalPersonName": "Bob VASP",
+							"legalPersonNameIdentifierType": "SHRT"
+						}
+					]
+				},
+				"geographicAddress": [{
+					"addressType": "BIZZ",
+					"streetName": "Grimsby Road",
+					"buildingNumber": "762",
+					"postCode": "OX8 U89",
+					"townName": "Oxford",
+					"country": "GB"
+				}],
+				"nationalIdentification": {
+					"nationalIdentifier": "213800AQUAUP6I215N33",
+					"nationalIdentifierType": "TXID",
+					"registrationAuthority": "RA777777"
+				},
+				"country": "GB"
+			}
+		}
+	}
+}

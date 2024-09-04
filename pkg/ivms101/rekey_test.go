@@ -6,7 +6,57 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"github.com/trisacrypto/trisa/pkg/ivms101"
 )
+
+func TestRekeying(t *testing.T) {
+	ivms101.AllowRekeying()
+	t.Cleanup(ivms101.DisallowRekeying)
+
+	expected, err := os.ReadFile("testdata/identity_payload.json")
+	require.NoError(t, err, "could not load testdata/identity_payload.json")
+
+	t.Run("NoModification", func(t *testing.T) {
+		f, err := os.Open("testdata/identity_payload.json")
+		require.NoError(t, err, "could not load testdata/identity_payload.json")
+		defer f.Close()
+
+		payload := &ivms101.IdentityPayload{}
+		err = json.NewDecoder(f).Decode(payload)
+		require.NoError(t, err, "could not decode payload with rekeying")
+
+		compat, err := json.Marshal(payload)
+		require.NoError(t, err, "could not marshal payload")
+
+		require.JSONEq(t, string(expected), string(compat), "json not equal to expected")
+	})
+
+	t.Run("Modified", func(t *testing.T) {
+		f, err := os.Open("testdata/identity_payload_alt.json")
+		require.NoError(t, err, "could not load testdata/identity_payload_alt.json")
+		defer f.Close()
+
+		payload := &ivms101.IdentityPayload{}
+		err = json.NewDecoder(f).Decode(payload)
+		require.NoError(t, err, "could not decode payload with rekeying")
+
+		compat, err := json.Marshal(payload)
+		require.NoError(t, err, "could not marshal payload")
+
+		require.JSONEq(t, string(expected), string(compat), "json not equal to expected")
+	})
+
+	t.Run("Protobuf", func(t *testing.T) {
+		f, err := os.Open("testdata/identity_payload.pb.json")
+		require.NoError(t, err, "could not load testdata/identity_payload.pb.json")
+		defer f.Close()
+
+		payload := &ivms101.IdentityPayload{}
+		err = json.NewDecoder(f).Decode(payload)
+		require.NoError(t, err, "could not decode payload with rekeying")
+	})
+}
 
 func BenchmarkRekeying(b *testing.B) {
 	// Rekey1 uses a map[string]interface{} for decoding and rekeying.

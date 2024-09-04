@@ -83,6 +83,8 @@ var serialNaturalPersonKeys = map[string]string{
 	"geographic_addresses":    "geographicAddress",
 	"addresses":               "geographicAddress",
 	"address":                 "geographicAddress",
+	"nationalIdentification":  "nationalIdentification",
+	"national_identification": "nationalIdentification",
 	"customerIdentification":  "customerIdentification",
 	"customer_identification": "customerIdentification",
 	"dateAndPlaceOfBirth":     "dateAndPlaceOfBirth",
