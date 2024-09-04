@@ -59,6 +59,33 @@ func TestRekeying(t *testing.T) {
 }
 
 func BenchmarkRekeying(b *testing.B) {
+	data, err := os.ReadFile("testdata/identity_payload.json")
+	require.NoError(b, err)
+
+	b.Run("WithRekeying", func(b *testing.B) {
+		ivms101.AllowRekeying()
+		ivms101.DisallowUnknownFields()
+		b.Cleanup(func() {
+			ivms101.AllowUnknownFields()
+			ivms101.DisallowRekeying()
+		})
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			payload := ivms101.IdentityPayload{}
+			json.Unmarshal(data, &payload)
+		}
+	})
+
+	b.Run("WithoutRekeying", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			payload := ivms101.IdentityPayload{}
+			json.Unmarshal(data, &payload)
+		}
+	})
+}
+
+func BenchmarkRekeyingType(b *testing.B) {
 	// Rekey1 uses a map[string]interface{} for decoding and rekeying.
 	rekey1 := func(b *testing.B, data []byte) {
 		var middle map[string]interface{}
