@@ -27,7 +27,7 @@ func TestLegalPerson(t *testing.T) {
 	person.NationalIdentification.NationalIdentifierType = 9
 	person.NationalIdentification.RegistrationAuthority = ""
 	require.NoError(t, person.Validate())
-	person.NationalIdentification.RegistrationAuthority = "Chuck Norris"
+	person.NationalIdentification.RegistrationAuthority = "RA777777"
 	require.Error(t, person.Validate())
 
 	// If the National Identifier is not an LEI, Registration Authority is mandatory

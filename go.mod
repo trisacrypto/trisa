@@ -8,8 +8,8 @@ require (
 	github.com/bombsimon/tld-validator v1.2.33
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
-	github.com/nsf/jsondiff v0.0.0-20230430225905-43f6cf3098c1
 	github.com/stretchr/testify v1.9.0
+	github.com/trisacrypto/lei v1.0.0
 	github.com/urfave/cli/v2 v2.27.2
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2
