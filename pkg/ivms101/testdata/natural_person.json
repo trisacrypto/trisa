@@ -22,8 +22,7 @@
     "nationalIdentification": {
         "nationalIdentifier": "864-118-996",
         "nationalIdentifierType": "SOCS",
-        "countryOfIssue": "US",
-        "registrationAuthority": "RA000628"
+        "countryOfIssue": "US"
     },
     "customerIdentification": "1234abc",
     "dateAndPlaceOfBirth": {

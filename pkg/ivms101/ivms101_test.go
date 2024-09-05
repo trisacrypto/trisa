@@ -5,7 +5,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/nsf/jsondiff"
 	"github.com/stretchr/testify/require"
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 )
@@ -60,9 +59,7 @@ func TestNaturalPersonMarshaling(t *testing.T) {
 	compat, err := json.Marshal(person)
 	require.NoError(t, err, "could not marshal natural person")
 
-	diffOpts := jsondiff.DefaultConsoleOptions()
-	res, _ := jsondiff.Compare(data, compat, &diffOpts)
-	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+	require.JSONEq(t, string(data), string(compat), "marshalled json differs from original")
 }
 
 //
@@ -200,9 +197,7 @@ func TestAddressMarshaling(t *testing.T) {
 	require.Nil(t, err)
 
 	// Newly marshaled json should match original json
-	diffOpts := jsondiff.DefaultConsoleOptions()
-	res, _ := jsondiff.Compare(data, compatB, &diffOpts)
-	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+	require.JSONEq(t, string(data), string(compatB), "marshalled json differs from original")
 }
 
 //
@@ -219,9 +214,7 @@ func TestDateAndPlaceOfBirthMarshaling(t *testing.T) {
 	outdata, err := json.Marshal(dob)
 	require.NoError(t, err, "could not marshal date and place of birth")
 
-	diffOpts := jsondiff.DefaultConsoleOptions()
-	res, _ := jsondiff.Compare(dobData, outdata, &diffOpts)
-	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+	require.JSONEq(t, string(dobData), string(outdata), "marshalled json differs from original")
 }
 
 //
@@ -242,9 +235,7 @@ func TestNationalIdentificationMarshaling(t *testing.T) {
 	compat, err := json.Marshal(natId)
 	require.NoError(t, err, "could not marshal national identification")
 
-	diffOpts := jsondiff.DefaultConsoleOptions()
-	res, _ := jsondiff.Compare(data, compat, &diffOpts)
-	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+	require.JSONEq(t, string(data), string(compat), "marshalled json differs from original")
 }
 
 //
@@ -269,9 +260,7 @@ func TestLegalPersonMarshaling(t *testing.T) {
 	compat, err := json.Marshal(person)
 	require.NoError(t, err, "could not marshal legal person")
 
-	diffOpts := jsondiff.DefaultConsoleOptions()
-	res, _ := jsondiff.Compare(data, compat, &diffOpts)
-	require.Equal(t, res, jsondiff.FullMatch, "marshalled json differs from original")
+	require.JSONEq(t, string(data), string(compat), "marshalled json differs from original")
 }
 
 //

@@ -8,13 +8,9 @@ import (
 
 // Standard error values for error type checking
 var (
-	ErrNoNaturalPersonNameIdentifiers           = errors.New("one or more natural person name identifiers is required")
-	ErrInvalidNaturalPersonName                 = errors.New("natural person name required with max length 100 chars")
 	ErrNoLegalPersonNameIdentifiers             = errors.New("one or more legal person name identifiers is required")
 	ErrInvalidLegalPersonName                   = errors.New("legal person name required with max length 100 chars")
-	ErrLegalNamesPresent                        = errors.New("at least one name identifier must have a LEGL name identifier type")
 	ErrInvalidCustomerNumber                    = errors.New("customer number can be at most 50 chars")
-	ErrInvalidCustomerIdentification            = errors.New("customer identification can be at most 50 chars")
 	ErrInvalidCountryCode                       = errors.New("invalid ISO-3166-1 alpha-2 country code")
 	ErrValidNationalIdentifierLegalPerson       = errors.New("a legal person must have a national identifier of type RAID, MISC, LEIX, or TXID")
 	ErrInvalidLEI                               = errors.New("national identifier required with max length 35")
@@ -55,8 +51,12 @@ func IncorrectField(field, issue string) *FieldError {
 	return &FieldError{verb: "invalid field", field: field, issue: issue}
 }
 
-func ReadOnlyField(field string) *FieldError {
-	return &FieldError{verb: "read-only field", field: field, issue: "this field cannot be written by the user"}
+func MaxNText(field string, max, length int) *FieldError {
+	return &FieldError{field: fmt.Sprintf("exceeded max length %d chars", max), verb: field, issue: fmt.Sprintf("%d characters is too long", length)}
+}
+
+func InvalidEnum(field, enumValue, enumType string) *FieldError {
+	return &FieldError{field: field, verb: "invalid enum", issue: fmt.Sprintf("%q is not a valid %s", enumValue, enumType)}
 }
 
 func OneOfMissing(fields ...string) *FieldError {
@@ -80,21 +80,35 @@ func OneOfTooMany(fields ...string) *FieldError {
 	return &FieldError{verb: "specify only one of", field: fieldList(fields...), issue: "at most one of these fields may be specified"}
 }
 
-func ValidationError(err error, errs ...*FieldError) error {
+func ValidationError(prefix string, err error, errs ...error) error {
 	var verr ValidationErrors
 	if err == nil {
 		verr = make(ValidationErrors, 0, len(errs))
 	} else {
-		var ok bool
-		if verr, ok = err.(ValidationErrors); !ok {
+		switch v := err.(type) {
+		case ValidationErrors:
+			verr = v
+		case *FieldError:
+			verr = ValidationErrors{v}
+		default:
 			verr = make(ValidationErrors, 0, len(errs)+1)
-			verr = append(verr, &FieldError{verb: "invalid", field: "input", issue: err.Error()})
+			verr = append(verr, &FieldError{verb: "invalid", field: "input", issue: v.Error()})
 		}
 	}
 
 	for _, e := range errs {
 		if e != nil {
-			verr = append(verr, e)
+			switch v := e.(type) {
+			case ValidationErrors:
+				for _, serr := range v {
+					verr = append(verr, serr.add(prefix))
+				}
+			case *FieldError:
+				verr = append(verr, v.add(prefix))
+			default:
+				ierr := &FieldError{verb: "invalid", field: "input", issue: e.Error()}
+				verr = append(verr, ierr.add(prefix))
+			}
 		}
 	}
 
@@ -120,17 +134,32 @@ func (e ValidationErrors) Error() string {
 }
 
 type FieldError struct {
-	verb  string
-	field string
-	issue string
+	parent []string
+	verb   string
+	field  string
+	issue  string
 }
 
 func (e *FieldError) Error() string {
-	return fmt.Sprintf("ivms101: %s %s: %s", e.verb, e.field, e.issue)
+	return fmt.Sprintf("ivms101: %s %s: %s", e.verb, e.Field(), e.issue)
 }
 
 func (e *FieldError) Field() string {
+	if len(e.parent) > 0 {
+		prefix := strings.Join(e.parent, ".")
+		return fmt.Sprintf("%s.%s", prefix, e.field)
+	}
 	return e.field
+}
+
+func (e *FieldError) add(parent string) *FieldError {
+	if parent != "" {
+		if e.parent == nil {
+			e.parent = make([]string, 0, 1)
+		}
+		e.parent = append([]string{parent}, e.parent...)
+	}
+	return e
 }
 
 func fieldList(fields ...string) string {
