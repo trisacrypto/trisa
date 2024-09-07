@@ -1,6 +1,9 @@
 package ivms101
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 //===========================================================================
 // IdentityPayload Methods
@@ -43,6 +46,11 @@ func (i *IdentityPayload) MarshalJSON() ([]byte, error) {
 }
 
 func (i *IdentityPayload) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		i = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialIdentityPayloadFields); err != nil {
@@ -98,6 +106,11 @@ func (o *Originator) MarshalJSON() ([]byte, error) {
 }
 
 func (o *Originator) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		o = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialOriginatorFields); err != nil {
@@ -149,6 +162,11 @@ func (b *Beneficiary) MarshalJSON() ([]byte, error) {
 }
 
 func (b *Beneficiary) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		b = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialBeneficiaryFields); err != nil {
@@ -190,6 +208,11 @@ func (o *OriginatingVasp) MarshalJSON() ([]byte, error) {
 }
 
 func (o *OriginatingVasp) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		o = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialOriginatorVASPFields); err != nil {
@@ -230,6 +253,11 @@ func (b *BeneficiaryVasp) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BeneficiaryVasp) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		b = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialBeneficiaryVASPFields); err != nil {
@@ -275,6 +303,11 @@ func (v *IntermediaryVasp) MarshalJSON() ([]byte, error) {
 }
 
 func (v *IntermediaryVasp) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		v = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialIntermediaryVASPFields); err != nil {
@@ -316,6 +349,11 @@ func (p *TransferPath) MarshalJSON() ([]byte, error) {
 }
 
 func (p *TransferPath) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		p = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialTransferPathFields); err != nil {
@@ -359,6 +397,11 @@ func (p *PayloadMetadata) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PayloadMetadata) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		p = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialPayloadMetadataFields); err != nil {
@@ -374,6 +417,5 @@ func (p *PayloadMetadata) UnmarshalJSON(data []byte) (err error) {
 
 	// Populate payload metadata values
 	p.TransliterationMethod = middle.TransliterationMethod
-
 	return nil
 }

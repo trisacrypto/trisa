@@ -13,6 +13,12 @@ import (
 // Person JSON
 //
 
+func TestJSONNil(t *testing.T) {
+	person := &ivms101.Person{}
+	err := json.Unmarshal([]byte(`{}`), person)
+	require.NoError(t, err)
+}
+
 func TestPersonMarshaling(t *testing.T) {
 	data, err := os.ReadFile("testdata/person_natural_person.json")
 	require.NoError(t, err, "could not load person with natural person json fixture")

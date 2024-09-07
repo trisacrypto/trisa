@@ -1,6 +1,7 @@
 package ivms101
 
 import (
+	"bytes"
 	"encoding/json"
 )
 
@@ -29,6 +30,11 @@ func (p *Person) MarshalJSON() ([]byte, error) {
 }
 
 func (p *Person) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		p = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialPersonKeys); err != nil {
@@ -104,19 +110,24 @@ var serialNaturalPersonKeys = map[string]string{
 	"country":                 "countryOfResidence",
 }
 
-func (n *NaturalPerson) MarshalJSON() ([]byte, error) {
+func (p *NaturalPerson) MarshalJSON() ([]byte, error) {
 	middle := serialNaturalPerson{
-		Name:               n.Name,
-		Address:            n.GeographicAddresses,
-		Identification:     n.NationalIdentification,
-		CustomerID:         n.CustomerIdentification,
-		DOB:                n.DateAndPlaceOfBirth,
-		CountryOfResidence: n.CountryOfResidence,
+		Name:               p.Name,
+		Address:            p.GeographicAddresses,
+		Identification:     p.NationalIdentification,
+		CustomerID:         p.CustomerIdentification,
+		DOB:                p.DateAndPlaceOfBirth,
+		CountryOfResidence: p.CountryOfResidence,
 	}
 	return json.Marshal(middle)
 }
 
-func (n *NaturalPerson) UnmarshalJSON(data []byte) (err error) {
+func (p *NaturalPerson) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		p = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialNaturalPersonKeys); err != nil {
@@ -131,12 +142,12 @@ func (n *NaturalPerson) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	// Populate the natural person value
-	n.Name = middle.Name
-	n.GeographicAddresses = middle.Address
-	n.NationalIdentification = middle.Identification
-	n.CustomerIdentification = middle.CustomerID
-	n.DateAndPlaceOfBirth = middle.DOB
-	n.CountryOfResidence = middle.CountryOfResidence
+	p.Name = middle.Name
+	p.GeographicAddresses = middle.Address
+	p.NationalIdentification = middle.Identification
+	p.CustomerIdentification = middle.CustomerID
+	p.DateAndPlaceOfBirth = middle.DOB
+	p.CountryOfResidence = middle.CountryOfResidence
 
 	return nil
 }
@@ -176,6 +187,11 @@ func (n *NaturalPersonName) MarshalJSON() ([]byte, error) {
 }
 
 func (n *NaturalPersonName) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		n = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialNaturalPersonNameFields); err != nil {
@@ -223,16 +239,21 @@ var serialNaturalPersonNameIDFields = map[string]string{
 	"name_identifier_type": "nameIdentifierType",
 }
 
-func (p *NaturalPersonNameId) MarshalJSON() ([]byte, error) {
+func (n *NaturalPersonNameId) MarshalJSON() ([]byte, error) {
 	middle := serialNaturalPersonNameID{
-		PrimaryIdentifier:   p.PrimaryIdentifier,
-		SecondaryIdentifier: p.SecondaryIdentifier,
-		NameIdentifierType:  p.NameIdentifierType,
+		PrimaryIdentifier:   n.PrimaryIdentifier,
+		SecondaryIdentifier: n.SecondaryIdentifier,
+		NameIdentifierType:  n.NameIdentifierType,
 	}
 	return json.Marshal(middle)
 }
 
-func (p *NaturalPersonNameId) UnmarshalJSON(data []byte) (err error) {
+func (n *NaturalPersonNameId) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		n = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialNaturalPersonNameIDFields); err != nil {
@@ -247,9 +268,9 @@ func (p *NaturalPersonNameId) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	// Populate the natural person name id values
-	p.PrimaryIdentifier = middle.PrimaryIdentifier
-	p.SecondaryIdentifier = middle.SecondaryIdentifier
-	p.NameIdentifierType = middle.NameIdentifierType
+	n.PrimaryIdentifier = middle.PrimaryIdentifier
+	n.SecondaryIdentifier = middle.SecondaryIdentifier
+	n.NameIdentifierType = middle.NameIdentifierType
 
 	return nil
 }
@@ -273,16 +294,21 @@ var serialLocalNaturalPersonNameIDFields = map[string]string{
 	"name_identifier_type": "nameIdentifierType",
 }
 
-func (p *LocalNaturalPersonNameId) MarshalJSON() ([]byte, error) {
+func (n *LocalNaturalPersonNameId) MarshalJSON() ([]byte, error) {
 	middle := serialLocalNaturalPersonNameID{
-		PrimaryIdentifier:   p.PrimaryIdentifier,
-		SecondaryIdentifier: p.SecondaryIdentifier,
-		NameIdentifierType:  p.NameIdentifierType,
+		PrimaryIdentifier:   n.PrimaryIdentifier,
+		SecondaryIdentifier: n.SecondaryIdentifier,
+		NameIdentifierType:  n.NameIdentifierType,
 	}
 	return json.Marshal(middle)
 }
 
-func (p *LocalNaturalPersonNameId) UnmarshalJSON(data []byte) (err error) {
+func (n *LocalNaturalPersonNameId) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		n = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialLocalNaturalPersonNameIDFields); err != nil {
@@ -297,9 +323,9 @@ func (p *LocalNaturalPersonNameId) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	// Populate the natural person name id values
-	p.PrimaryIdentifier = middle.PrimaryIdentifier
-	p.SecondaryIdentifier = middle.SecondaryIdentifier
-	p.NameIdentifierType = middle.NameIdentifierType
+	n.PrimaryIdentifier = middle.PrimaryIdentifier
+	n.SecondaryIdentifier = middle.SecondaryIdentifier
+	n.NameIdentifierType = middle.NameIdentifierType
 
 	return nil
 }
@@ -401,6 +427,11 @@ func (a *Address) MarshalJSON() ([]byte, error) {
 }
 
 func (a *Address) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		a = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialAddressFields); err != nil {
@@ -462,6 +493,11 @@ func (d *DateAndPlaceOfBirth) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DateAndPlaceOfBirth) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		d = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialDateAndPlaceOfBirthFields); err != nil {
@@ -520,6 +556,11 @@ func (n *NationalIdentification) MarshalJSON() ([]byte, error) {
 }
 
 func (n *NationalIdentification) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		n = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialNationalIdentificationFields); err != nil {
@@ -545,6 +586,15 @@ func (n *NationalIdentification) UnmarshalJSON(data []byte) (err error) {
 //===========================================================================
 // LegalPerson Methods
 //===========================================================================
+
+// Person converts a LegalPerson into a Person protobuf message type.
+func (p *LegalPerson) Person() *Person {
+	return &Person{
+		Person: &Person_LegalPerson{
+			LegalPerson: p,
+		},
+	}
+}
 
 type serialLegalPerson struct {
 	Name                   *LegalPersonName        `json:"name,omitempty"`
@@ -572,18 +622,23 @@ var serialLegalPersonFields = map[string]string{
 	"country":                 "countryOfRegistration",
 }
 
-func (l *LegalPerson) MarshalJSON() ([]byte, error) {
+func (p *LegalPerson) MarshalJSON() ([]byte, error) {
 	middle := serialLegalPerson{
-		Name:                   l.Name,
-		Address:                l.GeographicAddresses,
-		CustomerNumber:         l.CustomerNumber,
-		NationalIdentification: l.NationalIdentification,
-		CountryOfRegistration:  l.CountryOfRegistration,
+		Name:                   p.Name,
+		Address:                p.GeographicAddresses,
+		CustomerNumber:         p.CustomerNumber,
+		NationalIdentification: p.NationalIdentification,
+		CountryOfRegistration:  p.CountryOfRegistration,
 	}
 	return json.Marshal(middle)
 }
 
-func (l *LegalPerson) UnmarshalJSON(data []byte) (err error) {
+func (p *LegalPerson) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		p = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialLegalPersonFields); err != nil {
@@ -598,11 +653,11 @@ func (l *LegalPerson) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	// Populate legal person values
-	l.Name = middle.Name
-	l.GeographicAddresses = middle.Address
-	l.CustomerNumber = middle.CustomerNumber
-	l.NationalIdentification = middle.NationalIdentification
-	l.CountryOfRegistration = middle.CountryOfRegistration
+	p.Name = middle.Name
+	p.GeographicAddresses = middle.Address
+	p.CustomerNumber = middle.CustomerNumber
+	p.NationalIdentification = middle.NationalIdentification
+	p.CountryOfRegistration = middle.CountryOfRegistration
 
 	return nil
 }
@@ -610,15 +665,6 @@ func (l *LegalPerson) UnmarshalJSON(data []byte) (err error) {
 //===========================================================================
 // LegalPersonName Methods
 //===========================================================================
-
-// Person converts a LegalPerson into a Person protobuf message type.
-func (p *LegalPerson) Person() *Person {
-	return &Person{
-		Person: &Person_LegalPerson{
-			LegalPerson: p,
-		},
-	}
-}
 
 type serialLegalPersonName struct {
 	NameIdentifiers         []*LegalPersonNameId      `json:"nameIdentifier,omitempty"`
@@ -641,16 +687,21 @@ var serialLegalPersonNameFields = map[string]string{
 	"phonetic_name_identifiers": "phoneticNameIdentifier",
 }
 
-func (l *LegalPersonName) MarshalJSON() ([]byte, error) {
+func (n *LegalPersonName) MarshalJSON() ([]byte, error) {
 	middle := serialLegalPersonName{
-		LocalNameIdentifiers:    l.LocalNameIdentifiers,
-		NameIdentifiers:         l.NameIdentifiers,
-		PhoneticNameIdentifiers: l.PhoneticNameIdentifiers,
+		LocalNameIdentifiers:    n.LocalNameIdentifiers,
+		NameIdentifiers:         n.NameIdentifiers,
+		PhoneticNameIdentifiers: n.PhoneticNameIdentifiers,
 	}
 	return json.Marshal(middle)
 }
 
-func (l *LegalPersonName) UnmarshalJSON(data []byte) (err error) {
+func (n *LegalPersonName) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		n = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialLegalPersonNameFields); err != nil {
@@ -665,9 +716,9 @@ func (l *LegalPersonName) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	// Populate legal person values
-	l.NameIdentifiers = middle.NameIdentifiers
-	l.LocalNameIdentifiers = middle.LocalNameIdentifiers
-	l.PhoneticNameIdentifiers = middle.PhoneticNameIdentifiers
+	n.NameIdentifiers = middle.NameIdentifiers
+	n.LocalNameIdentifiers = middle.LocalNameIdentifiers
+	n.PhoneticNameIdentifiers = middle.PhoneticNameIdentifiers
 
 	return nil
 }
@@ -689,15 +740,20 @@ var serialLegalPersonNameIDFields = map[string]string{
 	"legal_person_name_identifier_type": "legalPersonNameIdentifierType",
 }
 
-func (p *LegalPersonNameId) MarshalJSON() ([]byte, error) {
+func (n *LegalPersonNameId) MarshalJSON() ([]byte, error) {
 	middle := serialLegalPersonNameID{
-		LegalPersonName:               p.LegalPersonName,
-		LegalPersonNameIdentifierType: p.LegalPersonNameIdentifierType,
+		LegalPersonName:               n.LegalPersonName,
+		LegalPersonNameIdentifierType: n.LegalPersonNameIdentifierType,
 	}
 	return json.Marshal(middle)
 }
 
-func (p *LegalPersonNameId) UnmarshalJSON(data []byte) (err error) {
+func (n *LegalPersonNameId) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		n = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialLegalPersonNameIDFields); err != nil {
@@ -712,8 +768,8 @@ func (p *LegalPersonNameId) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	// Populate legal person values
-	p.LegalPersonName = middle.LegalPersonName
-	p.LegalPersonNameIdentifierType = middle.LegalPersonNameIdentifierType
+	n.LegalPersonName = middle.LegalPersonName
+	n.LegalPersonNameIdentifierType = middle.LegalPersonNameIdentifierType
 
 	return nil
 }
@@ -735,15 +791,20 @@ var serialLocalLegalPersonNameIDFields = map[string]string{
 	"legal_person_name_identifier_type": "legalPersonNameIdentifierType",
 }
 
-func (p *LocalLegalPersonNameId) MarshalJSON() ([]byte, error) {
+func (n *LocalLegalPersonNameId) MarshalJSON() ([]byte, error) {
 	middle := serialLocalLegalPersonNameID{
-		LegalPersonName:               p.LegalPersonName,
-		LegalPersonNameIdentifierType: p.LegalPersonNameIdentifierType,
+		LegalPersonName:               n.LegalPersonName,
+		LegalPersonNameIdentifierType: n.LegalPersonNameIdentifierType,
 	}
 	return json.Marshal(middle)
 }
 
-func (p *LocalLegalPersonNameId) UnmarshalJSON(data []byte) (err error) {
+func (n *LocalLegalPersonNameId) UnmarshalJSON(data []byte) (err error) {
+	if bytes.Equal(data, nullJSON) {
+		n = nil
+		return nil
+	}
+
 	// Perform rekeying operation
 	if allowRekeying {
 		if data, err = Rekey(data, serialLocalLegalPersonNameIDFields); err != nil {
@@ -758,8 +819,8 @@ func (p *LocalLegalPersonNameId) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	// Populate legal person values
-	p.LegalPersonName = middle.LegalPersonName
-	p.LegalPersonNameIdentifierType = middle.LegalPersonNameIdentifierType
+	n.LegalPersonName = middle.LegalPersonName
+	n.LegalPersonNameIdentifierType = middle.LegalPersonNameIdentifierType
 
 	return nil
 }
