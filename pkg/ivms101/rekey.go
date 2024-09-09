@@ -8,6 +8,7 @@ import (
 var (
 	allowRekeying         bool
 	disallowUnknownFields bool
+	nullJSON              = []byte{110, 117, 108, 108}
 )
 
 // Rekeying sets the module to perform a rekeying operation that changes snake_case and
