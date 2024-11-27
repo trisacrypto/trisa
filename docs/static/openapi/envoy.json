@@ -11,10 +11,9 @@
       "name": "MIT Licensed",
       "url": "https://github.com/trisacrypto/envoy/blob/main/LICENSE"
     },
-    "version": "v0.25.0"
+    "version": "v0.28.0"
   },
   "openapi": "3.1.0",
-  "servers": [],
   "tags": [
     {
       "name": "Authentication",
@@ -31,6 +30,10 @@
     {
       "name": "Counterparties",
       "description": "Counterparties define remote VASP peers with whom you can exchange Travel Rule information for compliance purposes."
+    },
+    {
+      "name": "Contacts",
+      "description": "Contacts associated with remote counterparties that can be messaged to handle technical or compliance support issues or to send Sunrise messages to."
     },
     {
       "name": "Transactions",
@@ -806,6 +809,14 @@
             "description": "The base64 encoded representation of a JSON or protocol buffer IVMS101 record for the legal person of the counterparty.",
             "example": "EmcKLwoeChpBbGljZSBUcmFkaW5nIENvbXBhbnksIExURBABCg0KCUFsaWNlQ29pbhADEjAIAiILTWFpbiBTdHJlZXQqAzEyM1IFNTU4ODBaClNtYWxsdmlsbGVqAktZggECVVMqAkRF"
           },
+          "contacts": {
+            "type": "array",
+            "description": "A list of compliance contact email addresses associated with the counterparty for technical support or sunrise requests.",
+            "items": {
+              "$ref": "#/components/schemas/Contact"
+            },
+            "example": []
+          },
           "created": {
             "type": "string",
             "format": "date-time",
@@ -836,6 +847,24 @@
             "Other"
           ],
           "ivms101": "EmcKLwoeChpBbGljZSBUcmFkaW5nIENvbXBhbnksIExURBABCg0KCUFsaWNlQ29pbhADEjAIAiILTWFpbiBTdHJlZXQqAzEyM1IFNTU4ODBaClNtYWxsdmlsbGVqAktZggECVVMqAkRF",
+          "contacts": [
+            {
+              "id": "01JDQDM9QG9056TS0B7YXSDP0K",
+              "name": "James Duffy",
+              "email": "jduffy@alice.vaspbot.net",
+              "role": "Compliance Officer",
+              "created": "2024-11-27T12:21:08-06:00",
+              "modified": "2024-11-27T12:21:08-06:00"
+            },
+            {
+              "id": "01JDQDPEC3KWSW4FMFEHPETS00",
+              "name": "Alice Barnes",
+              "email": "alice@alice.vaspbot.net",
+              "role": "Technical Support",
+              "created": "2024-08-28T10:14:43-05:00",
+              "modified": "2024-08-28T12:23:24-05:00"
+            }
+          ],
           "verified_on": "2024-08-28T10:14:43-05:00",
           "created": "2024-08-28T10:14:43-05:00",
           "modified": "2024-08-28T12:23:24-05:00"
@@ -4986,6 +5015,112 @@
           "encoded": "ta32sgxYnHqYMeJSfyng1wA3s7zCw5Q48v",
           "decoded": "beneficiary.com?t=i"
         }
+      },
+      "Contact": {
+        "title": "Contact",
+        "type": "object",
+        "description": "The contact officer of a compliance officer or technical support representative at a counterparty VASP. This information is used to send emails to the recipient.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "ULID",
+            "description": "The unique identifier of the contact on your Envoy node.",
+            "example": "01JDQDM9QG9056TS0B7YXSDP0K"
+          },
+          "name": {
+            "type": "string",
+            "description": "The full name of the compliance officer (first last).",
+            "example": "James Duffy"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The professional email address of the contact (must be unique and associated with only one counterparty).",
+            "example": "jduffy@alice.vaspbot.net"
+          },
+          "role": {
+            "type": "string",
+            "description": "The type of role or responsibilities the contact has at the counterparty.",
+            "example": "Compliance Officer"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the contact record was created.",
+            "example": "2024-11-27T12:21:08-06:00"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the contact record was last modified.",
+            "example": "2024-11-27T12:21:08-06:00"
+          }
+        },
+        "example": {
+          "id": "01JDQDM9QG9056TS0B7YXSDP0K",
+          "name": "James Duffy",
+          "email": "jduffy@alice.vaspbot.net",
+          "role": "Compliance Officer",
+          "created": "2024-11-27T12:21:08-06:00",
+          "modified": "2024-11-27T12:21:08-06:00"
+        }
+      },
+      "ContactList": {
+        "title": "ContactList",
+        "type": "object",
+        "description": "A list of Contact objects, returned in a paginated fashion.",
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PageInfo"
+          },
+          "contacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Contact"
+            },
+            "example": [
+              {
+                "id": "01JDQDM9QG9056TS0B7YXSDP0K",
+                "name": "James Duffy",
+                "email": "jduffy@alice.vaspbot.net",
+                "role": "Compliance Officer",
+                "created": "2024-11-27T12:21:08-06:00",
+                "modified": "2024-11-27T12:21:08-06:00"
+              },
+              {
+                "id": "01JDQDPEC3KWSW4FMFEHPETS00",
+                "name": "Alice Barnes",
+                "email": "alice@alice.vaspbot.net",
+                "role": "Technical Support",
+                "created": "2024-08-28T10:14:43-05:00",
+                "modified": "2024-08-28T12:23:24-05:00"
+              }
+            ]
+          }
+        },
+        "example": {
+          "page": {
+            "page_size": 50
+          },
+          "contacts": [
+            {
+              "id": "01JDQDM9QG9056TS0B7YXSDP0K",
+              "name": "James Duffy",
+              "email": "jduffy@alice.vaspbot.net",
+              "role": "Compliance Officer",
+              "created": "2024-11-27T12:21:08-06:00",
+              "modified": "2024-11-27T12:21:08-06:00"
+            },
+            {
+              "id": "01JDQDPEC3KWSW4FMFEHPETS00",
+              "name": "Alice Barnes",
+              "email": "alice@alice.vaspbot.net",
+              "role": "Technical Support",
+              "created": "2024-08-28T10:14:43-05:00",
+              "modified": "2024-08-28T12:23:24-05:00"
+            }
+          ]
+        }
       }
     },
     "securitySchemes": {
@@ -5072,6 +5207,36 @@
           "example": true
         },
         "example": true
+      },
+      "encoding": {
+        "name": "encoding",
+        "in": "query",
+        "description": "Specify the encoding of the IVMS101 payload in the response or request (default: base64), specifying 'none' encoding will cause the JSON payload to be rendered/parsed inline with the payload. Note that base64 encoding is urlsafe with padding.",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "none",
+            "base64"
+          ],
+          "example": "base64"
+        },
+        "example": "base64"
+      },
+      "formatq": {
+        "name": "format",
+        "in": "query",
+        "description": "Specify the format of the IVMS101 payload in the response or request (default: json), specifying 'pb' encoding will cause the protocol buffers to be returned/parsed (base64 encoding required).",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "pb",
+            "json"
+          ],
+          "example": "pb"
+        },
+        "example": "pb"
       }
     }
   },
@@ -5331,6 +5496,14 @@
             "bearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/encoding"
+          },
+          {
+            "$ref": "#/components/parameters/formatq"
+          }
+        ],
         "requestBody": {
           "required": true,
           "description": "Account information that includes all required writeable fields and no crypto addresses.",
@@ -5450,6 +5623,12 @@
               "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
             },
             "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "$ref": "#/components/parameters/encoding"
+          },
+          {
+            "$ref": "#/components/parameters/formatq"
           }
         ],
         "responses": {
@@ -5545,6 +5724,12 @@
               "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
             },
             "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "$ref": "#/components/parameters/encoding"
+          },
+          {
+            "$ref": "#/components/parameters/formatq"
           }
         ],
         "requestBody": {
@@ -6354,6 +6539,14 @@
             "bearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/encoding"
+          },
+          {
+            "$ref": "#/components/parameters/formatq"
+          }
+        ],
         "requestBody": {
           "required": true,
           "description": "Counterparty information that includes all required writeable fields.",
@@ -6562,6 +6755,12 @@
               "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
             },
             "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "$ref": "#/components/parameters/encoding"
+          },
+          {
+            "$ref": "#/components/parameters/formatq"
           }
         ],
         "responses": {
@@ -6650,6 +6849,12 @@
               "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
             },
             "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "$ref": "#/components/parameters/encoding"
+          },
+          {
+            "$ref": "#/components/parameters/formatq"
           }
         ],
         "requestBody": {
@@ -12071,6 +12276,517 @@
                       "error": "missing encoded: this field is required"
                     }
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/counterparties/{counterpartyID}/contacts": {
+      "get": {
+        "summary": "List Contacts",
+        "description": "Return a paginated list of contacts associated with the specified counterparty",
+        "operationId": "listContacts",
+        "tags": [
+          "Contacts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "counterpartyID",
+            "in": "path",
+            "description": "The ID of the counterparty to fetch the contacts of.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+            },
+            "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "$ref": "#/components/parameters/page_size"
+          },
+          {
+            "$ref": "#/components/parameters/next_page_token"
+          },
+          {
+            "$ref": "#/components/parameters/prev_page_token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Contacts Page Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactList"
+                },
+                "example": {
+                  "page": {
+                    "page_size": 50
+                  },
+                  "contacts": [
+                    {
+                      "id": "01JDQDM9QG9056TS0B7YXSDP0K",
+                      "name": "James Duffy",
+                      "email": "jduffy@alice.vaspbot.net",
+                      "role": "Compliance Officer",
+                      "created": "2024-11-27T12:21:08-06:00",
+                      "modified": "2024-11-27T12:21:08-06:00"
+                    },
+                    {
+                      "id": "01JDQDPEC3KWSW4FMFEHPETS00",
+                      "name": "Alice Barnes",
+                      "email": "alice@alice.vaspbot.net",
+                      "role": "Technical Support",
+                      "created": "2024-08-28T10:14:43-05:00",
+                      "modified": "2024-08-28T12:23:24-05:00"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Contacts Page Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "could not parse page query request"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized to View Contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "this endpoint requires authentication"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Contact",
+        "description": "Create a new contact record for the specified counterparty.",
+        "operationId": "createContact",
+        "tags": [
+          "Contacts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "counterpartyID",
+            "in": "path",
+            "description": "The ID of the counterparty to create the contact for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+            },
+            "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Contact information that includes all required writeable fields.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Contact"
+              },
+              "example": {
+                "name": "Alice Barnes",
+                "email": "alice@example.com",
+                "role": "Technical Support"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Contact Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                },
+                "example": {
+                  "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
+                  "name": "Alice Barnes",
+                  "email": "alice@example.com",
+                  "role": "Technical Support",
+                  "created": "2024-08-28T10:14:43-05:00",
+                  "modified": "2024-08-28T12:23:24-05:00"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Create Contact Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "could not parse contact data"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized to Manage Counterparties",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "this endpoint requires authentication"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Contact Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldErrors"
+                },
+                "example": {
+                  "success": false,
+                  "error": "2 validation errors occurred",
+                  "errors": [
+                    {
+                      "field": "id",
+                      "error": "invalid id: this is a readonly field"
+                    },
+                    {
+                      "field": "email",
+                      "error": "missing email: this field is required"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/counterparties/{counterpartyID}/contacts/{contactID}": {
+      "get": {
+        "summary": "Contact Detail",
+        "description": "Return a detailed record of the contact record for a counterparty.",
+        "operationId": "contactDetail",
+        "tags": [
+          "Contacts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "counterpartyID",
+            "in": "path",
+            "description": "The ID of the counterparty the contact is associated with.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+            },
+            "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "name": "contactID",
+            "in": "path",
+            "description": "The ID of the contact to fetch a detailed record of.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6FRB1EGJCEZXRMQGW1FM0BR"
+            },
+            "example": "01J6FRB1EGJCEZXRMQGW1FM0BR"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact Retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                },
+                "example": {
+                  "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
+                  "name": "An Long",
+                  "email": "along@example.com",
+                  "role": "Owner",
+                  "created": "2024-08-28T10:14:43-05:00",
+                  "modified": "2024-08-28T12:23:24-05:00"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized to View Contact Detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "this endpoint requires authentication"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "contact not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Contact",
+        "description": "Update a contact record with new information.",
+        "operationId": "updateContact",
+        "tags": [
+          "Contacts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "counterpartyID",
+            "in": "path",
+            "description": "The ID of the counterparty associated with the contact to update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+            },
+            "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "name": "contactID",
+            "in": "path",
+            "description": "The ID of the contact to update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6FRB1EGJCEZXRMQGW1FM0BR"
+            },
+            "example": "01J6FRB1EGJCEZXRMQGW1FM0BR"
+          }
+        ],
+        "requestBody": {
+          "description": "A complete contact record that should reflect the state of the contact after the operation.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Contact"
+              },
+              "example": {
+                "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
+                "name": "Juan Sao Levine",
+                "email": "juan@example.com",
+                "role": "Technical Support"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Contact Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contact"
+                },
+                "example": {
+                  "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
+                  "name": "Juan Sao Levine",
+                  "email": "juan@example.com",
+                  "role": "Technical Support",
+                  "created": "2024-08-28T10:14:43-05:00",
+                  "modified": "2024-08-28T12:23:24-05:00"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized to Update Contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "this endpoint requires authentication"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact Not Found (Cannot Update)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "contact not found"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Contact Update Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FieldErrors"
+                },
+                "example": {
+                  "success": false,
+                  "error": "3 validation errors occurred",
+                  "errors": [
+                    {
+                      "field": "email",
+                      "error": "invalid field email: this is not an email address"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Contact",
+        "description": "Delete a contact with the specified ID associated with the specified counterparty.",
+        "operationId": "deleteContact",
+        "tags": [
+          "Contacts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "counterpartyID",
+            "in": "path",
+            "description": "The ID of the counterparty associated with the contact to delete.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+            },
+            "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "name": "contactID",
+            "in": "path",
+            "description": "The ID of the contact to delete.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6FRB1EGJCEZXRMQGW1FM0BR"
+            },
+            "example": "01J6FRB1EGJCEZXRMQGW1FM0BR"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Reply"
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized to Delete Contact",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "this endpoint requires authentication"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact Not Found (Cannot Delete)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "contact not found"
                 }
               }
             }
