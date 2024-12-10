@@ -7,7 +7,7 @@ weight: 95
 ---
 
 {{% notice style="tip" title="Enabling the Webhook" icon="anchor" %}}
-To enable the Envoy webhook, you must first specify a webhook endpoint using the `$TRISA_WEBHOOK_URL` as specified in the ["configuration values"]({{< relref "configuration.md#configuration-values" >}}). This URL should be available for HTTP POST requests from the Envoy node. If this value is not specified, Envoy will not make any webhook callbacks.
+To enable the Envoy webhook, you must first specify a webhook endpoint using the `$TRISA_WEBHOOK_URL` as specified in the ["configuration values"]({{% relref "envoy/configuration.md#configuration-values" %}}). This URL should be available for HTTP POST requests from the Envoy node. If this value is not specified, Envoy will not make any webhook callbacks.
 {{% /notice %}}
 
 When Envoy receives an incoming travel rule message from a remote counterparty it must return a response to that request (for both TRP and TRISA requests). Envoy may handle the request automatically using accept/reject policies or it may simply send a pending message back as the default response. Envoy also supports handling incoming messages by using a webhook callback for another compliance system to determine handling.
@@ -82,7 +82,7 @@ The reply to the POST request must have a 200 status code and the following data
 
 If the `transaction_id` does not match the ID of the request, then Envoy will fail and return an error to the counterparty.
 
-The `transfer_action` can be one of "PENDING", "REVIEW", "REPAIR", "ACCEPTED", "REJECTED", or "COMPLETED". See [TRISA workflows]({{< relref "../api/workflows.md" >}}) for more about how these states determine responses to incoming messages. A basic summary is as follows:
+The `transfer_action` can be one of "PENDING", "REVIEW", "REPAIR", "ACCEPTED", "REJECTED", or "COMPLETED". See [TRISA workflows]({{% relref "../api/workflows.md" %}}) for more about how these states determine responses to incoming messages. A basic summary is as follows:
 
 Use `"PENDING"` if a compliance officer on your team needs to review the travel rule request, make sure you include a `pending` and `identity` in your reply.
 
@@ -122,7 +122,7 @@ The fields for the error are as follows:
 | message | string | a detailed message about why the request is being rejected or what needs to be repaired |
 | retry | bool | should be false if this is a rejection, true if a repair is being requested |
 
-View the available [error codes in the TRISA API docs]({{< relref "../api/errors.md" >}}).
+View the available [error codes in the TRISA API docs]({{% relref "../api/errors.md" %}}).
 
 ### Payload
 
@@ -150,9 +150,9 @@ The payload fields are as follows:
 | sent_at | string | the RFC3339 encoded timestamp of when the compliance exchange was initiated |
 | received_at | string | the RFC3339 encoded timestamp of when the compliance exchange was approved by the counterparty |
 
-For more information about IVMS101, please see: [Working with IVMS101]({{< relref "../data/ivms.md" >}}).
+For more information about IVMS101, please see: [Working with IVMS101]({{% relref "../data/ivms.md" %}}).
 
-For more information about the pending and transaction generic payloads, please see: [TRISA Data Payloads]({{< relref "../data/payloads.md" >}}).
+For more information about the pending and transaction generic payloads, please see: [TRISA Data Payloads]({{% relref "../data/payloads.md" %}}).
 
 ### Counterparty
 

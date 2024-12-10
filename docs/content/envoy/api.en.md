@@ -7,7 +7,7 @@ weight: 90
 ---
 
 {{% notice style="tip" title="API Credentials" icon="rocket" %}}
-In order to use the API you will have to generate an API Key Client ID and Secret either from the user interface, or by using the command line tool as described in ["creating api keys"]({{< relref "deploy.md#creating-api-keys" >}}).
+In order to use the API you will have to generate an API Key Client ID and Secret either from the user interface, or by using the command line tool as described in ["creating api keys"]({{% relref "deploy.md#creating-api-keys" %}}).
 {{% /notice %}}
 
 ## Authentication and Authorization
