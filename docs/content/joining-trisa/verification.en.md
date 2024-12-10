@@ -6,7 +6,7 @@ description: "Domain Verification"
 weight: 70
 ---
 
-The [TRISA Certificate Authority]({{% relref "/ca" %}}) issues [x509 certificates](https://sectigo.com/resource-library/what-is-x509-certificate) for mTLS authentication in its peer-to-peer network. These certificates are dependent on the verified ownership of a domain name that is used both in the _common name_ of the certificate (CN) as well as the _subject alternative name_ (SAN) extension of the certificate. Your TRISA node must be hosted at a domain name that is in the SAN field of the certificate otherwise mTLS connections will fail.
+The [TRISA Certificate Authority]({{% relref "joining-trisa/ca" %}}) issues [x509 certificates](https://sectigo.com/resource-library/what-is-x509-certificate) for mTLS authentication in its peer-to-peer network. These certificates are dependent on the verified ownership of a domain name that is used both in the _common name_ of the certificate (CN) as well as the _subject alternative name_ (SAN) extension of the certificate. Your TRISA node must be hosted at a domain name that is in the SAN field of the certificate otherwise mTLS connections will fail.
 
 {{% notice note %}}
 The domain that you host your TRISA node, e.g. `trisa.example.com` must be the common name of your TRISA Identity Certificates and _must_ match the endpoint of your TRISA directory record, e.g. `trisa.example.com:443`. If not, TRISA peers will be unable to connect to your TRISA node using mTLS. If you are using multiple domain names, please contact TRISA support for assistance.

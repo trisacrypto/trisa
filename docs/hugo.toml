@@ -14,7 +14,6 @@ enableMissingTranslationPlaceholders = false
 [params]
 
     # Source Code repository section
-    description = "TRISA Documentation"
     github_repository = "https://github.com/trisacrypto/trisa"
     version = "v1beta1"
 
