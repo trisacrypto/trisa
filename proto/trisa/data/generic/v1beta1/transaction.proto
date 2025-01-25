@@ -38,6 +38,29 @@ message Pending {
     Transaction transaction = 15; // the original transaction for reference
 }
 
+// Sunrise is a control flow message to indicate that the message was sent over a side
+// channel to the TRISA protocol such as via email or phone. The Sunrise message
+// is only saved locally to indicate a record of an out-of-band communication and is not
+// sent in a TRISA payload.
+message Sunrise {
+    string envelope_id = 1;                 // the TRISA envelope ID for reference
+    string counterparty = 2;                // the name of the counterparty or counterparty VASP the messages were sent to
+    repeated SunriseMessage messages = 3;   // the list of recipients that the message was sent to
+    string extra_json = 14;                 // any extra data as a JSON formatted object
+    Transaction transaction = 15;           // the original transaction for reference
+}
+
+// SunriseMessages may be sent to multiple contacts via different channels (e.g. via
+// an email or phone call to the compliance officer and general contact).
+message SunriseMessage {
+    string recipient = 1;         // the name of the recipient or recipient VASP
+    string email = 2;             // the email address of the recipient
+    string phone = 3;             // the phone number of the recipient
+    string channel = 4;           // the name of the method or channel the message was sent over (e.g. email or phone)
+    string sent_at = 5;           // the RFC3339 formatted timestamp when the message was sent
+    string reply_not_before = 6;  // the RFC339 formatted timestamp that the response is expected before message expiration
+}
+
 // DEPRECATED: the ConfirmationReceipt message was deemed to cause confusion as it could
 // signal that the confirmation payload was received and the transfer is concluded. Use
 // the Pending message instead to signal that this is a control flow message.
