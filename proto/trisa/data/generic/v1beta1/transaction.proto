@@ -7,7 +7,7 @@ option go_package = "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1
 // Generic Transaction message for TRISA transaction payloads. The goal of this payload
 // is to provide enough information to link Travel Rule Compliance information in the
 // identity payload with a transaction on the blockchain or network. All fields are
-// optional, this message serves as a convienience for parsing transaction payloads.
+// optional, this message serves as a convenience for parsing transaction payloads.
 message Transaction {
     string txid = 1;              // a transaction ID unique to the chain/network
     string originator = 2;        // crypto address of the originator
@@ -16,8 +16,19 @@ message Transaction {
     string network = 5;           // the chain/network of the transaction
     string timestamp = 6;         // RFC 3339 timestamp of the transaction
     string extra_json = 7;        // any extra data as a JSON formatted object
-    string asset_type = 8;        // the type of virtual asset for mult-asset chains
+    string asset_type = 8;        // the type of virtual asset for multi-asset chains
     string tag = 9;               // optional memo/destination-tag required by some ledgers to identify transactions
+}
+
+message Asset {
+    Identifier identifier = 1;        // the identifier being used, e.g. "DTI" or "SLIP0044"
+    string symbol = 2;            // the symbol of the asset used for the identifier
+}
+
+enum Identifier {
+    SYMBOL = 0;                 // the identifier is a coin/token symbol
+    DTI = 1;                    // the Digital Token Identifier (DTI) for the asset
+    SLIP0044 = 2;               // the SLIP0044 identifier for the asset
 }
 
 // A control flow message to support asynchronous TRISA transfers. Pending messages can
@@ -36,6 +47,29 @@ message Pending {
     string reply_not_before = 6;  // the RFC339 formatted timestamp that the response will not be sent before
     string extra_json = 7;        // any extra data as a JSON formatted object
     Transaction transaction = 15; // the original transaction for reference
+}
+
+// Sunrise is a control flow message to indicate that the message was sent over a side
+// channel to the TRISA protocol such as via email or phone. The Sunrise message
+// is only saved locally to indicate a record of an out-of-band communication and is not
+// sent in a TRISA payload.
+message Sunrise {
+    string envelope_id = 1;                 // the TRISA envelope ID for reference
+    string counterparty = 2;                // the name of the counterparty or counterparty VASP the messages were sent to
+    repeated SunriseMessage messages = 3;   // the list of recipients that the message was sent to
+    string extra_json = 14;                 // any extra data as a JSON formatted object
+    Transaction transaction = 15;           // the original transaction for reference
+}
+
+// SunriseMessages may be sent to multiple contacts via different channels (e.g. via
+// an email or phone call to the compliance officer and general contact).
+message SunriseMessage {
+    string recipient = 1;         // the name of the recipient or recipient VASP
+    string email = 2;             // the email address of the recipient
+    string phone = 3;             // the phone number of the recipient
+    string channel = 4;           // the name of the method or channel the message was sent over (e.g. email or phone)
+    string sent_at = 5;           // the RFC3339 formatted timestamp when the message was sent
+    string reply_not_before = 6;  // the RFC339 formatted timestamp that the response is expected before message expiration
 }
 
 // DEPRECATED: the ConfirmationReceipt message was deemed to cause confusion as it could
