@@ -55,7 +55,7 @@ func TestJSON(t *testing.T) {
 	}
 
 	data, err := os.ReadFile("testdata/example.json")
-	require.NoError(t, err, "could not loat testdata/example.json")
+	require.NoError(t, err, "could not load testdata/example.json")
 
 	var example *Example
 	err = json.Unmarshal(data, &example)
