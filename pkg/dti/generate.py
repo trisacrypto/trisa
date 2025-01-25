@@ -5,6 +5,8 @@ import glob
 import json
 
 from datetime import datetime
+from collections import Counter
+
 
 CODE_FILE = "dti.gen.go"
 DATA_GLOB = "testdata/DTI_Data_*.json"
@@ -44,9 +46,37 @@ def find_dti_data(pattern=DATA_GLOB):
     return fname
 
 
+def key_analysis(records):
+    counts = Counter()
+    for record in records:
+        counts.update(key_counts(record))
+    return counts
+
+
+def key_counts(d: dict, parent=None) -> Counter:
+    counts = Counter()
+    for key, val in d.items():
+        if parent is not None:
+            key = f"{parent}.{key}"
+
+        if isinstance(val, dict):
+            counts.update(key_counts(val, parent=key))
+        elif isinstance(val, list):
+            for item in val:
+                if isinstance(item, dict):
+                    counts.update(key_counts(item, parent=key))
+        else:
+            counts[key] += 1
+
+    return counts
+
+
 def main():
     path = find_dti_data()
     records = load_dti_data(path)
+
+    # counts = key_analysis(records)
+    # print(json.dumps(counts, indent=2))
 
     with open(CODE_FILE, "w") as f:
         f.write("\n".join(HEADERS) % path)
@@ -54,6 +84,7 @@ def main():
         for record in records:
             header = record.get("Header")
             info = record.get("Informative")
+            norm = record.get("Normative")
             shortName = "nil"
 
             names = info.get("ShortNames")
@@ -61,12 +92,25 @@ def main():
                 shortName = ", ".join([f'"{n["ShortName"]}"' for n in names])
                 shortName = "[]string{" + shortName + "}"
 
+            related = []
+            for identifier in info.get("UnderlyingAssetExternalIdentifiers", []):  # noqa
+                related.append(identifier.get("UnderlyingAssetExternalIdentifierValue"))  # noqa
+
+            if norm is not None:
+                aux = norm.get("AuxiliaryDistributedLedger")
+                if aux is not None:
+                    related.append(aux)
+
+            related_repr = "nil"
+            if len(related) > 0:
+                related_repr = ", ".join([f'"{r}"' for r in related])
+                related_repr = "[]string{" + related_repr + "}"
+
             f.write("\t{\n")
             f.write(f"\t\tIdentifier: \"{header.get('DTI')}\",\n")
-            f.write(f"\t\tType: {header.get('DTIType')},\n")
-            f.write(f"\t\tVersion: \"{header.get('templateVersion')}\",\n")
             f.write(f"\t\tLongName: \"{info.get('LongName')}\",\n")
             f.write(f"\t\tShortNames: {shortName},\n")
+            f.write(f"\t\tRelated: {related_repr},\n")
             f.write("\t},\n")
 
         f.write("}\n")
