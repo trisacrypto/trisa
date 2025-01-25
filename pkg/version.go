@@ -8,10 +8,10 @@ import "fmt"
 // Version component constants for the current build.
 const (
 	VersionMajor         = 1
-	VersionMinor         = 4
-	VersionPatch         = 1
+	VersionMinor         = 5
+	VersionPatch         = 0
 	VersionReleaseLevel  = ""
-	VersionReleaseNumber = 6
+	VersionReleaseNumber = 7
 )
 
 // Version returns the semantic version for the current build.
