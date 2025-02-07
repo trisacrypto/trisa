@@ -10,7 +10,7 @@ var (
 	ErrUnknownState          = errors.New("envelope is in an unknown state")
 	ErrInvalidState          = errors.New("envelope is invalid")
 	ErrEnvelopeError         = errors.New("envelope has an error")
-	ErrUnknownTravelAddress  = errors.New("could not identify travel address scheme")
+	ErrUnknownTravelAddress  = errors.New("could not identify travel address or trp endpoint")
 	ErrEmptyConfirmation     = errors.New("invalid: must specify either txid or canceled in confirmation")
 	ErrAmbiguousConfirmation = errors.New("invalid: cannot specify both txid and canceled in confirmation")
 	ErrEmptyAddress          = errors.New("invalid: payment address is required")

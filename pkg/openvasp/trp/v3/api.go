@@ -36,6 +36,9 @@ type Info struct {
 
 func (i *Info) URL() (_ *url.URL, err error) {
 	switch {
+	case i.Address == "":
+		return nil, ErrUnknownTravelAddress
+
 	case strings.HasPrefix(i.Address, "lnurl1"), strings.HasPrefix(i.Address, "LNURL1"):
 		var uri string
 		if uri, err = lnurl.Decode(i.Address); err != nil {

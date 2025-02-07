@@ -253,7 +253,7 @@ func TestTransferConfirmation(t *testing.T) {
 
 		data, err := io.ReadAll(rep.Body)
 		require.NoError(t, err)
-		require.Equal(t, "must specify either txid or canceled in confirmation\n", string(data))
+		require.Equal(t, trp.ErrEmptyConfirmation.Error()+"\n", string(data))
 	})
 
 	t.Run("Error", func(t *testing.T) {
