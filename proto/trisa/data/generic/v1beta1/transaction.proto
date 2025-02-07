@@ -72,6 +72,61 @@ message SunriseMessage {
     string reply_not_before = 6;  // the RFC339 formatted timestamp that the response is expected before message expiration
 }
 
+// When a TRP message is received by a TRISA node the "pending reply" is implicit in
+// the response. Therefore instead of storing a Pending message, the TRISA node will
+// store a TRP transaction with additional metadata about the TRP/OpenVASP exchage.
+message TRP {
+    // The headers of the message
+    string envelope_id = 1;         // in TRP parlance, the "request identifier" (extracted from headers)
+    TRPInfo headers = 2;            // the TRP API metadata for the transaction
+
+    // The TRP Message sent in the body of the request or reply
+    oneof message {
+        TRPInquiry inquiry = 3;
+        TRPApproved approved = 4;
+        TRPRejected rejected = 5;
+        TRPConfirmed confirmed = 6;
+        TRPCanceled canceled = 7;
+    }
+
+    // Extensions and parsed TRISA information
+    string extensions = 14;         // any extensions data as a JSON formatted string
+    Transaction transaction = 15;   // the TRISA reference transaction
+}
+
+// TRPInfo stores the API metadata for the TRP transaction.
+message TRPInfo {
+    string version = 1;             // the TRP API version used in the message
+    string request_identifier = 2;  // the request identifier (envelope ID)
+    repeated string extensions = 3; // The names of any extensions uses in the request
+}
+
+// A TRPInquiry contains the asset, amount, and callback information.
+message TRPInquiry {
+    map<string, string> asset = 1;  // the asset identifier(s) for the transaction
+    double amount = 2;              // the amount of the transaction
+    string callback = 3;            // the callback URL to respond to
+}
+
+
+// TRPResolution contains the response to an approved/rejected TRP inquiry.
+message TRPApproved {
+    string address = 1;            // some payment address
+    string callback = 2;           // callback to send transaction ID to.
+}
+
+message TRPRejected {
+    string rejected = 1;           // the human readable reason for rejection or null
+}
+
+message TRPConfirmed {
+    string txid = 1;               // the transaction ID of the confirmed transaction on the chain
+}
+
+message TRPCanceled {
+    string canceled = 1;           // the human readable reason for cancellation or null
+}
+
 // DEPRECATED: the ConfirmationReceipt message was deemed to cause confusion as it could
 // signal that the confirmation payload was received and the transfer is concluded. Use
 // the Pending message instead to signal that this is a control flow message.
