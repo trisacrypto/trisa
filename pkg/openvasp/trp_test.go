@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/trisacrypto/trisa/pkg/ivms101"
 	. "github.com/trisacrypto/trisa/pkg/openvasp"
+	"github.com/trisacrypto/trisa/pkg/openvasp/trp/v3"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
 	generic "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1"
 	"github.com/trisacrypto/trisa/pkg/trisa/envelope"
@@ -16,65 +17,10 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 )
 
-func TestTravelAddress(t *testing.T) {
-	testCases := []struct {
-		address  string
-		expected string
-		err      error
-	}{
-		{
-			"lnurl1dp68gurn8ghj7cn9dejkv6trd9shy7fwvdhk6tm5wfcr7arpvu7hgunpwejkcun4d3jkjmn3w45hy7gmsy37e",
-			"https://beneficiary.com/trp?tag=travelruleinquiry",
-			nil,
-		},
-		{
-			"LNURL1DP68GURN8GHJ7MMSV4H8VCTNWQH8GETNWSKKUET59E5K7TE3XGEN7ARPVU7KJMN3W45HY7GF5KZ53",
-			"https://openvasp.test-net.io/123?tag=inquiry",
-			nil,
-		},
-		{
-			"taGw1e4cjuujwyHBV51aspbLBUbcDhebW7ss8iF6dLEn19WfyQZt6HaUTStSE2YcadkFG",
-			"https://beneficiary.com/x/12345?color=red&foo=bar&t=i",
-			nil,
-		},
-		{
-			"https://beneficiary.com/x/12345?t=i",
-			"https://beneficiary.com/x/12345?t=i",
-			nil,
-		},
-		{
-			"https://beneficiary.com/x/12345",
-			"https://beneficiary.com/x/12345?t=i",
-			nil,
-		},
-		{
-			"http://beneficiary.com/x/12345",
-			"http://beneficiary.com/x/12345?t=i",
-			nil,
-		},
-		{
-			"foo", "",
-			ErrUnknownTravelAddress,
-		},
-	}
-
-	for i, tc := range testCases {
-		info := &TRPInfo{Address: tc.address, APIVersion: APIVersion, RequestIdentifier: "704c548a-70af-480c-af83-6fb7803df85c"}
-		actual, err := info.GetURL()
-		if tc.err != nil {
-			require.Error(t, err, "expected error on test case %d", i)
-			require.ErrorIs(t, err, tc.err, "unexpected error on test case %d", i)
-		} else {
-			require.NoError(t, err, "expected no error on test case %d", i)
-			require.Equal(t, tc.expected, actual, "unexpected mismatch on test case %d", i)
-		}
-	}
-}
-
 func TestEnvelopePayload(t *testing.T) {
 	// Nil envelope should return an error
 	_, err := EnvelopeToPayload(nil)
-	require.ErrorIs(t, err, ErrNilEnvelope, "nil envelope should return an error")
+	require.ErrorIs(t, err, trp.ErrNilEnvelope, "nil envelope should return an error")
 
 	// Load a sealed envelope fixture
 	env, err := loadEnvelope("testdata/sealed_envelope.json")
@@ -129,7 +75,7 @@ func TestEnvelopePayload(t *testing.T) {
 	// Convert the clear envelope to a TRP payload
 	payload, err = EnvelopeToPayload(env)
 	require.NoError(t, err, "could not convert envelope to TRP payload")
-	require.Equal(t, &Asset{SLIP044: 0}, payload.Asset, "asset type does not match")
+	require.Equal(t, &trp.Asset{SLIP044: 0}, payload.Asset, "asset type does not match")
 	require.Equal(t, transaction.Amount, payload.Amount, "amount does not match")
 	require.True(t, proto.Equal(payload.IVMS101, identity), "identity does not match")
 	require.Nil(t, payload.Extensions, "payload should not contain any extensions")
@@ -174,26 +120,4 @@ func loadFixture(path string, m proto.Message) (err error) {
 		return err
 	}
 	return nil
-}
-
-func TestConfirmationValidate(t *testing.T) {
-	testCases := []struct {
-		confirm *Confirmation
-		err     error
-	}{
-		{&Confirmation{}, ErrEmptyConfirmation},
-		{&Confirmation{TRP: &TRPInfo{APIVersion: APIVersion}}, ErrEmptyConfirmation},
-		{&Confirmation{TXID: "foo", Canceled: "bar"}, ErrAmbiguousConfirmation},
-		{&Confirmation{TXID: "foo"}, nil},
-		{&Confirmation{Canceled: "bar"}, nil},
-	}
-
-	for i, tc := range testCases {
-		err := tc.confirm.Validate()
-		if tc.err != nil {
-			require.ErrorIs(t, err, tc.err, "test case %d failed with mismatched error", i)
-		} else {
-			require.NoError(t, err, "test case %d failed: expected valid confirmation", i)
-		}
-	}
 }

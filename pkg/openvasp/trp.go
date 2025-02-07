@@ -1,12 +1,8 @@
 package openvasp
 
 import (
-	"net/url"
-	"strings"
-
 	"github.com/trisacrypto/trisa/pkg/ivms101"
-	"github.com/trisacrypto/trisa/pkg/openvasp/lnurl"
-	"github.com/trisacrypto/trisa/pkg/openvasp/traddr"
+	"github.com/trisacrypto/trisa/pkg/openvasp/trp/v3"
 	"github.com/trisacrypto/trisa/pkg/slip0044"
 	api "github.com/trisacrypto/trisa/pkg/trisa/api/v1beta1"
 	generic "github.com/trisacrypto/trisa/pkg/trisa/data/generic/v1beta1"
@@ -35,52 +31,6 @@ const (
 	SealedTRISAExtension   = "sealed_trisa_envelope"
 	UnsealedTRISAExtension = "unsealed_trisa_envelope"
 )
-
-// TRPInfo contains metadata information from the TRP API Headers.
-type TRPInfo struct {
-	Address           string   // Address can be a Travel Rule Address, LNURL, or URL
-	APIVersion        string   // Defaults to the APIVersion of the package
-	RequestIdentifier string   // A unique identifier representing the specific transfer
-	APIExtensions     []string // The names of any extensions uses in the request
-}
-
-func (t TRPInfo) GetURL() (_ string, err error) {
-	switch {
-	case strings.HasPrefix(t.Address, "lnurl1"), strings.HasPrefix(t.Address, "LNURL1"):
-		return lnurl.Decode(t.Address)
-	case strings.HasPrefix(t.Address, "ta"):
-		return traddr.DecodeURL(t.Address)
-	default:
-		var u *url.URL
-		if u, err = url.Parse(t.Address); err != nil {
-			return "", err
-		}
-
-		if u.Scheme != "" {
-			query := u.Query()
-			query.Set("t", "i")
-			u.RawQuery = query.Encode()
-			return u.String(), nil
-		}
-	}
-	return "", ErrUnknownTravelAddress
-}
-
-// Inquiry defines a Travel Rule Protocol payload that contains information about the
-// transaction and the originator and beneficiary of the transaction.
-type Inquiry struct {
-	TRP        *TRPInfo                 `json:"-"`
-	Asset      *Asset                   `json:"asset"`
-	Amount     float64                  `json:"amount"`
-	Callback   string                   `json:"callback"`
-	IVMS101    *ivms101.IdentityPayload `json:"IVMS101"`
-	Extensions map[string]interface{}   `json:"extensions,omitempty"`
-}
-
-type Asset struct {
-	DTI     string            `json:"dti,omitempty"`      // digital token identifier as per Digital Token Identifier Foundation
-	SLIP044 slip0044.CoinType `json:"slip0044,omitempty"` // registered coin types defined by BIP-0044
-}
 
 // The TransactionPayload extension is used to provide information about the
 // transaction on the blockchain or network so it can be linked to the identity
@@ -139,9 +89,9 @@ type UnsealedTRISAEnvelope struct {
 // unsealed, then this returns a payload with the UnsealedTRISAEnvelope extension.
 // If the envelope is in the clear then this returns a standard TRP payload with no
 // TRISA extensions.
-func EnvelopeToPayload(env *envelope.Envelope) (*Inquiry, error) {
+func EnvelopeToPayload(env *envelope.Envelope) (*trp.Inquiry, error) {
 	if env == nil {
-		return nil, ErrNilEnvelope
+		return nil, trp.ErrNilEnvelope
 	}
 
 	var err error
@@ -152,7 +102,7 @@ func EnvelopeToPayload(env *envelope.Envelope) (*Inquiry, error) {
 		if envBytes, err = protojson.Marshal(env.Proto()); err != nil {
 			return nil, err
 		}
-		return &Inquiry{
+		return &trp.Inquiry{
 			Extensions: map[string]interface{}{
 				SealedTRISAExtension: &SealedTRISAEnvelope{
 					Envelope: string(envBytes),
@@ -162,7 +112,7 @@ func EnvelopeToPayload(env *envelope.Envelope) (*Inquiry, error) {
 	case envelope.Unsealed:
 		// If already unsealed, just return the wrapped envelope.
 		proto := env.Proto()
-		return &Inquiry{
+		return &trp.Inquiry{
 			Extensions: map[string]interface{}{
 				UnsealedTRISAExtension: &UnsealedTRISAEnvelope{
 					Id:                  proto.Id,
@@ -188,8 +138,8 @@ func EnvelopeToPayload(env *envelope.Envelope) (*Inquiry, error) {
 			return nil, err
 		}
 
-		inq := &Inquiry{
-			Asset:   &Asset{},
+		inq := &trp.Inquiry{
+			Asset:   &trp.Asset{},
 			Amount:  transaction.Amount,
 			IVMS101: &ivms101.IdentityPayload{},
 		}
@@ -203,67 +153,10 @@ func EnvelopeToPayload(env *envelope.Envelope) (*Inquiry, error) {
 		}
 		return inq, nil
 	case envelope.Unknown:
-		return nil, ErrUnknownState
+		return nil, trp.ErrUnknownState
 	case envelope.Corrupted:
-		return nil, ErrInvalidState
+		return nil, trp.ErrInvalidState
 	default:
-		return nil, ErrEnvelopeError
+		return nil, trp.ErrEnvelopeError
 	}
-}
-
-// InquiryResolution is used to approve or reject a TRP Transfer Inquiry either
-// automatically in direct response to the inquiry request or via the callback URL
-// specified in the request. One of "approved", "rejected", or "version" should be
-// specified to ensure unambiguous results are returned to the caller.
-type InquiryResolution struct {
-	Version  string    `json:"version,omitempty"`  // the API version of the request
-	Approved *Approval `json:"approved,omitempty"` // payment address and callback
-	Rejected string    `json:"rejected,omitempty"` // human readable comment (must be specified to reject)
-}
-
-// Approval is used to accept a TRP Transfer Inquiry.
-type Approval struct {
-	Address  string `json:"address"`  // some payment address
-	Callback string `json:"callback"` // some implementation defined URL for transfer confirmation
-}
-
-// Confirmation JSON data is sent in response to a TransferInquiry via a POST to the
-// callback URl. Only one of txid or canceled should be specified. The txid should be
-// specified only if the transaction has been broadcasted. Canceled is used to indicate
-// that the transfer will not move forward with a human readable comment.
-type Confirmation struct {
-	TRP      *TRPInfo `json:"-"`
-	TXID     string   `json:"txid,omitempty"`     // some asset-specific tx identifier
-	Canceled string   `json:"canceled,omitempty"` // human readable comment or null
-}
-
-func (c Confirmation) Validate() error {
-	if c.TXID == "" && c.Canceled == "" {
-		return ErrEmptyConfirmation
-	}
-
-	if c.TXID != "" && c.Canceled != "" {
-		return ErrAmbiguousConfirmation
-	}
-
-	return nil
-}
-
-// VersionInfo is returned on the version discoverability endpoint.
-type VersionInfo struct {
-	Version string `json:"version,omitempty"`
-	Vendor  string `json:"vendor,omitempty"`
-}
-
-// ExtensionsInfo is returned on the extensions discoverability endpoint.
-type ExtensionsInfo struct {
-	Required  []string `json:"required,omitempty"`
-	Supported []string `json:"supported,omitempty"`
-}
-
-// IdentityInfo is returned on the identity discoverability endpoint.
-type IdentityInfo struct {
-	Name string `json:"name,omitempty"` // company name as incorporated in the commercial registry as a string
-	LEI  string `json:"lei,omitempty"`  // the Legal Entity Indentifier (see gleif.org) as string
-	X509 string `json:"x509,omitempty"` // x509 certificate in PEM format
 }

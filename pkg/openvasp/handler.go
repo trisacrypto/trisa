@@ -8,6 +8,8 @@ import (
 	"mime"
 	"net/http"
 	"strings"
+
+	"github.com/trisacrypto/trisa/pkg/openvasp/trp/v3"
 )
 
 const (
@@ -18,14 +20,14 @@ const (
 func TransferInquiry(handler InquiryHandler) http.Handler {
 	return APIChecks(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Decode the travel rule inquiry
-		var inquiry *Inquiry
+		var inquiry *trp.Inquiry
 		if err := decodeJSON(w, r, &inquiry); err != nil {
 			httpError(w, err)
 			return
 		}
 
 		// Add the TRP Info to the inquiry from the headers
-		inquiry.TRP = ParseTRPInfo(r)
+		inquiry.Info = ParseTRPInfo(r)
 
 		// TODO: validate the inquiry received
 
@@ -37,7 +39,7 @@ func TransferInquiry(handler InquiryHandler) http.Handler {
 
 		// If out is nil and no error is specified send standard response.
 		if out == nil {
-			out = &InquiryResolution{}
+			out = &trp.Resolution{}
 		}
 
 		// If not automatically approved or rejected, add the API version to the reply.
@@ -55,14 +57,14 @@ func TransferInquiry(handler InquiryHandler) http.Handler {
 func TransferConfirmation(handler ConfirmationHandler) http.Handler {
 	return APIChecks(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Decode the confirmation message
-		var confirmation Confirmation
+		var confirmation trp.Confirmation
 		if err := decodeJSON(w, r, &confirmation); err != nil {
 			httpError(w, err)
 			return
 		}
 
 		// Add the TRP Info to the confirmation from the headers
-		confirmation.TRP = ParseTRPInfo(r)
+		confirmation.Info = ParseTRPInfo(r)
 
 		// Validate the confirmation message
 		if err := confirmation.Validate(); err != nil {
@@ -132,8 +134,8 @@ func APIChecks(next http.Handler) http.Handler {
 // Parse TRPInfo from the headers of an HTTP request. If any headers are not present,
 // then the info is populated with assumed fields or empty values as appropriate.
 // TODO: parse the LNURL from the URL rather than passing the raw URL.
-func ParseTRPInfo(r *http.Request) *TRPInfo {
-	info := &TRPInfo{
+func ParseTRPInfo(r *http.Request) *trp.Info {
+	info := &trp.Info{
 		Address:           r.URL.String(),
 		APIVersion:        r.Header.Get(APIVersionHeader),
 		RequestIdentifier: r.Header.Get(RequestIdentifierHeader),
@@ -148,7 +150,7 @@ func ParseTRPInfo(r *http.Request) *TRPInfo {
 }
 
 func httpError(w http.ResponseWriter, err error) {
-	var status *StatusError
+	var status *trp.StatusError
 	if errors.As(err, &status) {
 		http.Error(w, status.Error(), status.Code)
 		return
@@ -175,25 +177,25 @@ func decodeJSON(w http.ResponseWriter, r *http.Request, dst interface{}) error {
 		switch {
 		case errors.As(err, &syntaxError):
 			msg := fmt.Sprintf("request body contains badly-formed JSON (at position %d)", syntaxError.Offset)
-			return &StatusError{http.StatusBadRequest, msg}
+			return &trp.StatusError{Code: http.StatusBadRequest, Message: msg}
 
 		case errors.Is(err, io.ErrUnexpectedEOF):
-			return &StatusError{http.StatusBadRequest, "request body contains badly-formed JSON"}
+			return &trp.StatusError{Code: http.StatusBadRequest, Message: "request body contains badly-formed JSON"}
 
 		case errors.As(err, &typeError):
 			msg := fmt.Sprintf("request body contains an invalid value for the %q field (at %d)", typeError.Field, typeError.Offset)
-			return &StatusError{http.StatusBadRequest, msg}
+			return &trp.StatusError{Code: http.StatusBadRequest, Message: msg}
 
 		case strings.HasPrefix(err.Error(), "json: unknown field "):
 			fieldName := strings.TrimPrefix(err.Error(), "json: unknown field ")
 			msg := fmt.Sprintf("request body contains unknown field %s", fieldName)
-			return &StatusError{http.StatusBadRequest, msg}
+			return &trp.StatusError{Code: http.StatusBadRequest, Message: msg}
 
 		case errors.Is(err, io.EOF):
-			return &StatusError{http.StatusBadRequest, ""}
+			return &trp.StatusError{Code: http.StatusBadRequest}
 
 		case errors.As(err, &maxBytes):
-			return &StatusError{http.StatusRequestEntityTooLarge, ""}
+			return &trp.StatusError{Code: http.StatusRequestEntityTooLarge}
 
 		default:
 			return err
@@ -202,7 +204,7 @@ func decodeJSON(w http.ResponseWriter, r *http.Request, dst interface{}) error {
 
 	// Ensure the request body only contains a single JSON object
 	if err := decoder.Decode(&struct{}{}); err != nil && !errors.Is(err, io.EOF) {
-		return &StatusError{Code: http.StatusBadRequest, Message: "request body must only contain a single JSON object"}
+		return &trp.StatusError{Code: http.StatusBadRequest, Message: "request body must only contain a single JSON object"}
 	}
 
 	return nil
