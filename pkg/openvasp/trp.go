@@ -27,6 +27,7 @@ const (
 	APIVersion       = "3.1.0"
 	ContentTypeValue = "application/json; charset=utf-8"
 	ContentMediaType = "application/json"
+	ContentPlainText = "text/plain"
 )
 
 // TRISA extensions
@@ -246,4 +247,23 @@ func (c Confirmation) Validate() error {
 	}
 
 	return nil
+}
+
+// VersionInfo is returned on the version discoverability endpoint.
+type VersionInfo struct {
+	Version string `json:"version,omitempty"`
+	Vendor  string `json:"vendor,omitempty"`
+}
+
+// ExtensionsInfo is returned on the extensions discoverability endpoint.
+type ExtensionsInfo struct {
+	Required  []string `json:"required,omitempty"`
+	Supported []string `json:"supported,omitempty"`
+}
+
+// IdentityInfo is returned on the identity discoverability endpoint.
+type IdentityInfo struct {
+	Name string `json:"name,omitempty"` // company name as incorporated in the commercial registry as a string
+	LEI  string `json:"lei,omitempty"`  // the Legal Entity Indentifier (see gleif.org) as string
+	X509 string `json:"x509,omitempty"` // x509 certificate in PEM format
 }
