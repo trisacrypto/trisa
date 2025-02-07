@@ -8,10 +8,20 @@ import (
 	"mime"
 	"net/http"
 	"net/http/cookiejar"
+	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/google/uuid"
+)
+
+const (
+	// Discoverability Extension Endpoints
+	DiscoverabilityVersion    = "/version"
+	DiscoverabilityUptime     = "/uptime"
+	DiscoverabilityExtensions = "/extensions"
+	DiscoverabilityIdentity   = "/identity"
 )
 
 // Client is used to make HTTPS requests with mTLS configured to TRP servers.
@@ -52,6 +62,151 @@ func (c *Client) Confirmation(confirm *Confirmation) (_ *TravelRuleResponse, err
 	return c.Post(confirm.TRP, body)
 }
 
+// Gets the identity of the TRP server specified by the travel address.
+func (c *Client) Identity(info *TRPInfo) (out *IdentityInfo, err error) {
+	// Use the identity endpoint
+	var req *TRPInfo
+	if req, err = discoverabilityEndpoint(info, DiscoverabilityIdentity); err != nil {
+		return nil, err
+	}
+
+	var rep *TravelRuleResponse
+	if rep, err = c.Get(req); err != nil {
+		return nil, err
+	}
+
+	out = &IdentityInfo{}
+	if err = rep.Decode(out); err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+// Gets the version and vendor of the TRP server specified by the travel address.
+func (c *Client) Version(info *TRPInfo) (out *VersionInfo, err error) {
+	// Use the version endpoint
+	var req *TRPInfo
+	if req, err = discoverabilityEndpoint(info, DiscoverabilityVersion); err != nil {
+		return nil, err
+	}
+
+	var rep *TravelRuleResponse
+	if rep, err = c.Get(req); err != nil {
+		return nil, err
+	}
+
+	out = &VersionInfo{}
+	if err = rep.Decode(out); err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+// Gets the supported extensions of the TRP server specified by the travel address.
+func (c *Client) Extensions(info *TRPInfo) (out *ExtensionsInfo, err error) {
+	// Use the extensions endpoint
+	var req *TRPInfo
+	if req, err = discoverabilityEndpoint(info, DiscoverabilityExtensions); err != nil {
+		return nil, err
+	}
+
+	var rep *TravelRuleResponse
+	if rep, err = c.Get(req); err != nil {
+		return nil, err
+	}
+
+	out = &ExtensionsInfo{}
+	if err = rep.Decode(out); err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+// Gets the uptime of the TRP server specified by the travel address.
+func (c *Client) Uptime(info *TRPInfo) (out time.Duration, err error) {
+	// Use the uptime endpoint
+	var req *TRPInfo
+	if req, err = discoverabilityEndpoint(info, DiscoverabilityUptime); err != nil {
+		return 0, err
+	}
+
+	var rep *TravelRuleResponse
+	if rep, err = c.Get(req); err != nil {
+		return 0, err
+	}
+
+	// Check the content type to ensure JSON data was returned
+	contentType := rep.Header.Get(ContentTypeHeader)
+	if contentType != "" {
+		mediaType, _, err := mime.ParseMediaType(contentType)
+		if err != nil {
+			return 0, err
+		}
+
+		if mediaType != ContentPlainText {
+			return 0, fmt.Errorf("could not decode response content type %s", contentType)
+		}
+	}
+	defer rep.Body.Close()
+
+	var data []byte
+	if data, err = io.ReadAll(rep.Body); err != nil {
+		return 0, fmt.Errorf("could not read response body: %w", err)
+	}
+
+	// Read the integer from the body
+	var uptime int64
+	if uptime, err = strconv.ParseInt(string(data), 10, 64); err != nil {
+		return 0, fmt.Errorf("could not parse uptime response: %w", err)
+	}
+
+	return time.Duration(uptime) * time.Second, nil
+}
+
+// Create the discoverability endpoint info without overwriting the original.
+func discoverabilityEndpoint(info *TRPInfo, endpoint string) (_ *TRPInfo, err error) {
+	var uri string
+	if uri, err = info.GetURL(); err != nil {
+		return nil, err
+	}
+
+	u, _ := url.Parse(uri)
+	u.Path = endpoint
+	u.Fragment = ""
+	u.RawQuery = ""
+
+	return &TRPInfo{
+		Address:           u.String(),
+		APIVersion:        info.APIVersion,
+		RequestIdentifier: info.RequestIdentifier,
+		APIExtensions:     info.APIExtensions,
+	}, nil
+}
+
+// Get a request to the specified Address, which can be a Travel Address, LNURL, or
+// plain-text URL. The content type is automatically set to application/json and the
+// body should read JSON data. Required OpenVASP headers are set by the TRPInfo struct.
+func (c *Client) Get(info *TRPInfo) (_ *TravelRuleResponse, err error) {
+	var req *http.Request
+	if req, err = NewRequest(http.MethodGet, info, nil); err != nil {
+		return nil, err
+	}
+
+	var rep *http.Response
+	if rep, err = c.Client.Do(req); err != nil {
+		return nil, err
+	}
+
+	trr := &TravelRuleResponse{Response: *rep}
+	if serr := trr.StatusError(); serr != nil {
+		return nil, serr
+	}
+	return trr, nil
+}
+
 // Post a request to the specified Address, which can be a Travel Address, LNURL, or
 // plain-text URL. The content type is automatically set to application/json and the
 // body should read JSON data. Required OpenVASP headers are set by the TRPInfo struct.
@@ -59,7 +214,7 @@ func (c *Client) Confirmation(confirm *Confirmation) (_ *TravelRuleResponse, err
 // identifier is present, one is generated for the reuqest.
 func (c *Client) Post(info *TRPInfo, body io.Reader) (_ *TravelRuleResponse, err error) {
 	var req *http.Request
-	if req, err = NewRequest(info, body); err != nil {
+	if req, err = NewRequest(http.MethodPost, info, body); err != nil {
 		return nil, err
 	}
 
@@ -79,7 +234,7 @@ func (c *Client) Post(info *TRPInfo, body io.Reader) (_ *TravelRuleResponse, err
 // Address to determine the endpoint and setting headers accordingly. If the APIVersion
 // is omitted, the default APIVersion is used. If there is no request identifier, one
 // is generated and added to the info struct.
-func NewRequest(info *TRPInfo, body io.Reader) (req *http.Request, err error) {
+func NewRequest(method string, info *TRPInfo, body io.Reader) (req *http.Request, err error) {
 	if info.APIVersion == "" {
 		info.APIVersion = APIVersion
 	}
@@ -93,7 +248,7 @@ func NewRequest(info *TRPInfo, body io.Reader) (req *http.Request, err error) {
 		return nil, err
 	}
 
-	if req, err = http.NewRequest(http.MethodPost, endpoint, body); err != nil {
+	if req, err = http.NewRequest(method, endpoint, body); err != nil {
 		return nil, err
 	}
 
@@ -164,16 +319,26 @@ func (t *TravelRuleResponse) InquiryResolution() (*InquiryResolution, error) {
 		return nil, t.StatusError()
 	}
 
+	resolution := &InquiryResolution{}
+	if err := t.Decode(resolution); err != nil {
+		return nil, err
+	}
+
+	return resolution, nil
+}
+
+// Decodes JSON from the response body into the specified interface.
+func (t *TravelRuleResponse) Decode(v interface{}) error {
 	// Check the content type to ensure JSON data was returned
 	contentType := t.Header.Get(ContentTypeHeader)
 	if contentType != "" {
 		mediaType, _, err := mime.ParseMediaType(contentType)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		if mediaType != ContentMediaType {
-			return nil, fmt.Errorf("could not parse response content type %s", contentType)
+			return fmt.Errorf("could not decode response content type %s", contentType)
 		}
 	}
 
@@ -182,11 +347,5 @@ func (t *TravelRuleResponse) InquiryResolution() (*InquiryResolution, error) {
 	// Create the JSON decoder
 	decoder := json.NewDecoder(t.Body)
 	decoder.DisallowUnknownFields()
-
-	resolution := &InquiryResolution{}
-	if err := decoder.Decode(resolution); err != nil {
-		return nil, err
-	}
-
-	return resolution, nil
+	return decoder.Decode(v)
 }
