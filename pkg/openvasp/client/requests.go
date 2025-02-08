@@ -77,7 +77,7 @@ func NewRequest(ctx context.Context, method string, ta *trp.Info, body io.Reader
 
 	// If there is a tracing ID on the context, set it on the request
 	var tracingID string
-	if tracingID, _ = TracingFromContext(ctx); tracingID == "" {
+	if tracingID, _ = TracingFromContext(ctx); tracingID != "" {
 		req.Header.Add("X-Request-ID", tracingID)
 	}
 
@@ -158,7 +158,7 @@ func (c *Client) NewTextRequest(ctx context.Context, method string, ta *trp.Info
 
 	// Ensure that the content type and accept headers are set to text/plain.
 	req.Header.Set(openvasp.ContentTypeHeader, openvasp.MIMEPlainText)
-	req.Header.Set(Accept, openvasp.MIMEPlainText)
+	req.Header.Set("Accept", openvasp.MIMEPlainText)
 
 	return req, nil
 }

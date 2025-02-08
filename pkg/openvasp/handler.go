@@ -93,6 +93,7 @@ func APIChecks(next http.Handler) http.Handler {
 		}
 
 		// Enforce Application Version
+		// TODO: add supported versions
 		apiVersion := r.Header.Get(APIVersionHeader)
 		if apiVersion != APIVersion {
 			http.Error(w, "must specify api version header "+APIVersion, http.StatusBadRequest)

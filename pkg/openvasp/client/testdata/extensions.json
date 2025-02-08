@@ -1,0 +1,4 @@
+{
+  "required": ["message-signing"],
+  "supported": ["extended-ivms101", "deterministic-transfer"]
+}

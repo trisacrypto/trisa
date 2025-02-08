@@ -253,8 +253,8 @@ func (s *Client) Do(req *http.Request, out interface{}) (rep *http.Response, err
 	defer rep.Body.Close()
 
 	// Attempt to parse the content type from the response
-	var mediaType string
-	if contentType := req.Header.Get(openvasp.ContentTypeHeader); contentType != "" {
+	var contentType, mediaType string
+	if contentType = rep.Header.Get(openvasp.ContentTypeHeader); contentType != "" {
 		mediaType, _, _ = mime.ParseMediaType(contentType)
 	}
 
@@ -319,7 +319,7 @@ func (s *Client) Do(req *http.Request, out interface{}) (rep *http.Response, err
 			}
 
 		case "":
-			return nil, fmt.Errorf("could not identify media type from response header %q", rep.Header.Get(openvasp.ContentTypeHeader))
+			return nil, fmt.Errorf("could not identify media type from response header %q", contentType)
 
 		default:
 			return nil, fmt.Errorf("unsupported content type: %s", mediaType)
