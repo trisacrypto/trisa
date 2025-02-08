@@ -121,7 +121,7 @@ func APIChecks(next http.Handler) http.Handler {
 				return
 			}
 
-			if mt != ContentMediaType {
+			if mt != MIMEJSON {
 				http.Error(w, "content-type header must be application/json", http.StatusUnsupportedMediaType)
 				return
 			}

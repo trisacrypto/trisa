@@ -38,13 +38,3 @@ func TracingFromContext(ctx context.Context) (string, bool) {
 	tracingID, ok := ctx.Value(contextKeyTracing).(string)
 	return tracingID, ok
 }
-
-var contextKeyNames = []string{"unknown", "requestIdentifier", "tracing"}
-
-// String returns a human readable representation of the context key for easier debugging.
-func (c contextKey) String() string {
-	if int(c) < len(contextKeyNames) {
-		return contextKeyNames[c]
-	}
-	return contextKeyNames[0]
-}

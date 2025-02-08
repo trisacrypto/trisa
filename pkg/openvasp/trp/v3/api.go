@@ -14,6 +14,8 @@ import (
 	"github.com/trisacrypto/trisa/pkg/slip0044"
 )
 
+const IdentityEndpoint = "/identity"
+
 type Client interface {
 	Identity(ctx context.Context, address string) (*Identity, error)
 	Inquiry(ctx context.Context, in *Inquiry) (*Resolution, error)
@@ -59,6 +61,15 @@ func (i *Info) URL() (_ string, err error) {
 	}
 
 	return "", ErrUnknownTravelAddress
+}
+
+func (i *Info) ParseURL() (_ *url.URL, err error) {
+	var uri string
+	if uri, err = i.URL(); err != nil {
+		return nil, err
+	}
+
+	return url.Parse(uri)
 }
 
 //===========================================================================

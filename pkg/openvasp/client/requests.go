@@ -128,6 +128,7 @@ func (c *Client) NewJSONRequest(ctx context.Context, method string, ta *trp.Info
 		}
 	}
 
+	// NOTE: the NewRequest function sets the Accept and Content-Type headers to JSON.
 	return c.NewRequest(ctx, method, ta, body)
 }
 
@@ -151,5 +152,13 @@ func (c *Client) NewTextRequest(ctx context.Context, method string, ta *trp.Info
 		body = bytes.NewBufferString(fmt.Sprintf("%v", v))
 	}
 
-	return c.NewRequest(ctx, method, ta, body)
+	if req, err = c.NewRequest(ctx, method, ta, body); err != nil {
+		return nil, err
+	}
+
+	// Ensure that the content type and accept headers are set to text/plain.
+	req.Header.Set(openvasp.ContentTypeHeader, openvasp.MIMEPlainText)
+	req.Header.Set(Accept, openvasp.MIMEPlainText)
+
+	return req, nil
 }

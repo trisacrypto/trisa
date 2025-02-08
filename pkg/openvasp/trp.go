@@ -22,8 +22,8 @@ const (
 const (
 	APIVersion       = "3.1.0"
 	ContentTypeValue = "application/json; charset=utf-8"
-	ContentMediaType = "application/json"
-	ContentPlainText = "text/plain"
+	MIMEJSON         = "application/json"
+	MIMEPlainText    = "text/plain"
 )
 
 // TRISA extensions
