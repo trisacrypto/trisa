@@ -27,7 +27,7 @@ func TestClient(t *testing.T) {
 	ctx := context.Background()
 
 	t.Run("Identity", func(t *testing.T) {
-		srv, _ := NewServer(ValidatePath("/identity", HandleFixture(http.MethodGet, "testdata/identity.json")))
+		srv, ta := NewServer(ValidatePath("/identity", HandleFixture(http.MethodGet, "testdata/identity.json")))
 		defer srv.Close()
 
 		id, err := client.Identity(ctx, srv.URL)
@@ -36,6 +36,10 @@ func TestClient(t *testing.T) {
 		require.Equal(t, "Acme VASP", id.Name)
 		require.Equal(t, "TVYD005I7Q5IJK0EMI53", id.LEI)
 		require.True(t, strings.HasPrefix(id.X509, "-----BEGIN CERTIFICATE-----"))
+		require.NotNil(t, id.Info)
+		require.Equal(t, ta.Address+"/identity", id.Info.Address)
+		require.Equal(t, client.APIVersion(), id.Info.APIVersion)
+		require.NotEmpty(t, id.Info.RequestIdentifier)
 	})
 
 	t.Run("Inquiry", func(t *testing.T) {
@@ -44,6 +48,8 @@ func TestClient(t *testing.T) {
 
 		inquiry := &trp.Inquiry{}
 		Fixture(t, "testdata/inquiry.json", inquiry)
+
+		ta.RequestIdentifier = "f3b9e22c-d7d6-4458-bbd9-0320612a0267"
 		inquiry.Info = ta
 
 		out, err := client.Inquiry(ctx, inquiry)
@@ -52,6 +58,10 @@ func TestClient(t *testing.T) {
 		require.Equal(t, "3.2.1", out.Version)
 		require.Empty(t, out.Approved)
 		require.Empty(t, out.Rejected)
+		require.NotNil(t, out.Info)
+		require.Equal(t, ta.Address, out.Info.Address)
+		require.Equal(t, client.APIVersion(), out.Info.APIVersion)
+		require.Equal(t, ta.RequestIdentifier, out.Info.RequestIdentifier)
 	})
 
 	t.Run("Resolve", func(t *testing.T) {

@@ -92,10 +92,13 @@ func (c *Client) Identity(ctx context.Context, address string) (out *trp.Identit
 	uri.Path = trp.IdentityEndpoint
 	info.Address = uri.String()
 
+	var rep *Response
 	out = &trp.Identity{}
-	if _, err = c.Get(ctx, info, out); err != nil {
+	if rep, err = c.Get(ctx, info, out); err != nil {
 		return nil, err
 	}
+
+	out.Info = rep.Info()
 	return out, nil
 }
 
@@ -113,11 +116,13 @@ func (c *Client) Inquiry(ctx context.Context, in *trp.Inquiry) (out *trp.Resolut
 	in.Info.Address = uri.String()
 
 	// Send the inquiry request
+	var rep *Response
 	out = &trp.Resolution{}
-	if _, err = c.Post(ctx, in.Info, in, out); err != nil {
+	if rep, err = c.Post(ctx, in.Info, in, out); err != nil {
 		return nil, err
 	}
 
+	out.Info = rep.Info()
 	return out, nil
 }
 
