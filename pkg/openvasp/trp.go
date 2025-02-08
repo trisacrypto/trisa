@@ -28,8 +28,8 @@ const (
 
 // TRISA extensions
 const (
-	SealedTRISAExtension   = "sealed_trisa_envelope"
-	UnsealedTRISAExtension = "unsealed_trisa_envelope"
+	SealedTRISAExtension   = "sealed-trisa-envelope"
+	UnsealedTRISAExtension = "unsealed-trisa-envelope"
 )
 
 // The TransactionPayload extension is used to provide information about the

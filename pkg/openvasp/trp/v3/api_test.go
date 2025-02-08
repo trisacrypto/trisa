@@ -47,7 +47,7 @@ func TestTravelAddress(t *testing.T) {
 			require.ErrorIs(t, err, tc.err, "unexpected error on test case %d", i)
 		} else {
 			require.NoError(t, err, "expected no error on test case %d", i)
-			require.Equal(t, tc.expected, actual.String(), "unexpected mismatch on test case %d", i)
+			require.Equal(t, tc.expected, actual, "unexpected mismatch on test case %d", i)
 		}
 	}
 }

@@ -34,39 +34,31 @@ type Info struct {
 	APIExtensions     []string `json:"-"` // The names of any extensions uses in the request
 }
 
-func (i *Info) URL() (_ *url.URL, err error) {
+func (i *Info) URL() (_ string, err error) {
 	switch {
 	case i.Address == "":
-		return nil, ErrUnknownTravelAddress
+		return "", ErrUnknownTravelAddress
 
 	case strings.HasPrefix(i.Address, "lnurl1"), strings.HasPrefix(i.Address, "LNURL1"):
-		var uri string
-		if uri, err = lnurl.Decode(i.Address); err != nil {
-			return nil, err
-		}
-		return url.Parse(uri)
+		return lnurl.Decode(i.Address)
 
 	case strings.HasPrefix(i.Address, "ta"):
-		var uri string
-		if uri, err = traddr.DecodeURL(i.Address); err != nil {
-			return nil, err
-		}
-		return url.Parse(uri)
+		return traddr.DecodeURL(i.Address)
 
 	default:
 		// Attempt to parse the URL
 		var u *url.URL
 		if u, err = url.Parse(i.Address); err != nil {
-			return nil, err
+			return "", err
 		}
 
 		// The URL must have a scheme to be valid
 		if u.Scheme != "" {
-			return u, nil
+			return u.String(), nil
 		}
 	}
 
-	return nil, ErrUnknownTravelAddress
+	return "", ErrUnknownTravelAddress
 }
 
 //===========================================================================
