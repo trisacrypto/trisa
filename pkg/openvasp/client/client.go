@@ -223,7 +223,7 @@ func (c *Client) Extensions(ctx context.Context, address string) (out *discovera
 
 // Executes an HTTP GET request expecting a JSON response (out) from the server. If
 // out is nil or the status code is 204 then the body response will not be parsed.
-func (s *Client) Get(ctx context.Context, ta *trp.Info, out interface{}) (rep *http.Response, err error) {
+func (s *Client) Get(ctx context.Context, ta *trp.Info, out interface{}) (rep *Response, err error) {
 	var req *http.Request
 	if req, err = s.NewJSONRequest(ctx, http.MethodGet, ta, nil); err != nil {
 		return nil, err
@@ -234,7 +234,7 @@ func (s *Client) Get(ctx context.Context, ta *trp.Info, out interface{}) (rep *h
 // Executes an HTTP POST request expecting a JSON payload (in) and accepts a JSON
 // payload (out) from the server (though the response will be handled based on the
 // content-type the server responds with). Both in and out can be nil to skip handling.
-func (s *Client) Post(ctx context.Context, ta *trp.Info, in, out interface{}) (rep *http.Response, err error) {
+func (s *Client) Post(ctx context.Context, ta *trp.Info, in, out interface{}) (rep *Response, err error) {
 	var req *http.Request
 	if req, err = s.NewJSONRequest(ctx, http.MethodPost, ta, in); err != nil {
 		return nil, err
@@ -246,8 +246,20 @@ func (s *Client) Post(ctx context.Context, ta *trp.Info, in, out interface{}) (r
 // data into the specified out interface. The out interface should implement either
 // encoding.TextUnmarshaler in the case of text/plain responses or will be decoded using
 // json in the case of application/json responses.
-func (s *Client) Do(req *http.Request, out interface{}) (rep *http.Response, err error) {
-	if rep, err = s.client.Do(req); err != nil {
+func (c *Client) Do(req *http.Request, out interface{}) (reply *Response, err error) {
+	var rep *http.Response
+	if rep, err = c.do(req, out); rep != nil {
+		reply = &Response{
+			Response: *rep,
+			err:      err,
+		}
+	}
+	return reply, err
+}
+
+// Internal method to execute an HTTP request and handle the response.
+func (c *Client) do(req *http.Request, out interface{}) (rep *http.Response, err error) {
+	if rep, err = c.client.Do(req); err != nil {
 		return nil, fmt.Errorf("could not execute request: %w", err)
 	}
 	defer rep.Body.Close()
@@ -280,7 +292,7 @@ func (s *Client) Do(req *http.Request, out interface{}) (rep *http.Response, err
 			var msg []byte
 			if msg, err = io.ReadAll(rep.Body); err != nil {
 				// If we can't read the body, just return the status error.
-				return nil, serr
+				return rep, serr
 			}
 
 			if msgs := strings.TrimSpace(string(msg)); msgs != "" {
@@ -296,33 +308,33 @@ func (s *Client) Do(req *http.Request, out interface{}) (rep *http.Response, err
 		switch mediaType {
 		case openvasp.MIMEJSON:
 			if err = json.NewDecoder(rep.Body).Decode(out); err != nil {
-				return nil, fmt.Errorf("could not deserialize json response: %w", err)
+				return rep, fmt.Errorf("could not deserialize json response: %w", err)
 			}
 
 		case openvasp.MIMEPlainText:
 			var data []byte
 			if data, err = io.ReadAll(rep.Body); err != nil {
-				return nil, fmt.Errorf("could not read response body: %w", err)
+				return rep, fmt.Errorf("could not read response body: %w", err)
 			}
 
 			switch v := out.(type) {
 			case encoding.TextUnmarshaler:
 				if err = v.UnmarshalText(data); err != nil {
-					return nil, fmt.Errorf("could not unmarshal text response: %w", err)
+					return rep, fmt.Errorf("could not unmarshal text response: %w", err)
 				}
 			case encoding.BinaryUnmarshaler:
 				if err = v.UnmarshalBinary(data); err != nil {
-					return nil, fmt.Errorf("could not unmarshal binary response: %w", err)
+					return rep, fmt.Errorf("could not unmarshal binary response: %w", err)
 				}
 			default:
-				return nil, fmt.Errorf("could not unmarshal text response to %T", v)
+				return rep, fmt.Errorf("could not unmarshal text response to %T", v)
 			}
 
 		case "":
-			return nil, fmt.Errorf("could not identify media type from response header %q", contentType)
+			return rep, fmt.Errorf("could not identify media type from response header %q", contentType)
 
 		default:
-			return nil, fmt.Errorf("unsupported content type: %s", mediaType)
+			return rep, fmt.Errorf("unsupported content type: %s", mediaType)
 		}
 	}
 

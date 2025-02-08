@@ -164,6 +164,60 @@ func TestClient(t *testing.T) {
 		require.Equal(t, http.StatusTeapot, serr.Code)
 		require.Equal(t, "bad teapot", serr.Message)
 	})
+
+	t.Run("Do", func(t *testing.T) {
+		t.Run("NoContent", func(t *testing.T) {
+			srv, ta := NewServer(HandleNoContent(http.MethodGet))
+			defer srv.Close()
+
+			req, err := client.NewRequest(ctx, http.MethodGet, ta, nil)
+			require.NoError(t, err, "could not create request")
+
+			rep, err := client.Do(req, nil)
+			require.NoError(t, err, "could not execute request")
+			require.NotNil(t, rep, "expected reply to be returned")
+
+			require.Nil(t, rep.Err(), "expected no error")
+			serr, ok := rep.StatusError()
+			require.Nil(t, serr, "expected no status error")
+			require.True(t, ok, "expected status error to be nil")
+
+			info := rep.Info()
+			require.NotNil(t, info, "expected TRP info")
+			require.Equal(t, ta.Address, info.Address)
+			require.Equal(t, openvasp.APIVersion, info.APIVersion)
+			require.Equal(t, ta.RequestIdentifier, info.RequestIdentifier)
+			require.Empty(t, info.APIExtensions)
+		})
+
+		t.Run("Error", func(t *testing.T) {
+			srv, ta := NewServer(ValidateAPIHeaders(http.MethodGet, func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set(openvasp.APIExtensionsHeader, "extended-ivms101, deterministic-transfer")
+				http.Error(w, "something bad happened", http.StatusUnprocessableEntity)
+			}))
+			defer srv.Close()
+
+			ta.APIExtensions = []string{"extended-ivms101", "deterministic-transfer"}
+			req, err := client.NewRequest(ctx, http.MethodGet, ta, nil)
+			require.NoError(t, err, "could not create request")
+
+			rep, err := client.Do(req, nil)
+			require.Error(t, err, "expected a status error")
+			require.NotNil(t, rep, "expected reply to be returned")
+
+			serr, ok := rep.StatusError()
+			require.True(t, ok, "expected status error")
+			require.Equal(t, http.StatusUnprocessableEntity, serr.Code)
+			require.Equal(t, "something bad happened", serr.Message)
+
+			info := rep.Info()
+			require.NotNil(t, info, "expected TRP info")
+			require.Equal(t, ta.Address, info.Address)
+			require.Equal(t, openvasp.APIVersion, info.APIVersion)
+			require.Equal(t, ta.RequestIdentifier, info.RequestIdentifier)
+			require.Equal(t, ta.APIExtensions, info.APIExtensions)
+		})
+	})
 }
 
 func NewServer(handler http.Handler) (*httptest.Server, *trp.Info) {
