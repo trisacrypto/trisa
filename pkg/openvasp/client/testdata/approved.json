@@ -1,0 +1,6 @@
+{
+    "approved": {
+        "address": "some payment address",
+        "callback": "https://beneficiary.com/implementation/defined/path/for/transferConfirmation"
+    }
+}

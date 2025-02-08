@@ -1,11 +1,11 @@
-package openvasp_test
+package trp_test
 
 import (
 	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	. "github.com/trisacrypto/trisa/pkg/openvasp"
+	. "github.com/trisacrypto/trisa/pkg/openvasp/trp/v3"
 )
 
 func TestStatusError(t *testing.T) {

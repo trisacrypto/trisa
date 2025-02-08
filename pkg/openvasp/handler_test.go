@@ -15,6 +15,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 	. "github.com/trisacrypto/trisa/pkg/openvasp"
+	"github.com/trisacrypto/trisa/pkg/openvasp/trp/v3"
 	"github.com/trisacrypto/trisa/pkg/slip0044"
 )
 
@@ -50,9 +51,9 @@ func TestTransferInquiry(t *testing.T) {
 
 	t.Run("Standard", func(t *testing.T) {
 		defer mock.Reset()
-		mock.CallInquiry = func(i *Inquiry) (*InquiryResolution, error) {
+		mock.CallInquiry = func(i *trp.Inquiry) (*trp.Resolution, error) {
 			// Make some assertions about the inquiry
-			if i.TRP == nil || i.TRP.RequestIdentifier != requestIdentifier || i.TRP.APIVersion != APIVersion {
+			if i.Info == nil || i.Info.RequestIdentifier != requestIdentifier || i.Info.APIVersion != APIVersion {
 				return nil, errors.New("invalid TRP info")
 			}
 
@@ -82,9 +83,9 @@ func TestTransferInquiry(t *testing.T) {
 
 	t.Run("Approval", func(t *testing.T) {
 		defer mock.Reset()
-		mock.CallInquiry = func(i *Inquiry) (*InquiryResolution, error) {
-			return &InquiryResolution{
-				Approved: &Approval{
+		mock.CallInquiry = func(i *trp.Inquiry) (*trp.Resolution, error) {
+			return &trp.Resolution{
+				Approved: &trp.Approval{
 					Address:  "some payment address",
 					Callback: beneficiaryURL,
 				},
@@ -107,8 +108,8 @@ func TestTransferInquiry(t *testing.T) {
 
 	t.Run("Rejection", func(t *testing.T) {
 		defer mock.Reset()
-		mock.CallInquiry = func(i *Inquiry) (*InquiryResolution, error) {
-			return &InquiryResolution{
+		mock.CallInquiry = func(i *trp.Inquiry) (*trp.Resolution, error) {
+			return &trp.Resolution{
 				Rejected: "human readable comment",
 			}, nil
 		}
@@ -145,7 +146,7 @@ func TestTransferInquiry(t *testing.T) {
 
 	t.Run("StatusError", func(t *testing.T) {
 		defer mock.Reset()
-		mock.UseError(CallInquiry, &StatusError{Code: http.StatusConflict})
+		mock.UseError(CallInquiry, &trp.StatusError{Code: http.StatusConflict})
 
 		w, r := makeRequest(t)
 		handler.ServeHTTP(w, r)
@@ -163,7 +164,7 @@ func TestTransferInquiry(t *testing.T) {
 
 func TestTransferConfirmation(t *testing.T) {
 	// Create requests to execute against the inquiry handler
-	makeRequest := func(t *testing.T, payload *Confirmation) (*httptest.ResponseRecorder, *http.Request) {
+	makeRequest := func(t *testing.T, payload *trp.Confirmation) (*httptest.ResponseRecorder, *http.Request) {
 		var body bytes.Buffer
 		err := json.NewEncoder(&body).Encode(payload)
 		require.NoError(t, err, "could not encode json payload")
@@ -182,8 +183,8 @@ func TestTransferConfirmation(t *testing.T) {
 
 	t.Run("TXID", func(t *testing.T) {
 		defer mock.Reset()
-		mock.CallConfirmation = func(c *Confirmation) error {
-			if c.TRP == nil || c.TRP.RequestIdentifier != requestIdentifier || c.TRP.APIVersion != APIVersion {
+		mock.CallConfirmation = func(c *trp.Confirmation) error {
+			if c.Info == nil || c.Info.RequestIdentifier != requestIdentifier || c.Info.APIVersion != APIVersion {
 				return errors.New("invalid TRP info")
 			}
 
@@ -197,7 +198,7 @@ func TestTransferConfirmation(t *testing.T) {
 			return nil
 		}
 
-		w, r := makeRequest(t, &Confirmation{TXID: "foo"})
+		w, r := makeRequest(t, &trp.Confirmation{TXID: "foo"})
 		handler.ServeHTTP(w, r)
 		require.Equal(t, 1, mock.Calls(CallConfirmation))
 		require.Equal(t, 0, mock.Calls(CallInquiry))
@@ -211,8 +212,8 @@ func TestTransferConfirmation(t *testing.T) {
 
 	t.Run("Canceled", func(t *testing.T) {
 		defer mock.Reset()
-		mock.CallConfirmation = func(c *Confirmation) error {
-			if c.TRP == nil || c.TRP.RequestIdentifier != requestIdentifier || c.TRP.APIVersion != APIVersion {
+		mock.CallConfirmation = func(c *trp.Confirmation) error {
+			if c.Info == nil || c.Info.RequestIdentifier != requestIdentifier || c.Info.APIVersion != APIVersion {
 				return errors.New("invalid TRP info")
 			}
 
@@ -226,7 +227,7 @@ func TestTransferConfirmation(t *testing.T) {
 			return nil
 		}
 
-		w, r := makeRequest(t, &Confirmation{Canceled: "foo"})
+		w, r := makeRequest(t, &trp.Confirmation{Canceled: "foo"})
 		handler.ServeHTTP(w, r)
 		require.Equal(t, 1, mock.Calls(CallConfirmation))
 		require.Equal(t, 0, mock.Calls(CallInquiry))
@@ -242,7 +243,7 @@ func TestTransferConfirmation(t *testing.T) {
 		defer mock.Reset()
 		mock.UseError(CallConfirmation, errors.New("whoopsie"))
 
-		w, r := makeRequest(t, &Confirmation{})
+		w, r := makeRequest(t, &trp.Confirmation{})
 		handler.ServeHTTP(w, r)
 		require.Equal(t, 0, mock.Calls(CallInquiry))
 		require.Equal(t, 0, mock.Calls(CallConfirmation))
@@ -252,14 +253,14 @@ func TestTransferConfirmation(t *testing.T) {
 
 		data, err := io.ReadAll(rep.Body)
 		require.NoError(t, err)
-		require.Equal(t, "must specify either txid or canceled in confirmation\n", string(data))
+		require.Equal(t, trp.ErrEmptyConfirmation.Error()+"\n", string(data))
 	})
 
 	t.Run("Error", func(t *testing.T) {
 		defer mock.Reset()
 		mock.UseError(CallConfirmation, errors.New("whoopsie"))
 
-		w, r := makeRequest(t, &Confirmation{TXID: "foo"})
+		w, r := makeRequest(t, &trp.Confirmation{TXID: "foo"})
 		handler.ServeHTTP(w, r)
 		require.Equal(t, 0, mock.Calls(CallInquiry))
 		require.Equal(t, 1, mock.Calls(CallConfirmation))
@@ -274,9 +275,9 @@ func TestTransferConfirmation(t *testing.T) {
 
 	t.Run("StatusError", func(t *testing.T) {
 		defer mock.Reset()
-		mock.UseError(CallConfirmation, &StatusError{Code: http.StatusExpectationFailed})
+		mock.UseError(CallConfirmation, &trp.StatusError{Code: http.StatusExpectationFailed})
 
-		w, r := makeRequest(t, &Confirmation{TXID: "foo"})
+		w, r := makeRequest(t, &trp.Confirmation{TXID: "foo"})
 		handler.ServeHTTP(w, r)
 		require.Equal(t, 0, mock.Calls(CallInquiry))
 		require.Equal(t, 1, mock.Calls(CallConfirmation))
@@ -527,22 +528,22 @@ type MockHandler struct {
 	sync.RWMutex
 	calls map[string]int
 
-	CallInquiry      func(*Inquiry) (*InquiryResolution, error)
-	CallConfirmation func(*Confirmation) error
+	CallInquiry      func(*trp.Inquiry) (*trp.Resolution, error)
+	CallConfirmation func(*trp.Confirmation) error
 }
 
 func (m *MockHandler) UseError(call string, err error) {
 	switch call {
 	case CallInquiry:
-		m.CallInquiry = func(*Inquiry) (*InquiryResolution, error) { return nil, err }
+		m.CallInquiry = func(*trp.Inquiry) (*trp.Resolution, error) { return nil, err }
 	case CallConfirmation:
-		m.CallConfirmation = func(*Confirmation) error { return err }
+		m.CallConfirmation = func(*trp.Confirmation) error { return err }
 	default:
 		panic(fmt.Errorf("unknown call %q", call))
 	}
 }
 
-func (m *MockHandler) OnInquiry(in *Inquiry) (*InquiryResolution, error) {
+func (m *MockHandler) OnInquiry(in *trp.Inquiry) (*trp.Resolution, error) {
 	m.incr(CallInquiry)
 	if m.CallInquiry != nil {
 		return m.CallInquiry(in)
@@ -550,7 +551,7 @@ func (m *MockHandler) OnInquiry(in *Inquiry) (*InquiryResolution, error) {
 	return nil, errors.New("no mock on inquiry handler defined")
 }
 
-func (m *MockHandler) OnConfirmation(in *Confirmation) error {
+func (m *MockHandler) OnConfirmation(in *trp.Confirmation) error {
 	m.incr(CallConfirmation)
 	if m.CallConfirmation != nil {
 		return m.CallConfirmation(in)
@@ -587,7 +588,7 @@ func (m *MockHandler) incr(call string) {
 	m.calls[call]++
 }
 
-func loadInquiryPayload(path string) (inquiry *Inquiry, err error) {
+func loadInquiryPayload(path string) (inquiry *trp.Inquiry, err error) {
 	var f *os.File
 	if f, err = os.Open(path); err != nil {
 		return nil, err

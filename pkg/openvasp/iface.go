@@ -1,9 +1,11 @@
 package openvasp
 
+import "github.com/trisacrypto/trisa/pkg/openvasp/trp/v3"
+
 type InquiryHandler interface {
-	OnInquiry(*Inquiry) (*InquiryResolution, error)
+	OnInquiry(*trp.Inquiry) (*trp.Resolution, error)
 }
 
 type ConfirmationHandler interface {
-	OnConfirmation(*Confirmation) error
+	OnConfirmation(*trp.Confirmation) error
 }
