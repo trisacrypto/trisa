@@ -1,0 +1,1373 @@
+{"coin_type": "0", "path_component": "0x80000000", "symbol": "BTC", "name": "Bitcoin"}
+{"coin_type": "1", "path_component": "0x80000001", "symbol": "", "name": "Testnet (all coins)"}
+{"coin_type": "2", "path_component": "0x80000002", "symbol": "LTC", "name": "Litecoin"}
+{"coin_type": "3", "path_component": "0x80000003", "symbol": "DOGE", "name": "Dogecoin"}
+{"coin_type": "4", "path_component": "0x80000004", "symbol": "RDD", "name": "Reddcoin"}
+{"coin_type": "5", "path_component": "0x80000005", "symbol": "DASH", "name": "Dash"}
+{"coin_type": "6", "path_component": "0x80000006", "symbol": "PPC", "name": "Peercoin"}
+{"coin_type": "7", "path_component": "0x80000007", "symbol": "NMC", "name": "Namecoin"}
+{"coin_type": "8", "path_component": "0x80000008", "symbol": "FTC", "name": "Feathercoin"}
+{"coin_type": "9", "path_component": "0x80000009", "symbol": "XCP", "name": "Counterparty"}
+{"coin_type": "10", "path_component": "0x8000000a", "symbol": "BLK", "name": "Blackcoin"}
+{"coin_type": "11", "path_component": "0x8000000b", "symbol": "NSR", "name": "NuShares"}
+{"coin_type": "12", "path_component": "0x8000000c", "symbol": "NBT", "name": "NuBits"}
+{"coin_type": "13", "path_component": "0x8000000d", "symbol": "MZC", "name": "Mazacoin"}
+{"coin_type": "14", "path_component": "0x8000000e", "symbol": "VIA", "name": "Viacoin"}
+{"coin_type": "15", "path_component": "0x8000000f", "symbol": "XCH", "name": "ClearingHouse"}
+{"coin_type": "16", "path_component": "0x80000010", "symbol": "RBY", "name": "Rubycoin"}
+{"coin_type": "17", "path_component": "0x80000011", "symbol": "GRS", "name": "Groestlcoin"}
+{"coin_type": "18", "path_component": "0x80000012", "symbol": "DGC", "name": "Digitalcoin"}
+{"coin_type": "19", "path_component": "0x80000013", "symbol": "CCN", "name": "Cannacoin"}
+{"coin_type": "20", "path_component": "0x80000014", "symbol": "DGB", "name": "DigiByte"}
+{"coin_type": "21", "path_component": "0x80000015", "symbol": "", "name": "Open Assets"}
+{"coin_type": "22", "path_component": "0x80000016", "symbol": "MONA", "name": "Monacoin"}
+{"coin_type": "23", "path_component": "0x80000017", "symbol": "CLAM", "name": "Clams"}
+{"coin_type": "24", "path_component": "0x80000018", "symbol": "XPM", "name": "Primecoin"}
+{"coin_type": "25", "path_component": "0x80000019", "symbol": "NEOS", "name": "Neoscoin"}
+{"coin_type": "26", "path_component": "0x8000001a", "symbol": "JBS", "name": "Jumbucks"}
+{"coin_type": "27", "path_component": "0x8000001b", "symbol": "ZRC", "name": "ziftrCOIN"}
+{"coin_type": "28", "path_component": "0x8000001c", "symbol": "VTC", "name": "Vertcoin"}
+{"coin_type": "29", "path_component": "0x8000001d", "symbol": "NXT", "name": "NXT"}
+{"coin_type": "30", "path_component": "0x8000001e", "symbol": "BURST", "name": "Burst"}
+{"coin_type": "31", "path_component": "0x8000001f", "symbol": "MUE", "name": "MonetaryUnit"}
+{"coin_type": "32", "path_component": "0x80000020", "symbol": "ZOOM", "name": "Zoom"}
+{"coin_type": "33", "path_component": "0x80000021", "symbol": "VASH", "name": "Virtual Cash"}
+{"coin_type": "34", "path_component": "0x80000022", "symbol": "CDN", "name": "Canada eCoin"}
+{"coin_type": "35", "path_component": "0x80000023", "symbol": "SDC", "name": "ShadowCash"}
+{"coin_type": "36", "path_component": "0x80000024", "symbol": "PKB", "name": "ParkByte"}
+{"coin_type": "37", "path_component": "0x80000025", "symbol": "PND", "name": "Pandacoin"}
+{"coin_type": "38", "path_component": "0x80000026", "symbol": "START", "name": "StartCOIN"}
+{"coin_type": "39", "path_component": "0x80000027", "symbol": "MOIN", "name": "MOIN"}
+{"coin_type": "40", "path_component": "0x80000028", "symbol": "EXP", "name": "Expanse"}
+{"coin_type": "41", "path_component": "0x80000029", "symbol": "EMC2", "name": "Einsteinium"}
+{"coin_type": "42", "path_component": "0x8000002a", "symbol": "DCR", "name": "Decred"}
+{"coin_type": "43", "path_component": "0x8000002b", "symbol": "XEM", "name": "NEM"}
+{"coin_type": "44", "path_component": "0x8000002c", "symbol": "PART", "name": "Particl"}
+{"coin_type": "45", "path_component": "0x8000002d", "symbol": "ARG", "name": "Argentum (dead)"}
+{"coin_type": "46", "path_component": "0x8000002e", "symbol": "", "name": "Libertas"}
+{"coin_type": "47", "path_component": "0x8000002f", "symbol": "", "name": "Posw coin"}
+{"coin_type": "48", "path_component": "0x80000030", "symbol": "SHR", "name": "Shreeji"}
+{"coin_type": "49", "path_component": "0x80000031", "symbol": "GCR", "name": "Global Currency Reserve (GCRcoin)"}
+{"coin_type": "50", "path_component": "0x80000032", "symbol": "NVC", "name": "Novacoin"}
+{"coin_type": "51", "path_component": "0x80000033", "symbol": "AC", "name": "Asiacoin"}
+{"coin_type": "52", "path_component": "0x80000034", "symbol": "BTCD", "name": "BitcoinDark"}
+{"coin_type": "53", "path_component": "0x80000035", "symbol": "DOPE", "name": "Dopecoin"}
+{"coin_type": "54", "path_component": "0x80000036", "symbol": "TPC", "name": "Templecoin"}
+{"coin_type": "55", "path_component": "0x80000037", "symbol": "AIB", "name": "AIB"}
+{"coin_type": "56", "path_component": "0x80000038", "symbol": "EDRC", "name": "EDRCoin"}
+{"coin_type": "57", "path_component": "0x80000039", "symbol": "SYS", "name": "Syscoin"}
+{"coin_type": "58", "path_component": "0x8000003a", "symbol": "SLR", "name": "Solarcoin"}
+{"coin_type": "59", "path_component": "0x8000003b", "symbol": "SMLY", "name": "Smileycoin"}
+{"coin_type": "60", "path_component": "0x8000003c", "symbol": "ETH", "name": "Ether"}
+{"coin_type": "61", "path_component": "0x8000003d", "symbol": "ETC", "name": "Ether Classic"}
+{"coin_type": "62", "path_component": "0x8000003e", "symbol": "PSB", "name": "Pesobit"}
+{"coin_type": "63", "path_component": "0x8000003f", "symbol": "LDCN", "name": "Landcoin (dead)"}
+{"coin_type": "64", "path_component": "0x80000040", "symbol": "", "name": "Open Chain"}
+{"coin_type": "65", "path_component": "0x80000041", "symbol": "XBC", "name": "Bitcoinplus"}
+{"coin_type": "66", "path_component": "0x80000042", "symbol": "IOP", "name": "Internet of People"}
+{"coin_type": "67", "path_component": "0x80000043", "symbol": "NXS", "name": "Nexus"}
+{"coin_type": "68", "path_component": "0x80000044", "symbol": "INSN", "name": "InsaneCoin"}
+{"coin_type": "69", "path_component": "0x80000045", "symbol": "OK", "name": "OKCash"}
+{"coin_type": "70", "path_component": "0x80000046", "symbol": "BRIT", "name": "BritCoin"}
+{"coin_type": "71", "path_component": "0x80000047", "symbol": "CMP", "name": "Compcoin"}
+{"coin_type": "72", "path_component": "0x80000048", "symbol": "CRW", "name": "Crown"}
+{"coin_type": "73", "path_component": "0x80000049", "symbol": "BELA", "name": "BelaCoin"}
+{"coin_type": "74", "path_component": "0x8000004a", "symbol": "ICX", "name": "ICON"}
+{"coin_type": "75", "path_component": "0x8000004b", "symbol": "FJC", "name": "FujiCoin"}
+{"coin_type": "76", "path_component": "0x8000004c", "symbol": "MIX", "name": "MIX"}
+{"coin_type": "77", "path_component": "0x8000004d", "symbol": "XVG", "name": "Verge Currency"}
+{"coin_type": "78", "path_component": "0x8000004e", "symbol": "EFL", "name": "Electronic Gulden"}
+{"coin_type": "79", "path_component": "0x8000004f", "symbol": "CLUB", "name": "ClubCoin"}
+{"coin_type": "80", "path_component": "0x80000050", "symbol": "RICHX", "name": "RichCoin"}
+{"coin_type": "81", "path_component": "0x80000051", "symbol": "POT", "name": "Potcoin"}
+{"coin_type": "82", "path_component": "0x80000052", "symbol": "QRK", "name": "Quarkcoin"}
+{"coin_type": "83", "path_component": "0x80000053", "symbol": "TRC", "name": "Terracoin"}
+{"coin_type": "84", "path_component": "0x80000054", "symbol": "GRC", "name": "Gridcoin"}
+{"coin_type": "85", "path_component": "0x80000055", "symbol": "AUR", "name": "Auroracoin"}
+{"coin_type": "86", "path_component": "0x80000056", "symbol": "IXC", "name": "IXCoin"}
+{"coin_type": "87", "path_component": "0x80000057", "symbol": "NLG", "name": "Gulden"}
+{"coin_type": "88", "path_component": "0x80000058", "symbol": "BITB", "name": "BitBean"}
+{"coin_type": "89", "path_component": "0x80000059", "symbol": "BTA", "name": "Bata"}
+{"coin_type": "90", "path_component": "0x8000005a", "symbol": "XMY", "name": "Myriadcoin"}
+{"coin_type": "91", "path_component": "0x8000005b", "symbol": "BSD", "name": "BitSend"}
+{"coin_type": "92", "path_component": "0x8000005c", "symbol": "UNO", "name": "Unobtanium"}
+{"coin_type": "93", "path_component": "0x8000005d", "symbol": "MTR", "name": "MasterTrader"}
+{"coin_type": "94", "path_component": "0x8000005e", "symbol": "GB", "name": "GoldBlocks"}
+{"coin_type": "95", "path_component": "0x8000005f", "symbol": "SHM", "name": "Saham"}
+{"coin_type": "96", "path_component": "0x80000060", "symbol": "CRX", "name": "Chronos"}
+{"coin_type": "97", "path_component": "0x80000061", "symbol": "BIQ", "name": "Ubiquoin"}
+{"coin_type": "98", "path_component": "0x80000062", "symbol": "EVO", "name": "Evotion"}
+{"coin_type": "99", "path_component": "0x80000063", "symbol": "STO", "name": "SaveTheOcean"}
+{"coin_type": "100", "path_component": "0x80000064", "symbol": "BIGUP", "name": "BigUp"}
+{"coin_type": "101", "path_component": "0x80000065", "symbol": "GAME", "name": "GameCredits"}
+{"coin_type": "102", "path_component": "0x80000066", "symbol": "DLC", "name": "Dollarcoins"}
+{"coin_type": "103", "path_component": "0x80000067", "symbol": "ZYD", "name": "Zayedcoin"}
+{"coin_type": "104", "path_component": "0x80000068", "symbol": "DBIC", "name": "Dubaicoin"}
+{"coin_type": "105", "path_component": "0x80000069", "symbol": "STRAT", "name": "Stratis"}
+{"coin_type": "106", "path_component": "0x8000006a", "symbol": "SH", "name": "Shilling"}
+{"coin_type": "107", "path_component": "0x8000006b", "symbol": "MARS", "name": "MarsCoin"}
+{"coin_type": "108", "path_component": "0x8000006c", "symbol": "UBQ", "name": "Ubiq"}
+{"coin_type": "109", "path_component": "0x8000006d", "symbol": "PTC", "name": "Pesetacoin"}
+{"coin_type": "110", "path_component": "0x8000006e", "symbol": "NRO", "name": "Neurocoin"}
+{"coin_type": "111", "path_component": "0x8000006f", "symbol": "ARK", "name": "ARK"}
+{"coin_type": "112", "path_component": "0x80000070", "symbol": "USC", "name": "UltimateSecureCashMain"}
+{"coin_type": "113", "path_component": "0x80000071", "symbol": "THC", "name": "Hempcoin"}
+{"coin_type": "114", "path_component": "0x80000072", "symbol": "LINX", "name": "Linx"}
+{"coin_type": "115", "path_component": "0x80000073", "symbol": "ECN", "name": "Ecoin"}
+{"coin_type": "116", "path_component": "0x80000074", "symbol": "DNR", "name": "Denarius"}
+{"coin_type": "117", "path_component": "0x80000075", "symbol": "PINK", "name": "Pinkcoin"}
+{"coin_type": "118", "path_component": "0x80000076", "symbol": "ATOM", "name": "Atom"}
+{"coin_type": "119", "path_component": "0x80000077", "symbol": "PIVX", "name": "Pivx"}
+{"coin_type": "120", "path_component": "0x80000078", "symbol": "FLASH", "name": "Flashcoin"}
+{"coin_type": "121", "path_component": "0x80000079", "symbol": "ZEN", "name": "Zencash"}
+{"coin_type": "122", "path_component": "0x8000007a", "symbol": "PUT", "name": "Putincoin"}
+{"coin_type": "123", "path_component": "0x8000007b", "symbol": "ZNY", "name": "BitZeny"}
+{"coin_type": "124", "path_component": "0x8000007c", "symbol": "UNIFY", "name": "Unify"}
+{"coin_type": "125", "path_component": "0x8000007d", "symbol": "XST", "name": "StealthCoin"}
+{"coin_type": "126", "path_component": "0x8000007e", "symbol": "BRK", "name": "Breakout Coin"}
+{"coin_type": "127", "path_component": "0x8000007f", "symbol": "VC", "name": "Vcash"}
+{"coin_type": "128", "path_component": "0x80000080", "symbol": "XMR", "name": "Monero"}
+{"coin_type": "129", "path_component": "0x80000081", "symbol": "VOX", "name": "Voxels"}
+{"coin_type": "130", "path_component": "0x80000082", "symbol": "NAV", "name": "NavCoin"}
+{"coin_type": "131", "path_component": "0x80000083", "symbol": "FCT", "name": "Factom Factoids"}
+{"coin_type": "132", "path_component": "0x80000084", "symbol": "EC", "name": "Factom Entry Credits"}
+{"coin_type": "133", "path_component": "0x80000085", "symbol": "ZEC", "name": "Zcash"}
+{"coin_type": "134", "path_component": "0x80000086", "symbol": "LSK", "name": "Lisk"}
+{"coin_type": "135", "path_component": "0x80000087", "symbol": "STEEM", "name": "Steem"}
+{"coin_type": "136", "path_component": "0x80000088", "symbol": "XZC", "name": "ZCoin"}
+{"coin_type": "137", "path_component": "0x80000089", "symbol": "RBTC", "name": "Rootstock"}
+{"coin_type": "138", "path_component": "0x8000008a", "symbol": "", "name": "Giftblock"}
+{"coin_type": "139", "path_component": "0x8000008b", "symbol": "RPT", "name": "RealPointCoin"}
+{"coin_type": "140", "path_component": "0x8000008c", "symbol": "LBC", "name": "LBRY Credits"}
+{"coin_type": "141", "path_component": "0x8000008d", "symbol": "KMD", "name": "Komodo"}
+{"coin_type": "142", "path_component": "0x8000008e", "symbol": "BSQ", "name": "bisq Token"}
+{"coin_type": "143", "path_component": "0x8000008f", "symbol": "RIC", "name": "Riecoin"}
+{"coin_type": "144", "path_component": "0x80000090", "symbol": "XRP", "name": "XRP"}
+{"coin_type": "145", "path_component": "0x80000091", "symbol": "BCH", "name": "Bitcoin Cash"}
+{"coin_type": "146", "path_component": "0x80000092", "symbol": "NEBL", "name": "Neblio"}
+{"coin_type": "147", "path_component": "0x80000093", "symbol": "ZCL", "name": "ZClassic"}
+{"coin_type": "148", "path_component": "0x80000094", "symbol": "XLM", "name": "Stellar Lumens"}
+{"coin_type": "149", "path_component": "0x80000095", "symbol": "NLC2", "name": "NoLimitCoin2"}
+{"coin_type": "150", "path_component": "0x80000096", "symbol": "WHL", "name": "WhaleCoin"}
+{"coin_type": "151", "path_component": "0x80000097", "symbol": "ERC", "name": "EuropeCoin"}
+{"coin_type": "152", "path_component": "0x80000098", "symbol": "DMD", "name": "Diamond"}
+{"coin_type": "153", "path_component": "0x80000099", "symbol": "BTM", "name": "Bytom"}
+{"coin_type": "154", "path_component": "0x8000009a", "symbol": "BIO", "name": "Biocoin"}
+{"coin_type": "155", "path_component": "0x8000009b", "symbol": "XWCC", "name": "Whitecoin Classic"}
+{"coin_type": "156", "path_component": "0x8000009c", "symbol": "BTG", "name": "Bitcoin Gold"}
+{"coin_type": "157", "path_component": "0x8000009d", "symbol": "BTC2X", "name": "Bitcoin 2x"}
+{"coin_type": "158", "path_component": "0x8000009e", "symbol": "SSN", "name": "SuperSkynet"}
+{"coin_type": "159", "path_component": "0x8000009f", "symbol": "TOA", "name": "TOACoin"}
+{"coin_type": "160", "path_component": "0x800000a0", "symbol": "BTX", "name": "Bitcore"}
+{"coin_type": "161", "path_component": "0x800000a1", "symbol": "ACC", "name": "Adcoin"}
+{"coin_type": "162", "path_component": "0x800000a2", "symbol": "BCO", "name": "Bridgecoin"}
+{"coin_type": "163", "path_component": "0x800000a3", "symbol": "ELLA", "name": "Ellaism"}
+{"coin_type": "164", "path_component": "0x800000a4", "symbol": "PIRL", "name": "Pirl"}
+{"coin_type": "165", "path_component": "0x800000a5", "symbol": "XNO", "name": "Nano"}
+{"coin_type": "166", "path_component": "0x800000a6", "symbol": "VIVO", "name": "Vivo"}
+{"coin_type": "167", "path_component": "0x800000a7", "symbol": "FRST", "name": "Firstcoin"}
+{"coin_type": "168", "path_component": "0x800000a8", "symbol": "HNC", "name": "Helleniccoin"}
+{"coin_type": "169", "path_component": "0x800000a9", "symbol": "BUZZ", "name": "BUZZ"}
+{"coin_type": "170", "path_component": "0x800000aa", "symbol": "MBRS", "name": "Ember"}
+{"coin_type": "171", "path_component": "0x800000ab", "symbol": "HC", "name": "Hcash"}
+{"coin_type": "172", "path_component": "0x800000ac", "symbol": "HTML", "name": "HTMLCOIN"}
+{"coin_type": "173", "path_component": "0x800000ad", "symbol": "ODN", "name": "Obsidian"}
+{"coin_type": "174", "path_component": "0x800000ae", "symbol": "ONX", "name": "OnixCoin"}
+{"coin_type": "175", "path_component": "0x800000af", "symbol": "RVN", "name": "Ravencoin"}
+{"coin_type": "176", "path_component": "0x800000b0", "symbol": "GBX", "name": "GoByte"}
+{"coin_type": "177", "path_component": "0x800000b1", "symbol": "BTCZ", "name": "BitcoinZ"}
+{"coin_type": "178", "path_component": "0x800000b2", "symbol": "POA", "name": "Poa"}
+{"coin_type": "179", "path_component": "0x800000b3", "symbol": "NYC", "name": "NewYorkCoin"}
+{"coin_type": "180", "path_component": "0x800000b4", "symbol": "MXT", "name": "MarteXcoin"}
+{"coin_type": "181", "path_component": "0x800000b5", "symbol": "WC", "name": "Wincoin"}
+{"coin_type": "182", "path_component": "0x800000b6", "symbol": "MNX", "name": "Minexcoin"}
+{"coin_type": "183", "path_component": "0x800000b7", "symbol": "BTCP", "name": "Bitcoin Private"}
+{"coin_type": "184", "path_component": "0x800000b8", "symbol": "MUSIC", "name": "Musicoin"}
+{"coin_type": "185", "path_component": "0x800000b9", "symbol": "BCA", "name": "Bitcoin Atom"}
+{"coin_type": "186", "path_component": "0x800000ba", "symbol": "CRAVE", "name": "Crave"}
+{"coin_type": "187", "path_component": "0x800000bb", "symbol": "STAK", "name": "STRAKS"}
+{"coin_type": "188", "path_component": "0x800000bc", "symbol": "WBTC", "name": "World Bitcoin"}
+{"coin_type": "189", "path_component": "0x800000bd", "symbol": "LCH", "name": "LiteCash"}
+{"coin_type": "190", "path_component": "0x800000be", "symbol": "EXCL", "name": "ExclusiveCoin"}
+{"coin_type": "191", "path_component": "0x800000bf", "symbol": "", "name": "Lynx"}
+{"coin_type": "192", "path_component": "0x800000c0", "symbol": "LCC", "name": "LitecoinCash"}
+{"coin_type": "193", "path_component": "0x800000c1", "symbol": "XFE", "name": "Feirm"}
+{"coin_type": "194", "path_component": "0x800000c2", "symbol": "EOS", "name": "EOS"}
+{"coin_type": "195", "path_component": "0x800000c3", "symbol": "TRX", "name": "Tron"}
+{"coin_type": "196", "path_component": "0x800000c4", "symbol": "KOBO", "name": "Kobocoin"}
+{"coin_type": "197", "path_component": "0x800000c5", "symbol": "HUSH", "name": "HUSH"}
+{"coin_type": "198", "path_component": "0x800000c6", "symbol": "BAN", "name": "Banano"}
+{"coin_type": "199", "path_component": "0x800000c7", "symbol": "ETF", "name": "ETF"}
+{"coin_type": "200", "path_component": "0x800000c8", "symbol": "OMNI", "name": "Omni"}
+{"coin_type": "201", "path_component": "0x800000c9", "symbol": "BIFI", "name": "BitcoinFile"}
+{"coin_type": "202", "path_component": "0x800000ca", "symbol": "UFO", "name": "Uniform Fiscal Object"}
+{"coin_type": "203", "path_component": "0x800000cb", "symbol": "CNMC", "name": "Cryptonodes"}
+{"coin_type": "204", "path_component": "0x800000cc", "symbol": "BCN", "name": "Bytecoin"}
+{"coin_type": "205", "path_component": "0x800000cd", "symbol": "RIN", "name": "Ringo"}
+{"coin_type": "206", "path_component": "0x800000ce", "symbol": "ATP", "name": "Alaya"}
+{"coin_type": "207", "path_component": "0x800000cf", "symbol": "EVT", "name": "everiToken"}
+{"coin_type": "208", "path_component": "0x800000d0", "symbol": "ATN", "name": "ATN"}
+{"coin_type": "209", "path_component": "0x800000d1", "symbol": "BIS", "name": "Bismuth"}
+{"coin_type": "210", "path_component": "0x800000d2", "symbol": "NEET", "name": "NEETCOIN"}
+{"coin_type": "211", "path_component": "0x800000d3", "symbol": "BOPO", "name": "BopoChain"}
+{"coin_type": "212", "path_component": "0x800000d4", "symbol": "OOT", "name": "Utrum"}
+{"coin_type": "213", "path_component": "0x800000d5", "symbol": "ALIAS", "name": "Alias"}
+{"coin_type": "214", "path_component": "0x800000d6", "symbol": "MONK", "name": "Monkey Project"}
+{"coin_type": "215", "path_component": "0x800000d7", "symbol": "BOXY", "name": "BoxyCoin"}
+{"coin_type": "216", "path_component": "0x800000d8", "symbol": "FLO", "name": "Flo"}
+{"coin_type": "217", "path_component": "0x800000d9", "symbol": "MEC", "name": "Megacoin"}
+{"coin_type": "218", "path_component": "0x800000da", "symbol": "BTDX", "name": "BitCloud"}
+{"coin_type": "219", "path_component": "0x800000db", "symbol": "XAX", "name": "Artax"}
+{"coin_type": "220", "path_component": "0x800000dc", "symbol": "ANON", "name": "ANON"}
+{"coin_type": "221", "path_component": "0x800000dd", "symbol": "LTZ", "name": "LitecoinZ"}
+{"coin_type": "222", "path_component": "0x800000de", "symbol": "BITG", "name": "Bitcoin Green"}
+{"coin_type": "223", "path_component": "0x800000df", "symbol": "ICP", "name": "Internet Computer (DFINITY)"}
+{"coin_type": "224", "path_component": "0x800000e0", "symbol": "SMART", "name": "Smartcash"}
+{"coin_type": "225", "path_component": "0x800000e1", "symbol": "XUEZ", "name": "XUEZ"}
+{"coin_type": "226", "path_component": "0x800000e2", "symbol": "HLM", "name": "Helium"}
+{"coin_type": "227", "path_component": "0x800000e3", "symbol": "WEB", "name": "Webchain"}
+{"coin_type": "228", "path_component": "0x800000e4", "symbol": "ACM", "name": "Actinium"}
+{"coin_type": "229", "path_component": "0x800000e5", "symbol": "NOS", "name": "NOS Stable Coins"}
+{"coin_type": "230", "path_component": "0x800000e6", "symbol": "BITC", "name": "BitCash"}
+{"coin_type": "231", "path_component": "0x800000e7", "symbol": "HTH", "name": "Help The Homeless Coin"}
+{"coin_type": "232", "path_component": "0x800000e8", "symbol": "TZC", "name": "Trezarcoin"}
+{"coin_type": "233", "path_component": "0x800000e9", "symbol": "VAR", "name": "Varda"}
+{"coin_type": "234", "path_component": "0x800000ea", "symbol": "IOV", "name": "IOV"}
+{"coin_type": "235", "path_component": "0x800000eb", "symbol": "FIO", "name": "FIO"}
+{"coin_type": "236", "path_component": "0x800000ec", "symbol": "BSV", "name": "BitcoinSV"}
+{"coin_type": "237", "path_component": "0x800000ed", "symbol": "DXN", "name": "DEXON"}
+{"coin_type": "238", "path_component": "0x800000ee", "symbol": "QRL", "name": "Quantum Resistant Ledger"}
+{"coin_type": "239", "path_component": "0x800000ef", "symbol": "PCX", "name": "ChainX"}
+{"coin_type": "240", "path_component": "0x800000f0", "symbol": "LOKI", "name": "Loki"}
+{"coin_type": "241", "path_component": "0x800000f1", "symbol": "", "name": "Imagewallet"}
+{"coin_type": "242", "path_component": "0x800000f2", "symbol": "NIM", "name": "Nimiq"}
+{"coin_type": "243", "path_component": "0x800000f3", "symbol": "SOV", "name": "Sovereign Coin"}
+{"coin_type": "244", "path_component": "0x800000f4", "symbol": "JCT", "name": "Jibital Coin"}
+{"coin_type": "245", "path_component": "0x800000f5", "symbol": "SLP", "name": "Simple Ledger Protocol"}
+{"coin_type": "246", "path_component": "0x800000f6", "symbol": "EWT", "name": "Energy Web"}
+{"coin_type": "247", "path_component": "0x800000f7", "symbol": "UC", "name": "Ulord"}
+{"coin_type": "248", "path_component": "0x800000f8", "symbol": "EXOS", "name": "EXOS"}
+{"coin_type": "249", "path_component": "0x800000f9", "symbol": "ECA", "name": "Electra"}
+{"coin_type": "250", "path_component": "0x800000fa", "symbol": "SOOM", "name": "Soom"}
+{"coin_type": "251", "path_component": "0x800000fb", "symbol": "XRD", "name": "Redstone"}
+{"coin_type": "252", "path_component": "0x800000fc", "symbol": "FREE", "name": "FreeCoin"}
+{"coin_type": "253", "path_component": "0x800000fd", "symbol": "NPW", "name": "NewPowerCoin"}
+{"coin_type": "254", "path_component": "0x800000fe", "symbol": "BST", "name": "BlockStamp"}
+{"coin_type": "255", "path_component": "0x800000ff", "symbol": "", "name": "SmartHoldem"}
+{"coin_type": "256", "path_component": "0x80000100", "symbol": "NANO", "name": "Bitcoin Nano"}
+{"coin_type": "257", "path_component": "0x80000101", "symbol": "BTCC", "name": "Bitcoin Core"}
+{"coin_type": "258", "path_component": "0x80000102", "symbol": "", "name": "Zen Protocol"}
+{"coin_type": "259", "path_component": "0x80000103", "symbol": "ZEST", "name": "Zest"}
+{"coin_type": "260", "path_component": "0x80000104", "symbol": "ABT", "name": "ArcBlock"}
+{"coin_type": "261", "path_component": "0x80000105", "symbol": "PION", "name": "Pion"}
+{"coin_type": "262", "path_component": "0x80000106", "symbol": "DT3", "name": "DreamTeam3"}
+{"coin_type": "263", "path_component": "0x80000107", "symbol": "ZBUX", "name": "Zbux"}
+{"coin_type": "264", "path_component": "0x80000108", "symbol": "KPL", "name": "Kepler"}
+{"coin_type": "265", "path_component": "0x80000109", "symbol": "TPAY", "name": "TokenPay"}
+{"coin_type": "266", "path_component": "0x8000010a", "symbol": "ZILLA", "name": "ChainZilla"}
+{"coin_type": "267", "path_component": "0x8000010b", "symbol": "ANK", "name": "Anker"}
+{"coin_type": "268", "path_component": "0x8000010c", "symbol": "BCC", "name": "BCChain"}
+{"coin_type": "269", "path_component": "0x8000010d", "symbol": "HPB", "name": "HPB"}
+{"coin_type": "270", "path_component": "0x8000010e", "symbol": "ONE", "name": "ONE"}
+{"coin_type": "271", "path_component": "0x8000010f", "symbol": "SBC", "name": "SBC"}
+{"coin_type": "272", "path_component": "0x80000110", "symbol": "IPC", "name": "IPChain"}
+{"coin_type": "273", "path_component": "0x80000111", "symbol": "DMTC", "name": "Dominantchain"}
+{"coin_type": "274", "path_component": "0x80000112", "symbol": "OGC", "name": "Onegram"}
+{"coin_type": "275", "path_component": "0x80000113", "symbol": "SHIT", "name": "Shitcoin"}
+{"coin_type": "276", "path_component": "0x80000114", "symbol": "ANDES", "name": "Andescoin"}
+{"coin_type": "277", "path_component": "0x80000115", "symbol": "AREPA", "name": "Arepacoin"}
+{"coin_type": "278", "path_component": "0x80000116", "symbol": "BOLI", "name": "Bolivarcoin"}
+{"coin_type": "279", "path_component": "0x80000117", "symbol": "RIL", "name": "Rilcoin"}
+{"coin_type": "280", "path_component": "0x80000118", "symbol": "HTR", "name": "Hathor Network"}
+{"coin_type": "281", "path_component": "0x80000119", "symbol": "ACME", "name": "Accumulate"}
+{"coin_type": "282", "path_component": "0x8000011a", "symbol": "BRAVO", "name": "BRAVO"}
+{"coin_type": "283", "path_component": "0x8000011b", "symbol": "ALGO", "name": "Algorand"}
+{"coin_type": "284", "path_component": "0x8000011c", "symbol": "BZX", "name": "Bitcoinzero"}
+{"coin_type": "285", "path_component": "0x8000011d", "symbol": "GXX", "name": "GravityCoin"}
+{"coin_type": "286", "path_component": "0x8000011e", "symbol": "HEAT", "name": "HEAT"}
+{"coin_type": "287", "path_component": "0x8000011f", "symbol": "XDN", "name": "DigitalNote"}
+{"coin_type": "288", "path_component": "0x80000120", "symbol": "FSN", "name": "FUSION"}
+{"coin_type": "289", "path_component": "0x80000121", "symbol": "CPC", "name": "Capricoin"}
+{"coin_type": "290", "path_component": "0x80000122", "symbol": "BOLD", "name": "Bold"}
+{"coin_type": "291", "path_component": "0x80000123", "symbol": "IOST", "name": "IOST"}
+{"coin_type": "292", "path_component": "0x80000124", "symbol": "TKEY", "name": "Tkeycoin"}
+{"coin_type": "293", "path_component": "0x80000125", "symbol": "USE", "name": "Usechain"}
+{"coin_type": "294", "path_component": "0x80000126", "symbol": "BCZ", "name": "BitcoinCZ"}
+{"coin_type": "295", "path_component": "0x80000127", "symbol": "IOC", "name": "Iocoin"}
+{"coin_type": "296", "path_component": "0x80000128", "symbol": "ASF", "name": "Asofe"}
+{"coin_type": "297", "path_component": "0x80000129", "symbol": "MASS", "name": "MASS"}
+{"coin_type": "298", "path_component": "0x8000012a", "symbol": "FAIR", "name": "FairCoin"}
+{"coin_type": "299", "path_component": "0x8000012b", "symbol": "NUKO", "name": "Nekonium"}
+{"coin_type": "300", "path_component": "0x8000012c", "symbol": "GNX", "name": "Genaro Network"}
+{"coin_type": "301", "path_component": "0x8000012d", "symbol": "DIVI", "name": "Divi Project"}
+{"coin_type": "302", "path_component": "0x8000012e", "symbol": "CMT", "name": "Community"}
+{"coin_type": "303", "path_component": "0x8000012f", "symbol": "EUNO", "name": "EUNO"}
+{"coin_type": "304", "path_component": "0x80000130", "symbol": "IOTX", "name": "IoTeX"}
+{"coin_type": "305", "path_component": "0x80000131", "symbol": "ONION", "name": "DeepOnion"}
+{"coin_type": "306", "path_component": "0x80000132", "symbol": "8BIT", "name": "8Bit"}
+{"coin_type": "307", "path_component": "0x80000133", "symbol": "ATC", "name": "AToken Coin"}
+{"coin_type": "308", "path_component": "0x80000134", "symbol": "BTS", "name": "Bitshares"}
+{"coin_type": "309", "path_component": "0x80000135", "symbol": "CKB", "name": "Nervos CKB"}
+{"coin_type": "310", "path_component": "0x80000136", "symbol": "UGAS", "name": "Ultrain"}
+{"coin_type": "311", "path_component": "0x80000137", "symbol": "ADS", "name": "Adshares"}
+{"coin_type": "312", "path_component": "0x80000138", "symbol": "ARA", "name": "Aura"}
+{"coin_type": "313", "path_component": "0x80000139", "symbol": "ZIL", "name": "Zilliqa"}
+{"coin_type": "314", "path_component": "0x8000013a", "symbol": "MOAC", "name": "MOAC"}
+{"coin_type": "315", "path_component": "0x8000013b", "symbol": "SWTC", "name": "SWTC"}
+{"coin_type": "316", "path_component": "0x8000013c", "symbol": "VNSC", "name": "vnscoin"}
+{"coin_type": "317", "path_component": "0x8000013d", "symbol": "PLUG", "name": "Pl^g"}
+{"coin_type": "318", "path_component": "0x8000013e", "symbol": "MAN", "name": "Matrix AI Network"}
+{"coin_type": "319", "path_component": "0x8000013f", "symbol": "ECC", "name": "ECCoin"}
+{"coin_type": "320", "path_component": "0x80000140", "symbol": "RPD", "name": "Rapids"}
+{"coin_type": "321", "path_component": "0x80000141", "symbol": "RAP", "name": "Rapture"}
+{"coin_type": "322", "path_component": "0x80000142", "symbol": "GARD", "name": "Hashgard"}
+{"coin_type": "323", "path_component": "0x80000143", "symbol": "ZER", "name": "Zero"}
+{"coin_type": "324", "path_component": "0x80000144", "symbol": "EBST", "name": "eBoost"}
+{"coin_type": "325", "path_component": "0x80000145", "symbol": "SHARD", "name": "Shard"}
+{"coin_type": "326", "path_component": "0x80000146", "symbol": "MRX", "name": "Metrix Coin"}
+{"coin_type": "327", "path_component": "0x80000147", "symbol": "CMM", "name": "Commercium"}
+{"coin_type": "328", "path_component": "0x80000148", "symbol": "BLOCK", "name": "Blocknet"}
+{"coin_type": "329", "path_component": "0x80000149", "symbol": "AUDAX", "name": "AUDAX"}
+{"coin_type": "330", "path_component": "0x8000014a", "symbol": "LUNA", "name": "Terra"}
+{"coin_type": "331", "path_component": "0x8000014b", "symbol": "ZPM", "name": "zPrime"}
+{"coin_type": "332", "path_component": "0x8000014c", "symbol": "KUVA", "name": "Kuva Utility Note"}
+{"coin_type": "333", "path_component": "0x8000014d", "symbol": "MEM", "name": "MemCoin"}
+{"coin_type": "334", "path_component": "0x8000014e", "symbol": "CS", "name": "Credits"}
+{"coin_type": "335", "path_component": "0x8000014f", "symbol": "SWIFT", "name": "SwiftCash"}
+{"coin_type": "336", "path_component": "0x80000150", "symbol": "FIX", "name": "FIX"}
+{"coin_type": "337", "path_component": "0x80000151", "symbol": "CPC", "name": "CPChain"}
+{"coin_type": "338", "path_component": "0x80000152", "symbol": "VGO", "name": "VirtualGoodsToken"}
+{"coin_type": "339", "path_component": "0x80000153", "symbol": "DVT", "name": "DeVault"}
+{"coin_type": "340", "path_component": "0x80000154", "symbol": "N8V", "name": "N8VCoin"}
+{"coin_type": "341", "path_component": "0x80000155", "symbol": "MTNS", "name": "OmotenashiCoin"}
+{"coin_type": "342", "path_component": "0x80000156", "symbol": "BLAST", "name": "BLAST"}
+{"coin_type": "343", "path_component": "0x80000157", "symbol": "DCT", "name": "DECENT"}
+{"coin_type": "344", "path_component": "0x80000158", "symbol": "AUX", "name": "Auxilium"}
+{"coin_type": "345", "path_component": "0x80000159", "symbol": "USDP", "name": "USDP"}
+{"coin_type": "346", "path_component": "0x8000015a", "symbol": "HTDF", "name": "HTDF"}
+{"coin_type": "347", "path_component": "0x8000015b", "symbol": "YEC", "name": "Ycash"}
+{"coin_type": "348", "path_component": "0x8000015c", "symbol": "QLC", "name": "QLC Chain"}
+{"coin_type": "349", "path_component": "0x8000015d", "symbol": "TEA", "name": "Icetea Blockchain"}
+{"coin_type": "350", "path_component": "0x8000015e", "symbol": "ARW", "name": "ArrowChain"}
+{"coin_type": "351", "path_component": "0x8000015f", "symbol": "MDM", "name": "Medium"}
+{"coin_type": "352", "path_component": "0x80000160", "symbol": "CYB", "name": "Cybex"}
+{"coin_type": "353", "path_component": "0x80000161", "symbol": "LTO", "name": "LTO Network"}
+{"coin_type": "354", "path_component": "0x80000162", "symbol": "DOT", "name": "Polkadot"}
+{"coin_type": "355", "path_component": "0x80000163", "symbol": "AEON", "name": "Aeon"}
+{"coin_type": "356", "path_component": "0x80000164", "symbol": "RES", "name": "Resistance"}
+{"coin_type": "357", "path_component": "0x80000165", "symbol": "AYA", "name": "Aryacoin"}
+{"coin_type": "358", "path_component": "0x80000166", "symbol": "DAPS", "name": "Dapscoin"}
+{"coin_type": "359", "path_component": "0x80000167", "symbol": "CSC", "name": "CasinoCoin"}
+{"coin_type": "360", "path_component": "0x80000168", "symbol": "VSYS", "name": "V Systems"}
+{"coin_type": "361", "path_component": "0x80000169", "symbol": "NOLLAR", "name": "Nollar"}
+{"coin_type": "362", "path_component": "0x8000016a", "symbol": "XNOS", "name": "NOS"}
+{"coin_type": "363", "path_component": "0x8000016b", "symbol": "CPU", "name": "CPUchain"}
+{"coin_type": "364", "path_component": "0x8000016c", "symbol": "LAMB", "name": "Lambda Storage Chain"}
+{"coin_type": "365", "path_component": "0x8000016d", "symbol": "VCT", "name": "ValueCyber"}
+{"coin_type": "366", "path_component": "0x8000016e", "symbol": "CZR", "name": "Canonchain"}
+{"coin_type": "367", "path_component": "0x8000016f", "symbol": "ABBC", "name": "ABBC"}
+{"coin_type": "368", "path_component": "0x80000170", "symbol": "HET", "name": "HET"}
+{"coin_type": "369", "path_component": "0x80000171", "symbol": "XAS", "name": "Asch"}
+{"coin_type": "370", "path_component": "0x80000172", "symbol": "VDL", "name": "Vidulum"}
+{"coin_type": "371", "path_component": "0x80000173", "symbol": "MED", "name": "MediBloc"}
+{"coin_type": "372", "path_component": "0x80000174", "symbol": "ZVC", "name": "ZVChain"}
+{"coin_type": "373", "path_component": "0x80000175", "symbol": "VESTX", "name": "Vestx"}
+{"coin_type": "374", "path_component": "0x80000176", "symbol": "DBT", "name": "DarkBit"}
+{"coin_type": "375", "path_component": "0x80000177", "symbol": "SEOS", "name": "SuperEOS"}
+{"coin_type": "376", "path_component": "0x80000178", "symbol": "MXW", "name": "Maxonrow"}
+{"coin_type": "377", "path_component": "0x80000179", "symbol": "ZNZ", "name": "ZENZO"}
+{"coin_type": "378", "path_component": "0x8000017a", "symbol": "XCX", "name": "XChain"}
+{"coin_type": "379", "path_component": "0x8000017b", "symbol": "SOX", "name": "SonicX"}
+{"coin_type": "380", "path_component": "0x8000017c", "symbol": "NYZO", "name": "Nyzo"}
+{"coin_type": "381", "path_component": "0x8000017d", "symbol": "ULC", "name": "ULCoin"}
+{"coin_type": "382", "path_component": "0x8000017e", "symbol": "RYO", "name": "Ryo Currency"}
+{"coin_type": "383", "path_component": "0x8000017f", "symbol": "KAL", "name": "Kaleidochain"}
+{"coin_type": "384", "path_component": "0x80000180", "symbol": "XSN", "name": "Stakenet"}
+{"coin_type": "385", "path_component": "0x80000181", "symbol": "DOGEC", "name": "DogeCash"}
+{"coin_type": "386", "path_component": "0x80000182", "symbol": "BMV", "name": "Bitcoin Matteo's Vision"}
+{"coin_type": "387", "path_component": "0x80000183", "symbol": "QBC", "name": "Quebecoin"}
+{"coin_type": "388", "path_component": "0x80000184", "symbol": "IMG", "name": "ImageCoin"}
+{"coin_type": "389", "path_component": "0x80000185", "symbol": "QOS", "name": "QOS"}
+{"coin_type": "390", "path_component": "0x80000186", "symbol": "PKT", "name": "PKT"}
+{"coin_type": "391", "path_component": "0x80000187", "symbol": "LHD", "name": "LitecoinHD"}
+{"coin_type": "392", "path_component": "0x80000188", "symbol": "CENNZ", "name": "CENNZnet"}
+{"coin_type": "393", "path_component": "0x80000189", "symbol": "HSN", "name": "Hyper Speed Network"}
+{"coin_type": "394", "path_component": "0x8000018a", "symbol": "CRO", "name": "Crypto Chain"}
+{"coin_type": "395", "path_component": "0x8000018b", "symbol": "UMBRU", "name": "Umbru"}
+{"coin_type": "396", "path_component": "0x8000018c", "symbol": "EVER", "name": "Everscale"}
+{"coin_type": "397", "path_component": "0x8000018d", "symbol": "NEAR", "name": "NEAR Protocol"}
+{"coin_type": "398", "path_component": "0x8000018e", "symbol": "XPC", "name": "XPChain"}
+{"coin_type": "399", "path_component": "0x8000018f", "symbol": "ZOC", "name": "01coin"}
+{"coin_type": "400", "path_component": "0x80000190", "symbol": "NIX", "name": "NIX"}
+{"coin_type": "401", "path_component": "0x80000191", "symbol": "UC", "name": "Utopiacoin"}
+{"coin_type": "402", "path_component": "0x80000192", "symbol": "GALI", "name": "Galilel"}
+{"coin_type": "403", "path_component": "0x80000193", "symbol": "OLT", "name": "Oneledger"}
+{"coin_type": "404", "path_component": "0x80000194", "symbol": "XBI", "name": "XBI"}
+{"coin_type": "405", "path_component": "0x80000195", "symbol": "DONU", "name": "DONU"}
+{"coin_type": "406", "path_component": "0x80000196", "symbol": "EARTHS", "name": "Earths"}
+{"coin_type": "407", "path_component": "0x80000197", "symbol": "HDD", "name": "HDDCash"}
+{"coin_type": "408", "path_component": "0x80000198", "symbol": "SUGAR", "name": "Sugarchain"}
+{"coin_type": "409", "path_component": "0x80000199", "symbol": "AILE", "name": "AileCoin"}
+{"coin_type": "410", "path_component": "0x8000019a", "symbol": "TENT", "name": "TENT"}
+{"coin_type": "411", "path_component": "0x8000019b", "symbol": "TAN", "name": "Tangerine Network"}
+{"coin_type": "412", "path_component": "0x8000019c", "symbol": "AIN", "name": "AIN"}
+{"coin_type": "413", "path_component": "0x8000019d", "symbol": "MSR", "name": "Masari"}
+{"coin_type": "414", "path_component": "0x8000019e", "symbol": "SUMO", "name": "Sumokoin"}
+{"coin_type": "415", "path_component": "0x8000019f", "symbol": "ETN", "name": "Electroneum"}
+{"coin_type": "416", "path_component": "0x800001a0", "symbol": "BYTZ", "name": "BYTZ"}
+{"coin_type": "417", "path_component": "0x800001a1", "symbol": "WOW", "name": "Wownero"}
+{"coin_type": "418", "path_component": "0x800001a2", "symbol": "XTNC", "name": "XtendCash"}
+{"coin_type": "419", "path_component": "0x800001a3", "symbol": "LTHN", "name": "Lethean"}
+{"coin_type": "420", "path_component": "0x800001a4", "symbol": "NODE", "name": "NodeHost"}
+{"coin_type": "421", "path_component": "0x800001a5", "symbol": "AGM", "name": "Argoneum"}
+{"coin_type": "422", "path_component": "0x800001a6", "symbol": "CCX", "name": "Conceal Network"}
+{"coin_type": "423", "path_component": "0x800001a7", "symbol": "TNET", "name": "Title Network"}
+{"coin_type": "424", "path_component": "0x800001a8", "symbol": "TELOS", "name": "TelosCoin"}
+{"coin_type": "425", "path_component": "0x800001a9", "symbol": "AION", "name": "Aion"}
+{"coin_type": "426", "path_component": "0x800001aa", "symbol": "BC", "name": "Bitcoin Confidential"}
+{"coin_type": "427", "path_component": "0x800001ab", "symbol": "KTV", "name": "KmushiCoin"}
+{"coin_type": "428", "path_component": "0x800001ac", "symbol": "ZCR", "name": "ZCore"}
+{"coin_type": "429", "path_component": "0x800001ad", "symbol": "ERG", "name": "Ergo"}
+{"coin_type": "430", "path_component": "0x800001ae", "symbol": "PESO", "name": "Criptopeso"}
+{"coin_type": "431", "path_component": "0x800001af", "symbol": "BTC2", "name": "Bitcoin 2"}
+{"coin_type": "432", "path_component": "0x800001b0", "symbol": "XRPHD", "name": "XRPHD"}
+{"coin_type": "433", "path_component": "0x800001b1", "symbol": "WE", "name": "WE Coin"}
+{"coin_type": "434", "path_component": "0x800001b2", "symbol": "KSM", "name": "Kusama"}
+{"coin_type": "435", "path_component": "0x800001b3", "symbol": "PCN", "name": "Peepcoin"}
+{"coin_type": "436", "path_component": "0x800001b4", "symbol": "NCH", "name": "NetCloth"}
+{"coin_type": "437", "path_component": "0x800001b5", "symbol": "ICU", "name": "CHIPO"}
+{"coin_type": "438", "path_component": "0x800001b6", "symbol": "FNSA", "name": "FINSCHIA"}
+{"coin_type": "439", "path_component": "0x800001b7", "symbol": "DTP", "name": "DeVault Token Protocol"}
+{"coin_type": "440", "path_component": "0x800001b8", "symbol": "BTCR", "name": "Bitcoin Royale"}
+{"coin_type": "441", "path_component": "0x800001b9", "symbol": "AERGO", "name": "AERGO"}
+{"coin_type": "442", "path_component": "0x800001ba", "symbol": "XTH", "name": "Dothereum"}
+{"coin_type": "443", "path_component": "0x800001bb", "symbol": "LV", "name": "Lava"}
+{"coin_type": "444", "path_component": "0x800001bc", "symbol": "PHR", "name": "Phore"}
+{"coin_type": "445", "path_component": "0x800001bd", "symbol": "VITAE", "name": "Vitae"}
+{"coin_type": "446", "path_component": "0x800001be", "symbol": "COCOS", "name": "Cocos-BCX"}
+{"coin_type": "447", "path_component": "0x800001bf", "symbol": "DIN", "name": "Dinero"}
+{"coin_type": "448", "path_component": "0x800001c0", "symbol": "SPL", "name": "Simplicity"}
+{"coin_type": "449", "path_component": "0x800001c1", "symbol": "YCE", "name": "MYCE"}
+{"coin_type": "450", "path_component": "0x800001c2", "symbol": "XLR", "name": "Solaris"}
+{"coin_type": "451", "path_component": "0x800001c3", "symbol": "KTS", "name": "Klimatas"}
+{"coin_type": "452", "path_component": "0x800001c4", "symbol": "DGLD", "name": "DGLD"}
+{"coin_type": "453", "path_component": "0x800001c5", "symbol": "XNS", "name": "Insolar"}
+{"coin_type": "454", "path_component": "0x800001c6", "symbol": "EM", "name": "EMPOW"}
+{"coin_type": "455", "path_component": "0x800001c7", "symbol": "SHN", "name": "ShineBlocks"}
+{"coin_type": "456", "path_component": "0x800001c8", "symbol": "SEELE", "name": "Seele"}
+{"coin_type": "457", "path_component": "0x800001c9", "symbol": "AE", "name": "\u00e6ternity"}
+{"coin_type": "458", "path_component": "0x800001ca", "symbol": "ODX", "name": "ObsidianX"}
+{"coin_type": "459", "path_component": "0x800001cb", "symbol": "KAVA", "name": "Kava"}
+{"coin_type": "460", "path_component": "0x800001cc", "symbol": "GLEEC", "name": "GLEEC"}
+{"coin_type": "461", "path_component": "0x800001cd", "symbol": "FIL", "name": "Filecoin"}
+{"coin_type": "462", "path_component": "0x800001ce", "symbol": "RUTA", "name": "Rutanio"}
+{"coin_type": "463", "path_component": "0x800001cf", "symbol": "CSDT", "name": "CSDT"}
+{"coin_type": "464", "path_component": "0x800001d0", "symbol": "ETI", "name": "EtherInc"}
+{"coin_type": "465", "path_component": "0x800001d1", "symbol": "ZSLP", "name": "Zclassic Simple Ledger Protocol"}
+{"coin_type": "466", "path_component": "0x800001d2", "symbol": "ERE", "name": "EtherCore"}
+{"coin_type": "467", "path_component": "0x800001d3", "symbol": "DX", "name": "DxChain Token"}
+{"coin_type": "468", "path_component": "0x800001d4", "symbol": "CPS", "name": "Capricoin+"}
+{"coin_type": "469", "path_component": "0x800001d5", "symbol": "BTH", "name": "Bithereum"}
+{"coin_type": "470", "path_component": "0x800001d6", "symbol": "MESG", "name": "MESG"}
+{"coin_type": "471", "path_component": "0x800001d7", "symbol": "FIMK", "name": "FIMK"}
+{"coin_type": "472", "path_component": "0x800001d8", "symbol": "AR", "name": "Arweave"}
+{"coin_type": "473", "path_component": "0x800001d9", "symbol": "OGO", "name": "Origo"}
+{"coin_type": "474", "path_component": "0x800001da", "symbol": "ROSE", "name": "Oasis Network"}
+{"coin_type": "475", "path_component": "0x800001db", "symbol": "BARE", "name": "BARE Network"}
+{"coin_type": "476", "path_component": "0x800001dc", "symbol": "GLEEC", "name": "GleecBTC"}
+{"coin_type": "477", "path_component": "0x800001dd", "symbol": "CLR", "name": "Color Coin"}
+{"coin_type": "478", "path_component": "0x800001de", "symbol": "RNG", "name": "Ring"}
+{"coin_type": "479", "path_component": "0x800001df", "symbol": "OLO", "name": "Tool Global"}
+{"coin_type": "480", "path_component": "0x800001e0", "symbol": "PEXA", "name": "Pexa"}
+{"coin_type": "481", "path_component": "0x800001e1", "symbol": "MOON", "name": "Mooncoin"}
+{"coin_type": "482", "path_component": "0x800001e2", "symbol": "OCEAN", "name": "Ocean Protocol"}
+{"coin_type": "483", "path_component": "0x800001e3", "symbol": "BNT", "name": "Bluzelle Native"}
+{"coin_type": "484", "path_component": "0x800001e4", "symbol": "AMO", "name": "AMO Blockchain"}
+{"coin_type": "485", "path_component": "0x800001e5", "symbol": "FCH", "name": "FreeCash"}
+{"coin_type": "486", "path_component": "0x800001e6", "symbol": "LAT", "name": "PlatON"}
+{"coin_type": "487", "path_component": "0x800001e7", "symbol": "COIN", "name": "Bitcoin Bank"}
+{"coin_type": "488", "path_component": "0x800001e8", "symbol": "VEO", "name": "Amoveo"}
+{"coin_type": "489", "path_component": "0x800001e9", "symbol": "CCA", "name": "Counos Coin"}
+{"coin_type": "490", "path_component": "0x800001ea", "symbol": "GFN", "name": "Graphene"}
+{"coin_type": "491", "path_component": "0x800001eb", "symbol": "BIP", "name": "Minter Network"}
+{"coin_type": "492", "path_component": "0x800001ec", "symbol": "KPG", "name": "Kunpeng Network"}
+{"coin_type": "493", "path_component": "0x800001ed", "symbol": "FIN", "name": "FINL Chain"}
+{"coin_type": "494", "path_component": "0x800001ee", "symbol": "BAND", "name": "Band"}
+{"coin_type": "495", "path_component": "0x800001ef", "symbol": "DROP", "name": "Dropil"}
+{"coin_type": "496", "path_component": "0x800001f0", "symbol": "BHT", "name": "Bluehelix Chain"}
+{"coin_type": "497", "path_component": "0x800001f1", "symbol": "LYRA", "name": "Scrypta"}
+{"coin_type": "498", "path_component": "0x800001f2", "symbol": "CS", "name": "Credits"}
+{"coin_type": "499", "path_component": "0x800001f3", "symbol": "RUPX", "name": "Rupaya"}
+{"coin_type": "500", "path_component": "0x800001f4", "symbol": "THETA", "name": "Theta"}
+{"coin_type": "501", "path_component": "0x800001f5", "symbol": "SOL", "name": "Solana"}
+{"coin_type": "502", "path_component": "0x800001f6", "symbol": "THT", "name": "ThoughtAI"}
+{"coin_type": "503", "path_component": "0x800001f7", "symbol": "CFX", "name": "Conflux"}
+{"coin_type": "504", "path_component": "0x800001f8", "symbol": "KUMA", "name": "Kumacoin"}
+{"coin_type": "505", "path_component": "0x800001f9", "symbol": "HASH", "name": "Provenance"}
+{"coin_type": "506", "path_component": "0x800001fa", "symbol": "CSPR", "name": "Casper"}
+{"coin_type": "507", "path_component": "0x800001fb", "symbol": "EARTH", "name": "EARTH"}
+{"coin_type": "508", "path_component": "0x800001fc", "symbol": "EGLD", "name": "MultiversX"}
+{"coin_type": "509", "path_component": "0x800001fd", "symbol": "CHI", "name": "Xaya"}
+{"coin_type": "510", "path_component": "0x800001fe", "symbol": "KOTO", "name": "Koto"}
+{"coin_type": "511", "path_component": "0x800001ff", "symbol": "OTC", "name": "\u03b8"}
+{"coin_type": "512", "path_component": "0x80000200", "symbol": "RXD", "name": "Radiant"}
+{"coin_type": "513", "path_component": "0x80000201", "symbol": "SEELEN", "name": "Seele-N"}
+{"coin_type": "514", "path_component": "0x80000202", "symbol": "AETH", "name": "AETH"}
+{"coin_type": "515", "path_component": "0x80000203", "symbol": "DNA", "name": "Idena"}
+{"coin_type": "516", "path_component": "0x80000204", "symbol": "VEE", "name": "Virtual Economy Era"}
+{"coin_type": "517", "path_component": "0x80000205", "symbol": "SIERRA", "name": "SierraCoin"}
+{"coin_type": "518", "path_component": "0x80000206", "symbol": "LET", "name": "Linkeye"}
+{"coin_type": "519", "path_component": "0x80000207", "symbol": "BSC", "name": "Bitcoin Smart Contract"}
+{"coin_type": "520", "path_component": "0x80000208", "symbol": "BTCV", "name": "BitcoinVIP"}
+{"coin_type": "521", "path_component": "0x80000209", "symbol": "ABA", "name": "Dabacus"}
+{"coin_type": "522", "path_component": "0x8000020a", "symbol": "SCC", "name": "StakeCubeCoin"}
+{"coin_type": "523", "path_component": "0x8000020b", "symbol": "EDG", "name": "Edgeware"}
+{"coin_type": "524", "path_component": "0x8000020c", "symbol": "AMS", "name": "AmsterdamCoin"}
+{"coin_type": "525", "path_component": "0x8000020d", "symbol": "GOSS", "name": "GOSSIP Coin"}
+{"coin_type": "526", "path_component": "0x8000020e", "symbol": "BU", "name": "BUMO"}
+{"coin_type": "527", "path_component": "0x8000020f", "symbol": "GRAM", "name": "GRAM"}
+{"coin_type": "528", "path_component": "0x80000210", "symbol": "YAP", "name": "Yapstone"}
+{"coin_type": "529", "path_component": "0x80000211", "symbol": "SCRT", "name": "Secret Network"}
+{"coin_type": "530", "path_component": "0x80000212", "symbol": "NOVO", "name": "Novo"}
+{"coin_type": "531", "path_component": "0x80000213", "symbol": "GHOST", "name": "Ghost"}
+{"coin_type": "532", "path_component": "0x80000214", "symbol": "HST", "name": "HST"}
+{"coin_type": "533", "path_component": "0x80000215", "symbol": "PRJ", "name": "ProjectCoin"}
+{"coin_type": "534", "path_component": "0x80000216", "symbol": "YOU", "name": "YOUChain"}
+{"coin_type": "535", "path_component": "0x80000217", "symbol": "XHV", "name": "Haven Protocol"}
+{"coin_type": "536", "path_component": "0x80000218", "symbol": "BYND", "name": "Beyondcoin"}
+{"coin_type": "537", "path_component": "0x80000219", "symbol": "JOYS", "name": "Joys Digital"}
+{"coin_type": "538", "path_component": "0x8000021a", "symbol": "VAL", "name": "Valorbit"}
+{"coin_type": "539", "path_component": "0x8000021b", "symbol": "FLOW", "name": "Flow"}
+{"coin_type": "540", "path_component": "0x8000021c", "symbol": "SMESH", "name": "Spacemesh Coin"}
+{"coin_type": "541", "path_component": "0x8000021d", "symbol": "SCDO", "name": "SCDO"}
+{"coin_type": "542", "path_component": "0x8000021e", "symbol": "IQS", "name": "IQ-Cash"}
+{"coin_type": "543", "path_component": "0x8000021f", "symbol": "BIND", "name": "Compendia"}
+{"coin_type": "544", "path_component": "0x80000220", "symbol": "COINEVO", "name": "Coinevo"}
+{"coin_type": "545", "path_component": "0x80000221", "symbol": "SCRIBE", "name": "Scribe"}
+{"coin_type": "546", "path_component": "0x80000222", "symbol": "HYN", "name": "Hyperion"}
+{"coin_type": "547", "path_component": "0x80000223", "symbol": "BHP", "name": "BHP"}
+{"coin_type": "548", "path_component": "0x80000224", "symbol": "BBC", "name": "BigBang Core"}
+{"coin_type": "549", "path_component": "0x80000225", "symbol": "MKF", "name": "MarketFinance"}
+{"coin_type": "550", "path_component": "0x80000226", "symbol": "XDC", "name": "XinFin"}
+{"coin_type": "551", "path_component": "0x80000227", "symbol": "STR", "name": "Straightedge"}
+{"coin_type": "552", "path_component": "0x80000228", "symbol": "SUM", "name": "Sumcoin"}
+{"coin_type": "553", "path_component": "0x80000229", "symbol": "HBC", "name": "HuobiChain"}
+{"coin_type": "554", "path_component": "0x8000022a", "symbol": "---", "name": "reserved"}
+{"coin_type": "555", "path_component": "0x8000022b", "symbol": "BCS", "name": "Bitcoin Smart"}
+{"coin_type": "556", "path_component": "0x8000022c", "symbol": "KTS", "name": "Kratos"}
+{"coin_type": "557", "path_component": "0x8000022d", "symbol": "LKR", "name": "Lkrcoin"}
+{"coin_type": "558", "path_component": "0x8000022e", "symbol": "TAO", "name": "Tao"}
+{"coin_type": "559", "path_component": "0x8000022f", "symbol": "XWC", "name": "Whitecoin"}
+{"coin_type": "560", "path_component": "0x80000230", "symbol": "DEAL", "name": "DEAL"}
+{"coin_type": "561", "path_component": "0x80000231", "symbol": "NTY", "name": "Nexty"}
+{"coin_type": "562", "path_component": "0x80000232", "symbol": "TOP", "name": "TOP NetWork"}
+{"coin_type": "563", "path_component": "0x80000233", "symbol": "---", "name": "reserved"}
+{"coin_type": "564", "path_component": "0x80000234", "symbol": "AG", "name": "Agoric"}
+{"coin_type": "565", "path_component": "0x80000235", "symbol": "CICO", "name": "Coinicles"}
+{"coin_type": "566", "path_component": "0x80000236", "symbol": "IRIS", "name": "Irisnet"}
+{"coin_type": "567", "path_component": "0x80000237", "symbol": "NCG", "name": "Nine Chronicles"}
+{"coin_type": "568", "path_component": "0x80000238", "symbol": "LRG", "name": "Large Coin"}
+{"coin_type": "569", "path_component": "0x80000239", "symbol": "SERO", "name": "Super Zero Protocol"}
+{"coin_type": "570", "path_component": "0x8000023a", "symbol": "BDX", "name": "Beldex"}
+{"coin_type": "571", "path_component": "0x8000023b", "symbol": "CCXX", "name": "Counos X"}
+{"coin_type": "572", "path_component": "0x8000023c", "symbol": "SLS", "name": "Saluscoin"}
+{"coin_type": "573", "path_component": "0x8000023d", "symbol": "SRM", "name": "Serum"}
+{"coin_type": "574", "path_component": "0x8000023e", "symbol": "---", "name": "reserved"}
+{"coin_type": "575", "path_component": "0x8000023f", "symbol": "VIVT", "name": "VIDT Datalink"}
+{"coin_type": "576", "path_component": "0x80000240", "symbol": "BPS", "name": "BitcoinPoS"}
+{"coin_type": "577", "path_component": "0x80000241", "symbol": "NKN", "name": "NKN"}
+{"coin_type": "578", "path_component": "0x80000242", "symbol": "ICL", "name": "ILCOIN"}
+{"coin_type": "579", "path_component": "0x80000243", "symbol": "BONO", "name": "Bonorum"}
+{"coin_type": "580", "path_component": "0x80000244", "symbol": "PLC", "name": "PLATINCOIN"}
+{"coin_type": "581", "path_component": "0x80000245", "symbol": "DUN", "name": "Dune"}
+{"coin_type": "582", "path_component": "0x80000246", "symbol": "DMCH", "name": "Darmacash"}
+{"coin_type": "583", "path_component": "0x80000247", "symbol": "CTC", "name": "Creditcoin"}
+{"coin_type": "584", "path_component": "0x80000248", "symbol": "KELP", "name": "Haidai Network"}
+{"coin_type": "585", "path_component": "0x80000249", "symbol": "GBCR", "name": "GoldBCR"}
+{"coin_type": "586", "path_component": "0x8000024a", "symbol": "XDAG", "name": "XDAG"}
+{"coin_type": "587", "path_component": "0x8000024b", "symbol": "PRV", "name": "Incognito Privacy"}
+{"coin_type": "588", "path_component": "0x8000024c", "symbol": "SCAP", "name": "SafeCapital"}
+{"coin_type": "589", "path_component": "0x8000024d", "symbol": "TFUEL", "name": "Theta Fuel"}
+{"coin_type": "590", "path_component": "0x8000024e", "symbol": "GTM", "name": "Gentarium"}
+{"coin_type": "591", "path_component": "0x8000024f", "symbol": "RNL", "name": "RentalChain"}
+{"coin_type": "592", "path_component": "0x80000250", "symbol": "GRIN", "name": "Grin"}
+{"coin_type": "593", "path_component": "0x80000251", "symbol": "MWC", "name": "MimbleWimbleCoin"}
+{"coin_type": "594", "path_component": "0x80000252", "symbol": "DOCK", "name": "Dock"}
+{"coin_type": "595", "path_component": "0x80000253", "symbol": "POLYX", "name": "Polymesh"}
+{"coin_type": "596", "path_component": "0x80000254", "symbol": "DIVER", "name": "Divergenti"}
+{"coin_type": "597", "path_component": "0x80000255", "symbol": "XEP", "name": "Electra Protocol"}
+{"coin_type": "598", "path_component": "0x80000256", "symbol": "APN", "name": "Apron"}
+{"coin_type": "599", "path_component": "0x80000257", "symbol": "TFC", "name": "Turbo File Coin"}
+{"coin_type": "600", "path_component": "0x80000258", "symbol": "UTE", "name": "Unit-e"}
+{"coin_type": "601", "path_component": "0x80000259", "symbol": "MTC", "name": "Metacoin"}
+{"coin_type": "602", "path_component": "0x8000025a", "symbol": "NC", "name": "NobodyCash"}
+{"coin_type": "603", "path_component": "0x8000025b", "symbol": "XINY", "name": "Xinyuehu"}
+{"coin_type": "604", "path_component": "0x8000025c", "symbol": "DYN", "name": "Dynamo"}
+{"coin_type": "605", "path_component": "0x8000025d", "symbol": "BUFS", "name": "Buffer"}
+{"coin_type": "606", "path_component": "0x8000025e", "symbol": "STOS", "name": "Stratos"}
+{"coin_type": "607", "path_component": "0x8000025f", "symbol": "TON", "name": "TON"}
+{"coin_type": "608", "path_component": "0x80000260", "symbol": "TAFT", "name": "TAFT"}
+{"coin_type": "609", "path_component": "0x80000261", "symbol": "HYDRA", "name": "HYDRA"}
+{"coin_type": "610", "path_component": "0x80000262", "symbol": "NOR", "name": "Noir"}
+{"coin_type": "611", "path_component": "0x80000263", "symbol": "", "name": "Manta Network Private Asset"}
+{"coin_type": "612", "path_component": "0x80000264", "symbol": "", "name": "Calamari Network Private Asset"}
+{"coin_type": "613", "path_component": "0x80000265", "symbol": "WCN", "name": "Widecoin"}
+{"coin_type": "614", "path_component": "0x80000266", "symbol": "OPT", "name": "Optimistic Ethereum"}
+{"coin_type": "615", "path_component": "0x80000267", "symbol": "PSWAP", "name": "PolkaSwap"}
+{"coin_type": "616", "path_component": "0x80000268", "symbol": "VAL", "name": "Validator"}
+{"coin_type": "617", "path_component": "0x80000269", "symbol": "XOR", "name": "Sora"}
+{"coin_type": "618", "path_component": "0x8000026a", "symbol": "SSP", "name": "SmartShare"}
+{"coin_type": "619", "path_component": "0x8000026b", "symbol": "DEI", "name": "DeimosX"}
+{"coin_type": "620", "path_component": "0x8000026c", "symbol": "---", "name": "reserved"}
+{"coin_type": "621", "path_component": "0x8000026d", "symbol": "ZERO", "name": "Singularity"}
+{"coin_type": "622", "path_component": "0x8000026e", "symbol": "ALPHA", "name": "AlphaDAO"}
+{"coin_type": "623", "path_component": "0x8000026f", "symbol": "BDECO", "name": "BDCashProtocol Ecosystem"}
+{"coin_type": "624", "path_component": "0x80000270", "symbol": "NOBL", "name": "Nobility"}
+{"coin_type": "625", "path_component": "0x80000271", "symbol": "EAST", "name": "Eastcoin"}
+{"coin_type": "626", "path_component": "0x80000272", "symbol": "KDA", "name": "Kadena"}
+{"coin_type": "627", "path_component": "0x80000273", "symbol": "SOUL", "name": "Phantasma"}
+{"coin_type": "628", "path_component": "0x80000274", "symbol": "LORE", "name": "Gitopia"}
+{"coin_type": "629", "path_component": "0x80000275", "symbol": "FNR", "name": "Fincor"}
+{"coin_type": "630", "path_component": "0x80000276", "symbol": "NEXUS", "name": "Nexus"}
+{"coin_type": "631", "path_component": "0x80000277", "symbol": "QTZ", "name": "Quartz"}
+{"coin_type": "632", "path_component": "0x80000278", "symbol": "MAS", "name": "Massa"}
+{"coin_type": "633", "path_component": "0x80000279", "symbol": "CALL", "name": "Callchain"}
+{"coin_type": "634", "path_component": "0x8000027a", "symbol": "VAL", "name": "Validity"}
+{"coin_type": "635", "path_component": "0x8000027b", "symbol": "POKT", "name": "Pocket Network"}
+{"coin_type": "636", "path_component": "0x8000027c", "symbol": "EMIT", "name": "EMIT"}
+{"coin_type": "637", "path_component": "0x8000027d", "symbol": "APTOS", "name": "Aptos"}
+{"coin_type": "638", "path_component": "0x8000027e", "symbol": "ADON", "name": "ADON"}
+{"coin_type": "639", "path_component": "0x8000027f", "symbol": "BTSG", "name": "BitSong"}
+{"coin_type": "640", "path_component": "0x80000280", "symbol": "LFC", "name": "Leofcoin"}
+{"coin_type": "641", "path_component": "0x80000281", "symbol": "KCS", "name": "KuCoin Shares"}
+{"coin_type": "642", "path_component": "0x80000282", "symbol": "KCC", "name": "KuCoin Community Chain"}
+{"coin_type": "643", "path_component": "0x80000283", "symbol": "AZERO", "name": "Aleph Zero"}
+{"coin_type": "644", "path_component": "0x80000284", "symbol": "TREE", "name": "Tree"}
+{"coin_type": "645", "path_component": "0x80000285", "symbol": "LX", "name": "Lynx"}
+{"coin_type": "646", "path_component": "0x80000286", "symbol": "XLN", "name": "Lunarium"}
+{"coin_type": "647", "path_component": "0x80000287", "symbol": "CIC", "name": "CIC Chain"}
+{"coin_type": "648", "path_component": "0x80000288", "symbol": "ZRB", "name": "Zarb"}
+{"coin_type": "649", "path_component": "0x80000289", "symbol": "---", "name": "reserved"}
+{"coin_type": "650", "path_component": "0x8000028a", "symbol": "UCO", "name": "Archethic"}
+{"coin_type": "651", "path_component": "0x8000028b", "symbol": "SFX", "name": "Safex Cash"}
+{"coin_type": "652", "path_component": "0x8000028c", "symbol": "SFT", "name": "Safex Token"}
+{"coin_type": "653", "path_component": "0x8000028d", "symbol": "WSFX", "name": "Wrapped Safex Cash"}
+{"coin_type": "654", "path_component": "0x8000028e", "symbol": "USDG", "name": "US Digital Gold"}
+{"coin_type": "655", "path_component": "0x8000028f", "symbol": "WMP", "name": "WAMP"}
+{"coin_type": "656", "path_component": "0x80000290", "symbol": "EKTA", "name": "Ekta"}
+{"coin_type": "657", "path_component": "0x80000291", "symbol": "YDA", "name": "YadaCoin"}
+{"coin_type": "658", "path_component": "0x80000292", "symbol": "WHIVE", "name": "Whive"}
+{"coin_type": "659", "path_component": "0x80000293", "symbol": "KOIN", "name": "Koinos"}
+{"coin_type": "660", "path_component": "0x80000294", "symbol": "PIRATE", "name": "PirateCash"}
+{"coin_type": "661", "path_component": "0x80000295", "symbol": "UNQ", "name": "Unique"}
+{"coin_type": "662", "path_component": "0x80000296", "symbol": "ULM", "name": "UltonSmartchain"}
+{"coin_type": "663", "path_component": "0x80000297", "symbol": "SFRX", "name": "EtherGem Sapphire"}
+{"coin_type": "664", "path_component": "0x80000298", "symbol": "BSTY", "name": "GlobalBoost-Y"}
+{"coin_type": "665", "path_component": "0x80000299", "symbol": "IMP", "name": "Impact Protocol"}
+{"coin_type": "666", "path_component": "0x8000029a", "symbol": "ACT", "name": "Achain"}
+{"coin_type": "667", "path_component": "0x8000029b", "symbol": "PRKL", "name": "Perkle"}
+{"coin_type": "668", "path_component": "0x8000029c", "symbol": "SSC", "name": "SelfSell"}
+{"coin_type": "669", "path_component": "0x8000029d", "symbol": "GC", "name": "GateChain"}
+{"coin_type": "670", "path_component": "0x8000029e", "symbol": "PLGR", "name": "Pledger"}
+{"coin_type": "671", "path_component": "0x8000029f", "symbol": "MPLGR", "name": "Pledger"}
+{"coin_type": "672", "path_component": "0x800002a0", "symbol": "KNOX", "name": "Knox"}
+{"coin_type": "673", "path_component": "0x800002a1", "symbol": "ZED", "name": "ZED"}
+{"coin_type": "674", "path_component": "0x800002a2", "symbol": "CNDL", "name": "Candle"}
+{"coin_type": "675", "path_component": "0x800002a3", "symbol": "WLKR", "name": "Walker Crypto Innovation Index"}
+{"coin_type": "676", "path_component": "0x800002a4", "symbol": "WLKRR", "name": "Walker"}
+{"coin_type": "677", "path_component": "0x800002a5", "symbol": "YUNGE", "name": "Yunge"}
+{"coin_type": "678", "path_component": "0x800002a6", "symbol": "Voken", "name": "Voken"}
+{"coin_type": "679", "path_component": "0x800002a7", "symbol": "APL", "name": "Apollo"}
+{"coin_type": "680", "path_component": "0x800002a8", "symbol": "Evrynet", "name": "Evrynet"}
+{"coin_type": "681", "path_component": "0x800002a9", "symbol": "NENG", "name": "Nengcoin"}
+{"coin_type": "682", "path_component": "0x800002aa", "symbol": "CHTA", "name": "Cheetahcoin"}
+{"coin_type": "683", "path_component": "0x800002ab", "symbol": "ALEO", "name": "Aleo Network"}
+{"coin_type": "684", "path_component": "0x800002ac", "symbol": "HMS", "name": "Hemis"}
+{"coin_type": "685", "path_component": "0x800002ad", "symbol": "OAS", "name": "Oasys"}
+{"coin_type": "686", "path_component": "0x800002ae", "symbol": "KAR", "name": "Karura Network"}
+{"coin_type": "687", "path_component": "0x800002af", "symbol": "FLON", "name": "FullOn Network"}
+{"coin_type": "688", "path_component": "0x800002b0", "symbol": "CET", "name": "CoinEx Chain"}
+{"coin_type": "689", "path_component": "0x800002b1", "symbol": "XLINK", "name": "XLink Chain"}
+{"coin_type": "690", "path_component": "0x800002b2", "symbol": "KLV", "name": "KleverChain"}
+{"coin_type": "691", "path_component": "0x800002b3", "symbol": "TNT", "name": "Tangle"}
+{"coin_type": "692", "path_component": "0x800002b4", "symbol": "GTG", "name": "Gotigin"}
+{"coin_type": "693", "path_component": "0x800002b5", "symbol": "NET", "name": "RealityNet"}
+{"coin_type": "694", "path_component": "0x800002b6", "symbol": "VTBC", "name": "VTB Community"}
+{"coin_type": "695", "path_component": "0x800002b7", "symbol": "DIONE", "name": "Odyssey Chain"}
+{"coin_type": "696", "path_component": "0x800002b8", "symbol": "LUM", "name": "Lumos"}
+{"coin_type": "697", "path_component": "0x800002b9", "symbol": "AVA", "name": "Avalon"}
+{"coin_type": "698", "path_component": "0x800002ba", "symbol": "VEIL", "name": "Veil"}
+{"coin_type": "699", "path_component": "0x800002bb", "symbol": "GTB", "name": "GotaBit"}
+{"coin_type": "700", "path_component": "0x800002bc", "symbol": "XDAI", "name": "xDai"}
+{"coin_type": "701", "path_component": "0x800002bd", "symbol": "COM", "name": "Commercio"}
+{"coin_type": "702", "path_component": "0x800002be", "symbol": "CCC", "name": "Commercio Cash Credit"}
+{"coin_type": "703", "path_component": "0x800002bf", "symbol": "SNR", "name": "Sonr"}
+{"coin_type": "704", "path_component": "0x800002c0", "symbol": "RAQ", "name": "Ra Quantum"}
+{"coin_type": "705", "path_component": "0x800002c1", "symbol": "PEG", "name": "Pegasus Token"}
+{"coin_type": "706", "path_component": "0x800002c2", "symbol": "LKG", "name": "Lionking"}
+{"coin_type": "707", "path_component": "0x800002c3", "symbol": "MCOIN", "name": "Moneta Coin"}
+{"coin_type": "708", "path_component": "0x800002c4", "symbol": "---", "name": "reserved"}
+{"coin_type": "709", "path_component": "0x800002c5", "symbol": "AVAIL", "name": "Avail"}
+{"coin_type": "710", "path_component": "0x800002c6", "symbol": "FURY", "name": "Highbury"}
+{"coin_type": "711", "path_component": "0x800002c7", "symbol": "CHC", "name": "Chaincoin"}
+{"coin_type": "712", "path_component": "0x800002c8", "symbol": "SERF", "name": "Serfnet"}
+{"coin_type": "713", "path_component": "0x800002c9", "symbol": "XTL", "name": "Katal Chain"}
+{"coin_type": "714", "path_component": "0x800002ca", "symbol": "BNB", "name": "Binance"}
+{"coin_type": "715", "path_component": "0x800002cb", "symbol": "SIN", "name": "Sinovate"}
+{"coin_type": "716", "path_component": "0x800002cc", "symbol": "DLN", "name": "Delion"}
+{"coin_type": "717", "path_component": "0x800002cd", "symbol": "BONTE", "name": "Bontecoin"}
+{"coin_type": "718", "path_component": "0x800002ce", "symbol": "PEER", "name": "Peer"}
+{"coin_type": "719", "path_component": "0x800002cf", "symbol": "ZET", "name": "Zetacoin"}
+{"coin_type": "720", "path_component": "0x800002d0", "symbol": "ABY", "name": "Artbyte"}
+{"coin_type": "721", "path_component": "0x800002d1", "symbol": "PGX", "name": "Mirai Chain"}
+{"coin_type": "722", "path_component": "0x800002d2", "symbol": "IL8P", "name": "InfiniLooP"}
+{"coin_type": "723", "path_component": "0x800002d3", "symbol": "VOI", "name": "Voi"}
+{"coin_type": "724", "path_component": "0x800002d4", "symbol": "XVC", "name": "Vanillacash"}
+{"coin_type": "725", "path_component": "0x800002d5", "symbol": "MCX", "name": "MultiCash"}
+{"coin_type": "726", "path_component": "0x800002d6", "symbol": "TARA", "name": "Taraxa"}
+{"coin_type": "727", "path_component": "0x800002d7", "symbol": "BLU", "name": "BluCrates"}
+{"coin_type": "728", "path_component": "0x800002d8", "symbol": "BFC", "name": "BFC"}
+{"coin_type": "729", "path_component": "0x800002d9", "symbol": "DCC", "name": "DecentraCast"}
+{"coin_type": "730", "path_component": "0x800002da", "symbol": "HEALIOS", "name": "Tenacity"}
+{"coin_type": "731", "path_component": "0x800002db", "symbol": "BMK", "name": "Bitmark"}
+{"coin_type": "732", "path_component": "0x800002dc", "symbol": "FUGA", "name": "Fuga token"}
+{"coin_type": "733", "path_component": "0x800002dd", "symbol": "TBC", "name": "TBChat"}
+{"coin_type": "734", "path_component": "0x800002de", "symbol": "DENTX", "name": "DENTNet"}
+{"coin_type": "735", "path_component": "0x800002df"}
+{"coin_type": "736", "path_component": "0x800002e0"}
+{"coin_type": "737", "path_component": "0x800002e1", "symbol": "ATOP", "name": "Financial Blockchain"}
+{"coin_type": "738", "path_component": "0x800002e2", "symbol": "BTE", "name": "Bitweb"}
+{"coin_type": "739", "path_component": "0x800002e3", "symbol": "DPC", "name": "Dpowcoin (DualPowCoin)"}
+{"coin_type": "740", "path_component": "0x800002e4", "symbol": "MDC", "name": "MyDataCoin"}
+{"coin_type": "741", "path_component": "0x800002e5", "symbol": "RIV", "name": "Rigvid"}
+{"coin_type": "742", "path_component": "0x800002e6"}
+{"coin_type": "743", "path_component": "0x800002e7"}
+{"coin_type": "744", "path_component": "0x800002e8", "symbol": "DUSK", "name": "Dusk"}
+{"coin_type": "745", "path_component": "0x800002e9"}
+{"coin_type": "746", "path_component": "0x800002ea"}
+{"coin_type": "747", "path_component": "0x800002eb", "symbol": "CFG", "name": "Centrifuge"}
+{"coin_type": "748", "path_component": "0x800002ec"}
+{"coin_type": "749", "path_component": "0x800002ed"}
+{"coin_type": "750", "path_component": "0x800002ee", "symbol": "XPRT", "name": "Persistence"}
+{"coin_type": "751", "path_component": "0x800002ef"}
+{"coin_type": "752", "path_component": "0x800002f0"}
+{"coin_type": "753", "path_component": "0x800002f1", "symbol": "", "name": "Age X25519 Encryption"}
+{"coin_type": "754", "path_component": "0x800002f2", "symbol": "", "name": "Age NIST Encryption"}
+{"coin_type": "755", "path_component": "0x800002f3"}
+{"coin_type": "756", "path_component": "0x800002f4"}
+{"coin_type": "757", "path_component": "0x800002f5", "symbol": "HONEY", "name": "HoneyWood"}
+{"coin_type": "758", "path_component": "0x800002f6", "symbol": "XDD", "name": "XDDCoin"}
+{"coin_type": "759", "path_component": "0x800002f7"}
+{"coin_type": "760", "path_component": "0x800002f8"}
+{"coin_type": "761", "path_component": "0x800002f9"}
+{"coin_type": "762", "path_component": "0x800002fa"}
+{"coin_type": "763", "path_component": "0x800002fb"}
+{"coin_type": "764", "path_component": "0x800002fc"}
+{"coin_type": "765", "path_component": "0x800002fd", "symbol": "TGN", "name": "Tagion"}
+{"coin_type": "766", "path_component": "0x800002fe"}
+{"coin_type": "767", "path_component": "0x800002ff"}
+{"coin_type": "768", "path_component": "0x80000300", "symbol": "BALLZ", "name": "Ballzcoin"}
+{"coin_type": "769", "path_component": "0x80000301"}
+{"coin_type": "770", "path_component": "0x80000302", "symbol": "COSA", "name": "Cosanta"}
+{"coin_type": "771", "path_component": "0x80000303", "symbol": "BR", "name": "BR"}
+{"coin_type": "772", "path_component": "0x80000304"}
+{"coin_type": "773", "path_component": "0x80000305", "symbol": "CSB", "name": "CosmoBliss"}
+{"coin_type": "774", "path_component": "0x80000306"}
+{"coin_type": "775", "path_component": "0x80000307", "symbol": "PLSR", "name": "Pulsar Coin"}
+{"coin_type": "776", "path_component": "0x80000308", "symbol": "KEY", "name": "Keymaker Coin"}
+{"coin_type": "777", "path_component": "0x80000309", "symbol": "BTW", "name": "Bitcoin World"}
+{"coin_type": "778", "path_component": "0x8000030a"}
+{"coin_type": "779", "path_component": "0x8000030b"}
+{"coin_type": "780", "path_component": "0x8000030c", "symbol": "PLCUC", "name": "PLC Ultima Classic"}
+{"coin_type": "781", "path_component": "0x8000030d", "symbol": "PLCUX", "name": "PLC Ultima X"}
+{"coin_type": "782", "path_component": "0x8000030e", "symbol": "PLCU", "name": "PLC Ultima"}
+{"coin_type": "783", "path_component": "0x8000030f", "symbol": "SMARTBC", "name": "SMART Blockchain"}
+{"coin_type": "784", "path_component": "0x80000310", "symbol": "SUI", "name": "Sui"}
+{"coin_type": "785", "path_component": "0x80000311", "symbol": "ULTIMA", "name": "ULTIMA"}
+{"coin_type": "786", "path_component": "0x80000312", "symbol": "UIDD", "name": "UIDD"}
+{"coin_type": "787", "path_component": "0x80000313", "symbol": "ACA", "name": "Acala"}
+{"coin_type": "788", "path_component": "0x80000314", "symbol": "BNC", "name": "Bifrost"}
+{"coin_type": "789", "path_component": "0x80000315", "symbol": "TAU", "name": "Lamden"}
+{"coin_type": "790", "path_component": "0x80000316"}
+{"coin_type": "791", "path_component": "0x80000317"}
+{"coin_type": "792", "path_component": "0x80000318"}
+{"coin_type": "793", "path_component": "0x80000319"}
+{"coin_type": "794", "path_component": "0x8000031a", "symbol": "INTR", "name": "Interlay"}
+{"coin_type": "795", "path_component": "0x8000031b", "symbol": "KINT", "name": "Kintsugi"}
+{"coin_type": "796", "path_component": "0x8000031c"}
+{"coin_type": "797", "path_component": "0x8000031d"}
+{"coin_type": "798", "path_component": "0x8000031e"}
+{"coin_type": "799", "path_component": "0x8000031f", "symbol": "PDEX", "name": "Polkadex"}
+{"coin_type": "800", "path_component": "0x80000320", "symbol": "BEET", "name": "Beetle Coin"}
+{"coin_type": "801", "path_component": "0x80000321", "symbol": "DST", "name": "DSTRA"}
+{"coin_type": "802", "path_component": "0x80000322", "symbol": "CY", "name": "Cyberyen"}
+{"coin_type": "803", "path_component": "0x80000323", "symbol": "RYME", "name": "Ryme Network"}
+{"coin_type": "804", "path_component": "0x80000324", "symbol": "ZKS", "name": "zkSync"}
+{"coin_type": "805", "path_component": "0x80000325", "symbol": "SCASH", "name": "Scash"}
+{"coin_type": "806", "path_component": "0x80000326"}
+{"coin_type": "807", "path_component": "0x80000327"}
+{"coin_type": "808", "path_component": "0x80000328", "symbol": "QVT", "name": "Qvolta"}
+{"coin_type": "809", "path_component": "0x80000329", "symbol": "SDN", "name": "Shiden Network"}
+{"coin_type": "810", "path_component": "0x8000032a", "symbol": "ASTR", "name": "Astar Network"}
+{"coin_type": "811", "path_component": "0x8000032b", "symbol": "---", "name": "reserved"}
+{"coin_type": "812", "path_component": "0x8000032c"}
+{"coin_type": "813", "path_component": "0x8000032d", "symbol": "MEER", "name": "Qitmeer"}
+{"coin_type": "814", "path_component": "0x8000032e"}
+{"coin_type": "815", "path_component": "0x8000032f", "symbol": "FACT", "name": "ImFACT"}
+{"coin_type": "816", "path_component": "0x80000330", "symbol": "FSC", "name": "FSC"}
+{"coin_type": "817", "path_component": "0x80000331"}
+{"coin_type": "818", "path_component": "0x80000332", "symbol": "VET", "name": "VeChain Token"}
+{"coin_type": "819", "path_component": "0x80000333", "symbol": "REEF", "name": "Reef"}
+{"coin_type": "820", "path_component": "0x80000334", "symbol": "CLO", "name": "Callisto"}
+{"coin_type": "821", "path_component": "0x80000335"}
+{"coin_type": "822", "path_component": "0x80000336", "symbol": "BDB", "name": "BigchainDB"}
+{"coin_type": "823", "path_component": "0x80000337"}
+{"coin_type": "824", "path_component": "0x80000338", "symbol": "RBNT", "name": "Redbelly Network"}
+{"coin_type": "825", "path_component": "0x80000339"}
+{"coin_type": "826", "path_component": "0x8000033a"}
+{"coin_type": "827", "path_component": "0x8000033b", "symbol": "ACE", "name": "Endurance"}
+{"coin_type": "828", "path_component": "0x8000033c", "symbol": "CCN", "name": "ComputeCoin"}
+{"coin_type": "829", "path_component": "0x8000033d", "symbol": "BBA", "name": "BBACHAIN"}
+{"coin_type": "830", "path_component": "0x8000033e"}
+{"coin_type": "831", "path_component": "0x8000033f", "symbol": "CRUZ", "name": "cruzbit"}
+{"coin_type": "832", "path_component": "0x80000340", "symbol": "SAPP", "name": "Sapphire"}
+{"coin_type": "833", "path_component": "0x80000341", "symbol": "777", "name": "Jackpot"}
+{"coin_type": "834", "path_component": "0x80000342", "symbol": "KYAN", "name": "Kyanite"}
+{"coin_type": "835", "path_component": "0x80000343", "symbol": "AZR", "name": "Azzure"}
+{"coin_type": "836", "path_component": "0x80000344", "symbol": "CFL", "name": "CryptoFlow"}
+{"coin_type": "837", "path_component": "0x80000345", "symbol": "DASHD", "name": "Dash Diamond"}
+{"coin_type": "838", "path_component": "0x80000346", "symbol": "TRTT", "name": "Trittium"}
+{"coin_type": "839", "path_component": "0x80000347", "symbol": "UCR", "name": "Ultra Clear"}
+{"coin_type": "840", "path_component": "0x80000348", "symbol": "PNY", "name": "Peony"}
+{"coin_type": "841", "path_component": "0x80000349", "symbol": "BECN", "name": "Beacon"}
+{"coin_type": "842", "path_component": "0x8000034a", "symbol": "MONK", "name": "Monk"}
+{"coin_type": "843", "path_component": "0x8000034b", "symbol": "SAGA", "name": "CryptoSaga"}
+{"coin_type": "844", "path_component": "0x8000034c", "symbol": "SUV", "name": "Suvereno"}
+{"coin_type": "845", "path_component": "0x8000034d", "symbol": "ESK", "name": "EskaCoin"}
+{"coin_type": "846", "path_component": "0x8000034e", "symbol": "OWO", "name": "OneWorld Coin"}
+{"coin_type": "847", "path_component": "0x8000034f", "symbol": "PEPS", "name": "PEPS Coin"}
+{"coin_type": "848", "path_component": "0x80000350", "symbol": "BIR", "name": "Birake"}
+{"coin_type": "849", "path_component": "0x80000351", "symbol": "MOBIC", "name": "MobilityCoin"}
+{"coin_type": "850", "path_component": "0x80000352", "symbol": "FLS", "name": "Flits"}
+{"coin_type": "851", "path_component": "0x80000353", "symbol": "FRECO", "name": "Freco"}
+{"coin_type": "852", "path_component": "0x80000354", "symbol": "DSM", "name": "Desmos"}
+{"coin_type": "853", "path_component": "0x80000355", "symbol": "PRCY", "name": "PRCY Coin"}
+{"coin_type": "854", "path_component": "0x80000356"}
+{"coin_type": "855", "path_component": "0x80000357"}
+{"coin_type": "856", "path_component": "0x80000358"}
+{"coin_type": "857", "path_component": "0x80000359"}
+{"coin_type": "858", "path_component": "0x8000035a", "symbol": "HVH", "name": "HAVAH"}
+{"coin_type": "859", "path_component": "0x8000035b"}
+{"coin_type": "860", "path_component": "0x8000035c", "symbol": "XBIT", "name": "XBIT Coin"}
+{"coin_type": "861", "path_component": "0x8000035d"}
+{"coin_type": "862", "path_component": "0x8000035e"}
+{"coin_type": "863", "path_component": "0x8000035f"}
+{"coin_type": "864", "path_component": "0x80000360", "symbol": "CVM", "name": "Convex"}
+{"coin_type": "865", "path_component": "0x80000361"}
+{"coin_type": "866", "path_component": "0x80000362", "symbol": "MOB", "name": "MobileCoin"}
+{"coin_type": "867", "path_component": "0x80000363"}
+{"coin_type": "868", "path_component": "0x80000364", "symbol": "IF", "name": "Infinitefuture"}
+{"coin_type": "869", "path_component": "0x80000365"}
+{"coin_type": "870", "path_component": "0x80000366"}
+{"coin_type": "871", "path_component": "0x80000367"}
+{"coin_type": "872", "path_component": "0x80000368"}
+{"coin_type": "873", "path_component": "0x80000369", "symbol": "QUORUM", "name": "Quorum"}
+{"coin_type": "874", "path_component": "0x8000036a"}
+{"coin_type": "875", "path_component": "0x8000036b"}
+{"coin_type": "876", "path_component": "0x8000036c"}
+{"coin_type": "877", "path_component": "0x8000036d", "symbol": "NAM", "name": "Namada"}
+{"coin_type": "878", "path_component": "0x8000036e", "symbol": "SCR", "name": "Scorum Network"}
+{"coin_type": "879", "path_component": "0x8000036f"}
+{"coin_type": "880", "path_component": "0x80000370", "symbol": "LUM", "name": "Lum Network"}
+{"coin_type": "881", "path_component": "0x80000371"}
+{"coin_type": "882", "path_component": "0x80000372"}
+{"coin_type": "883", "path_component": "0x80000373", "symbol": "ZBC", "name": "ZooBC"}
+{"coin_type": "884", "path_component": "0x80000374"}
+{"coin_type": "885", "path_component": "0x80000375"}
+{"coin_type": "886", "path_component": "0x80000376", "symbol": "ADF", "name": "AD Token"}
+{"coin_type": "887", "path_component": "0x80000377"}
+{"coin_type": "888", "path_component": "0x80000378", "symbol": "NEO", "name": "NEO"}
+{"coin_type": "889", "path_component": "0x80000379", "symbol": "TOMO", "name": "TOMO"}
+{"coin_type": "890", "path_component": "0x8000037a", "symbol": "XSEL", "name": "Seln"}
+{"coin_type": "891", "path_component": "0x8000037b"}
+{"coin_type": "892", "path_component": "0x8000037c"}
+{"coin_type": "893", "path_component": "0x8000037d"}
+{"coin_type": "894", "path_component": "0x8000037e"}
+{"coin_type": "895", "path_component": "0x8000037f"}
+{"coin_type": "896", "path_component": "0x80000380", "symbol": "LKSC", "name": "LKSCoin"}
+{"coin_type": "897", "path_component": "0x80000381"}
+{"coin_type": "898", "path_component": "0x80000382", "symbol": "AS", "name": "Assetchain"}
+{"coin_type": "899", "path_component": "0x80000383", "symbol": "XEC", "name": "eCash"}
+{"coin_type": "900", "path_component": "0x80000384", "symbol": "LMO", "name": "Lumeneo"}
+{"coin_type": "901", "path_component": "0x80000385", "symbol": "NXT", "name": "NxtMeta"}
+{"coin_type": "902", "path_component": "0x80000386"}
+{"coin_type": "903", "path_component": "0x80000387"}
+{"coin_type": "904", "path_component": "0x80000388", "symbol": "HNT", "name": "Helium"}
+{"coin_type": "905", "path_component": "0x80000389"}
+{"coin_type": "906", "path_component": "0x8000038a", "symbol": "XPX", "name": "Sirius"}
+{"coin_type": "907", "path_component": "0x8000038b", "symbol": "FIS", "name": "StaFi"}
+{"coin_type": "908", "path_component": "0x8000038c"}
+{"coin_type": "909", "path_component": "0x8000038d", "symbol": "SGE", "name": "Saage"}
+{"coin_type": "910", "path_component": "0x8000038e"}
+{"coin_type": "911", "path_component": "0x8000038f", "symbol": "GERT", "name": "Gert"}
+{"coin_type": "912", "path_component": "0x80000390"}
+{"coin_type": "913", "path_component": "0x80000391", "symbol": "VARA", "name": "Vara Network"}
+{"coin_type": "914", "path_component": "0x80000392"}
+{"coin_type": "915", "path_component": "0x80000393"}
+{"coin_type": "916", "path_component": "0x80000394", "symbol": "META", "name": "Metadium"}
+{"coin_type": "917", "path_component": "0x80000395", "symbol": "FRA", "name": "Findora"}
+{"coin_type": "918", "path_component": "0x80000396"}
+{"coin_type": "919", "path_component": "0x80000397", "symbol": "CCD", "name": "Concordium"}
+{"coin_type": "920", "path_component": "0x80000398"}
+{"coin_type": "921", "path_component": "0x80000399", "symbol": "AVN", "name": "Avian Network"}
+{"coin_type": "922", "path_component": "0x8000039a"}
+{"coin_type": "923", "path_component": "0x8000039b"}
+{"coin_type": "924", "path_component": "0x8000039c"}
+{"coin_type": "925", "path_component": "0x8000039d", "symbol": "DIP", "name": "Dipper Network"}
+{"coin_type": "926", "path_component": "0x8000039e"}
+{"coin_type": "927", "path_component": "0x8000039f"}
+{"coin_type": "928", "path_component": "0x800003a0", "symbol": "GHM", "name": "HermitMatrixNetwork"}
+{"coin_type": "929", "path_component": "0x800003a1"}
+{"coin_type": "930", "path_component": "0x800003a2"}
+{"coin_type": "931", "path_component": "0x800003a3", "symbol": "RUNE", "name": "THORChain (RUNE)"}
+{"coin_type": "932", "path_component": "0x800003a4"}
+{"coin_type": "933", "path_component": "0x800003a5"}
+{"coin_type": "934", "path_component": "0x800003a6"}
+{"coin_type": "935", "path_component": "0x800003a7"}
+{"coin_type": "936", "path_component": "0x800003a8"}
+{"coin_type": "937", "path_component": "0x800003a9"}
+{"coin_type": "938", "path_component": "0x800003aa", "symbol": "MGO", "name": "Mango Network"}
+{"coin_type": "939", "path_component": "0x800003ab", "symbol": "AB", "name": "Argot Protocol"}
+{"coin_type": "940", "path_component": "0x800003ac"}
+{"coin_type": "941", "path_component": "0x800003ad", "symbol": "---", "name": "reserved"}
+{"coin_type": "942", "path_component": "0x800003ae", "symbol": "KCN", "name": "Kylacoin"}
+{"coin_type": "943", "path_component": "0x800003af", "symbol": "LCN", "name": "Lyncoin"}
+{"coin_type": "944", "path_component": "0x800003b0"}
+{"coin_type": "945", "path_component": "0x800003b1", "symbol": "UNLOCK", "name": "Jasiri protocol"}
+{"coin_type": "946", "path_component": "0x800003b2"}
+{"coin_type": "947", "path_component": "0x800003b3"}
+{"coin_type": "948", "path_component": "0x800003b4"}
+{"coin_type": "949", "path_component": "0x800003b5"}
+{"coin_type": "950", "path_component": "0x800003b6"}
+{"coin_type": "951", "path_component": "0x800003b7"}
+{"coin_type": "952", "path_component": "0x800003b8"}
+{"coin_type": "953", "path_component": "0x800003b9"}
+{"coin_type": "954", "path_component": "0x800003ba"}
+{"coin_type": "955", "path_component": "0x800003bb", "symbol": "LTP", "name": "LifetionCoin"}
+{"coin_type": "956", "path_component": "0x800003bc"}
+{"coin_type": "957", "path_component": "0x800003bd"}
+{"coin_type": "958", "path_component": "0x800003be", "symbol": "", "name": "KickSoccer"}
+{"coin_type": "959", "path_component": "0x800003bf"}
+{"coin_type": "960", "path_component": "0x800003c0", "symbol": "VKAX", "name": "Vkax"}
+{"coin_type": "961", "path_component": "0x800003c1"}
+{"coin_type": "962", "path_component": "0x800003c2"}
+{"coin_type": "963", "path_component": "0x800003c3"}
+{"coin_type": "964", "path_component": "0x800003c4"}
+{"coin_type": "965", "path_component": "0x800003c5", "symbol": "ATLA", "name": "Atleta Network"}
+{"coin_type": "966", "path_component": "0x800003c6", "symbol": "POL", "name": "Polygon"}
+{"coin_type": "966", "path_component": "0x800003c6", "symbol": "MATIC", "name": "Matic"}
+{"coin_type": "967", "path_component": "0x800003c7"}
+{"coin_type": "968", "path_component": "0x800003c8", "symbol": "UNW", "name": "UNW"}
+{"coin_type": "969", "path_component": "0x800003c9", "symbol": "QI", "name": "Quai Network"}
+{"coin_type": "970", "path_component": "0x800003ca", "symbol": "TWINS", "name": "TWINS"}
+{"coin_type": "971", "path_component": "0x800003cb"}
+{"coin_type": "972", "path_component": "0x800003cc"}
+{"coin_type": "973", "path_component": "0x800003cd"}
+{"coin_type": "974", "path_component": "0x800003ce"}
+{"coin_type": "975", "path_component": "0x800003cf"}
+{"coin_type": "976", "path_component": "0x800003d0"}
+{"coin_type": "977", "path_component": "0x800003d1", "symbol": "TLOS", "name": "Telos"}
+{"coin_type": "978", "path_component": "0x800003d2"}
+{"coin_type": "979", "path_component": "0x800003d3"}
+{"coin_type": "980", "path_component": "0x800003d4"}
+{"coin_type": "981", "path_component": "0x800003d5", "symbol": "TAFECO", "name": "Taf ECO Chain"}
+{"coin_type": "982", "path_component": "0x800003d6"}
+{"coin_type": "983", "path_component": "0x800003d7"}
+{"coin_type": "984", "path_component": "0x800003d8"}
+{"coin_type": "985", "path_component": "0x800003d9", "symbol": "AU", "name": "Autonomy"}
+{"coin_type": "986", "path_component": "0x800003da"}
+{"coin_type": "987", "path_component": "0x800003db", "symbol": "VCG", "name": "VipCoin"}
+{"coin_type": "988", "path_component": "0x800003dc", "symbol": "XAZAB", "name": "Xazab core"}
+{"coin_type": "989", "path_component": "0x800003dd", "symbol": "AIOZ", "name": "AIOZ"}
+{"coin_type": "990", "path_component": "0x800003de", "symbol": "CORE", "name": "Coreum"}
+{"coin_type": "991", "path_component": "0x800003df", "symbol": "PEC", "name": "Phoenix"}
+{"coin_type": "992", "path_component": "0x800003e0", "symbol": "UNT", "name": "Unit"}
+{"coin_type": "993", "path_component": "0x800003e1", "symbol": "XRB", "name": "X Currency"}
+{"coin_type": "994", "path_component": "0x800003e2", "symbol": "QUAI", "name": "Quai Network"}
+{"coin_type": "995", "path_component": "0x800003e3", "symbol": "CAPS", "name": "Ternoa"}
+{"coin_type": "996", "path_component": "0x800003e4", "symbol": "OKT", "name": "OKChain Token"}
+{"coin_type": "997", "path_component": "0x800003e5", "symbol": "SUM", "name": "Solidum"}
+{"coin_type": "998", "path_component": "0x800003e6", "symbol": "LBTC", "name": "Lightning Bitcoin"}
+{"coin_type": "999", "path_component": "0x800003e7", "symbol": "BCD", "name": "Bitcoin Diamond"}
+{"coin_type": "1000", "path_component": "0x800003e8", "symbol": "BTN", "name": "Bitcoin New"}
+{"coin_type": "1001", "path_component": "0x800003e9", "symbol": "TT", "name": "ThunderCore"}
+{"coin_type": "1002", "path_component": "0x800003ea", "symbol": "BKT", "name": "BanKitt"}
+{"coin_type": "1003", "path_component": "0x800003eb", "symbol": "NODL", "name": "Nodle"}
+{"coin_type": "1004", "path_component": "0x800003ec", "symbol": "PCOIN", "name": "PCOIN"}
+{"coin_type": "1005", "path_component": "0x800003ed", "symbol": "TAO", "name": "Bittensor"}
+{"coin_type": "1006", "path_component": "0x800003ee", "symbol": "HSK", "name": "HashKey Chain"}
+{"coin_type": "1007", "path_component": "0x800003ef", "symbol": "FTM", "name": "Fantom"}
+{"coin_type": "1008", "path_component": "0x800003f0", "symbol": "RPG", "name": "RPG"}
+{"coin_type": "1009", "path_component": "0x800003f1", "symbol": "LAKE", "name": "iconLake"}
+{"coin_type": "1010", "path_component": "0x800003f2", "symbol": "HT", "name": "Huobi ECO Chain"}
+{"coin_type": "1011", "path_component": "0x800003f3", "symbol": "ELV", "name": "Eluvio"}
+{"coin_type": "1012", "path_component": "0x800003f4", "symbol": "JOC", "name": "Japan Open Chain"}
+{"coin_type": "1013", "path_component": "0x800003f5", "symbol": "BIC", "name": "Beincrypto"}
+{"coin_type": "1014", "path_component": "0x800003f6", "symbol": "JOY", "name": "Joystream"}
+{"coin_type": "1015", "path_component": "0x800003f7", "symbol": "ZCX", "name": "ZEN Exchange Token"}
+{"coin_type": "1016", "path_component": "0x800003f8", "symbol": "---", "name": "reserved"}
+{"coin_type": "1017", "path_component": "0x800003f9", "symbol": "ZTC", "name": "Zenchain"}
+{"coin_type": "1020", "path_component": "0x800003fc", "symbol": "EVC", "name": "Evrice"}
+{"coin_type": "1022", "path_component": "0x800003fe", "symbol": "XRD", "name": "Radix DLT"}
+{"coin_type": "1023", "path_component": "0x800003ff", "symbol": "ONE", "name": "HARMONY-ONE (Legacy)"}
+{"coin_type": "1024", "path_component": "0x80000400", "symbol": "ONT", "name": "Ontology"}
+{"coin_type": "1025", "path_component": "0x80000401", "symbol": "CZZ", "name": "Classzz"}
+{"coin_type": "1026", "path_component": "0x80000402", "symbol": "KEX", "name": "Kira Exchange Token"}
+{"coin_type": "1027", "path_component": "0x80000403", "symbol": "MCM", "name": "Mochimo"}
+{"coin_type": "1028", "path_component": "0x80000404", "symbol": "PLS", "name": "Pulse Coin"}
+{"coin_type": "1032", "path_component": "0x80000408", "symbol": "BTCR", "name": "BTCR"}
+{"coin_type": "1042", "path_component": "0x80000412", "symbol": "MFID", "name": "Moonfish ID"}
+{"coin_type": "1111", "path_component": "0x80000457", "symbol": "BBC", "name": "Big Bitcoin"}
+{"coin_type": "1116", "path_component": "0x8000045c", "symbol": "CORE", "name": "Core"}
+{"coin_type": "1120", "path_component": "0x80000460", "symbol": "RISE", "name": "RISE"}
+{"coin_type": "1122", "path_component": "0x80000462", "symbol": "CMT", "name": "CyberMiles Token"}
+{"coin_type": "1128", "path_component": "0x80000468", "symbol": "ETSC", "name": "Ethereum Social"}
+{"coin_type": "1129", "path_component": "0x80000469", "symbol": "DFI", "name": "DeFiChain"}
+{"coin_type": "1130", "path_component": "0x8000046a", "symbol": "DFI", "name": "DeFiChain EVM Network"}
+{"coin_type": "1134", "path_component": "0x8000046e", "symbol": "MESH", "name": "StateMesh"}
+{"coin_type": "1137", "path_component": "0x80000471", "symbol": "$DAG", "name": "Constellation Labs"}
+{"coin_type": "1145", "path_component": "0x80000479", "symbol": "CDY", "name": "Bitcoin Candy"}
+{"coin_type": "1155", "path_component": "0x80000483", "symbol": "ENJ", "name": "Enjin Coin"}
+{"coin_type": "1170", "path_component": "0x80000492", "symbol": "HOO", "name": "Hoo Smart Chain"}
+{"coin_type": "1234", "path_component": "0x800004d2", "symbol": "ALPH", "name": "Alephium"}
+{"coin_type": "1236", "path_component": "0x800004d4", "symbol": "", "name": "Masca"}
+{"coin_type": "1237", "path_component": "0x800004d5", "symbol": "", "name": "Nostr"}
+{"coin_type": "1280", "path_component": "0x80000500", "symbol": "", "name": "Kudos Setler"}
+{"coin_type": "1284", "path_component": "0x80000504", "symbol": "GLMR", "name": "Moonbeam"}
+{"coin_type": "1285", "path_component": "0x80000505", "symbol": "MOVR", "name": "Moonriver"}
+{"coin_type": "1286", "path_component": "0x80000506", "symbol": "DSG", "name": "Dessage Social Protocol"}
+{"coin_type": "1298", "path_component": "0x80000512", "symbol": "WPC", "name": "Wpc"}
+{"coin_type": "1308", "path_component": "0x8000051c", "symbol": "WEI", "name": "WEI"}
+{"coin_type": "1312", "path_component": "0x80000520", "symbol": "BITS", "name": "Entropy"}
+{"coin_type": "1337", "path_component": "0x80000539", "symbol": "DFC", "name": "Defcoin"}
+{"coin_type": "1338", "path_component": "0x8000053a", "symbol": "IRON", "name": "Iron Fish"}
+{"coin_type": "1348", "path_component": "0x80000544", "symbol": "ISLM", "name": "IslamicCoin"}
+{"coin_type": "1397", "path_component": "0x80000575", "symbol": "HYC", "name": "Hycon"}
+{"coin_type": "1410", "path_component": "0x80000582", "symbol": "TENTSLP", "name": "TENT Simple Ledger Protocol"}
+{"coin_type": "1510", "path_component": "0x800005e6", "symbol": "XSC", "name": "XT Smart Chain"}
+{"coin_type": "1512", "path_component": "0x800005e8", "symbol": "AAC", "name": "Double-A Chain"}
+{"coin_type": "1524", "path_component": "0x800005f4", "symbol": "", "name": "Taler"}
+{"coin_type": "1533", "path_component": "0x800005fd", "symbol": "BEAM", "name": "Beam"}
+{"coin_type": "1536", "path_component": "0x80000600", "symbol": "GAS", "name": "BubiChain"}
+{"coin_type": "1540", "path_component": "0x80000604", "symbol": "ATHENA", "name": "Athena"}
+{"coin_type": "1551", "path_component": "0x8000060f", "symbol": "SDK", "name": "Sovereign SDK"}
+{"coin_type": "1555", "path_component": "0x80000613", "symbol": "APC", "name": "Apc Chain"}
+{"coin_type": "1616", "path_component": "0x80000650", "symbol": "ELF", "name": "AELF"}
+{"coin_type": "1618", "path_component": "0x80000652", "symbol": "AUDL", "name": "AUDL"}
+{"coin_type": "1620", "path_component": "0x80000654", "symbol": "ATH", "name": "Atheios"}
+{"coin_type": "1627", "path_component": "0x8000065b", "symbol": "LUME", "name": "Lume Web"}
+{"coin_type": "1642", "path_component": "0x8000066a", "symbol": "NEW", "name": "Newton"}
+{"coin_type": "1657", "path_component": "0x80000679", "symbol": "BTA", "name": "Btachain"}
+{"coin_type": "1668", "path_component": "0x80000684", "symbol": "NEOX", "name": "Neoxa"}
+{"coin_type": "1669", "path_component": "0x80000685", "symbol": "MEWC", "name": "Meowcoin"}
+{"coin_type": "1688", "path_component": "0x80000698", "symbol": "BCX", "name": "BitcoinX"}
+{"coin_type": "1729", "path_component": "0x800006c1", "symbol": "XTZ", "name": "Tezos"}
+{"coin_type": "1776", "path_component": "0x800006f0", "symbol": "LBTC", "name": "Liquid BTC"}
+{"coin_type": "1777", "path_component": "0x800006f1", "symbol": "BBP", "name": "Biblepay"}
+{"coin_type": "1784", "path_component": "0x800006f8", "symbol": "JPYS", "name": "JPY Stablecoin"}
+{"coin_type": "1789", "path_component": "0x800006fd", "symbol": "VEGA", "name": "Vega Protocol"}
+{"coin_type": "1815", "path_component": "0x80000717", "symbol": "ADA", "name": "Cardano"}
+{"coin_type": "1818", "path_component": "0x8000071a", "symbol": "CUBE", "name": "Cube Chain Native Token"}
+{"coin_type": "1888", "path_component": "0x80000760", "symbol": "ZTX", "name": "Zetrix"}
+{"coin_type": "1899", "path_component": "0x8000076b", "symbol": "XEC", "name": "eCash token"}
+{"coin_type": "1900", "path_component": "0x8000076c", "symbol": "XNA", "name": "Neurai"}
+{"coin_type": "1901", "path_component": "0x8000076d", "symbol": "CLC", "name": "Classica"}
+{"coin_type": "1907", "path_component": "0x80000773", "symbol": "BITCI", "name": "Bitcicoin"}
+{"coin_type": "1918", "path_component": "0x8000077e", "symbol": "BKC", "name": "Briskcoin"}
+{"coin_type": "1919", "path_component": "0x8000077f", "symbol": "VIPS", "name": "VIPSTARCOIN"}
+{"coin_type": "1926", "path_component": "0x80000786", "symbol": "CITY", "name": "City Coin"}
+{"coin_type": "1951", "path_component": "0x8000079f", "symbol": "ESA", "name": "Esa"}
+{"coin_type": "1952", "path_component": "0x800007a0", "symbol": "ESC", "name": "EsaCoin"}
+{"coin_type": "1955", "path_component": "0x800007a3", "symbol": "XX", "name": "xx coin"}
+{"coin_type": "1977", "path_component": "0x800007b9", "symbol": "XMX", "name": "Xuma"}
+{"coin_type": "1984", "path_component": "0x800007c0", "symbol": "TRTL", "name": "TurtleCoin"}
+{"coin_type": "1985", "path_component": "0x800007c1", "symbol": "SLRT", "name": "Solarti Chain"}
+{"coin_type": "1986", "path_component": "0x800007c2", "symbol": "QTH", "name": "Qing Tong Horizon"}
+{"coin_type": "1987", "path_component": "0x800007c3", "symbol": "EGEM", "name": "EtherGem"}
+{"coin_type": "1988", "path_component": "0x800007c4", "symbol": "MIRA", "name": "Mira Chain"}
+{"coin_type": "1989", "path_component": "0x800007c5", "symbol": "HODL", "name": "HOdlcoin"}
+{"coin_type": "1990", "path_component": "0x800007c6", "symbol": "PHL", "name": "Placeholders"}
+{"coin_type": "1991", "path_component": "0x800007c7", "symbol": "SC", "name": "Sia"}
+{"coin_type": "1996", "path_component": "0x800007cc", "symbol": "MYT", "name": "Mineyourtime"}
+{"coin_type": "1997", "path_component": "0x800007cd", "symbol": "POLIS", "name": "Polis"}
+{"coin_type": "1998", "path_component": "0x800007ce", "symbol": "XMCC", "name": "Monoeci"}
+{"coin_type": "1999", "path_component": "0x800007cf", "symbol": "COLX", "name": "ColossusXT"}
+{"coin_type": "2000", "path_component": "0x800007d0", "symbol": "GIN", "name": "GinCoin"}
+{"coin_type": "2001", "path_component": "0x800007d1", "symbol": "MNP", "name": "MNPCoin"}
+{"coin_type": "2002", "path_component": "0x800007d2", "symbol": "MLN", "name": "Miraland"}
+{"coin_type": "2003", "path_component": "0x800007d3", "symbol": "ISNA", "name": "iSarrana"}
+{"coin_type": "2013", "path_component": "0x800007dd", "symbol": "JKC", "name": "Junkcoin"}
+{"coin_type": "2015", "path_component": "0x800007df", "symbol": "TEER", "name": "Integritee"}
+{"coin_type": "2017", "path_component": "0x800007e1", "symbol": "KIN", "name": "Kin"}
+{"coin_type": "2018", "path_component": "0x800007e2", "symbol": "EOSC", "name": "EOSClassic"}
+{"coin_type": "2019", "path_component": "0x800007e3", "symbol": "GBT", "name": "GoldBean Token"}
+{"coin_type": "2020", "path_component": "0x800007e4", "symbol": "PKC", "name": "PKC"}
+{"coin_type": "2021", "path_component": "0x800007e5", "symbol": "SKT", "name": "Sukhavati"}
+{"coin_type": "2024", "path_component": "0x800007e8", "symbol": "USBC", "name": "Universal Ledger USBC"}
+{"coin_type": "2022", "path_component": "0x800007e6", "symbol": "XHT", "name": "Xinghuo Token"}
+{"coin_type": "2023", "path_component": "0x800007e7", "symbol": "COC", "name": "Chat On Chain"}
+{"coin_type": "2025", "path_component": "0x800007e9", "symbol": "ROCK", "name": "Zenrock Labs"}
+{"coin_type": "2026", "path_component": "0x800007ea", "symbol": "ASTRON", "name": "ASTRON Token"}
+{"coin_type": "2046", "path_component": "0x800007fe", "symbol": "ANY", "name": "Any"}
+{"coin_type": "2048", "path_component": "0x80000800", "symbol": "MCASH", "name": "MCashChain"}
+{"coin_type": "2049", "path_component": "0x80000801", "symbol": "TRUE", "name": "TrueChain"}
+{"coin_type": "2050", "path_component": "0x80000802", "symbol": "MOVO", "name": "Movo Smart Chain"}
+{"coin_type": "2086", "path_component": "0x80000826", "symbol": "KILT", "name": "KILT Spiritnet"}
+{"coin_type": "2091", "path_component": "0x8000082b", "symbol": "FRQCY", "name": "Frequency"}
+{"coin_type": "2109", "path_component": "0x8000083d", "symbol": "SAMA", "name": "Exosama Network"}
+{"coin_type": "2112", "path_component": "0x80000840", "symbol": "IoTE", "name": "IoTE"}
+{"coin_type": "2121", "path_component": "0x80000849", "symbol": "CBTC", "name": "Coordinate BTC (Anduro)"}
+{"coin_type": "2125", "path_component": "0x8000084d", "symbol": "BAY", "name": "BitBay"}
+{"coin_type": "2137", "path_component": "0x80000859", "symbol": "XRG", "name": "Ergon"}
+{"coin_type": "2199", "path_component": "0x80000897", "symbol": "SAMA", "name": "Moonsama Network"}
+{"coin_type": "2221", "path_component": "0x800008ad", "symbol": "ASK", "name": "ASK"}
+{"coin_type": "2222", "path_component": "0x800008ae", "symbol": "CWEB", "name": "Coinweb"}
+{"coin_type": "2285", "path_component": "0x800008ed", "symbol": "", "name": "Qiyi Chain"}
+{"coin_type": "2301", "path_component": "0x800008fd", "symbol": "QTUM", "name": "QTUM"}
+{"coin_type": "2302", "path_component": "0x800008fe", "symbol": "ETP", "name": "Metaverse"}
+{"coin_type": "2303", "path_component": "0x800008ff", "symbol": "GXC", "name": "GXChain"}
+{"coin_type": "2304", "path_component": "0x80000900", "symbol": "CRP", "name": "CranePay"}
+{"coin_type": "2305", "path_component": "0x80000901", "symbol": "ELA", "name": "Elastos"}
+{"coin_type": "2338", "path_component": "0x80000922", "symbol": "SNOW", "name": "Snowblossom"}
+{"coin_type": "2365", "path_component": "0x8000093d", "symbol": "XIN", "name": "Mixin"}
+{"coin_type": "2500", "path_component": "0x800009c4", "symbol": "NEXI", "name": "Nexi"}
+{"coin_type": "2570", "path_component": "0x80000a0a", "symbol": "AOA", "name": "Aurora"}
+{"coin_type": "2686", "path_component": "0x80000a7e", "symbol": "AIPG", "name": "AIPowerGrid"}
+{"coin_type": "2718", "path_component": "0x80000a9e", "symbol": "NAS", "name": "Nebulas"}
+{"coin_type": "2809", "path_component": "0x80000af9", "symbol": "LAN", "name": "Lanify"}
+{"coin_type": "2894", "path_component": "0x80000b4e", "symbol": "REOSC", "name": "REOSC Ecosystem"}
+{"coin_type": "2941", "path_component": "0x80000b7d", "symbol": "BND", "name": "Blocknode"}
+{"coin_type": "3000", "path_component": "0x80000bb8", "symbol": "SM", "name": "Stealth Message"}
+{"coin_type": "3003", "path_component": "0x80000bbb", "symbol": "LUX", "name": "LUX"}
+{"coin_type": "3030", "path_component": "0x80000bd6", "symbol": "HBAR", "name": "Hedera HBAR"}
+{"coin_type": "3054", "path_component": "0x80000bee", "symbol": "HIVE", "name": "Hive Blockchain"}
+{"coin_type": "3077", "path_component": "0x80000c05", "symbol": "COS", "name": "Contentos"}
+{"coin_type": "3276", "path_component": "0x80000ccc", "symbol": "CCC", "name": "CodeChain"}
+{"coin_type": "3344", "path_component": "0x80000d10", "symbol": "PLMC", "name": "Polimec"}
+{"coin_type": "3333", "path_component": "0x80000d05", "symbol": "SXP", "name": "Solar"}
+{"coin_type": "3338", "path_component": "0x80000d0a", "symbol": "PEAQ", "name": "peaq"}
+{"coin_type": "3377", "path_component": "0x80000d31", "symbol": "ROI", "name": "ROIcoin"}
+{"coin_type": "3381", "path_component": "0x80000d35", "symbol": "DYN", "name": "Dynamic"}
+{"coin_type": "3383", "path_component": "0x80000d37", "symbol": "SEQ", "name": "Sequence"}
+{"coin_type": "3434", "path_component": "0x80000d6a", "symbol": "PEPE", "name": "Pepecoin Core"}
+{"coin_type": "3501", "path_component": "0x80000dad", "symbol": "JFIN", "name": "JFIN Coin"}
+{"coin_type": "3552", "path_component": "0x80000de0", "symbol": "DEO", "name": "Destocoin"}
+{"coin_type": "3564", "path_component": "0x80000dec", "symbol": "DST", "name": "DeStream"}
+{"coin_type": "3601", "path_component": "0x80000e11", "symbol": "CY", "name": "Cybits"}
+{"coin_type": "3757", "path_component": "0x80000ead", "symbol": "MPC", "name": "Partisia Blockchain"}
+{"coin_type": "3840", "path_component": "0x80000f00", "symbol": "RED", "name": "ReDeFi RED"}
+{"coin_type": "4040", "path_component": "0x80000fc8", "symbol": "FC8", "name": "FCH Network"}
+{"coin_type": "4096", "path_component": "0x80001000", "symbol": "YEE", "name": "YeeCo"}
+{"coin_type": "4218", "path_component": "0x8000107a", "symbol": "IOTA", "name": "IOTA"}
+{"coin_type": "4219", "path_component": "0x8000107b", "symbol": "SMR", "name": "Shimmer"}
+{"coin_type": "4242", "path_component": "0x80001092", "symbol": "AXE", "name": "Axe"}
+{"coin_type": "4343", "path_component": "0x800010f7", "symbol": "XYM", "name": "Symbol"}
+{"coin_type": "4444", "path_component": "0x8000115c", "symbol": "C4E", "name": "Chain4Energy"}
+{"coin_type": "4646", "path_component": "0x80001226", "symbol": "MST", "name": "MST"}
+{"coin_type": "4919", "path_component": "0x80001337", "symbol": "XVM", "name": "Venidium"}
+{"coin_type": "4976", "path_component": "0x80001370", "symbol": "VARA", "name": "Vara"}
+{"coin_type": "4999", "path_component": "0x80001387", "symbol": "BXN", "name": "BlackFort Exchange Network"}
+{"coin_type": "5000", "path_component": "0x80001388", "symbol": "V12", "name": "Vet The Vote"}
+{"coin_type": "5006", "path_component": "0x8000138e", "symbol": "SBC", "name": "Senior Blockchain"}
+{"coin_type": "5248", "path_component": "0x80001480", "symbol": "FIC", "name": "FIC"}
+{"coin_type": "5353", "path_component": "0x800014e9", "symbol": "HNS", "name": "Handshake"}
+{"coin_type": "5404", "path_component": "0x8000151c", "symbol": "ISK", "name": "ISKRA"}
+{"coin_type": "5467", "path_component": "0x8000155b", "symbol": "ALTME", "name": "ALTME"}
+{"coin_type": "5555", "path_component": "0x800015b3", "symbol": "FUND", "name": "Unification"}
+{"coin_type": "5757", "path_component": "0x8000167d", "symbol": "STX", "name": "Stacks"}
+{"coin_type": "5895", "path_component": "0x80001707", "symbol": "VOW", "name": "VowChain VOW"}
+{"coin_type": "5920", "path_component": "0x80001720", "symbol": "SLU", "name": "SILUBIUM"}
+{"coin_type": "5995", "path_component": "0x8000176B", "symbol": "DUSK", "name": "Dusk Network"}
+{"coin_type": "6060", "path_component": "0x800017ac", "symbol": "GO", "name": "GoChain GO"}
+{"coin_type": "6144", "path_component": "0x80001800", "symbol": "DTS", "name": "Datos"}
+{"coin_type": "6174", "path_component": "0x8000181e", "symbol": "MOI", "name": "My Own Internet"}
+{"coin_type": "6278", "path_component": "0x80001886", "symbol": "STEAMX", "name": "Rails Network Mainnet"}
+{"coin_type": "6532", "path_component": "0x80001984", "symbol": "UM", "name": "Penumbra"}
+{"coin_type": "6599", "path_component": "0x800019c7", "symbol": "RSC", "name": "Royal Sports City"}
+{"coin_type": "6666", "path_component": "0x80001a0a", "symbol": "BPA", "name": "Bitcoin Pizza"}
+{"coin_type": "6688", "path_component": "0x80001a20", "symbol": "SAFE", "name": "SAFE"}
+{"coin_type": "6779", "path_component": "0x80001a7b", "symbol": "COTI", "name": "COTI"}
+{"coin_type": "6969", "path_component": "0x80001b39", "symbol": "ROGER", "name": "TheHolyrogerCoin"}
+{"coin_type": "7000", "path_component": "0x80001b58", "symbol": "ZETA", "name": "ZetaChain"}
+{"coin_type": "7027", "path_component": "0x80001b73", "symbol": "ELLA", "name": "Ella the heart"}
+{"coin_type": "7028", "path_component": "0x80001b74", "symbol": "AA", "name": "Arthera"}
+{"coin_type": "7070", "path_component": "0x80001b9e", "symbol": "DOI", "name": "Doichain"}
+{"coin_type": "7091", "path_component": "0x80001bb3", "symbol": "TOPL", "name": "Topl"}
+{"coin_type": "7272", "path_component": "0x80001c68", "symbol": "ABTC", "name": "Alys BTC (Anduro)"}
+{"coin_type": "7331", "path_component": "0x80001ca3", "symbol": "KLY", "name": "KLYNTAR"}
+{"coin_type": "7341", "path_component": "0x80001cad", "symbol": "SHFT", "name": "Shyft"}
+{"coin_type": "7518", "path_component": "0x80001d5e", "symbol": "MEV", "name": "MEVerse"}
+{"coin_type": "7576", "path_component": "0x80001d98", "symbol": "ADIL", "name": "ADIL Chain"}
+{"coin_type": "7777", "path_component": "0x80001e61", "symbol": "BTV", "name": "Bitvote"}
+{"coin_type": "7779", "path_component": "0x80001e63", "symbol": "CPV", "name": "Compverse"}
+{"coin_type": "8000", "path_component": "0x80001f40", "symbol": "SKY", "name": "Skycoin"}
+{"coin_type": "8017", "path_component": "0x80001f51", "symbol": "ISC", "name": "iSunCoin"}
+{"coin_type": "8080", "path_component": "0x80001f90", "symbol": "DSRV", "name": "DSRV"}
+{"coin_type": "8181", "path_component": "0x80001ff5", "symbol": "BOC", "name": "BeOne Chain"}
+{"coin_type": "8192", "path_component": "0x80002000", "symbol": "PAC", "name": "pacprotocol"}
+{"coin_type": "8217", "path_component": "0x80002019", "symbol": "KAIA", "name": "KAIA"}
+{"coin_type": "8339", "path_component": "0x80002093", "symbol": "BTQ", "name": "BitcoinQuark"}
+{"coin_type": "8444", "path_component": "0x800020fc", "symbol": "XCH", "name": "Chia"}
+{"coin_type": "8453", "path_component": "0x80002105", "symbol": "BASE", "name": "Base"}
+{"coin_type": "8520", "path_component": "0x80002148", "symbol": "---", "name": "reserved"}
+{"coin_type": "8680", "path_component": "0x800021e8", "symbol": "PLMNT", "name": "Planetmint"}
+{"coin_type": "8732", "path_component": "0x8000221c", "symbol": "BLN", "name": "Bullions"}
+{"coin_type": "8738", "path_component": "0x80002222", "symbol": "ALPH", "name": "Alph Network"}
+{"coin_type": "8866", "path_component": "0x800022a2", "symbol": "GGX", "name": "Golden Gate"}
+{"coin_type": "8886", "path_component": "0x800022b6", "symbol": "GGXT", "name": "Golden Gate Sydney"}
+{"coin_type": "8888", "path_component": "0x800022b8", "symbol": "SBTC", "name": "Super Bitcoin"}
+{"coin_type": "8964", "path_component": "0x80002304", "symbol": "NULS", "name": "NULS"}
+{"coin_type": "8997", "path_component": "0x80002325", "symbol": "BBC", "name": "Babacoin"}
+{"coin_type": "8998", "path_component": "0x80002326", "symbol": "JGC", "name": "JagoanCoin"}
+{"coin_type": "8999", "path_component": "0x80002327", "symbol": "BTP", "name": "Bitcoin Pay"}
+{"coin_type": "9000", "path_component": "0x80002328", "symbol": "AVAX", "name": "Avalanche"}
+{"coin_type": "9001", "path_component": "0x80002329", "symbol": "ARB1", "name": "Arbitrum"}
+{"coin_type": "9002", "path_component": "0x8000232a", "symbol": "BOBA", "name": "Boba"}
+{"coin_type": "9003", "path_component": "0x8000232b", "symbol": "LOOP", "name": "Loopring"}
+{"coin_type": "9004", "path_component": "0x8000232c", "symbol": "STRK", "name": "StarkNet"}
+{"coin_type": "9005", "path_component": "0x8000232d", "symbol": "AVAXC", "name": "Avalanche C-Chain"}
+{"coin_type": "9006", "path_component": "0x8000232e", "symbol": "BSC", "name": "Binance Smart Chain"}
+{"coin_type": "9797", "path_component": "0x80002645", "symbol": "NRG", "name": "Energi"}
+{"coin_type": "9888", "path_component": "0x800026a0", "symbol": "BTF", "name": "Bitcoin Faith"}
+{"coin_type": "9969", "path_component": "0x800026f1", "symbol": "OSMI", "name": "Osmium"}
+{"coin_type": "9999", "path_component": "0x8000270f", "symbol": "GOD", "name": "Bitcoin God"}
+{"coin_type": "10000", "path_component": "0x80002710", "symbol": "FO", "name": "FIBOS"}
+{"coin_type": "10001", "path_component": "0x80002711", "symbol": "SPACE", "name": "Space"}
+{"coin_type": "10007", "path_component": "0x80002717", "symbol": "S", "name": "SONIC"}
+{"coin_type": "10111", "path_component": "0x8000277f", "symbol": "DHP", "name": "dHealth"}
+{"coin_type": "10226", "path_component": "0x800027f2", "symbol": "RTM", "name": "Raptoreum"}
+{"coin_type": "10242", "path_component": "0x80002802", "symbol": "AA", "name": "Arthera"}
+{"coin_type": "10291", "path_component": "0x80002833", "symbol": "XRC", "name": "XRhodium"}
+{"coin_type": "10507", "path_component": "0x8000290b", "symbol": "NUM", "name": "Numbers Protocol"}
+{"coin_type": "10605", "path_component": "0x8000296d", "symbol": "XPI", "name": "Lotus"}
+{"coin_type": "11111", "path_component": "0x80002b67", "symbol": "ESS", "name": "Essentia One"}
+{"coin_type": "11742", "path_component": "0x80002dde", "symbol": "VARCH", "name": "InvArch"}
+{"coin_type": "11743", "path_component": "0x80002ddf", "symbol": "TNKR", "name": "Tinkernet"}
+{"coin_type": "12345", "path_component": "0x80003039", "symbol": "IPOS", "name": "IPOS"}
+{"coin_type": "12586", "path_component": "0x8000312a", "symbol": "MINA", "name": "Mina"}
+{"coin_type": "12850", "path_component": "0x80003232", "symbol": "ANLOG", "name": "Analog Timechain"}
+{"coin_type": "13107", "path_component": "0x80003333", "symbol": "BTY", "name": "BitYuan"}
+{"coin_type": "13108", "path_component": "0x80003334", "symbol": "YCC", "name": "Yuan Chain Coin"}
+{"coin_type": "13381", "path_component": "0x80003445", "symbol": "PHX", "name": "Phoenix"}
+{"coin_type": "14001", "path_component": "0x800036b1", "symbol": "WAX", "name": "Worldwide Asset Exchange"}
+{"coin_type": "15845", "path_component": "0x80003de5", "symbol": "SDGO", "name": "SanDeGo"}
+{"coin_type": "16181", "path_component": "0x80003f35", "symbol": "XTX", "name": "Totem Live Network"}
+{"coin_type": "16754", "path_component": "0x80004172", "symbol": "ARDR", "name": "Ardor"}
+{"coin_type": "18000", "path_component": "0x80004650", "symbol": "MTR", "name": "Meter"}
+{"coin_type": "19165", "path_component": "0x80004add", "symbol": "SAFE", "name": "Safecoin"}
+{"coin_type": "19167", "path_component": "0x80004adf", "symbol": "FLUX", "name": "Flux"}
+{"coin_type": "19169", "path_component": "0x80004ae1", "symbol": "RITO", "name": "Ritocoin"}
+{"coin_type": "19788", "path_component": "0x80004d4c", "symbol": "ML", "name": "Mintlayer"}
+{"coin_type": "20036", "path_component": "0x80004e44", "symbol": "XND", "name": "ndau"}
+{"coin_type": "21004", "path_component": "0x8000520c", "symbol": "C4EI", "name": "c4ei"}
+{"coin_type": "21337", "path_component": "0x80005359", "symbol": "XAH", "name": "Xahau"}
+{"coin_type": "21888", "path_component": "0x80005580", "symbol": "PAC", "name": "Pactus"}
+{"coin_type": "22504", "path_component": "0x800057e8", "symbol": "PWR", "name": "PWRcoin"}
+{"coin_type": "23000", "path_component": "0x800059d8", "symbol": "EPIC", "name": "Epic Cash"}
+{"coin_type": "25252", "path_component": "0x800062a4", "symbol": "BELL", "name": "Bellcoin"}
+{"coin_type": "25718", "path_component": "0x80006476", "symbol": "CHX", "name": "Own"}
+{"coin_type": "26417", "path_component": "0x80006731", "symbol": "G1", "name": "\u011e1"}
+{"coin_type": "29223", "path_component": "0x80007227", "symbol": "NEXA", "name": "Nexa"}
+{"coin_type": "30001", "path_component": "0x80007531", "symbol": "---", "name": "reserved"}
+{"coin_type": "31102", "path_component": "0x8000797e", "symbol": "ESN", "name": "EtherSocial Network"}
+{"coin_type": "31337", "path_component": "0x80007a69", "symbol": "", "name": "ThePower"}
+{"coin_type": "33416", "path_component": "0x80008288", "symbol": "TEO", "name": "Trust Eth reOrigin"}
+{"coin_type": "33878", "path_component": "0x80008456", "symbol": "BTCS", "name": "Bitcoin Stake"}
+{"coin_type": "34952", "path_component": "0x80008888", "symbol": "BTT", "name": "ByteTrade"}
+{"coin_type": "37992", "path_component": "0x80009468", "symbol": "FXTC", "name": "FixedTradeCoin"}
+{"coin_type": "39321", "path_component": "0x80009999", "symbol": "AMA", "name": "Amabig"}
+{"coin_type": "42069", "path_component": "0x8000a455", "symbol": "FACT", "name": "FACT0RN"}
+{"coin_type": "43028", "path_component": "0x8000a814", "symbol": "AXIV", "name": "AXIV"}
+{"coin_type": "47803", "path_component": "0x8000babb", "symbol": "BAX", "name": "BAX"}
+{"coin_type": "49262", "path_component": "0x8000c06e", "symbol": "EVE", "name": "evan"}
+{"coin_type": "49344", "path_component": "0x8000c0c0", "symbol": "STASH", "name": "STASH"}
+{"coin_type": "52752", "path_component": "0x8000ce10", "symbol": "CELO", "name": "Celo"}
+{"coin_type": "54176", "path_component": "0x8000d3a0", "symbol": "OVER", "name": "OverProtocol"}
+{"coin_type": "61616", "path_component": "0x8000f0b0", "symbol": "TH", "name": "TianHe"}
+{"coin_type": "65536", "path_component": "0x80010000", "symbol": "KETH", "name": "Krypton World"}
+{"coin_type": "69420", "path_component": "0x80010f2c", "symbol": "GRLC", "name": "Garlicoin"}
+{"coin_type": "70007", "path_component": "0x80011177", "symbol": "GWL", "name": "Gewel"}
+{"coin_type": "83293", "path_component": "0x8001455d", "symbol": "QUBIC", "name": "Qubic"}
+{"coin_type": "77777", "path_component": "0x80012fd1", "symbol": "ZYN", "name": "Wethio"}
+{"coin_type": "88888", "path_component": "0x80015b38", "symbol": "RYO", "name": "c0ban"}
+{"coin_type": "99999", "path_component": "0x8001869f", "symbol": "WICC", "name": "Waykichain"}
+{"coin_type": "100500", "path_component": "0x80018894", "symbol": "HOME", "name": "HomeCoin"}
+{"coin_type": "101010", "path_component": "0x80018a92", "symbol": "STC", "name": "Starcoin"}
+{"coin_type": "104109", "path_component": "0x800196ad", "symbol": "", "name": "Seed Hypermedia"}
+{"coin_type": "105105", "path_component": "0x80019a91", "symbol": "STRAX", "name": "Strax"}
+{"coin_type": "111111", "path_component": "0x8001b207", "symbol": "KAS", "name": "Kaspa"}
+{"coin_type": "121337", "path_component": "0x8001d9f9", "symbol": "KLS", "name": "Karlsen"}
+{"coin_type": "123456", "path_component": "0x8001e240", "symbol": "SPR", "name": "Spectre"}
+{"coin_type": "130822", "path_component": "0x8001ff06", "symbol": "WBT", "name": "WhiteBIT Coin"}
+{"coin_type": "161803", "path_component": "0x8002780b", "symbol": "APTA", "name": "Bloqs4Good"}
+{"coin_type": "200625", "path_component": "0x80030fb1", "symbol": "AKA", "name": "Akroma"}
+{"coin_type": "200901", "path_component": "0x800310c5", "symbol": "BTR", "name": "Bitlayer"}
+{"coin_type": "224433", "path_component": "0x80036cb1", "symbol": "CONET", "name": "CONET Holesky Network"}
+{"coin_type": "246529", "path_component": "0x8003c301", "symbol": "ATS", "name": "ARTIS sigma1"}
+{"coin_type": "261131", "path_component": "0x8003fc0b", "symbol": "ZAMA", "name": "Zama"}
+{"coin_type": "314159", "path_component": "0x8004cb2f", "symbol": "PI", "name": "Pi Network"}
+{"coin_type": "333332", "path_component": "0x80051614", "symbol": "VALUE", "name": "Value Chain"}
+{"coin_type": "333333", "path_component": "0x80051615", "symbol": "3333", "name": "Pi Value Consensus"}
+{"coin_type": "424242", "path_component": "0x80067932", "symbol": "X42", "name": "x42"}
+{"coin_type": "440017", "path_component": "0x8006b6d1", "symbol": "@G", "name": "Graphite"}
+{"coin_type": "534352", "path_component": "0x80082750", "symbol": "SCR", "name": "Scroll"}
+{"coin_type": "666666", "path_component": "0x800a2c2a", "symbol": "VITE", "name": "Vite"}
+{"coin_type": "696365", "path_component": "0x800b3206", "symbol": "ICE", "name": "Ice Network"}
+{"coin_type": "888888", "path_component": "0x800d9038", "symbol": "SEA", "name": "Second Exchange Alliance"}
+{"coin_type": "1048576", "path_component": "0x80100000", "symbol": "AMAX", "name": "Armonia Meta Chain"}
+{"coin_type": "1171337", "path_component": "0x8011df89", "symbol": "ILT", "name": "iOlite"}
+{"coin_type": "1313114", "path_component": "0x8014095a", "symbol": "ETHO", "name": "Etho Protocol"}
+{"coin_type": "1313500", "path_component": "0x80140adc", "symbol": "XERO", "name": "Xerom"}
+{"coin_type": "1712144", "path_component": "0x801a2010", "symbol": "LAX", "name": "LAPO"}
+{"coin_type": "3924011", "path_component": "0x803be02b", "symbol": "EPK", "name": "EPIK Protocol"}
+{"coin_type": "4741444", "path_component": "0x80485944", "symbol": "HYD", "name": "Hydra Token"}
+{"coin_type": "5249353", "path_component": "0x80501949", "symbol": "BCO", "name": "BitcoinOre"}
+{"coin_type": "5249354", "path_component": "0x8050194a", "symbol": "BHD", "name": "BitcoinHD"}
+{"coin_type": "5264462", "path_component": "0x8050544e", "symbol": "PTN", "name": "PalletOne"}
+{"coin_type": "5655640", "path_component": "0x80564c58", "symbol": "VLX", "name": "Velas"}
+{"coin_type": "5718350", "path_component": "0x8057414e", "symbol": "WAN", "name": "Wanchain"}
+{"coin_type": "5741564", "path_component": "0x80579bfc", "symbol": "WAVES", "name": "Waves"}
+{"coin_type": "5741565", "path_component": "0x80579bfd", "symbol": "WEST", "name": "Waves Enterprise"}
+{"coin_type": "6382179", "path_component": "0x80616263", "symbol": "ABC", "name": "Abcmint"}
+{"coin_type": "6517357", "path_component": "0x8063726d", "symbol": "CRM", "name": "Creamcoin"}
+{"coin_type": "7171666", "path_component": "0x806d6e52", "symbol": "BROCK", "name": "Bitrock"}
+{"coin_type": "7562605", "path_component": "0x8073656d", "symbol": "SEM", "name": "Semux"}
+{"coin_type": "7567736", "path_component": "0x80737978", "symbol": "ION", "name": "ION"}
+{"coin_type": "7777777", "path_component": "0x8076adf1", "symbol": "FCT", "name": "FirmaChain"}
+{"coin_type": "7825266", "path_component": "0x80776772", "symbol": "WGR", "name": "WGR"}
+{"coin_type": "7825267", "path_component": "0x80776773", "symbol": "OBSR", "name": "OBServer"}
+{"coin_type": "8163271", "path_component": "0x807c8fc7", "symbol": "AFS", "name": "ANFS"}
+{"coin_type": "10000118", "path_component": "0x805d30b6", "symbol": "OSMO", "name": "Osmosis"}
+{"coin_type": "15118976", "path_component": "0x80e6b280", "symbol": "XDS", "name": "XDS"}
+{"coin_type": "19000118", "path_component": "0x8121eb36", "symbol": "SEI", "name": "SEI"}
+{"coin_type": "22000118", "path_component": "0x814fb1f6", "symbol": "DYDX", "name": "Dydx"}
+{"coin_type": "61717561", "path_component": "0x83adbc39", "symbol": "AQUA", "name": "Aquachain"}
+{"coin_type": "77777777", "path_component": "0x84a2cb71", "symbol": "AZT", "name": "Aztecoin"}
+{"coin_type": "88888888", "path_component": "0x854c5638", "symbol": "HATCH", "name": "Hatch"}
+{"coin_type": "91927009", "path_component": "0x857ab1e1", "symbol": "kUSD", "name": "kUSD"}
+{"coin_type": "99999996", "path_component": "0x85f5e0fc", "symbol": "GENS", "name": "GENS"}
+{"coin_type": "99999997", "path_component": "0x85f5e0fd", "symbol": "EQ", "name": "EQ"}
+{"coin_type": "99999998", "path_component": "0x85f5e0fe", "symbol": "FLUID", "name": "Fluid Chains"}
+{"coin_type": "99999999", "path_component": "0x85f5e0ff", "symbol": "QKC", "name": "QuarkChain"}
+{"coin_type": "11259375", "path_component": "0x80abcdef", "symbol": "LBR", "name": "0L"}
+{"coin_type": "20230101", "path_component": "0x8134afd5", "symbol": "ROH", "name": "Rooch"}
+{"coin_type": "20240430", "path_component": "0x8134d82e", "symbol": "NLK", "name": "NuLinkCoin"}
+{"coin_type": "240079435", "path_component": "0x8e4f524b", "symbol": "ZORK", "name": "Zork Network"}
+{"coin_type": "608589380", "path_component": "0xa4465644", "symbol": "FVDC", "name": "ForumCoin"}
+{"coin_type": "1010101010", "path_component": "0xbc34eb12", "symbol": "FAIC", "name": "Free AI Chain"}
+{"coin_type": "1179993420", "path_component": "0xc655454c", "symbol": "", "name": "Fuel"}
+{"coin_type": "1179993421", "path_component": "0xc655454d", "symbol": "TTNC", "name": "TakeTitan"}
+{"coin_type": "1179993431", "path_component": "0xc6554557", "symbol": "MTGBP", "name": "MTGBP"}
+{"coin_type": "1179993441", "path_component": "0xc6554561", "symbol": "QFS", "name": "Qfs"}
+{"coin_type": "1179993451", "path_component": "0xc655456b", "symbol": "RWA", "name": "Asset Chain"}
+{"coin_type": "1179993461", "path_component": "0xc6554575", "symbol": "HXC", "name": "HuaXia Chain"}
