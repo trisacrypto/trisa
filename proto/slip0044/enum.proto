@@ -1509,8 +1509,8 @@ enum CoinType {
   VKAX = 960;
   ATLA = 965;
   ATLETA_NETWORK = 965;
-  MATIC = 966;
   POL = 966;
+  MATIC = 966;
   POLYGON = 966;
   UNW = 968;
   QI = 969;

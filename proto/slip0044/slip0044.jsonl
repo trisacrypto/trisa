@@ -964,8 +964,8 @@
 {"coin_type": "963", "path_component": "0x800003c3"}
 {"coin_type": "964", "path_component": "0x800003c4"}
 {"coin_type": "965", "path_component": "0x800003c5", "symbol": "ATLA", "name": "Atleta Network"}
-{"coin_type": "966", "path_component": "0x800003c6", "symbol": "MATIC", "name": "Matic"}
 {"coin_type": "966", "path_component": "0x800003c6", "symbol": "POL", "name": "Polygon"}
+{"coin_type": "966", "path_component": "0x800003c6", "symbol": "MATIC", "name": "Matic"}
 {"coin_type": "967", "path_component": "0x800003c7"}
 {"coin_type": "968", "path_component": "0x800003c8", "symbol": "UNW", "name": "UNW"}
 {"coin_type": "969", "path_component": "0x800003c9", "symbol": "QI", "name": "Quai Network"}
