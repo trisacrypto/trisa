@@ -26,7 +26,7 @@ Imagine two VASPs that wish to exchange Travel Rule data, Alice and Bob. When Al
 ## The Sectigo CA API
 
 {{% notice warning %}}
-This portion of the documentation is targeted at TRISA developers rather than TRISA implementers. For the most part, the mechanics of certificate issuance will be fully abstracted away from TRISA implementers, who are encouraged to register for certificates using [vaspdirectory.net](https://vaspdirectory.net/).
+This portion of the documentation is targeted at TRISA developers rather than TRISA implementers. For the most part, the mechanics of certificate issuance will be fully abstracted away from TRISA implementers, who are encouraged to register for certificates using [trisa.directory](https://trisa.directory/).
 {{% /notice %}}
 
 

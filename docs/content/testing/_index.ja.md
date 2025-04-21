@@ -12,8 +12,7 @@ TRISA TestNetはTRISAピアツーピアプロトコルのデモンストレー�
 
 TRISA TestNetは次のサービスで構成されています。
 
-- [TRISA Directory Service](https://vaspdirectory.net) - TRISAグローバルディレクトリサービスを探索し、TRISAメンバーになるために登録するためのユーザーインターフェイス
-- [TestNet Demo](https://vaspbot.net) - TestNetで実行される「ロボット」VASP間のTRISA相互作用を示すデモサイト
+- [TRISA Directory Service](https://trisa.directory) - TRISAグローバルディレクトリサービスを探索し、TRISAメンバーになるために登録するためのユーザーインターフェイス
+- [TestNet Demo](https://vaspbot.com) - TestNetで実行される「ロボット」VASP間のTRISA相互作用を示すデモサイト
 
 TestNetはTRISAメンバーがTRISAサービスを統合するための利便性として実装された3つのロボットVASPまたはrVASPもホストします。 プライマリrVASPはAliceであり、デモ目的のセカンダリはBobです。検証されていないTRISAメンバーとの相互作用をテストするために、「Evil」rVASPもあります。
-

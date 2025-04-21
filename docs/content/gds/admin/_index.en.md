@@ -19,6 +19,6 @@ This section of the documentation is specifically focused on the workflows for T
 
 Each network is controlled by a single GDS, which defines the peers in the network and allocates certificate authority resources (e.g. right now we have a MainNet and a TestNet that are defined by two independent GDS systems). Each GDS is managed by an administrative UI to allow TRISA admins to manage the members in the network.
 
-Access to the Admin UI is limited to TRISA administrators; it is not accessible to the general public or members of the TRISA network. If you wish to view the public-facing landing page for the TRISA Global Directory Service, please visit vaspdirectory.net. If you require support accessing your TRISA administrator account to the Admin UI, please contact [support@rotational.io](mailto:support@rotational.io).
+Access to the Admin UI is limited to TRISA administrators; it is not accessible to the general public or members of the TRISA network. If you wish to view the public-facing landing page for the TRISA Global Directory Service, please visit trisa.directory. If you require support accessing your TRISA administrator account to the Admin UI, please contact [support@rotational.io](mailto:support@rotational.io).
 
 This documentation will be expanded in the future to include common workflows and describe the vetting process and requirements for administration via the Admin UI.

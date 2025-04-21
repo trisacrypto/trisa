@@ -8,9 +8,9 @@ weight: 10
 
 The TestNet hosts three convenience "robot VASPs" (rVASPs) services to facilitate integration and testing with the TRISA TestNet. These services are as follows:
 
-- Alice (`api.alice.vaspbot.net:443`): the primary integration rVASP used to trigger and receive TRISA messages.
-- Bob (`api.bob.vaspbot.net:443`): a demo rVASP to view exchanges with Alice.
-- Evil (`api.evil.vaspbot.net:443`): an "evil" rVASP that is not a TRISA TestNet member, used to test non-authenticated interactions.
+- Alice (`api.alice.vaspbot.com:443`): the primary integration rVASP used to trigger and receive TRISA messages.
+- Bob (`api.bob.vaspbot.com:443`): a demo rVASP to view exchanges with Alice.
+- Evil (`api.evil.vaspbot.com:443`): an "evil" rVASP that is not a TRISA TestNet member, used to test non-authenticated interactions.
 
 Note: the rVASPs are currently primarily configured for demos. Work has begun on making them more robust for integration purposes; please check in with this documentation regularly for any changes. If you notice any bugs in the rVASP code or behavior, [please open an issue](https://github.com/trisacrypto/testnet/issues).
 
@@ -27,30 +27,30 @@ The following table of "customers" for Alice, Bob, and Evil can be used as a ref
 
 | VASP                  | "Crypto Wallet"                    | Email                 | Originator Policy | Beneficiary Policy |
 |-----------------------|------------------------------------|-----------------------|-------------------|--------------------|
-| api.bob.vaspbot.net   | **moJuU1GjhJzUdUGukw13a4w6CWjfFsJ92q** | robert.test@bobvasp.co.uk  | SendPartial       | SyncRepair         |
-| api.bob.vaspbot.net   | **18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh** | robert@bobvasp.co.uk  | SendPartial       | SyncRepair         |
-| api.bob.vaspbot.net   | n1CqdbqoPZ8Y11UzQG6KyapWj4vcN3owcs | george.test@bobvasp.co.uk  | SendFull          | SyncRequire        |
-| api.bob.vaspbot.net   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  | SendFull          | SyncRequire        |
-| api.bob.vaspbot.net   | mj2RQ7AcYs5sMQVJVTUn6ZZX7iMiMzn75o | larry.test@bobvasp.co.uk   | SendFull          | AsyncRepair        |
-| api.bob.vaspbot.net   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   | SendFull          | AsyncRepair        |
-| api.bob.vaspbot.net   | mxWc29f1JHYSupfmveBYTHKMUYsnNcrJDV | fred.test@bobvasp.co.uk    | SendError     | AsyncReject        |
-| api.bob.vaspbot.net   | 1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9 | fred@bobvasp.co.uk    | SendError     | AsyncReject        |
-| api.alice.vaspbot.net | **mpxi8gszWxQtayy3dztQZ1rheWRDFZ2QWp** | mary.test@alicevasp.us     | SendPartial       | SyncRepair         |
-| api.alice.vaspbot.net | **1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX** | mary@alicevasp.us     | SendPartial       | SyncRepair         |
-| api.alice.vaspbot.net | n1wAFyKnzpyPchDUUwRpgXsrJYdekV7KGR | alice.test@alicevasp.us    | SendFull          | SyncRequire        |
-| api.alice.vaspbot.net | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    | SendFull          | SyncRequire        |
-| api.alice.vaspbot.net | mioiUW2dR9y7PdAFs8gPPhthaZgmpHhgGd | jane.test@alicevasp.us     | SendFull          | AsyncRepair        |
-| api.alice.vaspbot.net | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     | SendFull          | AsyncRepair        |
-| api.alice.vaspbot.net | mpJCwniMFW9FXGeFejtksrpPunjLEmPZsu | sarah.test@alicevasp.us    | SendError     | AsyncReject        |
-| api.alice.vaspbot.net | 19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ | sarah@alicevasp.us    | SendError     | AsyncReject        |
-| api.evil.vaspbot.net  | **n3mRAXVqEsN22rnXWEsnRMQMc9QmM47qUX** | voldemort.test@evilvasp.gg | SendPartial       | SyncRepair         |
-| api.evil.vaspbot.net  | **1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF** | voldemort@evilvasp.gg | SendPartial       | SyncRepair         |
-| api.evil.vaspbot.net  | mmYjRCpKYYm22RGKjVuruADHBR8c5dni68 | launderer.test@evilvasp.gg | SendFull          | SyncRequire        |
-| api.evil.vaspbot.net  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg | SendFull          | SyncRequire        |
-| api.evil.vaspbot.net  | mfdz3J9kQ6skqRjrdkQyoSg95WZqmRXmBA  | badnews.test@evilvasp.gg   | SendFull          | AsyncRepair        |
-| api.evil.vaspbot.net  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   | SendFull          | AsyncRepair        |
-| api.evil.vaspbot.net  | mqPCJiSRPYqFmA7MtxxCwwABFQ52nzC4gV | gambler.test@evilvasp.gg   | SendError     | AsyncReject        |
-| api.evil.vaspbot.net  | 1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz | gambler@evilvasp.gg   | SendError     | AsyncReject        |
+| api.bob.vaspbot.com   | **moJuU1GjhJzUdUGukw13a4w6CWjfFsJ92q** | robert.test@bobvasp.co.uk  | SendPartial       | SyncRepair         |
+| api.bob.vaspbot.com   | **18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh** | robert@bobvasp.co.uk  | SendPartial       | SyncRepair         |
+| api.bob.vaspbot.com   | n1CqdbqoPZ8Y11UzQG6KyapWj4vcN3owcs | george.test@bobvasp.co.uk  | SendFull          | SyncRequire        |
+| api.bob.vaspbot.com   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  | SendFull          | SyncRequire        |
+| api.bob.vaspbot.com   | mj2RQ7AcYs5sMQVJVTUn6ZZX7iMiMzn75o | larry.test@bobvasp.co.uk   | SendFull          | AsyncRepair        |
+| api.bob.vaspbot.com   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   | SendFull          | AsyncRepair        |
+| api.bob.vaspbot.com   | mxWc29f1JHYSupfmveBYTHKMUYsnNcrJDV | fred.test@bobvasp.co.uk    | SendError     | AsyncReject        |
+| api.bob.vaspbot.com   | 1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9 | fred@bobvasp.co.uk    | SendError     | AsyncReject        |
+| api.alice.vaspbot.com | **mpxi8gszWxQtayy3dztQZ1rheWRDFZ2QWp** | mary.test@alicevasp.us     | SendPartial       | SyncRepair         |
+| api.alice.vaspbot.com | **1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX** | mary@alicevasp.us     | SendPartial       | SyncRepair         |
+| api.alice.vaspbot.com | n1wAFyKnzpyPchDUUwRpgXsrJYdekV7KGR | alice.test@alicevasp.us    | SendFull          | SyncRequire        |
+| api.alice.vaspbot.com | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    | SendFull          | SyncRequire        |
+| api.alice.vaspbot.com | mioiUW2dR9y7PdAFs8gPPhthaZgmpHhgGd | jane.test@alicevasp.us     | SendFull          | AsyncRepair        |
+| api.alice.vaspbot.com | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     | SendFull          | AsyncRepair        |
+| api.alice.vaspbot.com | mpJCwniMFW9FXGeFejtksrpPunjLEmPZsu | sarah.test@alicevasp.us    | SendError     | AsyncReject        |
+| api.alice.vaspbot.com | 19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ | sarah@alicevasp.us    | SendError     | AsyncReject        |
+| api.evil.vaspbot.com  | **n3mRAXVqEsN22rnXWEsnRMQMc9QmM47qUX** | voldemort.test@evilvasp.gg | SendPartial       | SyncRepair         |
+| api.evil.vaspbot.com  | **1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF** | voldemort@evilvasp.gg | SendPartial       | SyncRepair         |
+| api.evil.vaspbot.com  | mmYjRCpKYYm22RGKjVuruADHBR8c5dni68 | launderer.test@evilvasp.gg | SendFull          | SyncRequire        |
+| api.evil.vaspbot.com  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg | SendFull          | SyncRequire        |
+| api.evil.vaspbot.com  | mfdz3J9kQ6skqRjrdkQyoSg95WZqmRXmBA  | badnews.test@evilvasp.gg   | SendFull          | AsyncRepair        |
+| api.evil.vaspbot.com  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   | SendFull          | AsyncRepair        |
+| api.evil.vaspbot.com  | mqPCJiSRPYqFmA7MtxxCwwABFQ52nzC4gV | gambler.test@evilvasp.gg   | SendError     | AsyncReject        |
+| api.evil.vaspbot.com  | 1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz | gambler@evilvasp.gg   | SendError     | AsyncReject        |
 
 Note that all rVASP data was generated using a Faker tool to produce realistic/consistent test data and fixtures; this data is completely fictional. For example, the records for Alice VASP (a fake US company) are primarily in North America, etc.
 
@@ -81,14 +81,14 @@ To use the [rVASP protocol buffers](https://github.com/trisacrypto/testnet/tree/
 
 The rVASP admin endpoints are used to interact with the rVASP directly for development and integration purposes. Note that this endpoint is different than the TRISA endpoint, which was described above.
 
-- Alice: `admin.alice.vaspbot.net:443`
-- Bob: `admin.bob.vaspbot.net:443`
-- Evil: `admin.evil.vaspbot.net:443`
+- Alice: `admin.alice.vaspbot.com:443`
+- Bob: `admin.bob.vaspbot.com:443`
+- Evil: `admin.evil.vaspbot.com:443`
 
 To use the command line tool to trigger a message, run the following command:
 
 ```
-$ rvasp transfer -e admin.alice.vaspbot.net:443 \
+$ rvasp transfer -e admin.alice.vaspbot.com:443 \
         -a mary@alicevasp.us \
         -d 0.3 \
         -B trisa.example.com \

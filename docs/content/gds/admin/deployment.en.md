@@ -47,7 +47,7 @@ Staging images (user interface images configured for a staging environment):
 Deprecated images:
 
 - [trisa/gds-ui](https://hub.docker.com/repository/docker/trisa/gds-ui): GDS v1.4.1 single GDS user interface.
-- [trisa/gds-testnet-ui](https://hub.docker.com/repository/docker/trisa/gds-testnet-ui): GDS v1.4.1 single GDS user interface configured for trisatest.net.
+- [trisa/gds-testnet-ui](https://hub.docker.com/repository/docker/trisa/gds-testnet-ui): GDS v1.4.1 single GDS user interface configured for testnet.directory.
 - [trisa/rvasp-alice](https://hub.docker.com/repository/docker/trisa/rvasp-alice): the sqlite configured Alice rVASP.
 - [trisa/rvasp-bob](https://hub.docker.com/repository/docker/trisa/rvasp-bob): the sqlite configured Bob rVASP.
 - [trisa/rvasp-evil](https://hub.docker.com/repository/docker/trisa/rvasp-evil): the sqlite configured Evil rVASP.

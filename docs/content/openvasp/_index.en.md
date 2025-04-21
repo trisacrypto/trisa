@@ -35,7 +35,7 @@ Therefore, as you implement your TRP integration, you need to consider the follo
 
 ### For TRP Implementers
 
-Welcome, thank you for checking out TRISA! The best thing you can do for integration is to register for TRISA mTLS certificates on [vaspdirectory.net](https://vaspdirectory.net). If you perform mTLS with TRISA VASPs using TRISA certificates, that will help a lot in establishing trust and verification for consideration #1 above.
+Welcome, thank you for checking out TRISA! The best thing you can do for integration is to register for TRISA mTLS certificates on [trisa.directory](https://trisa.directory). If you perform mTLS with TRISA VASPs using TRISA certificates, that will help a lot in establishing trust and verification for consideration #1 above.
 
 If you're interested in implementing the extensions for key exchange and parsing secure envelopes, you're more than welcome to use the Golang code in this library to get you started! If you're implementation is in another language, [please let us know](https://github.com/trisacrypto/trisa/issues) so that we can create library code to help you implement secure PII transfers.
 

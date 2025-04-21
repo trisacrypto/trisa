@@ -32,7 +32,7 @@ The `Lookup` RPC is designed to provide VASP certification information. *Note th
 
 This RPC expects a `LookupRequest` message, which provides either the VASP's unique ID in the Global Directory Service, or the domain of their TRISA implementation endpoint (*Note: this should be the common name of their certificate*). If both `id` and `common_name` are supplied, the `id` field will be prioritized.
 
-The `registered_directory` field is the URL of the directory that registered the VASP (e.g. either `"trisatest.net"` or `"vaspdirectory.net"`). If omitted, this value defaults to the directory currently being queried.
+The `registered_directory` field is the URL of the directory that registered the VASP (e.g. either `"testnet.directory"` or `"trisa.directory"`). If omitted, this value defaults to the directory currently being queried.
 
 ```proto
 message LookupRequest {
@@ -120,7 +120,7 @@ The `Verification` RPC enables VASPs to check on the status of a VASP, including
 
 The `Verification` RPC expects as input a `VerificationRequest` message, which provides either the VASP's unique ID in the Global Directory Service, or the domain of their TRISA implementation endpoint (*Note: this should be the commone name of their certificate). If both `id` and `common_name` are supplied, the `id` field will be prioritized.
 
-The `registered_directory` field is the URL of the directory that registered the VASP (e.g. either `"trisatest.net"` or `"vaspdirectory.net"`). If omitted, this value defaults to the directory currently being queried.
+The `registered_directory` field is the URL of the directory that registered the VASP (e.g. either `"testnet.directory"` or `"trisa.directory"`). If omitted, this value defaults to the directory currently being queried.
 
 ```proto
 
@@ -195,7 +195,7 @@ The `Register` RPC expects a `RegisterRequest` message containing:
 
 1. The `LegalPerson` IVMS 101 `entity` to enable VASP KYC information exchange. This is the IVMS 101 data that should be exchanged in the TRISA P2P protocol as the Originator, Intermediate, or Beneficiary VASP fields. A complete and valid identity record with country of registration is required.
 2. Technical, legal, billing, and administrative `contacts` for the VASP.
-3. The Travel Rule implementation `trisa_endpoint` where other TRISA peers should connect. This should be an `addr:port` combination, (e.g. `trisa.vaspbot.net:443`).
+3. The Travel Rule implementation `trisa_endpoint` where other TRISA peers should connect. This should be an `addr:port` combination, (e.g. `trisa.vaspbot.com:443`).
 4. The VASP's `common_name`, which should be the domain name to issue certificates for and should match the domain in the `trisa_endpoint`. If this field is omitted, the `common_name` is inferred from the `trisa_endpoint`.
 5. Business information including `website`, `business_category`, `vasp_categories`, and the company's `established_on` date (in YYYY-MM-DD format).
 6. The VASP's `trixo` questionnaire data. For more information, see the [TRIXO documentation]({{% ref "/joining-trisa/trixo" %}}).

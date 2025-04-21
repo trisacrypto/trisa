@@ -74,9 +74,9 @@ Below is a sample TRIXO form, containing all of the fields required during regis
 			"phone": "+1-555-555-5555"
 		}
 	},
-	"trisa_endpoint": "api.alice.vaspbot.net:443",
-	"common_name": "api.alice.vaspbot.net",
-	"website": "https://alice.vaspbot.net/",
+	"trisa_endpoint": "api.alice.vaspbot.com:443",
+	"common_name": "api.alice.vaspbot.com",
+	"website": "https://alice.vaspbot.com/",
 	"business_category": 3,
 	"vasp_categories": [
 		"Exchange",

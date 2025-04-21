@@ -12,7 +12,7 @@ weight: 30
 
 TRISA TestNet由以下服务组成:
 
-- [TRISA Directory Service](https://vaspdirectory.net) - 一个探索TRISA全球目录服务并注册成为TRISA会员的用户界面
-- [TestNet Demo](https://vaspbot.net) - 一个演示网站，展示运行在TestNet中的“机器人”VASP之间的TRISA交互
+- [TRISA Directory Service](https://trisa.directory) - 一个探索TRISA全球目录服务并注册成为TRISA会员的用户界面
+- [TestNet Demo](https://vaspbot.com) - 一个演示网站，展示运行在TestNet中的“机器人”VASP之间的TRISA交互
 
 TestNet还有三个robot VASP（简称“rVASP”），为TRISA会员集成他们的TRISA服务提供了便利。主要的rVASP是Alice，用于演示的次要rVASP是Bob，为了测试与未经验证的TRISA会员之间的交互，还有一个“Evil” rVASP。

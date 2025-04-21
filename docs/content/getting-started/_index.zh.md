@@ -27,7 +27,7 @@ weight: 5
 
 ### 目录服务注册
 
-如需注册TRISA DS，请访问[https://vaspdirectory.net/](https://vaspdirectory.net/)。
+如需注册TRISA DS，请访问[https://trisa.directory/](https://trisa.directory/)。
 
 您可以选择“注册/Register”标签开始注册。请注意，您可以使用本网站逐项输入您的注册详细信息，也可以上传包含注册详细信息的JSON文档。
 
@@ -73,4 +73,3 @@ TestNet管理员审核并批准注册后，您将通过电子邮件收到KYV证�
 TRISA网络协议定义了数据如何在参与的VASP之间传输。用于识别信息而传输的数据的推荐格式，建议采用IVMS101。VASP有责任确保发送/接收的识别数据满足金融行动特别工作组数据转移规则(FATF Travel Rule)。
 
 成功的TRISA交易将产生满足金融行动特别工作组数据转移规则的密钥和加密数据。TRISA并没有规定一旦获得这些数据应该如何存储。VASP有责任确保事务产生的数据的安全存储。
-

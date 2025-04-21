@@ -27,7 +27,7 @@ Lors de l'enregistrement auprès du DS, vous devrez fournir les éléments `addr
 
 ### Enregistrement au Service d'Annuaire
 
-Pour commencer l'enregistrement avec le DS de TRISA, visitez le site web à l'adresse suivante [https://vaspdirectory.net/](https://vaspdirectory.net/)
+Pour commencer l'enregistrement avec le DS de TRISA, visitez le site web à l'adresse suivante [https://trisa.directory/](https://trisa.directory/)
 
 Vous pouvez sélectionner l'onglet "Enregistrer" pour commencer l'enregistrement. Notez que vous pouvez utiliser ce site web pour saisir les détails de votre enregistrement, champ par champ, ou pour télécharger un document JSON contenant les détails de votre enregistrement.
 
@@ -71,4 +71,3 @@ Ils devraient intégrer les demandes entrantes de transfert et d'échange de cl�
 Le protocole Réseau TRISA définit la manière dont les données sont transférées entre les VASP participants.  Le format recommandé pour les données transférées pour les informations d'identification est le format de données IVMS101.  Il est de la responsabilité du VASP qui l'implémente de s'assurer que les données d'identification envoyées/reçues sont conformes à la règle de voyage du GAFI.
 
 Le résultat d'une transaction TRISA réussie est une clé et des données cryptées qui répondent à la règle de voyage du GAFI.  TRISA ne définit pas comment ces données doivent être stockées une fois obtenues.  Il incombe au VASP chargé de la mise en œuvre de gérer le stockage sécurisé des données résultant de la transaction.
-

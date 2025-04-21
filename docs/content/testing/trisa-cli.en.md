@@ -35,7 +35,7 @@ TRISA_ENDPOINT=example.com:443
 
 # Directory service you'd like to connect to. You can specify a short name such as
 # "testnet" or "mainnet" or the endpoint of the directory service to connect to. The
-# configured directory is trisatest.net by default.
+# configured directory is testnet.directory by default.
 TRISA_DIRECTORY=testnet
 
 # Path to your TRISA identity certificates that include the private key. This can be the
@@ -228,7 +228,7 @@ The TRISA CLI supports some basic interactions with the TRISA Global Directory S
 Lookup a TRISA VASP by common name or VASP ID. The following requests will lookup Alice on the TestNet by both common name and ID:
 
 ```
-$ trisa lookup -n api.alice.vaspbot.net
+$ trisa lookup -n api.alice.vaspbot.com
 ```
 
 ```
@@ -286,9 +286,9 @@ $ trisa search -n alice
   "results":  [
     {
       "id":  "7a96ca2c-2818-4106-932e-1bcfd743b04c",
-      "registered_directory":  "trisatest.net",
-      "common_name":  "api.alice.vaspbot.net",
-      "endpoint":  "api.alice.vaspbot.net:443"
+      "registered_directory":  "testnet.directory",
+      "common_name":  "api.alice.vaspbot.com",
+      "endpoint":  "api.alice.vaspbot.com:443"
     }
   ]
 }
@@ -297,7 +297,7 @@ $ trisa search -n alice
 To get more information about Alice VASP, lookup the record in the GDS:
 
 ```
-$ trisa lookup -cn api.alice.vaspbot.net
+$ trisa lookup -cn api.alice.vaspbot.com
 {
     "name":  "AliceCoin",
     "country":  "US",
@@ -305,7 +305,7 @@ $ trisa lookup -cn api.alice.vaspbot.net
 }
 ```
 
-The rest of the interactions will be with the Alice rVASP, so ensure that the `$TRISA_ENDPOINT` environment variable is set to `api.alice.vaspbot.net:443` (or whatever endpoint was returned by the directory service).
+The rest of the interactions will be with the Alice rVASP, so ensure that the `$TRISA_ENDPOINT` environment variable is set to `api.alice.vaspbot.com:443` (or whatever endpoint was returned by the directory service).
 
 {{% notice tip %}}
 Managing the environment variables for configuring the `trisa` CLI can be done with a `.env` file in your current working directory.
