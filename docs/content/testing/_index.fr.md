@@ -12,7 +12,7 @@ Le TestNet TRISA a été mis en place pour fournir une démonstration du protoco
 
 Le TestNet TRISA est composé des services suivants :
 
-- [TRISA Directory Service](https://vaspdirectory.net) - une interface utilisateur permettant d'explorer le service d'annuaire global TRISA et de se faire enregistrer pour devenir membre de TRISA
-- [TestNet Demo](https://vaspbot.net) - un site de démonstration des interactions TRISA entre les VASP "robots" qui fonctionnent dans le TestNet.
+- [TRISA Directory Service](https://trisa.directory) - une interface utilisateur permettant d'explorer le service d'annuaire global TRISA et de se faire enregistrer pour devenir membre de TRISA
+- [TestNet Demo](https://vaspbot.com) - un site de démonstration des interactions TRISA entre les VASP "robots" qui fonctionnent dans le TestNet.
 
 Le TestNet héberge également trois robots VASP ou rVASP qui ont été mis en place pour permettre aux membres de TRISA d'intégrer leurs services TRISA. Le premier rVASP est Alice, le second est Bob et pour tester les interactions avec des membres TRISA non vérifiés, il existe également un rVASP "maléfique".

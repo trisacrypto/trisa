@@ -8,9 +8,9 @@ weight: 50
 
 ### Where to look for more information and assistance:
 
-* Submit your registration to join the TRISA Network: [TRISA Global Directory Service](https://vaspdirectory.net)
+* Submit your registration to join the TRISA Network: [TRISA Global Directory Service](https://trisa.directory)
 
-* Create an account and complete the certificate registration form: [Certificate Registration](https://vaspdirectory.net/guide)
+* Create an account and complete the certificate registration form: [Certificate Registration](https://trisa.directory/guide)
 
 * Connect with other VASPs, regulators, and engineers working on Travel Rule compliance: [TRISA Slack](https://trisa-workspace.slack.com)
 
@@ -31,4 +31,3 @@ weight: 50
 * Remote Procedure Call (RPC) framework: [gRPC Docs](https://grpc.io/)
 
 * [The TRISA Whitepaper](https://trisa.io/trisa-whitepaper/)
-

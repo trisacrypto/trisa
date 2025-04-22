@@ -72,13 +72,13 @@ Configuration values for the public facing TRISA node.
 
 The following configuration influences how the Envoy node connects to the TRISA Global Directory Service.
 
-If you're running a TestNet node, then ensure the values point to `trisatest.net` (e.g. `api.trisatest.net:443`), if you're running a MainNet node, then ensure the values point to `vaspdirectory.net` (the default values).
+If you're running a TestNet node, then ensure the values point to `testnet.directory` (e.g. `api.testnet.directory:443`), if you're running a MainNet node, then ensure the values point to `trisa.directory` (the default values).
 
 | EnvVar | Type | Default | Description |
 |---|---|---|---|
 | TRISA_NODE_DIRECTORY_INSECURE | bool | false | If true, do not connect to the directory using TLS (only useful for local development) |
-| TRISA_NODE_DIRECTORY_ENDPOINT | string | api.vaspdirectory.net:443 | The endpoint of the public GDS service |
-| TRISA_NODE_DIRECTORY_MEMBERS_ENDPOINT | string | members.vaspdirectory.net:443 | The endpoint of the private members GDS service |
+| TRISA_NODE_DIRECTORY_ENDPOINT | string | api.trisa.directory:443 | The endpoint of the public GDS service |
+| TRISA_NODE_DIRECTORY_MEMBERS_ENDPOINT | string | members.trisa.directory:443 | The endpoint of the private members GDS service |
 | TRISA_DIRECTORY_SYNC_ENABLED | bool | true | If false, then the background directory sync service will not run |
 | TRISA_DIRECTORY_SYNC_INTERVAL | duration | 6h | The interval that the node will synchronize counterparties with the GDS |
 

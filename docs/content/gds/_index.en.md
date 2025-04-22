@@ -26,14 +26,14 @@ This documentation describes the TRISA implementation of the directory service a
 
 ## Networks
 
-TRISA currently operates two directory services: a TestNet (trisatest.net) and the MainNet (vaspdirectory.net). The [TestNet]({{% ref "/testing" %}}) is intended to facilitate development and integration and should not be used for actual compliance exchanges. The MainNet is separated from the TestNet with a completely different certificate authority, and certificates issued to TestNet nodes cannot be used to connect to MainNet nodes and vice-versa.
+TRISA currently operates two directory services: a TestNet (testnet.directory) and the MainNet (trisa.directory). The [TestNet]({{% ref "/testing" %}}) is intended to facilitate development and integration and should not be used for actual compliance exchanges. The MainNet is separated from the TestNet with a completely different certificate authority, and certificates issued to TestNet nodes cannot be used to connect to MainNet nodes and vice-versa.
 
 Connect to the GDS and register for certificates with the following endpoints/urls:
 
 | Directory         | Network | Website                   | gRPC Endpoint               |
 |-------------------|---------|---------------------------|-----------------------------|
-| trisatest.net     | TestNet | https://trisatest.net     | `api.trisatest.net:443`     |
-| vaspdirectory.net | MainNet | https://vaspdirectory.net | `api.vaspdirectory.net:443` |
+| testnet.directory     | TestNet | https://testnet.directory     | `api.testnet.directory:443`     |
+| trisa.directory | MainNet | https://trisa.directory | `api.trisa.directory:443` |
 
 ## Registered Directories
 

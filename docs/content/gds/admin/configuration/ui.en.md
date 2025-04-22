@@ -14,11 +14,11 @@ Note that front-end applications _should not_ have any secret configurations. Th
 
 ### GDS User UI
 
-The build arguments for the GDS User Interface (vaspdirectory.net) are as follows:
+The build arguments for the GDS User Interface (trisa.directory) are as follows:
 
 | EnvVar                       | Type   | Default   | Description                                                                          |
 |------------------------------|--------|-----------|--------------------------------------------------------------------------------------|
-| REACT_APP_TRISA_BASE_URL     | string |           | The base URL of the BFF API endpoint, e.g. https://bff.vaspdirectory.net/v1/.        |
+| REACT_APP_TRISA_BASE_URL     | string |           | The base URL of the BFF API endpoint, e.g. https://bff.trisa.directory/v1/.        |
 | REACT_APP_VERSION_NUMBER     | string |           | The semvar build version of the app (usually parsed from the git tag).               |
 | REACT_APP_GIT_REVISION       | string |           | The seven-digit prefix of the git hash of the commit being built.                    |
 | REACT_APP_ANALYTICS_ID       | string |           | The Google Analytics tag (e.g. G-XXXXXXXXXX).                                        |
@@ -29,19 +29,19 @@ The GDS User Interface uses Auth0 for authentication. Front-end Auth0 configurat
 
 | EnvVar                       | Type   | Default | Description                                                                                |
 |------------------------------|--------|---------|--------------------------------------------------------------------------------------------|
-| REACT_APP_AUTH0_DOMAIN       | string |         | The domain (or custom domain) to connect to Auth0 on (e.g. auth.vaspdirectory.net).         |
+| REACT_APP_AUTH0_DOMAIN       | string |         | The domain (or custom domain) to connect to Auth0 on (e.g. auth.trisa.directory).         |
 | REACT_APP_AUTH0_CLIENT_ID    | string |         | The ClientID of the Auth0 app as configured in the Auth0 dashboard.                        |
 | REACT_APP_AUTH0_REDIRECT_URI | string |         | The callback URI for the application to receive Auth0 redirects after authentication.      |
 | REACT_APP_AUTH0_SCOPE        | string |         | The required Auth0 scope (usually 'openid profile email')                                  |
-| REACT_APP_AUTH0_AUDIENCE     | string |         | The audience of the tokens, usually the ID of the API (e.g. https://bff.vaspdirectory.net) |
+| REACT_APP_AUTH0_AUDIENCE     | string |         | The audience of the tokens, usually the ID of the API (e.g. https://bff.trisa.directory) |
 
 ### GDS Admin UI
 
-The build arguments for the GDS Admin UI (admin.vaspdirectory.net and admin.trisatest.net) are as follows:
+The build arguments for the GDS Admin UI (admin.trisa.directory and admin.testnet.directory) are as follows:
 
 | EnvVar                       | Type   | Default   | Description                                                                          |
 |------------------------------|--------|-----------|--------------------------------------------------------------------------------------|
-| REACT_APP_GDS_API_ENDPOINT   | string |           | The base URL of the Admin API endpoint, e.g. https://api.admin.vaspdirectory.net/v2. |
+| REACT_APP_GDS_API_ENDPOINT   | string |           | The base URL of the Admin API endpoint, e.g. https://api.admin.trisa.directory/v2. |
 | REACT_APP_GDS_IS_TESTNET     | bool   | false     | True if the Admin UI is managing the TestNet, false if MainNet.                      |
 | REACT_APP_VERSION_NUMBER     | string |           | The semvar build version of the app (usually parsed from the git tag).               |
 | REACT_APP_GOOGLE_CLIENT_ID   | string |           | The Google Client ID for Google OAuth2 authentication.                               |

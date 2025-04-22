@@ -91,7 +91,7 @@ The `KeyExchange` RPC allows VASPs to exchange public signing keys to facilitate
 
 ### SigningKey
 
-`SigningKey` provides metadata for decoding a PEM encoded PKIX public key for RSA encryption and transaction signing. The SigningKey is a lightweight version of the certificate information stored in the [Directory Service](https://vaspdirectory.net/).
+`SigningKey` provides metadata for decoding a PEM encoded PKIX public key for RSA encryption and transaction signing. The SigningKey is a lightweight version of the certificate information stored in the [Directory Service](https://trisa.directory/).
 
 ```proto
 message SigningKey {

@@ -27,7 +27,7 @@ Für Integrationszwecke steht eine gehostete TestNet TRISA DS-Instanz zum Testen
 
 ### Verzeichnisdienst-Registrierung
 
-Um mit der Registrierung des TRISA DS zu beginnen, besuchen Sie die Website unter [https://vaspdirectory.net/](https://vaspdirectory.net/)
+Um mit der Registrierung des TRISA DS zu beginnen, besuchen Sie die Website unter [https://trisa.directory/](https://trisa.directory/)
 
 Wählen Sie die Registerkarte "Registrieren", um mit der Registrierung zu beginnen. Beachten Sie, dass Sie auf dieser Website Ihre Registrierungsdaten Feld für Feld eingeben oder ein JSON-Dokument mit Ihren Registrierungsdaten hochladen können.
 

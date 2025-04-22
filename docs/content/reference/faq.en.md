@@ -55,13 +55,13 @@ TRISA is open to organizations that offer virtual asset or digital asset service
 - Traditional financial services institutions
 - Regulatory bodies
 
-For more information about joining TRISA, please review [TRISA’s VASP Verification Process](https://vaspdirectory.net/getting-started).
+For more information about joining TRISA, please review [TRISA’s VASP Verification Process](https://trisa.directory/getting-started).
 
 ## How can I look up TRISA members?
 
 If you are a member, you can look up TRISA members using the [Members Endpoint](https://trisa.dev/gds/members/).
 
-If you know a VASP’s TRISA Endpoint or Common Name, you can look it up in TRISA’s Global Directory via https://vaspdirectory.net.
+If you know a VASP’s TRISA Endpoint or Common Name, you can look it up in TRISA’s Global Directory via https://trisa.directory.
 
 ## Why does my common name have to match my endpoint?
 
@@ -107,4 +107,4 @@ The use of gRPC also facilitates convenient encryption at rest to ensure that PI
 
 The [TestNet]({{% ref "/testing" %}})  is a sandbox environment that allows VASPs to test securely sharing the cryptocurrency transaction details required to meet the FATF Travel Rule requirements. The TestNet includes [“robot” VASPs]({{% ref "/testing/rvasps" %}})  that give users the ability to interact with the TestNet by simulating transactions to see how secure transactions are conducted. Once a VASP completes testing, the VASP can switch to MainNet, where live transactions take place.
 
-It’s important to note that the reason that there are two networks is because those networks are issued from different intermediate certificate authorities. A VASP that has been issued a TestNet certificate cannot connect to a node that is running on MainNet and vice versa. In other words, the MainNet certificate authority will not recognize TestNet certificates. When you [submit a request for TRISA certificates](https://vaspdirectory.net/guide), you may simultaneously request certificates for TestNet and MainNet.
+It’s important to note that the reason that there are two networks is because those networks are issued from different intermediate certificate authorities. A VASP that has been issued a TestNet certificate cannot connect to a node that is running on MainNet and vice versa. In other words, the MainNet certificate authority will not recognize TestNet certificates. When you [submit a request for TRISA certificates](https://trisa.directory/guide), you may simultaneously request certificates for TestNet and MainNet.

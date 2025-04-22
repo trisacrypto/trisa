@@ -8,9 +8,9 @@ weight: 10
 
 Das TestNet beherbergt drei praktische "Roboter-VASP"-Dienste (rVASPs), die die Integration und Prüfung mit dem TRISA TestNet erleichtern. Diese Dienste sind Folgende:
 
-- Alice (`api.alice.vaspbot.net:443`): die primäre Integration, die rVASP verwendet, um TRISA-Meldungen auszulösen und zu empfangen.
-- Bob (`api.bob.vaspbot.net:443`): ein Demo-RVASP, um den Austausch mit Alice zu sehen.
-- Evil (`api.evil.vaspbot.net:443`): ein "böswilliger" rVASP, der kein TRISA-TestNet-Mitglied ist und zum Testen nicht authentifizierter Interaktionen verwendet wird.
+- Alice (`api.alice.vaspbot.com:443`): die primäre Integration, die rVASP verwendet, um TRISA-Meldungen auszulösen und zu empfangen.
+- Bob (`api.bob.vaspbot.com:443`): ein Demo-RVASP, um den Austausch mit Alice zu sehen.
+- Evil (`api.evil.vaspbot.com:443`): ein "böswilliger" rVASP, der kein TRISA-TestNet-Mitglied ist und zum Testen nicht authentifizierter Interaktionen verwendet wird.
 
 Hinweis: Die rVASPs sind derzeit in erster Linie für Demos konfiguriert, und es wird daran gearbeitet, sie für Integrationszwecke robuster zu machen; bitte schauen Sie regelmäßig in dieser Dokumentation nach, ob es Änderungen gibt. Wenn Sie irgendwelche Fehler im rVASP-Code oder im Verhalten bemerken, [reichen Sie bitte ein Anliegen ein](https://github.com/trisacrypto/testnet/issues).
 
@@ -27,18 +27,18 @@ Die folgende Tabelle der "Kunden" für Alice, Bob und Evil kann als Referenz fü
 
 | VASP                  | "Crypto Wallet"                    | Email                 |
 |-----------------------|------------------------------------|-----------------------|
-| api.bob.vaspbot.net   | 18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh | robert@bobvasp.co.uk  |
-| api.bob.vaspbot.net   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  |
-| api.bob.vaspbot.net   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   |
-| api.bob.vaspbot.net   | **1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9** | fred@bobvasp.co.uk    |
-| api.alice.vaspbot.net | **19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ** | sarah@alicevasp.us    |
-| api.alice.vaspbot.net | 1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX | mary@alicevasp.us     |
-| api.alice.vaspbot.net | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    |
-| api.alice.vaspbot.net | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     |
-| api.evil.vaspbot.net  | **1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz** | gambler@evilvasp.gg   |
-| api.evil.vaspbot.net  | 1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF | voldemort@evilvasp.gg |
-| api.evil.vaspbot.net  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg |
-| api.evil.vaspbot.net  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   |
+| api.bob.vaspbot.com   | 18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh | robert@bobvasp.co.uk  |
+| api.bob.vaspbot.com   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  |
+| api.bob.vaspbot.com   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   |
+| api.bob.vaspbot.com   | **1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9** | fred@bobvasp.co.uk    |
+| api.alice.vaspbot.com | **19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ** | sarah@alicevasp.us    |
+| api.alice.vaspbot.com | 1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX | mary@alicevasp.us     |
+| api.alice.vaspbot.com | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    |
+| api.alice.vaspbot.com | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     |
+| api.evil.vaspbot.com  | **1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz** | gambler@evilvasp.gg   |
+| api.evil.vaspbot.com  | 1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF | voldemort@evilvasp.gg |
+| api.evil.vaspbot.com  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg |
+| api.evil.vaspbot.com  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   |
 
 Beachten Sie, dass alle rVASP-Daten mit einem Faker-Tool erzeugt wurden, um realistische/konsistente Testdaten und Vorrichtungen zu erzeugen, und dass sie völlig fiktiv sind. Die Datensätze für Alice VASP (ein gefälschtes US-Unternehmen) befinden sich beispielsweise hauptsächlich in Nordamerika usw.
 
@@ -65,14 +65,14 @@ Um die [rVASP Protocol Buffer](https://github.com/trisacrypto/testnet/tree/main/
 
 Die rVASP-Admin-Endpunkte werden für die direkte Interaktion mit dem rVASP zu Entwicklungs- und Integrationszwecken verwendet. Beachten Sie, dass dieser Endpunkt sich vom TRISA-Endpunkt unterscheidet, der oben beschrieben wurde.
 
-- Alice: `admin.alice.vaspbot.net:443`
-- Bob: `admin.bob.vaspbot.net:443`
-- Evil: `admin.evil.vaspbot.net:443`
+- Alice: `admin.alice.vaspbot.com:443`
+- Bob: `admin.bob.vaspbot.com:443`
+- Evil: `admin.evil.vaspbot.com:443`
 
 Um das Kommandozeilentool zum Auslösen einer Nachricht zu verwenden, führen Sie den folgenden Befehl aus:
 
 ```
-$ rvasp transfer -e admin.alice.vaspbot.net:443 \
+$ rvasp transfer -e admin.alice.vaspbot.com:443 \
         -a mary@alicevasp.us \
         -d 0.3 \
         -B trisa.example.com \
@@ -123,4 +123,3 @@ Sie können einen beliebigen `txid`- oder `originator`-String angeben, und die F
 Erstellen Sie einen versiegelten Umschlag, indem Sie entweder den Verzeichnisdienst oder den direkten Schlüsselaustausch verwenden, um die öffentlichen RSA-Schlüssel des rVASP abzurufen, und verwenden Sie `AES256-GCM` und `HMAC-SHA256` als Umschlagkryptographie. Anschließend wird der versiegelte Umschlag mit dem RPC-Dienst `Transfer` des `TRISANetwork`-Dienstes an den rVASP gesendet.
 
 TO-DO: Bald wird das `trisa` Kommandozeilenprogramm verfügbar sein. Wir werden hier angeben, wie man das CLI-Programm verwendet, um eine Nachricht zu senden, sobald es veröffentlicht ist.
-

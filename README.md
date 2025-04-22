@@ -4,7 +4,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/trisa/pkg.svg)](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/trisacrypto/trisa)](https://goreportcard.com/report/github.com/trisacrypto/trisa)
 
-Please visit the [TRISA website](https://trisa.io) for more information and the [TRISA documentation](https://trisatest.net) for developer docs and integration.
+Please visit the [TRISA website](https://trisa.io) for more information and the [TRISA documentation](https://testnet.directory) for developer docs and integration.
 
 # Contributing to TRISA
 
@@ -31,9 +31,8 @@ The `pkg` folder contains the reference implementation code, including compiled 
 
 ## The Global Directory Service
 
-Another integral part of the TRISA protocol is the Global Directory Service, which serves as a look-up tool for TRISA members to identify peers with which they wish to exchange information. For RPC definitions and implementation code related to the Global Directory Service, visit the companion [directory repository](https://github.com/trisacrypto/directory). To learn more about how to become a member of the directory, visit [vaspdirectory.net](https://vaspdirectory.net/).
+Another integral part of the TRISA protocol is the Global Directory Service, which serves as a look-up tool for TRISA members to identify peers with which they wish to exchange information. For RPC definitions and implementation code related to the Global Directory Service, visit the companion [directory repository](https://github.com/trisacrypto/directory). To learn more about how to become a member of the directory, visit [trisa.directory](https://trisa.directory/).
 
 ## Translations
 
 Translations of the documentation on trisa.dev are done periodically by human translators, and may become out-of-sync with the English text or reflect errors. If you notice an error, please open a [bug report](https://github.com/trisacrypto/trisa/issues/new) to notify us.
-

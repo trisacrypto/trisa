@@ -6,7 +6,7 @@ description: "A quick guide on deploying your Envoy node"
 weight: 10
 ---
 
-This guide assumes that you're ready to deploy your Envoy node and that you've already obtained either TRISA TestNet or MainNet certificates as described by [the Joining TRISA guide]({{% ref "joining-trisa" %}}). If you haven't already, please go to the [TRISA Global Directory Service (vaspdirectory.net)](https://vaspdirectory.net/) to register for your certificates!
+This guide assumes that you're ready to deploy your Envoy node and that you've already obtained either TRISA TestNet or MainNet certificates as described by [the Joining TRISA guide]({{% ref "joining-trisa" %}}). If you haven't already, please go to the [TRISA Global Directory Service (trisa.directory)](https://trisa.directory/) to register for your certificates!
 
 {{% notice style="note" title="Local Development" icon="code" %}}
 If you'd like information about how to run Envoy locally using [Docker Compose](https://docs.docker.com/compose/) and self-signed keys generated using `openssl` please go to the repository at [trisacrypto/envoy](https://github.com/trisacrypto/envoy) and follow the instructions in the `README.md`.
@@ -136,4 +136,3 @@ $ envoy createapikey users:manage users:view
 ```
 
 The list of the permissions you can add to an API key can be found in the [API guide permissions table]({{% relref "api.en.md#permissions" %}}).
-

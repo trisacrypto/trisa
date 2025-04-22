@@ -8,9 +8,9 @@ weight: 10
 
 TestNet提供了三种方便的“robot VASPs”(rVASPs)服务，用以促进与TRISATestNet的集成和测试。这些服务如下:
 
-- Alice (`api.alice.vaspbot.net:443`): 用于触发和接收TRISA消息的主要集成rVASP。
-- Bob (`api.bob.vaspbot.net:443`): 一个用于查看与Alice进行交换的演示rVASP。
-- Evil (`api.evil.vaspbot.net:443`): 一个非TRISA TestNet会员的“evil”rVASP，用于测试未经验证的交互。
+- Alice (`api.alice.vaspbot.com:443`): 用于触发和接收TRISA消息的主要集成rVASP。
+- Bob (`api.bob.vaspbot.com:443`): 一个用于查看与Alice进行交换的演示rVASP。
+- Evil (`api.evil.vaspbot.com:443`): 一个非TRISA TestNet会员的“evil”rVASP，用于测试未经验证的交互。
 
 注意: rVASP目前主要是为演示而配置的，为了进行集成，我们已经开始让它们更健壮；如果有任何更改，请经常查看本文档。如果您发现rVASP代码或行为中的任何错误，[请上报问题](https://github.com/trisacrypto/testnet/issues)。
 
@@ -27,18 +27,18 @@ rVASP有一个内置的数据库，里面存储着带有假钱包地址的假客
 
 | VASP                  | "Crypto Wallet"                    | Email                 |
 |-----------------------|------------------------------------|-----------------------|
-| api.bob.vaspbot.net   | 18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh | robert@bobvasp.co.uk  |
-| api.bob.vaspbot.net   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  |
-| api.bob.vaspbot.net   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   |
-| api.bob.vaspbot.net   | **1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9** | fred@bobvasp.co.uk    |
-| api.alice.vaspbot.net | **19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ** | sarah@alicevasp.us    |
-| api.alice.vaspbot.net | 1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX | mary@alicevasp.us     |
-| api.alice.vaspbot.net | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    |
-| api.alice.vaspbot.net | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     |
-| api.evil.vaspbot.net  | **1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz** | gambler@evilvasp.gg   |
-| api.evil.vaspbot.net  | 1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF | voldemort@evilvasp.gg |
-| api.evil.vaspbot.net  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg |
-| api.evil.vaspbot.net  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   |
+| api.bob.vaspbot.com   | 18nxAxBktHZDrMoJ3N2fk9imLX8xNnYbNh | robert@bobvasp.co.uk  |
+| api.bob.vaspbot.com   | 1LgtLYkpaXhHDu1Ngh7x9fcBs5KuThbSzw | george@bobvasp.co.uk  |
+| api.bob.vaspbot.com   | 14WU745djqecaJ1gmtWQGeMCFim1W5MNp3 | larry@bobvasp.co.uk   |
+| api.bob.vaspbot.com   | **1Hzej6a2VG7C8iCAD5DAdN72cZH5THSMt9** | fred@bobvasp.co.uk    |
+| api.alice.vaspbot.com | **19nFejdNSUhzkAAdwAvP3wc53o8dL326QQ** | sarah@alicevasp.us    |
+| api.alice.vaspbot.com | 1ASkqdo1hvydosVRvRv2j6eNnWpWLHucMX | mary@alicevasp.us     |
+| api.alice.vaspbot.com | 1MRCxvEpBoY8qajrmNTSrcfXSZ2wsrGeha | alice@alicevasp.us    |
+| api.alice.vaspbot.com | 14HmBSwec8XrcWge9Zi1ZngNia64u3Wd2v | jane@alicevasp.us     |
+| api.evil.vaspbot.com  | **1AsF1fMSaXPzz3dkBPyq81wrPQUKtT2tiz** | gambler@evilvasp.gg   |
+| api.evil.vaspbot.com  | 1PFTsUQrRqvmFkJunfuQbSC2k9p4RfxYLF | voldemort@evilvasp.gg |
+| api.evil.vaspbot.com  | 172n89jLjXKmFJni1vwV5EzxKRXuAAoxUz | launderer@evilvasp.gg |
+| api.evil.vaspbot.com  | 182kF4mb5SW4KGEvBSbyXTpDWy8rK1Dpu  | badnews@evilvasp.gg   |
 
 注意，所有rVASP数据都是使用Faker工具生成的，用于产生真实/一致的测试数据，它们完全是虚构的。例如，Alice VASP(一家假的美国公司)的记录主要是在北美。
 
@@ -65,14 +65,14 @@ $ go get github.com/trisacrypto/testnet/...
 
 rVASP管理端点用于与rVASP直接交互，以实现开发和集成目的。注意，这个端点与上面描述的TRISA端点不同。
 
-- Alice: `admin.alice.vaspbot.net:443`
-- Bob: `admin.bob.vaspbot.net:443`
-- Evil: `admin.evil.vaspbot.net:443`
+- Alice: `admin.alice.vaspbot.com:443`
+- Bob: `admin.bob.vaspbot.com:443`
+- Evil: `admin.evil.vaspbot.com:443`
 
 如需使用命令行工具触发一条消息，请运行以下命令:
 
 ```
-$ rvasp transfer -e admin.alice.vaspbot.net:443 \
+$ rvasp transfer -e admin.alice.vaspbot.com:443 \
         -a mary@alicevasp.us \
         -d 0.3 \
         -B trisa.example.com \

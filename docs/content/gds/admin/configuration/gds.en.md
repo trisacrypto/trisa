@@ -10,7 +10,7 @@ The GDS is a collection of three APIs and several background services backed by 
 
 | EnvVar           | Type   | Default           | Description                                                                                                      |
 |------------------|--------|-------------------|------------------------------------------------------------------------------------------------------------------|
-| GDS_DIRECTORY_ID | string | vaspdirectory.net | The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev).                              |
+| GDS_DIRECTORY_ID | string | trisa.directory | The network ID the GDS serves, either trisa.directory or testnet.directory (or .dev).                              |
 | GDS_SECRET_KEY   | string |                   | A base64 encoded random 32 byte array that is used for salts and random seeds - required.                        |
 | GDS_MAINTENANCE  | bool   | false             | Sets the server to maintenance mode, which will respond to requests with Unavailable except for status requests. |
 | GDS_LOG_LEVEL    | string | info              | The verbosity of logging, one of trace, debug, info, warn, error, fatal, or panic.                               |
@@ -83,12 +83,12 @@ The GDS uses [SendGrid](https://sendgrid.com/) to send email notifications and t
 
 | EnvVar                 | Type   | Default                                | Description                                                                                 |
 |------------------------|--------|----------------------------------------|---------------------------------------------------------------------------------------------|
-| GDS_SERVICE_EMAIL      | string | TRISA Directory Service <admin@vaspdirectory.net>               | The email address used as the sender for all emails from the GDS system.                    |
+| GDS_SERVICE_EMAIL      | string | TRISA Directory Service <admin@trisa.directory>               | The email address used as the sender for all emails from the GDS system.                    |
 | GDS_ADMIN_EMAIL        | string | TRISA Admins <admin@trisa.io>                           | The email address to send admin emails to from the server.                                  |
 | SENDGRID_API_KEY       | string |                                        | API Key to authenticate to SendGrid with.                                                   |
-| GDS_DIRECTORY_ID       | string | vaspdirectory.net                      | (Reused) The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev). |
-| GDS_VERIFY_CONTACT_URL | string | https://vaspdirectory.net/verify       | The base URL to include in emails for contact verification.                                 |
-| GDS_ADMIN_REVIEW_URL   | string | https://admin.vaspdirectory.net/vasps/ | The base URL to include in emails to link to a new VASP registration.                       |
+| GDS_DIRECTORY_ID       | string | trisa.directory                      | (Reused) The network ID the GDS serves, either trisa.directory or testnet.directory (or .dev). |
+| GDS_VERIFY_CONTACT_URL | string | https://trisa.directory/verify       | The base URL to include in emails for contact verification.                                 |
+| GDS_ADMIN_REVIEW_URL   | string | https://admin.trisa.directory/vasps/ | The base URL to include in emails to link to a new VASP registration.                       |
 | GDS_EMAIL_TESTING      | bool   | false                                  | Use email in testing mode rather than send live emails.                                      |
 | GDS_EMAIL_STORAGE      | string | ""                                     | Directory to store test emails for "mark one eyeball" review.                                |
 
@@ -104,7 +104,7 @@ The CertMan is a background process that runs on the GDS and manages certificate
 | GDS_CERTMAN_REQUEST_INTERVAL    | duration | 10m               | The interval between certificate request processing runs.                                                       |
 | GDS_CERTMAN_REISSUANCE_INTERVAL | duration | 24h               | The interval between certificate reissuance processing runs.                                                    |
 | GDS_CERTMAN_STORAGE             | string   |                   | The path to a directory on disk where CertMan temporarily downloads certificates (otherwise a tmp dir is used). |
-| GDS_DIRECTORY_ID                | string   | vaspdirectory.net | (Reused) The network ID the GDS serves, either vaspdirectory.net or trisatest.net (or .dev).                    |
+| GDS_DIRECTORY_ID                | string   | trisa.directory | (Reused) The network ID the GDS serves, either trisa.directory or testnet.directory (or .dev).                    |
 | SECTIGO_USERNAME                | string   |                   | The username to authenticate with the Sectigo API.                                                              |
 | SECTIGO_PASSWORD                | string   |                   | The password to authenticate with the Sectigo API.                                                              |
 | SECTIGO_PROFILE                 | string   |                   | The certificate profile to use (see below for details).                                                         |

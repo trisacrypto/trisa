@@ -13,8 +13,8 @@ For reference, the [TRISA Protocol documentation]({{% relref "api/protocol" %}})
 The TRISA TestNet is comprised of several services, including:
 
 - A TestNet [Certificate Authority]({{% relref "joining-trisa/ca" %}}) that issues TestNet Identity Certificates (*note that these are distinct from MainNet certificates and not interchangeable*).
-- [TRISA Directory Service](https://vaspdirectory.net/) - a user interface to explore the TRISA Global Directory Service and register to become a TRISA member
-- [TestNet Demo](https://vaspbot.net) - a demo site to show TRISA interactions between “robot” VASPs that run in the TestNet
+- [TRISA Directory Service](https://trisa.directory/) - a user interface to explore the TRISA Global Directory Service and register to become a TRISA member
+- [TestNet Demo](https://vaspbot.com) - a demo site to show TRISA interactions between “robot” VASPs that run in the TestNet
 
 The TestNet also hosts three ["robot VASPs" (rVASPs)]({{% relref "testing/rvasps" %}}) that have been implemented as a convenience for TRISA members to integrate their TRISA services and validate the compliance solution safely. The primary rVASP is Alice, a secondary for demo purposes is Bob, and an "evil" rVASP to test interactions with non-verified TRISA members.
 
@@ -26,7 +26,7 @@ The TestNet also provides a [command line utility]({{% relref "testing/trisa-cli
 
 The following steps are required to join the TestNet:
 
-1. [Register](https://vaspdirectory.net/guide) with the GDS to create your TRISA Account with your VASP email address, where you can opt-in for TestNet Certificates. During registration, you can add collaborators within your organization.
+1. [Register](https://trisa.directory/guide) with the GDS to create your TRISA Account with your VASP email address, where you can opt-in for TestNet Certificates. During registration, you can add collaborators within your organization.
 
 2. Complete the VASP Verification form and due diligence process. Once approved, you will gain access to the TestNet.
 

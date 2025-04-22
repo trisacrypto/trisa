@@ -2,11 +2,11 @@
 title: "BFF"
 date: 2022-12-22T11:52:54-06:00
 lastmod: 2022-12-22T11:52:54-06:00
-description: "Configuring the BFF for vaspdirectory.net"
+description: "Configuring the BFF for trisa.directory"
 weight: 20
 ---
 
-The BFF (backend for frontend) is the backend API that powers the GDS UI at [vaspdirectory.net](https://vaspdirectory.net). The GDS UI is intended to give users a single access portal to both the MainNet and TestNet as well as to support non-GDS features like collaborators and TRISA Service Providers. Because of this it sits in the middle of multiple services, including both the MainNet and TestNet GDS services and multiple data sources. Its environment variables are all prefixed with the `GDS_BFF_` tag. The primary configuration is as follows:
+The BFF (backend for frontend) is the backend API that powers the GDS UI at [trisa.directory](https://trisa.directory). The GDS UI is intended to give users a single access portal to both the MainNet and TestNet as well as to support non-GDS features like collaborators and TRISA Service Providers. Because of this it sits in the middle of multiple services, including both the MainNet and TestNet GDS services and multiple data sources. Its environment variables are all prefixed with the `GDS_BFF_` tag. The primary configuration is as follows:
 
 | EnvVar                | Type     | Default               | Description                                                                                                      |
 |-----------------------|----------|-----------------------|------------------------------------------------------------------------------------------------------------------|
@@ -148,7 +148,7 @@ The BFF uses [SendGrid](https://sendgrid.com/) to send email notifications and t
 
 | EnvVar                | Type   | Default                                           | Description                                                              |
 |-----------------------|--------|---------------------------------------------------|--------------------------------------------------------------------------|
-| GDS_BFF_SERVICE_EMAIL | string | TRISA Directory Service <admin@vaspdirectory.net> | The email address used as the sender for all emails from the BFF system. |
+| GDS_BFF_SERVICE_EMAIL | string | TRISA Directory Service <admin@trisa.directory> | The email address used as the sender for all emails from the BFF system. |
 | SENDGRID_API_KEY      | string |                                                   | API Key to authenticate to SendGrid with.                                |
 | GDS_BFF_EMAIL_TESTING | bool   | false                                             | Use email in testing mode rather than send live emails.                   |
 | GDS_BFF_EMAIL_STORAGE | string | ""                                                | Directory to store test emails for "mark one eyeball" review.             |

@@ -125,4 +125,4 @@ func (m *MyProfile) Connect() (_ members.TRISAMembersClient, err error){
 }
 ```
 
-*現在、2つのtrisaディレクトリがあることに注意してください。TRISA [TestNet](https://trisatest.net/), これにより、ユーザーはトリッサの相互作用と仮想アプリケーションサービスプロバイダーディレクトリを試すことができます。[VASP Directory](https://vaspdirectory.net/), これは、トリッサ取引の生産ネットワークです。 テストネットに登録し、証明書を持っている場合、ダイヤル機能に渡すエンドポイントは次のようになります。`members.trisatest.net:443`. または、仮想アプリケーションサービスプロバイダーディレクトリのメンバーにアクセスする場合で、すでに登録済みのメンバーである場合は、エンドポイントを使用します。`members.vaspdirectory.net:443`.*
+*現在、2つのtrisaディレクトリがあることに注意してください。TRISA [TestNet](https://testnet.directory/), これにより、ユーザーはトリッサの相互作用と仮想アプリケーションサービスプロバイダーディレクトリを試すことができます。[VASP Directory](https://trisa.directory/), これは、トリッサ取引の生産ネットワークです。 テストネットに登録し、証明書を持っている場合、ダイヤル機能に渡すエンドポイントは次のようになります。`members.testnet.directory:443`. または、仮想アプリケーションサービスプロバイダーディレクトリのメンバーにアクセスする場合で、すでに登録済みのメンバーである場合は、エンドポイントを使用します。`members.trisa.directory:443`.*
