@@ -11,9 +11,16 @@
       "name": "MIT Licensed",
       "url": "https://github.com/trisacrypto/envoy/blob/main/LICENSE"
     },
-    "version": "v1.0.0-rc.1"
+    "version": "v{{ .Version }}"
   },
   "openapi": "3.1.0",
+  "servers": [
+    {
+      "url": "{{ .Origin }}",
+      "variables": {},
+      "description": "{{ .Description }}"
+    }
+  ],
   "tags": [
     {
       "name": "Authentication",
@@ -357,6 +364,16 @@
             "description": "The customer account travel address that allows counterparties to send this account travel rule inquiries.",
             "example": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv"
           },
+          "num_addresses": {
+            "type": "integer",
+            "description": "The number of registered crypto wallet addresses associated with this account.",
+            "example": 8
+          },
+          "has_ivms_record": {
+            "type": "boolean",
+            "description": "If the account has an IVMS101 record or not; note this does not determine if the record is empty, just if it is set.",
+            "example": true
+          },
           "crypto_addresses": {
             "type": "array",
             "description": "A list of crypto addresses associated with the account.",
@@ -385,6 +402,8 @@
           "last_name": "Bond",
           "travel_address": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv",
           "ivms101": "CjwKEQoPCgRCb25kEgVKYW1lcxgCKiMKCjE5MjAtMTEtMTESFVdhdHRlbnNjaGVpZCwgR2VybWFueTICR0I",
+          "num_addresses": 2,
+          "has_ivms_record": true,
           "crypto_addresses": [
             {
               "id": "01J6FRB1EGJCEZXRMQGW1FM0BR",
@@ -476,6 +495,16 @@
             "description": "A travel address that the customer can send to request payment using virtual assets.",
             "example": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv"
           },
+          "num_addresses": {
+            "type": "integer",
+            "description": "The number of registered crypto wallet addresses associated with this account summary.",
+            "example": 8
+          },
+          "has_ivms_record": {
+            "type": "boolean",
+            "description": "If the account summary has an IVMS101 record or not; note this does not determine if the record is empty, just if it is set.",
+            "example": true
+          },
           "created": {
             "type": "string",
             "format": "date-time",
@@ -495,6 +524,8 @@
           "first_name": "James",
           "last_name": "Bond",
           "travel_address": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv",
+          "num_addresses": 2,
+          "has_ivms_record": true,
           "created": "2024-08-28T10:14:43-05:00",
           "modified": "2024-08-28T12:23:24-05:00"
         }
@@ -519,6 +550,8 @@
                 "first_name": "James",
                 "last_name": "Bond",
                 "travel_address": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv",
+                "num_addresses": 2,
+                "has_ivms_record": true,
                 "created": "2024-08-28T10:14:43-05:00",
                 "modified": "2024-08-28T12:23:24-05:00"
               },
@@ -528,6 +561,8 @@
                 "first_name": "Twilda",
                 "last_name": "Swansong",
                 "travel_address": "taLg4sBFp3cWhB9wN7qsiUF8pxo7JXtVShYkv5ix1wG2kX5y4pRiJ3TRHmeD8H67TLLm5wHyDktVw1onfDeQfESumf91mjRTMbi",
+                "num_addresses": 0,
+                "has_ivms_record": false,
                 "created": "2024-08-29T14:09:21-05:00",
                 "modified": "2024-08-29T14:10:50-05:00"
               }
@@ -545,6 +580,8 @@
               "first_name": "James",
               "last_name": "Bond",
               "travel_address": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv",
+              "num_addresses": 2,
+              "has_ivms_record": true,
               "created": "2024-08-28T10:14:43-05:00",
               "modified": "2024-08-28T12:23:24-05:00"
             },
@@ -554,6 +591,8 @@
               "first_name": "Twilda",
               "last_name": "Swansong",
               "travel_address": "taLg4sBFp3cWhB9wN7qsiUF8pxo7JXtVShYkv5ix1wG2kX5y4pRiJ3TRHmeD8H67TLLm5wHyDktVw1onfDeQfESumf91mjRTMbi",
+              "num_addresses": 0,
+              "has_ivms_record": false,
               "created": "2024-08-29T14:09:21-05:00",
               "modified": "2024-08-29T14:10:50-05:00"
             }
@@ -2814,6 +2853,15 @@
                       "description": "The country of the geographic address (e.g. home address) of the originator person.",
                       "example": "GB"
                     }
+                  },
+                  "example": {
+                    "address_type": "HOME",
+                    "address_lines": [
+                      "1 High Street",
+                      "Apt. 007",
+                      "London SE1 2QH"
+                    ],
+                    "country": "GB"
                   }
                 },
                 "example": [
@@ -2962,10 +3010,7 @@
                       "description": "The address lines that describe the beneficiary address (e.g. street name and number, city, post code)",
                       "items": {
                         "type": "string",
-                        "example": [
-                          "123 Main Street",
-                          "Casper, WY 82604"
-                        ]
+                        "example": "123 Main Street"
                       },
                       "example": [
                         "123 Main Street",
@@ -5523,6 +5568,50 @@
           "example": "pb"
         },
         "example": "pb"
+      },
+      "transfer_archives": {
+        "name": "archives",
+        "in": "query",
+        "description": "If true, archived transactions are queried",
+        "required": false,
+        "schema": {
+          "type": "boolean",
+          "example": true
+        },
+        "example": true
+      },
+      "status": {
+        "name": "status",
+        "in": "query",
+        "description": "Filter the transactions by their status (can pass multiple params to include multiple statuses)",
+        "required": false,
+        "collectionFormat": "multi",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "pending",
+            "repair",
+            "review",
+            "rejected",
+            "accepted",
+            "completed"
+          ],
+          "example": "pending"
+        },
+        "example": "pending"
+      },
+      "asset": {
+        "name": "asset",
+        "in": "query",
+        "description": "Filter the transactions by a virtual asset (can pass multiple params to include multiple assets)",
+        "required": false,
+        "collectionFormat": "multi",
+        "schema": {
+          "type": "string",
+          "example": "BTC"
+        },
+        "example": "BTC"
       }
     }
   },
@@ -5723,6 +5812,8 @@
                       "first_name": "James",
                       "last_name": "Bond",
                       "travel_address": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv",
+                      "num_addreses": 2,
+                      "has_ivms_record": true,
                       "created": "2024-08-28T10:14:43-05:00",
                       "modified": "2024-08-28T12:23:24-05:00"
                     },
@@ -5732,6 +5823,8 @@
                       "first_name": "Twilda",
                       "last_name": "Swansong",
                       "travel_address": "taLg4sBFp3cWhB9wN7qsiUF8pxo7JXtVShYkv5ix1wG2kX5y4pRiJ3TRHmeD8H67TLLm5wHyDktVw1onfDeQfESumf91mjRTMbi",
+                      "num_addreses": 0,
+                      "has_ivms_record": false,
                       "created": "2024-08-29T14:09:21-05:00",
                       "modified": "2024-08-29T14:10:50-05:00"
                     }
@@ -5822,6 +5915,8 @@
                   "last_name": "Bond",
                   "travel_address": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv",
                   "ivms101": "CjwKEQoPCgRCb25kEgVKYW1lcxgCKiMKCjE5MjAtMTEtMTESFVdhdHRlbnNjaGVpZCwgR2VybWFueTICR0I",
+                  "num_addreses": 0,
+                  "has_ivms_record": true,
                   "crypto_addresses": [],
                   "created": "2024-08-28T10:14:43-05:00",
                   "modified": "2024-08-28T12:23:24-05:00"
@@ -5931,6 +6026,8 @@
                   "last_name": "Bond",
                   "travel_address": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv",
                   "ivms101": "CjwKEQoPCgRCb25kEgVKYW1lcxgCKiMKCjE5MjAtMTEtMTESFVdhdHRlbnNjaGVpZCwgR2VybWFueTICR0I",
+                  "num_addreses": 2,
+                  "has_ivms_record": true,
                   "crypto_addresses": [
                     {
                       "id": "01J6FRB1EGJCEZXRMQGW1FM0BR",
@@ -6034,6 +6131,8 @@
                   "last_name": "Bond",
                   "travel_address": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv",
                   "ivms101": "CjwKEQoPCgRCb25kEgVKYW1lcxgCKiMKCjE5MjAtMTEtMTESFVdhdHRlbnNjaGVpZCwgR2VybWFueTICR0I",
+                  "num_addreses": 2,
+                  "has_ivms_record": true,
                   "crypto_addresses": [
                     {
                       "id": "01J6FRB1EGJCEZXRMQGW1FM0BR",
@@ -6152,6 +6251,8 @@
                   "last_name": "Bond",
                   "travel_address": "taLg4sBFp3cWhB9wN7qqPwDzq32bWwhibhFvADbiYp5fMR7asAxbqNrPuUyT4VzZa98oPk6dHcdKhov9jiraNrcZ7yQdikXcwbv",
                   "ivms101": "CjwKEQoPCgRCb25kEgVKYW1lcxgCKiMKCjE5MjAtMTEtMTESFVdhdHRlbnNjaGVpZCwgR2VybWFueTICR0I",
+                  "num_addreses": 2,
+                  "has_ivms_record": true,
                   "crypto_addresses": [
                     {
                       "id": "01J6FRB1EGJCEZXRMQGW1FM0BR",
@@ -6286,6 +6387,169 @@
           },
           "404": {
             "description": "Account Not Found (Cannot Delete)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "account not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{accountID}/transfers": {
+      "get": {
+        "summary": "Account Related Transfers",
+        "description": "Search for all transfers related to the account by matching the associated crypto wallet addresses.",
+        "operationId": "accountTransfers",
+        "tags": [
+          "Accounts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "accountID",
+            "in": "path",
+            "description": "The ID of the account to list transfers for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+            },
+            "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "$ref": "#/components/parameters/page_size"
+          },
+          {
+            "$ref": "#/components/parameters/next_page_token"
+          },
+          {
+            "$ref": "#/components/parameters/prev_page_token"
+          },
+          {
+            "$ref": "#/components/parameters/transfer_archives"
+          },
+          {
+            "$ref": "#/components/parameters/status"
+          },
+          {
+            "$ref": "#/components/parameters/asset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account Transfers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionList"
+                },
+                "example": {
+                  "$ref": "#/components/schemas/TransactionList"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized to View Account Transfers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "this endpoint requires authentication"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No Account to List Transfers For",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "account not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{accountID}/qrcode": {
+      "get": {
+        "summary": "Account QR Code",
+        "description": "Generate and download a QR code for the account travel address.",
+        "operationId": "accountQRCode",
+        "tags": [
+          "Accounts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "accountID",
+            "in": "path",
+            "description": "The ID of the account to generate a QR Code for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+            },
+            "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QR Code Generated",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "description": "PNG image data returned for embedding into a website or to download.",
+                  "example": "iVBORw0KGgoAAAANSUhEUgAAADEAAAAxAQMAAABJUtNfAAAABlBMVEX///8AAABVwtN+AAABU0lEQVR42oSQT4sScQCGH1PHX430EwnyUDAQlhGR0Tco6BBBhhJSh/4cqoMHkSALiy6lSInYIQkiEaVhDJLY1b3swgr7j4VlkL2sJ/GwDO7KzlEWhGU+ge/lOb3wvg/zIq1m7/sUxLWx/UKAWp9drlig6tlHRYd/bob6FogrEy0oQI4NozUF/LP/MUDNnN8bJMEdWuz+NsE1yg2utoGnd1ZKAZBvrf1PGii76VovCsr7ybCTBa/7dsYTc/rGm5wNnvi7wxTgW3gczmvgT9wwUxE4262e2tCBL5vrpQIolxJBtQxn7qu+dgyU6N1XD9PgLXWer2rgazQb56ogCy6zYoIyHOkTZ8/Frf7pAIh/v+T1Z+D2LN/6+BqUlztPHiwB4ocd0kEeFX+OayAiHy7oZee/1pMO/35rrRVANfL17SSI8L34VxPkwef0sT1X80kAAAD//7BKaXx8kl/OAAAAAElFTkSuQmCC"
+                },
+                "example": "iVBORw0KGgoAAAANSUhEUgAAADEAAAAxAQMAAABJUtNfAAAABlBMVEX///8AAABVwtN+AAABU0lEQVR42oSQT4sScQCGH1PHX430EwnyUDAQlhGR0Tco6BBBhhJSh/4cqoMHkSALiy6lSInYIQkiEaVhDJLY1b3swgr7j4VlkL2sJ/GwDO7KzlEWhGU+ge/lOb3wvg/zIq1m7/sUxLWx/UKAWp9drlig6tlHRYd/bob6FogrEy0oQI4NozUF/LP/MUDNnN8bJMEdWuz+NsE1yg2utoGnd1ZKAZBvrf1PGii76VovCsr7ybCTBa/7dsYTc/rGm5wNnvi7wxTgW3gczmvgT9wwUxE4262e2tCBL5vrpQIolxJBtQxn7qu+dgyU6N1XD9PgLXWer2rgazQb56ogCy6zYoIyHOkTZ8/Frf7pAIh/v+T1Z+D2LN/6+BqUlztPHiwB4ocd0kEeFX+OayAiHy7oZee/1pMO/35rrRVANfL17SSI8L34VxPkwef0sT1X80kAAAD//7BKaXx8kl/OAAAAAElFTkSuQmCC"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized to Generate Account QR Code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "this endpoint requires authentication"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No Travel Address for Account",
             "content": {
               "application/json": {
                 "schema": {
@@ -6816,6 +7080,91 @@
                 "example": {
                   "success": false,
                   "error": "crypto address not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/accounts/{accountID}/crypto-addresses/{cryptoAddressID}/qrcode": {
+      "get": {
+        "summary": "Crypto Address QR Code",
+        "description": "Generate and download a QR code for the travel address associated with the crypto wallet address.",
+        "operationId": "cryptoAddressesQRCode",
+        "tags": [
+          "Crypto Addresses"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "accountID",
+            "in": "path",
+            "description": "The ID of the account associated with the crypto address the QR code is being generated for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+            },
+            "example": "01J6DJ9F691CF8E9H0V3ET0M0E"
+          },
+          {
+            "name": "cryptoAddressID",
+            "in": "path",
+            "description": "The ID of the crypto address to generate a QR code for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "ULID",
+              "example": "01J6FRB1EGJCEZXRMQGW1FM0BR"
+            },
+            "example": "01J6FRB1EGJCEZXRMQGW1FM0BR"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Crypto Address QR Code Generated",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "description": "PNG image data of qr code returned for embedding into a website or to download.",
+                  "example": "iVBORw0KGgoAAAANSUhEUgAAADEAAAAxAQMAAABJUtNfAAAABlBMVEX///8AAABVwtN+AAABU0lEQVR42oSQT4sScQCGH1PHX430EwnyUDAQlhGR0Tco6BBBhhJSh/4cqoMHkSALiy6lSInYIQkiEaVhDJLY1b3swgr7j4VlkL2sJ/GwDO7KzlEWhGU+ge/lOb3wvg/zIq1m7/sUxLWx/UKAWp9drlig6tlHRYd/bob6FogrEy0oQI4NozUF/LP/MUDNnN8bJMEdWuz+NsE1yg2utoGnd1ZKAZBvrf1PGii76VovCsr7ybCTBa/7dsYTc/rGm5wNnvi7wxTgW3gczmvgT9wwUxE4262e2tCBL5vrpQIolxJBtQxn7qu+dgyU6N1XD9PgLXWer2rgazQb56ogCy6zYoIyHOkTZ8/Frf7pAIh/v+T1Z+D2LN/6+BqUlztPHiwB4ocd0kEeFX+OayAiHy7oZee/1pMO/35rrRVANfL17SSI8L34VxPkwef0sT1X80kAAAD//7BKaXx8kl/OAAAAAElFTkSuQmCC"
+                },
+                "example": "iVBORw0KGgoAAAANSUhEUgAAADEAAAAxAQMAAABJUtNfAAAABlBMVEX///8AAABVwtN+AAABU0lEQVR42oSQT4sScQCGH1PHX430EwnyUDAQlhGR0Tco6BBBhhJSh/4cqoMHkSALiy6lSInYIQkiEaVhDJLY1b3swgr7j4VlkL2sJ/GwDO7KzlEWhGU+ge/lOb3wvg/zIq1m7/sUxLWx/UKAWp9drlig6tlHRYd/bob6FogrEy0oQI4NozUF/LP/MUDNnN8bJMEdWuz+NsE1yg2utoGnd1ZKAZBvrf1PGii76VovCsr7ybCTBa/7dsYTc/rGm5wNnvi7wxTgW3gczmvgT9wwUxE4262e2tCBL5vrpQIolxJBtQxn7qu+dgyU6N1XD9PgLXWer2rgazQb56ogCy6zYoIyHOkTZ8/Frf7pAIh/v+T1Z+D2LN/6+BqUlztPHiwB4ocd0kEeFX+OayAiHy7oZee/1pMO/35rrRVANfL17SSI8L34VxPkwef0sT1X80kAAAD//7BKaXx8kl/OAAAAAElFTkSuQmCC"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized to Generate Crypto Address QR Code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "this endpoint requires authentication"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No Travel Address for Crypto Address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                },
+                "example": {
+                  "success": false,
+                  "error": "account not found"
                 }
               }
             }
@@ -7995,48 +8344,13 @@
             "$ref": "#/components/parameters/prev_page_token"
           },
           {
-            "name": "archives",
-            "in": "query",
-            "description": "If true, archived transactions are queried",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "example": true
-            },
-            "example": true
+            "$ref": "#/components/parameters/transfer_archives"
           },
           {
-            "name": "status",
-            "in": "query",
-            "description": "Filter the transactions by their status (can pass multiple params to include multiple statuses)",
-            "required": false,
-            "collectionFormat": "multi",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "draft",
-                "pending",
-                "repair",
-                "review",
-                "rejected",
-                "accepted",
-                "completed"
-              ],
-              "example": "pending"
-            },
-            "example": "pending"
+            "$ref": "#/components/parameters/status"
           },
           {
-            "name": "asset",
-            "in": "query",
-            "description": "Filter the transactions by a virtual asset (can pass multiple params to include multiple assets)",
-            "required": false,
-            "collectionFormat": "multi",
-            "schema": {
-              "type": "string",
-              "example": "BTC"
-            },
-            "example": "BTC"
+            "$ref": "#/components/parameters/asset"
           }
         ],
         "responses": {
@@ -13028,6 +13342,9 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/IdentityPayload"
+              },
+              "example": {
+                "$ref": "#/components/schemas/IdentityPayload"
               }
             }
           }
@@ -13038,6 +13355,9 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "$ref": "#/components/schemas/IdentityPayload"
+                },
+                "example": {
                   "$ref": "#/components/schemas/IdentityPayload"
                 }
               }
