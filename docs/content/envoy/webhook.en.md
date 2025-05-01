@@ -199,3 +199,109 @@ The counterparty describes what the Envoy node knows about the remote counterpar
 | ivms101 | IVMS 101 | the ivms101 record of the legal person representing the counterparty |
 | created | string | the RFC3339nano timestamp of when the counterparty was added to your Envoy node |
 | modified | string | the RFC3339nano timestamp of when the counterparty was lasted modified on your Envoy node |
+
+## Authentication
+
+Webhook requests can be authenticated in two ways:
+
+1. mTLS using non-TRISA certificates
+2. HMAC signature verification with a shared secret
+
+### mTLS
+
+Coming Soon!
+
+### HMAC Shared Secret
+
+Simple, cryptographic authentication for webhook requests can performed with a shared secret using a mechanism similar to [Hawk](https://mohawk.readthedocs.io/en/latest/usage.html#sending-a-request) and [AWS4 HMAC-256](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html). This method adds authentication variables to the HTTP request in the `Authorization` header including a cryptographically signed HMAC that can be used to verify both the client and the server.
+
+The following is an example of the `Authorization` header value. Line breaks are added to this example for readibility:
+
+```
+Authorization: HMAC
+sig=zFeIxdyVnJtpMUExK7HoL37VN4tF6sMQZPEr58MBpMQ,
+nonce=wm0eHegl4lD0Uw_sSYYQCw,
+headers=x-transfer-id,x-transfer-timestamp
+kid=01JT4B3R5Z6AHJXV87QHPPKRBM
+```
+
+The following table describes the various components of the `Authorization` header value in the preceding example:
+
+| Component | Description |
+|---|---|
+| HMAC | The authentication scheme being used; indicates that this is an Envoy HMAC-256 signed header.  |
+| sig | A 32 byte HMAC signature using a SHA-256 hash and a secret key. The signature is expressed as base64 encoded characters. |
+| nonce | 16 cryptographically random bytes expressed as base64 encoded characters. The nonce helps prevent reply attacks by adding random data to the signature. |
+| headers | A semicolon-separated, ordered list of request headers used to compute the signature. The list includes header names only, and the header names must be in lowercase. |
+| kid | The ID (usually a ULID) that identifies the secret key being used to compute the signature. |
+
+If the webhook is configured with HMAC authentication, then it will send the signed header with every webhook request. It is up to the webhook server to verify the HMAC token (or not) and to respond with a 401 status code if the token is not verified.
+
+Additionally, server authentication is optionally available that requires the server to add a response header, `Server-Authorization` with a reciprocal HMAC code and a _new_ nonce using the same shared key. If this option is configured, the webhook client will require a verified token before accepting a response from the webhook.
+
+{{% notice style="orange" title="Use TLS" icon="lock" %}}
+Even if HMAC shared secret authorization is used, it is strongly recommended that TLS is used to secure and encrypt the connection between the webhook client and server.
+{{% /notice %}}
+
+#### Verification
+
+In order to verify the `Authorization` header, the following steps are required:
+
+1. Parse the value of the `Authorization` header.
+
+    - If the header does not contain an `HMAC ` prefix, then it is invalid; otherwise strip this prefix.
+    - Split the remaining header by `,` and trim any whitespace from the front or back of the split strings.
+    - Create key/value pairs by splitting each part of the header on `=` using a splitn algorithm that allows at most two parts (e.g. split on the first `=`). The key is the left side and the value is the right side.
+    - Ensure that `sig`, `nonce`, `headers`, and `kid` are present in the keys and contain values; any other key value pairs can be ignored.
+    - An example of parsing code in GoLang can be found [here](https://github.com/trisacrypto/envoy/blob/main/pkg/webhook/auth.go#L110-L168).
+
+2. Create a byte array of data to be signed.
+
+    - The beginning of the array is the base64 decoded `nonce` value.
+    - Split the `headers` value by `,` and then for each header in the order specified, append the utf-8 bytes of the unmodified header value to the data array.
+
+3. Sign the data using the key identified by the key id.
+
+    - Use the Key ID to identify the shared secret
+    - Use HMAC with SHA-256 hashing to create a signed token of the data
+
+4. Compare the bytes of the signed data with the signature.
+
+    - Base64 decode the `sig` value
+    - Ensure the bytes of `sig` are qual to the bytes of the constructed signature.
+
+#### Base64 Encoding
+
+The [Base64 encoding method](https://developer.mozilla.org/en-US/docs/Glossary/Base64) used is the URL-safe base64 encoding method that replaces `+/` with `-_` and does not use `=` padding characters to ensure that it does not interfere with the HTTP headers.
+
+#### Signing a Response
+
+You can optionally configure the Envoy webhook client to verify the response sent back from your server with the same shared secret.
+
+To create the authorization key:
+
+1. Generate a random 16 byte nonce
+2. Select headers and append their UTF-8 bytes to the nonce
+3. Use the secret key to create an HMAC with SHA-256 hash
+4. Base64 encode the HMAC sum and the nonce
+
+Create a `Server-Authorization` header using the signature, nonce, comma-separated lower case headers, and the keyID and send back as part of the reply.
+
+#### Configuration
+
+In order to configure HMAC authentication you need to set the following environment variables:
+
+1. `$TRISA_WEBHOOK_AUTH_KEY_ID`: the ULID representing the key for key management purposes; if set the auth key secret must also be set.
+2. `$TRISA_WEBHOOK_AUTH_KEY_SECRET`: the _hexadecimal_ encoded 32 byte secret used for securing the HMAC token; if set the auth key id must also be set.
+
+You can generate a key ID and secret with:
+
+```
+$ envoy hmackey
+```
+
+Optionally, to require server authentication (which is not enforced by default) you can set `$TRISA_WEBHOOK_REQUIRE_SERVER_AUTH` to `"true"`; this will cause the webhook client to verify the `Server-Authorization` header before accepting the response.
+
+Note that all of the configuration values above require `$TRISA_WEBHOOK_URL` to be set, which enables webhook usage; otherwise the configuration is ignored.
+
+See the ["configuration values"]({{% relref "envoy/configuration.md#configuration-values" %}}) section for more on configuring Envoy from the environment.
