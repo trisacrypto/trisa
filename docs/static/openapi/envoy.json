@@ -774,7 +774,7 @@
           "registered_directory": {
             "type": "string",
             "description": "the name of the directory service the counterparty is registered with if the source is gds.",
-            "example": "testnet.directory"
+            "example": "trisatest.net"
           },
           "protocol": {
             "type": "string",
@@ -790,13 +790,13 @@
             "type": "string",
             "format": "domain",
             "description": "the common name of the travel rule domain of the counterparty; used for uniquely identifying the counterparty.",
-            "example": "api.alice.vaspbot.com"
+            "example": "api.alice.vaspbot.net"
           },
           "endpoint": {
             "type": "string",
             "format": "url",
             "description": "the URL endpoint to connect to using the travel rule protocol. For TRISA this will be host:port and for TRP will be a URL.",
-            "example": "api.alice.vaspbot.com:443"
+            "example": "api.alice.vaspbot.net:443"
           },
           "travel_address": {
             "type": "string",
@@ -900,13 +900,13 @@
           "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
           "source": "gds",
           "directory_id": "5154a0aa-502c-4179-a6f2-8b143d59edce",
-          "registered_directory": "testnet.directory",
+          "registered_directory": "trisatest.net",
           "protocol": "trisa",
-          "common_name": "api.alice.vaspbot.com",
-          "endpoint": "api.alice.vaspbot.com:443",
+          "common_name": "api.alice.vaspbot.net",
+          "endpoint": "api.alice.vaspbot.net:443",
           "travel_address": "taVwqXdsZdDVuWE2gbQgtdYECG6sGy9E1r3213WKPGyYfDv",
           "name": "AliceCoin",
-          "website": "https://alice.vaspbot.com",
+          "website": "https://alice.vaspbot.net",
           "country": "GB",
           "business_category": "NON_VASP_ENTITY",
           "vasp_categories": [
@@ -917,7 +917,7 @@
             {
               "id": "01JDQDM9QG9056TS0B7YXSDP0K",
               "name": "James Duffy",
-              "email": "jduffy@alice.vaspbot.com",
+              "email": "jduffy@alice.vaspbot.net",
               "role": "Compliance Officer",
               "created": "2024-11-27T12:21:08-06:00",
               "modified": "2024-11-27T12:21:08-06:00"
@@ -925,7 +925,7 @@
             {
               "id": "01JDQDPEC3KWSW4FMFEHPETS00",
               "name": "Alice Barnes",
-              "email": "alice@alice.vaspbot.com",
+              "email": "alice@alice.vaspbot.net",
               "role": "Technical Support",
               "created": "2024-08-28T10:14:43-05:00",
               "modified": "2024-08-28T12:23:24-05:00"
@@ -955,13 +955,13 @@
             "type": "string",
             "format": "domain",
             "description": "Specify the common name of the travel rule domain of the counterparty; used for uniquely identifying the counterparty.",
-            "example": "api.alice.vaspbot.com"
+            "example": "api.alice.vaspbot.net"
           },
           "endpoint": {
             "type": "string",
             "format": "url",
             "description": "Specify the URL endpoint to connect to using the travel rule protocol.",
-            "example": "api.alice.vaspbot.com:443"
+            "example": "api.alice.vaspbot.net:443"
           },
           "name": {
             "type": "string",
@@ -1038,10 +1038,10 @@
         ],
         "example": {
           "protocol": "trp",
-          "common_name": "trp.alice.vaspbot.com",
-          "endpoint": "https://trp.alice.vaspbot.com",
+          "common_name": "trp.alice.vaspbot.net",
+          "endpoint": "https://trp.alice.vaspbot.net",
           "name": "AliceCoin",
-          "website": "https://alice.vaspbot.com",
+          "website": "https://alice.vaspbot.net",
           "country": "GB",
           "business_category": "NON_VASP_ENTITY",
           "vasp_categories": [
@@ -1085,7 +1085,7 @@
             "type": "string",
             "format": "url",
             "description": "the URL endpoint to connect to using the travel rule protocol.",
-            "example": "api.alice.vaspbot.com:443"
+            "example": "api.alice.vaspbot.net:443"
           },
           "travel_address": {
             "type": "string",
@@ -1127,10 +1127,10 @@
           "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
           "source": "gds",
           "protocol": "trisa",
-          "endpoint": "api.alice.vaspbot.com:443",
+          "endpoint": "api.alice.vaspbot.net:443",
           "travel_address": "taVwqXdsZdDVuWE2gbQgtdYECG6sGy9E1r3213WKPGyYfDv",
           "name": "AliceCoin",
-          "website": "https://alice.vaspbot.com",
+          "website": "https://alice.vaspbot.net",
           "country": "GB",
           "verified_on": "2024-02-06T13:51:43-05:00",
           "created": "2024-08-28T10:14:43-05:00"
@@ -1192,10 +1192,10 @@
                 "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
                 "source": "gds",
                 "protocol": "trisa",
-                "endpoint": "api.alice.vaspbot.com:443",
+                "endpoint": "api.alice.vaspbot.net:443",
                 "travel_address": "taVwqXdsZdDVuWE2gbQgtdYECG6sGy9E1r3213WKPGyYfDv",
                 "name": "AliceCoin",
-                "website": "https://alice.vaspbot.com",
+                "website": "https://alice.vaspbot.net",
                 "country": "GB",
                 "verified_on": "2023-11-19T08:27:12-05:00",
                 "created": "2024-08-28T10:14:43-05:00"
@@ -1204,10 +1204,10 @@
                 "id": "01J6G3BE4QRY6355ZJ998SATXA",
                 "source": "gds",
                 "protocol": "trisa",
-                "endpoint": "api.bob.vaspbot.com:443",
+                "endpoint": "api.bob.vaspbot.net:443",
                 "travel_address": "ta2VBBr9q3A5rJ17Fx6b8NW82byUzGyeUMUWmNDUfmKtr",
                 "name": "BobVASP",
-                "website": "https://bob.vaspbot.com",
+                "website": "https://bob.vaspbot.net",
                 "country": "US",
                 "verified_on": "2024-02-06T13:51:43-05:00",
                 "created": "2024-08-29T17:15:54-05:00"
@@ -1225,10 +1225,10 @@
               "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
               "source": "gds",
               "protocol": "trisa",
-              "endpoint": "api.alice.vaspbot.com:443",
+              "endpoint": "api.alice.vaspbot.net:443",
               "travel_address": "taVwqXdsZdDVuWE2gbQgtdYECG6sGy9E1r3213WKPGyYfDv",
               "name": "AliceCoin",
-              "website": "https://alice.vaspbot.com",
+              "website": "https://alice.vaspbot.net",
               "country": "GB",
               "verified_on": "2023-11-19T08:27:12-05:00",
               "created": "2024-08-28T10:14:43-05:00"
@@ -1237,10 +1237,10 @@
               "id": "01J6G3BE4QRY6355ZJ998SATXA",
               "source": "gds",
               "protocol": "trisa",
-              "endpoint": "api.bob.vaspbot.com:443",
+              "endpoint": "api.bob.vaspbot.net:443",
               "travel_address": "ta2VBBr9q3A5rJ17Fx6b8NW82byUzGyeUMUWmNDUfmKtr",
               "name": "BobVASP",
-              "website": "https://bob.vaspbot.com",
+              "website": "https://bob.vaspbot.net",
               "country": "US",
               "verified_on": "2024-02-06T13:51:43-05:00",
               "created": "2024-08-29T17:15:54-05:00"
@@ -1268,7 +1268,7 @@
             "type": "string",
             "format": "email",
             "description": "The professional email address of the contact (must be unique and associated with only one counterparty).",
-            "example": "jduffy@alice.vaspbot.com"
+            "example": "jduffy@alice.vaspbot.net"
           },
           "role": {
             "type": "string",
@@ -1291,7 +1291,7 @@
         "example": {
           "id": "01JDQDM9QG9056TS0B7YXSDP0K",
           "name": "James Duffy",
-          "email": "jduffy@alice.vaspbot.com",
+          "email": "jduffy@alice.vaspbot.net",
           "role": "Compliance Officer",
           "created": "2024-11-27T12:21:08-06:00",
           "modified": "2024-11-27T12:21:08-06:00"
@@ -1314,7 +1314,7 @@
               {
                 "id": "01JDQDM9QG9056TS0B7YXSDP0K",
                 "name": "James Duffy",
-                "email": "jduffy@alice.vaspbot.com",
+                "email": "jduffy@alice.vaspbot.net",
                 "role": "Compliance Officer",
                 "created": "2024-11-27T12:21:08-06:00",
                 "modified": "2024-11-27T12:21:08-06:00"
@@ -1322,7 +1322,7 @@
               {
                 "id": "01JDQDPEC3KWSW4FMFEHPETS00",
                 "name": "Alice Barnes",
-                "email": "alice@alice.vaspbot.com",
+                "email": "alice@alice.vaspbot.net",
                 "role": "Technical Support",
                 "created": "2024-08-28T10:14:43-05:00",
                 "modified": "2024-08-28T12:23:24-05:00"
@@ -1338,7 +1338,7 @@
             {
               "id": "01JDQDM9QG9056TS0B7YXSDP0K",
               "name": "James Duffy",
-              "email": "jduffy@alice.vaspbot.com",
+              "email": "jduffy@alice.vaspbot.net",
               "role": "Compliance Officer",
               "created": "2024-11-27T12:21:08-06:00",
               "modified": "2024-11-27T12:21:08-06:00"
@@ -1346,7 +1346,7 @@
             {
               "id": "01JDQDPEC3KWSW4FMFEHPETS00",
               "name": "Alice Barnes",
-              "email": "alice@alice.vaspbot.com",
+              "email": "alice@alice.vaspbot.net",
               "role": "Technical Support",
               "created": "2024-08-28T10:14:43-05:00",
               "modified": "2024-08-28T12:23:24-05:00"
@@ -1745,7 +1745,7 @@
           "remote": {
             "type": "string",
             "description": "The common name or mTLS certificate identification of the remote counterparty to whom the secure envelope was being sent.",
-            "example": "api.alice.vaspbot.com"
+            "example": "api.alice.vaspbot.net"
           },
           "reply_to": {
             "type": "string",
@@ -1828,7 +1828,7 @@
           "id": "01J6S9G7GDGNKETY6YDJQC3Z47",
           "envelope_id": "cb9a92a3-dfa6-4ecc-a4cc-c1f8fa94d3fe",
           "direction": "out",
-          "remote": "api.alice.vaspbot.com",
+          "remote": "api.alice.vaspbot.net",
           "reply_to": "01J6S9RJ2APF7C6M10C8NTYVGX",
           "payload": "Omjx7x69RRFOcheWgESMKph5befzbENJoFXjgno74FCrCeZx5EoR3w515lR76X0pOqghaXErNir14/GisfSKuyZnwD4re7hbFrQn3nIjqqirKvkFRKf4QIOQv/0DfK/ofc8/3+OLN5YP9Js/5vMp3DcFWqYzB8AvCDGC6AtcNh+7Y6arHlCCXzQfxeI1BZeMN5QGeMSL8Ad3od6Nqy92KVCeSksNv858x7XDiYKTh72Rn/z+11UVw5wc4cKdf536vZQ87v38SNV3k7ASfmT+a8+19HnE2aPy/bYtmEQd94Q2w0+JPF4lB9C8DooMS7ctnOUDSIiY++v4xX4Ty40iOFQOns77E9itfAYQwYyVHoLXJVA9SR5aBYDJse0mhRlJ5KHf0cY7CPQlvtcCRu+rwdYu7U2XFXYXCjYS2a6mB+ozUaZMepcPst1XPqQRW2ZMKP8Q9sCa/0r2XIO9yHksaPt3AbbjfHczEvl44f2NkdpfBAtTYYGUfO441EBieO3NhE6XTWbAHaj8Sxo4DUpvibaENbIuMNksme3WCM6ZJRHJ70us+9PJSA9VEiGRHR64YbZn95iBcH7HAVWPJdPAmfSuRQ0i4LbdFdq33LZG33uJWLP0sK6ncFM+0e1G1S6hRN3hXEEdFhHxuOOq90Vq29mQHbgzrZiHgIKqasutXYU/Tbxcqi1oUZdRAMXIySfAVFVT9672DsQpAoFalKGeSu3kbNTfYTYBpvDFVFxJI/cvn/D64AOzg8feo/9KtJgSPG9QijCyD1hbkii75/ssu1Z8X9mj0Y4kRxS41EimihmQzTE47dxYjGy+W3X9s0H8AMyDmlvTU++5x8qyxLht9s6R83L8sXH+J9/4mLebgIccaaKYqJQZ7pWJoqrujuO1InYBWCUGPdRpHPlKmuMHjhc13j8PhGOrc4ylanOfdxUumUI4nLNlluKpijAZ/lwpNnixNbAu/ZpZUXLGcpgOZgqgBljcLOWq+PKteLhH2SIxt9+bIO8HoWzfpkVRWumuTi1xKQmkrOHW140uYez831Mz0ZDwB4u6aiHouSAu+MAGp/VzA0DmfjTGqD8KccxYZg+Cxye2e2CXJe6xw+AgUTg5bSeAIgwEafZU56BlV5tjdYMrXlcchS4ORGUV1ysMGBc0KIxYuvmciV17aD7R6wUbvgntvSGfvPvcbFqTY06sECgcWVVs8QB5avB7v4nYCDYnTay6Zc6ETE6EO9t+94bKljvAto3RefiFQeCfDnkbFWKHY37ofsTn3Crc+iesMmAzGJvOPkzgcxEjhpoFV7XYPiG0ke31dNFOrb9cZpTZJfi80XZjE6Z/ugQYWrfKjXauPYRbJWAts7TAaz28PxpjTjbdCO3wMCzKlYKnk+yCYwZe2c1Hdz4VEmNFNe30Uf7AH3dW2Q5tjKzn/ghj/zVeVI2bQLwfSKaEQI78Sqg5gXETwgkMCuzjp2850AMndNaep5W1JQ4PcWkLEonMPcdZF9CMIX7WaYFHRkbOuJC5ncC3icnyD0qEC/XWsvEQTR6rzY4vTIIZOgDMbKoZDK4C5kOj5pewohNOuYySQwB6A5hcNtW6Z/uJ4V9vGX+EPzwjTaHbe8GDj++NlzG+FQi1GozS+6vqJU5FCTdhTMzelg5blkozihiUGkkABFsMcn8R2uMvjJ/WebjkeQC3pkRkc+qfyAH+Q2uhSASfVAsKkalBFh3Y9uwwuY1Tl4aHMvmAWvBpbIpP/PI90JhW",
           "encryption_key": "vSdEaKmbQUA4hUfbpx2LAi7rfYK3YwVPMt7w0M0wHWI6sPTlLI863Bgagja7pP3TAq6dTuwXnT0jxbW/I6i2LYshvUbkHJIl/6nddGbJiJzJNboFvVZNFlNYCRDm2T/lOx0PPcuuficHQpVrqZUTT8g9jB3gwkSvCQMVt41g4aKnNGmxze1nVLi3LlmILNfownTxWRkPP4ASbBVZ204qi4c/1EA3AKI0vuSB1I4Sjk2D77/Ui67QTVc5xqdk+AGUON/hkFAa4RSC0DXmNqKBLobPkY3RhK1n1SqmCifjGBsqMdpXPnfAZlibxeB5UssZKK+1Lcj2viKY3FUPZFCNm5GgUhzxyXH5BCHgpgbpS4JQ9+8uyiUxyG5MpRZrdRowz252b1QiZ12u5lnxDO6RKQGcwRvs2mEst6ikkTHIIoZ13q4aZHsW7VWP3+ogZj/o3EnLxcYJO2PNkoHhLcQya6NSvxxgA8x6oRDObOLnzspavNw7tHf2LwORrd3PYJylNgllpoFK1qUIIdYulESkLuE6jqURIgP8WYUZ3nhMEAaHJbB4G66KoDGam0cmxTKiHGG11QU8SUNVdU8w/eb1NmR5ZSQIJdQA7RyREklZdjsW+mmcHgygxynHjzBe7kiXBNYBWz2CVQxGE+TySIi4ZHE2rxLpSCFAKl3KtLIVG4o=",
@@ -1875,7 +1875,7 @@
           "remote": {
             "type": "string",
             "description": "The common name of the remote counterparty.",
-            "example": "api.alice.vaspbot.com"
+            "example": "api.alice.vaspbot.net"
           },
           "reply_to": {
             "type": "string",
@@ -1928,7 +1928,7 @@
           "id": "01J6S9G7GDGNKETY6YDJQC3Z47",
           "envelope_id": "cb9a92a3-dfa6-4ecc-a4cc-c1f8fa94d3fe",
           "direction": "out",
-          "remote": "api.alice.vaspbot.com",
+          "remote": "api.alice.vaspbot.net",
           "reply_to": "01J6S9RJ2APF7C6M10C8NTYVGX",
           "encryption_algorithm": "AES256-GCM",
           "valid_hmac": true,
@@ -1970,7 +1970,7 @@
           "remote": {
             "type": "string",
             "description": "The common name or mTLS certificate identification of the remote counterparty to whom the envelope was being sent.",
-            "example": "api.alice.vaspbot.com"
+            "example": "api.alice.vaspbot.net"
           },
           "reply_to": {
             "type": "string",
@@ -2223,7 +2223,7 @@
             "id": "01J6S9G7GDGNKETY6YDJQC3Z47",
             "envelope_id": "cb9a92a3-dfa6-4ecc-a4cc-c1f8fa94d3fe",
             "direction": "out",
-            "remote": "api.alice.vaspbot.com",
+            "remote": "api.alice.vaspbot.net",
             "reply_to": "01J6S9RJ2APF7C6M10C8NTYVGX",
             "payload": "Omjx7x69RRFOcheWgESMKph5befzbENJoFXjgno74FCrCeZx5EoR3w515lR76X0pOqghaXErNir14/GisfSKuyZnwD4re7hbFrQn3nIjqqirKvkFRKf4QIOQv/0DfK/ofc8/3+OLN5YP9Js/5vMp3DcFWqYzB8AvCDGC6AtcNh+7Y6arHlCCXzQfxeI1BZeMN5QGeMSL8Ad3od6Nqy92KVCeSksNv858x7XDiYKTh72Rn/z+11UVw5wc4cKdf536vZQ87v38SNV3k7ASfmT+a8+19HnE2aPy/bYtmEQd94Q2w0+JPF4lB9C8DooMS7ctnOUDSIiY++v4xX4Ty40iOFQOns77E9itfAYQwYyVHoLXJVA9SR5aBYDJse0mhRlJ5KHf0cY7CPQlvtcCRu+rwdYu7U2XFXYXCjYS2a6mB+ozUaZMepcPst1XPqQRW2ZMKP8Q9sCa/0r2XIO9yHksaPt3AbbjfHczEvl44f2NkdpfBAtTYYGUfO441EBieO3NhE6XTWbAHaj8Sxo4DUpvibaENbIuMNksme3WCM6ZJRHJ70us+9PJSA9VEiGRHR64YbZn95iBcH7HAVWPJdPAmfSuRQ0i4LbdFdq33LZG33uJWLP0sK6ncFM+0e1G1S6hRN3hXEEdFhHxuOOq90Vq29mQHbgzrZiHgIKqasutXYU/Tbxcqi1oUZdRAMXIySfAVFVT9672DsQpAoFalKGeSu3kbNTfYTYBpvDFVFxJI/cvn/D64AOzg8feo/9KtJgSPG9QijCyD1hbkii75/ssu1Z8X9mj0Y4kRxS41EimihmQzTE47dxYjGy+W3X9s0H8AMyDmlvTU++5x8qyxLht9s6R83L8sXH+J9/4mLebgIccaaKYqJQZ7pWJoqrujuO1InYBWCUGPdRpHPlKmuMHjhc13j8PhGOrc4ylanOfdxUumUI4nLNlluKpijAZ/lwpNnixNbAu/ZpZUXLGcpgOZgqgBljcLOWq+PKteLhH2SIxt9+bIO8HoWzfpkVRWumuTi1xKQmkrOHW140uYez831Mz0ZDwB4u6aiHouSAu+MAGp/VzA0DmfjTGqD8KccxYZg+Cxye2e2CXJe6xw+AgUTg5bSeAIgwEafZU56BlV5tjdYMrXlcchS4ORGUV1ysMGBc0KIxYuvmciV17aD7R6wUbvgntvSGfvPvcbFqTY06sECgcWVVs8QB5avB7v4nYCDYnTay6Zc6ETE6EO9t+94bKljvAto3RefiFQeCfDnkbFWKHY37ofsTn3Crc+iesMmAzGJvOPkzgcxEjhpoFV7XYPiG0ke31dNFOrb9cZpTZJfi80XZjE6Z/ugQYWrfKjXauPYRbJWAts7TAaz28PxpjTjbdCO3wMCzKlYKnk+yCYwZe2c1Hdz4VEmNFNe30Uf7AH3dW2Q5tjKzn/ghj/zVeVI2bQLwfSKaEQI78Sqg5gXETwgkMCuzjp2850AMndNaep5W1JQ4PcWkLEonMPcdZF9CMIX7WaYFHRkbOuJC5ncC3icnyD0qEC/XWsvEQTR6rzY4vTIIZOgDMbKoZDK4C5kOj5pewohNOuYySQwB6A5hcNtW6Z/uJ4V9vGX+EPzwjTaHbe8GDj++NlzG+FQi1GozS+6vqJU5FCTdhTMzelg5blkozihiUGkkABFsMcn8R2uMvjJ/WebjkeQC3pkRkc+qfyAH+Q2uhSASfVAsKkalBFh3Y9uwwuY1Tl4aHMvmAWvBpbIpP/PI90JhW",
             "encryption_key": "vSdEaKmbQUA4hUfbpx2LAi7rfYK3YwVPMt7w0M0wHWI6sPTlLI863Bgagja7pP3TAq6dTuwXnT0jxbW/I6i2LYshvUbkHJIl/6nddGbJiJzJNboFvVZNFlNYCRDm2T/lOx0PPcuuficHQpVrqZUTT8g9jB3gwkSvCQMVt41g4aKnNGmxze1nVLi3LlmILNfownTxWRkPP4ASbBVZ204qi4c/1EA3AKI0vuSB1I4Sjk2D77/Ui67QTVc5xqdk+AGUON/hkFAa4RSC0DXmNqKBLobPkY3RhK1n1SqmCifjGBsqMdpXPnfAZlibxeB5UssZKK+1Lcj2viKY3FUPZFCNm5GgUhzxyXH5BCHgpgbpS4JQ9+8uyiUxyG5MpRZrdRowz252b1QiZ12u5lnxDO6RKQGcwRvs2mEst6ikkTHIIoZ13q4aZHsW7VWP3+ogZj/o3EnLxcYJO2PNkoHhLcQya6NSvxxgA8x6oRDObOLnzspavNw7tHf2LwORrd3PYJylNgllpoFK1qUIIdYulESkLuE6jqURIgP8WYUZ3nhMEAaHJbB4G66KoDGam0cmxTKiHGG11QU8SUNVdU8w/eb1NmR5ZSQIJdQA7RyREklZdjsW+mmcHgygxynHjzBe7kiXBNYBWz2CVQxGE+TySIi4ZHE2rxLpSCFAKl3KtLIVG4o=",
@@ -2271,7 +2271,7 @@
           "remote": {
             "type": "string",
             "description": "The common name of the remote counterparty in the exchange.",
-            "example": "api.alice.vaspbot.com"
+            "example": "api.alice.vaspbot.net"
           },
           "reply_to": {
             "type": "string",
@@ -2654,7 +2654,7 @@
               "id": "01J6S9G7GDGNKETY6YDJQC3Z47",
               "envelope_id": "cb9a92a3-dfa6-4ecc-a4cc-c1f8fa94d3fe",
               "direction": "out",
-              "remote": "api.alice.vaspbot.com",
+              "remote": "api.alice.vaspbot.net",
               "reply_to": "01J6S9RJ2APF7C6M10C8NTYVGX",
               "payload": "Omjx7x69RRFOcheWgESMKph5befzbENJoFXjgno74FCrCeZx5EoR3w515lR76X0pOqghaXErNir14/GisfSKuyZnwD4re7hbFrQn3nIjqqirKvkFRKf4QIOQv/0DfK/ofc8/3+OLN5YP9Js/5vMp3DcFWqYzB8AvCDGC6AtcNh+7Y6arHlCCXzQfxeI1BZeMN5QGeMSL8Ad3od6Nqy92KVCeSksNv858x7XDiYKTh72Rn/z+11UVw5wc4cKdf536vZQ87v38SNV3k7ASfmT+a8+19HnE2aPy/bYtmEQd94Q2w0+JPF4lB9C8DooMS7ctnOUDSIiY++v4xX4Ty40iOFQOns77E9itfAYQwYyVHoLXJVA9SR5aBYDJse0mhRlJ5KHf0cY7CPQlvtcCRu+rwdYu7U2XFXYXCjYS2a6mB+ozUaZMepcPst1XPqQRW2ZMKP8Q9sCa/0r2XIO9yHksaPt3AbbjfHczEvl44f2NkdpfBAtTYYGUfO441EBieO3NhE6XTWbAHaj8Sxo4DUpvibaENbIuMNksme3WCM6ZJRHJ70us+9PJSA9VEiGRHR64YbZn95iBcH7HAVWPJdPAmfSuRQ0i4LbdFdq33LZG33uJWLP0sK6ncFM+0e1G1S6hRN3hXEEdFhHxuOOq90Vq29mQHbgzrZiHgIKqasutXYU/Tbxcqi1oUZdRAMXIySfAVFVT9672DsQpAoFalKGeSu3kbNTfYTYBpvDFVFxJI/cvn/D64AOzg8feo/9KtJgSPG9QijCyD1hbkii75/ssu1Z8X9mj0Y4kRxS41EimihmQzTE47dxYjGy+W3X9s0H8AMyDmlvTU++5x8qyxLht9s6R83L8sXH+J9/4mLebgIccaaKYqJQZ7pWJoqrujuO1InYBWCUGPdRpHPlKmuMHjhc13j8PhGOrc4ylanOfdxUumUI4nLNlluKpijAZ/lwpNnixNbAu/ZpZUXLGcpgOZgqgBljcLOWq+PKteLhH2SIxt9+bIO8HoWzfpkVRWumuTi1xKQmkrOHW140uYez831Mz0ZDwB4u6aiHouSAu+MAGp/VzA0DmfjTGqD8KccxYZg+Cxye2e2CXJe6xw+AgUTg5bSeAIgwEafZU56BlV5tjdYMrXlcchS4ORGUV1ysMGBc0KIxYuvmciV17aD7R6wUbvgntvSGfvPvcbFqTY06sECgcWVVs8QB5avB7v4nYCDYnTay6Zc6ETE6EO9t+94bKljvAto3RefiFQeCfDnkbFWKHY37ofsTn3Crc+iesMmAzGJvOPkzgcxEjhpoFV7XYPiG0ke31dNFOrb9cZpTZJfi80XZjE6Z/ugQYWrfKjXauPYRbJWAts7TAaz28PxpjTjbdCO3wMCzKlYKnk+yCYwZe2c1Hdz4VEmNFNe30Uf7AH3dW2Q5tjKzn/ghj/zVeVI2bQLwfSKaEQI78Sqg5gXETwgkMCuzjp2850AMndNaep5W1JQ4PcWkLEonMPcdZF9CMIX7WaYFHRkbOuJC5ncC3icnyD0qEC/XWsvEQTR6rzY4vTIIZOgDMbKoZDK4C5kOj5pewohNOuYySQwB6A5hcNtW6Z/uJ4V9vGX+EPzwjTaHbe8GDj++NlzG+FQi1GozS+6vqJU5FCTdhTMzelg5blkozihiUGkkABFsMcn8R2uMvjJ/WebjkeQC3pkRkc+qfyAH+Q2uhSASfVAsKkalBFh3Y9uwwuY1Tl4aHMvmAWvBpbIpP/PI90JhW",
               "encryption_key": "vSdEaKmbQUA4hUfbpx2LAi7rfYK3YwVPMt7w0M0wHWI6sPTlLI863Bgagja7pP3TAq6dTuwXnT0jxbW/I6i2LYshvUbkHJIl/6nddGbJiJzJNboFvVZNFlNYCRDm2T/lOx0PPcuuficHQpVrqZUTT8g9jB3gwkSvCQMVt41g4aKnNGmxze1nVLi3LlmILNfownTxWRkPP4ASbBVZ204qi4c/1EA3AKI0vuSB1I4Sjk2D77/Ui67QTVc5xqdk+AGUON/hkFAa4RSC0DXmNqKBLobPkY3RhK1n1SqmCifjGBsqMdpXPnfAZlibxeB5UssZKK+1Lcj2viKY3FUPZFCNm5GgUhzxyXH5BCHgpgbpS4JQ9+8uyiUxyG5MpRZrdRowz252b1QiZ12u5lnxDO6RKQGcwRvs2mEst6ikkTHIIoZ13q4aZHsW7VWP3+ogZj/o3EnLxcYJO2PNkoHhLcQya6NSvxxgA8x6oRDObOLnzspavNw7tHf2LwORrd3PYJylNgllpoFK1qUIIdYulESkLuE6jqURIgP8WYUZ3nhMEAaHJbB4G66KoDGam0cmxTKiHGG11QU8SUNVdU8w/eb1NmR5ZSQIJdQA7RyREklZdjsW+mmcHgygxynHjzBe7kiXBNYBWz2CVQxGE+TySIi4ZHE2rxLpSCFAKl3KtLIVG4o=",
@@ -7222,10 +7222,10 @@
                       "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
                       "source": "gds",
                       "protocol": "trisa",
-                      "endpoint": "api.alice.vaspbot.com:443",
+                      "endpoint": "api.alice.vaspbot.net:443",
                       "travel_address": "taVwqXdsZdDVuWE2gbQgtdYECG6sGy9E1r3213WKPGyYfDv",
                       "name": "AliceCoin",
-                      "website": "https://alice.vaspbot.com",
+                      "website": "https://alice.vaspbot.net",
                       "country": "GB",
                       "created": "2024-08-28T10:14:43-05:00"
                     },
@@ -7233,10 +7233,10 @@
                       "id": "01J6G3BE4QRY6355ZJ998SATXA",
                       "source": "gds",
                       "protocol": "trisa",
-                      "endpoint": "api.bob.vaspbot.com:443",
+                      "endpoint": "api.bob.vaspbot.net:443",
                       "travel_address": "ta2VBBr9q3A5rJ17Fx6b8NW82byUzGyeUMUWmNDUfmKtr",
                       "name": "BobVASP",
-                      "website": "https://bob.vaspbot.com",
+                      "website": "https://bob.vaspbot.net",
                       "country": "US",
                       "created": "2024-08-29T17:15:54-05:00"
                     }
@@ -7305,10 +7305,10 @@
               },
               "example": {
                 "protocol": "trp",
-                "common_name": "trp.alice.vaspbot.com",
-                "endpoint": "https://trp.alice.vaspbot.com",
+                "common_name": "trp.alice.vaspbot.net",
+                "endpoint": "https://trp.alice.vaspbot.net",
                 "name": "AliceCoin",
-                "website": "https://alice.vaspbot.com",
+                "website": "https://alice.vaspbot.net",
                 "country": "GB",
                 "business_category": "NON_VASP_ENTITY",
                 "vasp_categories": [
@@ -7331,10 +7331,10 @@
                   "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
                   "source": "user",
                   "protocol": "trp",
-                  "common_name": "trp.alice.vaspbot.com",
-                  "endpoint": "https://trp.alice.vaspbot.com",
+                  "common_name": "trp.alice.vaspbot.net",
+                  "endpoint": "https://trp.alice.vaspbot.net",
                   "name": "AliceCoin",
-                  "website": "https://alice.vaspbot.com",
+                  "website": "https://alice.vaspbot.net",
                   "country": "GB",
                   "business_category": "NON_VASP_ENTITY",
                   "vasp_categories": [
@@ -7440,10 +7440,10 @@
                       "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
                       "source": "gds",
                       "protocol": "trisa",
-                      "endpoint": "api.alice.vaspbot.com:443",
+                      "endpoint": "api.alice.vaspbot.net:443",
                       "travel_address": "taVwqXdsZdDVuWE2gbQgtdYECG6sGy9E1r3213WKPGyYfDv",
                       "name": "AliceCoin",
-                      "website": "https://alice.vaspbot.com",
+                      "website": "https://alice.vaspbot.net",
                       "country": "GB",
                       "created": "2024-08-28T10:14:43-05:00"
                     },
@@ -7451,10 +7451,10 @@
                       "id": "01J6G3BE4QRY6355ZJ998SATXA",
                       "source": "gds",
                       "protocol": "trisa",
-                      "endpoint": "api.bob.vaspbot.com:443",
+                      "endpoint": "api.bob.vaspbot.net:443",
                       "travel_address": "ta2VBBr9q3A5rJ17Fx6b8NW82byUzGyeUMUWmNDUfmKtr",
                       "name": "BobVASP",
-                      "website": "https://bob.vaspbot.com",
+                      "website": "https://bob.vaspbot.net",
                       "country": "US",
                       "created": "2024-08-29T17:15:54-05:00"
                     }
@@ -7525,13 +7525,13 @@
                   "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
                   "source": "gds",
                   "directory_id": "5154a0aa-502c-4179-a6f2-8b143d59edce",
-                  "registered_directory": "testnet.directory",
+                  "registered_directory": "trisatest.net",
                   "protocol": "trisa",
-                  "common_name": "api.alice.vaspbot.com",
-                  "endpoint": "api.alice.vaspbot.com:443",
+                  "common_name": "api.alice.vaspbot.net",
+                  "endpoint": "api.alice.vaspbot.net:443",
                   "travel_address": "taYgWCfsnPN8hsqUAZWm4TW7WrHU5qZT3GiBPpfSApGSqoPMH1D6kiNRzST5Gz",
                   "name": "AliceCoin",
-                  "website": "https://alice.vaspbot.com",
+                  "website": "https://alice.vaspbot.net",
                   "country": "GB",
                   "business_category": "NON_VASP_ENTITY",
                   "vasp_categories": [
@@ -7616,10 +7616,10 @@
               },
               "example": {
                 "protocol": "trp",
-                "common_name": "trp.alice.vaspbot.com",
-                "endpoint": "https://trp.alice.vaspbot.com",
+                "common_name": "trp.alice.vaspbot.net",
+                "endpoint": "https://trp.alice.vaspbot.net",
                 "name": "AliceCoin",
-                "website": "https://alice.vaspbot.com",
+                "website": "https://alice.vaspbot.net",
                 "country": "GB",
                 "business_category": "NON_VASP_ENTITY",
                 "vasp_categories": [
@@ -7643,13 +7643,13 @@
                   "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
                   "source": "gds",
                   "directory_id": "5154a0aa-502c-4179-a6f2-8b143d59edce",
-                  "registered_directory": "testnet.directory",
+                  "registered_directory": "trisatest.net",
                   "protocol": "trisa",
-                  "common_name": "api.alice.vaspbot.com",
-                  "endpoint": "api.alice.vaspbot.com:443",
+                  "common_name": "api.alice.vaspbot.net",
+                  "endpoint": "api.alice.vaspbot.net:443",
                   "travel_address": "taYgWCfsnPN8hsqUAZWm4TW7WrHU5qZT3GiBPpfSApGSqoPMH1D6kiNRzST5Gz",
                   "name": "AliceCoin",
-                  "website": "https://alice.vaspbot.com",
+                  "website": "https://alice.vaspbot.net",
                   "country": "GB",
                   "business_category": "NON_VASP_ENTITY",
                   "vasp_categories": [
@@ -7854,7 +7854,7 @@
                     {
                       "id": "01JDQDM9QG9056TS0B7YXSDP0K",
                       "name": "James Duffy",
-                      "email": "jduffy@alice.vaspbot.com",
+                      "email": "jduffy@alice.vaspbot.net",
                       "role": "Compliance Officer",
                       "created": "2024-11-27T12:21:08-06:00",
                       "modified": "2024-11-27T12:21:08-06:00"
@@ -7862,7 +7862,7 @@
                     {
                       "id": "01JDQDPEC3KWSW4FMFEHPETS00",
                       "name": "Alice Barnes",
-                      "email": "alice@alice.vaspbot.com",
+                      "email": "alice@alice.vaspbot.net",
                       "role": "Technical Support",
                       "created": "2024-08-28T10:14:43-05:00",
                       "modified": "2024-08-28T12:23:24-05:00"
@@ -8908,7 +8908,9 @@
               },
               "example": {
                 "routing": {
-                  "travel_address": "taLg4sBFp3cWhB9wN7qsiUF8pxo7JXtVShYkv5ix1wG2kX5y4pRiJ3TRHmeD8H67TLLm5wHyDktVw1onfDeQfESumf91mjRTMbi"
+                  "protocol": "sunrise",
+                  "counterparty": "AliceCoin, LLC",
+                  "email": "Jane Smith <jane@alicecoin.com>"
                 },
                 "originator": {
                   "first_name": "James",
@@ -8963,7 +8965,8 @@
                 },
                 "example": {
                   "routing": {
-                    "travel_address": "taLg4sBFp3cWhB9wN7qsiUF8pxo7JXtVShYkv5ix1wG2kX5y4pRiJ3TRHmeD8H67TLLm5wHyDktVw1onfDeQfESumf91mjRTMbi"
+                    "protocol": "trisa",
+                    "counterparty_id": "01JPMJG3ZFSX753ZAKRWRZPWVC"
                   },
                   "identity": {
                     "originator": {
@@ -11060,7 +11063,7 @@
                       "id": "01J6S9G7GDGNKETY6YDJQC3Z47",
                       "envelope_id": "cb9a92a3-dfa6-4ecc-a4cc-c1f8fa94d3fe",
                       "direction": "out",
-                      "remote": "api.alice.vaspbot.com",
+                      "remote": "api.alice.vaspbot.net",
                       "reply_to": "01J6S9RJ2APF7C6M10C8NTYVGX",
                       "payload": "Omjx7x69RRFOcheWgESMKph5befzbENJoFXjgno74FCrCeZx5EoR3w515lR76X0pOqghaXErNir14/GisfSKuyZnwD4re7hbFrQn3nIjqqirKvkFRKf4QIOQv/0DfK/ofc8/3+OLN5YP9Js/5vMp3DcFWqYzB8AvCDGC6AtcNh+7Y6arHlCCXzQfxeI1BZeMN5QGeMSL8Ad3od6Nqy92KVCeSksNv858x7XDiYKTh72Rn/z+11UVw5wc4cKdf536vZQ87v38SNV3k7ASfmT+a8+19HnE2aPy/bYtmEQd94Q2w0+JPF4lB9C8DooMS7ctnOUDSIiY++v4xX4Ty40iOFQOns77E9itfAYQwYyVHoLXJVA9SR5aBYDJse0mhRlJ5KHf0cY7CPQlvtcCRu+rwdYu7U2XFXYXCjYS2a6mB+ozUaZMepcPst1XPqQRW2ZMKP8Q9sCa/0r2XIO9yHksaPt3AbbjfHczEvl44f2NkdpfBAtTYYGUfO441EBieO3NhE6XTWbAHaj8Sxo4DUpvibaENbIuMNksme3WCM6ZJRHJ70us+9PJSA9VEiGRHR64YbZn95iBcH7HAVWPJdPAmfSuRQ0i4LbdFdq33LZG33uJWLP0sK6ncFM+0e1G1S6hRN3hXEEdFhHxuOOq90Vq29mQHbgzrZiHgIKqasutXYU/Tbxcqi1oUZdRAMXIySfAVFVT9672DsQpAoFalKGeSu3kbNTfYTYBpvDFVFxJI/cvn/D64AOzg8feo/9KtJgSPG9QijCyD1hbkii75/ssu1Z8X9mj0Y4kRxS41EimihmQzTE47dxYjGy+W3X9s0H8AMyDmlvTU++5x8qyxLht9s6R83L8sXH+J9/4mLebgIccaaKYqJQZ7pWJoqrujuO1InYBWCUGPdRpHPlKmuMHjhc13j8PhGOrc4ylanOfdxUumUI4nLNlluKpijAZ/lwpNnixNbAu/ZpZUXLGcpgOZgqgBljcLOWq+PKteLhH2SIxt9+bIO8HoWzfpkVRWumuTi1xKQmkrOHW140uYez831Mz0ZDwB4u6aiHouSAu+MAGp/VzA0DmfjTGqD8KccxYZg+Cxye2e2CXJe6xw+AgUTg5bSeAIgwEafZU56BlV5tjdYMrXlcchS4ORGUV1ysMGBc0KIxYuvmciV17aD7R6wUbvgntvSGfvPvcbFqTY06sECgcWVVs8QB5avB7v4nYCDYnTay6Zc6ETE6EO9t+94bKljvAto3RefiFQeCfDnkbFWKHY37ofsTn3Crc+iesMmAzGJvOPkzgcxEjhpoFV7XYPiG0ke31dNFOrb9cZpTZJfi80XZjE6Z/ugQYWrfKjXauPYRbJWAts7TAaz28PxpjTjbdCO3wMCzKlYKnk+yCYwZe2c1Hdz4VEmNFNe30Uf7AH3dW2Q5tjKzn/ghj/zVeVI2bQLwfSKaEQI78Sqg5gXETwgkMCuzjp2850AMndNaep5W1JQ4PcWkLEonMPcdZF9CMIX7WaYFHRkbOuJC5ncC3icnyD0qEC/XWsvEQTR6rzY4vTIIZOgDMbKoZDK4C5kOj5pewohNOuYySQwB6A5hcNtW6Z/uJ4V9vGX+EPzwjTaHbe8GDj++NlzG+FQi1GozS+6vqJU5FCTdhTMzelg5blkozihiUGkkABFsMcn8R2uMvjJ/WebjkeQC3pkRkc+qfyAH+Q2uhSASfVAsKkalBFh3Y9uwwuY1Tl4aHMvmAWvBpbIpP/PI90JhW",
                       "encryption_key": "vSdEaKmbQUA4hUfbpx2LAi7rfYK3YwVPMt7w0M0wHWI6sPTlLI863Bgagja7pP3TAq6dTuwXnT0jxbW/I6i2LYshvUbkHJIl/6nddGbJiJzJNboFvVZNFlNYCRDm2T/lOx0PPcuuficHQpVrqZUTT8g9jB3gwkSvCQMVt41g4aKnNGmxze1nVLi3LlmILNfownTxWRkPP4ASbBVZ204qi4c/1EA3AKI0vuSB1I4Sjk2D77/Ui67QTVc5xqdk+AGUON/hkFAa4RSC0DXmNqKBLobPkY3RhK1n1SqmCifjGBsqMdpXPnfAZlibxeB5UssZKK+1Lcj2viKY3FUPZFCNm5GgUhzxyXH5BCHgpgbpS4JQ9+8uyiUxyG5MpRZrdRowz252b1QiZ12u5lnxDO6RKQGcwRvs2mEst6ikkTHIIoZ13q4aZHsW7VWP3+ogZj/o3EnLxcYJO2PNkoHhLcQya6NSvxxgA8x6oRDObOLnzspavNw7tHf2LwORrd3PYJylNgllpoFK1qUIIdYulESkLuE6jqURIgP8WYUZ3nhMEAaHJbB4G66KoDGam0cmxTKiHGG11QU8SUNVdU8w/eb1NmR5ZSQIJdQA7RyREklZdjsW+mmcHgygxynHjzBe7kiXBNYBWz2CVQxGE+TySIi4ZHE2rxLpSCFAKl3KtLIVG4o=",
@@ -11871,7 +11874,7 @@
                   "id": "01J6S9G7GDGNKETY6YDJQC3Z47",
                   "envelope_id": "cb9a92a3-dfa6-4ecc-a4cc-c1f8fa94d3fe",
                   "direction": "out",
-                  "remote": "api.alice.vaspbot.com",
+                  "remote": "api.alice.vaspbot.net",
                   "reply_to": "01J6S9RJ2APF7C6M10C8NTYVGX",
                   "payload": "Omjx7x69RRFOcheWgESMKph5befzbENJoFXjgno74FCrCeZx5EoR3w515lR76X0pOqghaXErNir14/GisfSKuyZnwD4re7hbFrQn3nIjqqirKvkFRKf4QIOQv/0DfK/ofc8/3+OLN5YP9Js/5vMp3DcFWqYzB8AvCDGC6AtcNh+7Y6arHlCCXzQfxeI1BZeMN5QGeMSL8Ad3od6Nqy92KVCeSksNv858x7XDiYKTh72Rn/z+11UVw5wc4cKdf536vZQ87v38SNV3k7ASfmT+a8+19HnE2aPy/bYtmEQd94Q2w0+JPF4lB9C8DooMS7ctnOUDSIiY++v4xX4Ty40iOFQOns77E9itfAYQwYyVHoLXJVA9SR5aBYDJse0mhRlJ5KHf0cY7CPQlvtcCRu+rwdYu7U2XFXYXCjYS2a6mB+ozUaZMepcPst1XPqQRW2ZMKP8Q9sCa/0r2XIO9yHksaPt3AbbjfHczEvl44f2NkdpfBAtTYYGUfO441EBieO3NhE6XTWbAHaj8Sxo4DUpvibaENbIuMNksme3WCM6ZJRHJ70us+9PJSA9VEiGRHR64YbZn95iBcH7HAVWPJdPAmfSuRQ0i4LbdFdq33LZG33uJWLP0sK6ncFM+0e1G1S6hRN3hXEEdFhHxuOOq90Vq29mQHbgzrZiHgIKqasutXYU/Tbxcqi1oUZdRAMXIySfAVFVT9672DsQpAoFalKGeSu3kbNTfYTYBpvDFVFxJI/cvn/D64AOzg8feo/9KtJgSPG9QijCyD1hbkii75/ssu1Z8X9mj0Y4kRxS41EimihmQzTE47dxYjGy+W3X9s0H8AMyDmlvTU++5x8qyxLht9s6R83L8sXH+J9/4mLebgIccaaKYqJQZ7pWJoqrujuO1InYBWCUGPdRpHPlKmuMHjhc13j8PhGOrc4ylanOfdxUumUI4nLNlluKpijAZ/lwpNnixNbAu/ZpZUXLGcpgOZgqgBljcLOWq+PKteLhH2SIxt9+bIO8HoWzfpkVRWumuTi1xKQmkrOHW140uYez831Mz0ZDwB4u6aiHouSAu+MAGp/VzA0DmfjTGqD8KccxYZg+Cxye2e2CXJe6xw+AgUTg5bSeAIgwEafZU56BlV5tjdYMrXlcchS4ORGUV1ysMGBc0KIxYuvmciV17aD7R6wUbvgntvSGfvPvcbFqTY06sECgcWVVs8QB5avB7v4nYCDYnTay6Zc6ETE6EO9t+94bKljvAto3RefiFQeCfDnkbFWKHY37ofsTn3Crc+iesMmAzGJvOPkzgcxEjhpoFV7XYPiG0ke31dNFOrb9cZpTZJfi80XZjE6Z/ugQYWrfKjXauPYRbJWAts7TAaz28PxpjTjbdCO3wMCzKlYKnk+yCYwZe2c1Hdz4VEmNFNe30Uf7AH3dW2Q5tjKzn/ghj/zVeVI2bQLwfSKaEQI78Sqg5gXETwgkMCuzjp2850AMndNaep5W1JQ4PcWkLEonMPcdZF9CMIX7WaYFHRkbOuJC5ncC3icnyD0qEC/XWsvEQTR6rzY4vTIIZOgDMbKoZDK4C5kOj5pewohNOuYySQwB6A5hcNtW6Z/uJ4V9vGX+EPzwjTaHbe8GDj++NlzG+FQi1GozS+6vqJU5FCTdhTMzelg5blkozihiUGkkABFsMcn8R2uMvjJ/WebjkeQC3pkRkc+qfyAH+Q2uhSASfVAsKkalBFh3Y9uwwuY1Tl4aHMvmAWvBpbIpP/PI90JhW",
                   "encryption_key": "vSdEaKmbQUA4hUfbpx2LAi7rfYK3YwVPMt7w0M0wHWI6sPTlLI863Bgagja7pP3TAq6dTuwXnT0jxbW/I6i2LYshvUbkHJIl/6nddGbJiJzJNboFvVZNFlNYCRDm2T/lOx0PPcuuficHQpVrqZUTT8g9jB3gwkSvCQMVt41g4aKnNGmxze1nVLi3LlmILNfownTxWRkPP4ASbBVZ204qi4c/1EA3AKI0vuSB1I4Sjk2D77/Ui67QTVc5xqdk+AGUON/hkFAa4RSC0DXmNqKBLobPkY3RhK1n1SqmCifjGBsqMdpXPnfAZlibxeB5UssZKK+1Lcj2viKY3FUPZFCNm5GgUhzxyXH5BCHgpgbpS4JQ9+8uyiUxyG5MpRZrdRowz252b1QiZ12u5lnxDO6RKQGcwRvs2mEst6ikkTHIIoZ13q4aZHsW7VWP3+ogZj/o3EnLxcYJO2PNkoHhLcQya6NSvxxgA8x6oRDObOLnzspavNw7tHf2LwORrd3PYJylNgllpoFK1qUIIdYulESkLuE6jqURIgP8WYUZ3nhMEAaHJbB4G66KoDGam0cmxTKiHGG11QU8SUNVdU8w/eb1NmR5ZSQIJdQA7RyREklZdjsW+mmcHgygxynHjzBe7kiXBNYBWz2CVQxGE+TySIi4ZHE2rxLpSCFAKl3KtLIVG4o=",
@@ -11911,7 +11914,7 @@
                     "id": "01J6S9G7GDGNKETY6YDJQC3Z47",
                     "envelope_id": "cb9a92a3-dfa6-4ecc-a4cc-c1f8fa94d3fe",
                     "direction": "out",
-                    "remote": "api.alice.vaspbot.com",
+                    "remote": "api.alice.vaspbot.net",
                     "reply_to": "01J6S9RJ2APF7C6M10C8NTYVGX",
                     "payload": "Omjx7x69RRFOcheWgESMKph5befzbENJoFXjgno74FCrCeZx5EoR3w515lR76X0pOqghaXErNir14/GisfSKuyZnwD4re7hbFrQn3nIjqqirKvkFRKf4QIOQv/0DfK/ofc8/3+OLN5YP9Js/5vMp3DcFWqYzB8AvCDGC6AtcNh+7Y6arHlCCXzQfxeI1BZeMN5QGeMSL8Ad3od6Nqy92KVCeSksNv858x7XDiYKTh72Rn/z+11UVw5wc4cKdf536vZQ87v38SNV3k7ASfmT+a8+19HnE2aPy/bYtmEQd94Q2w0+JPF4lB9C8DooMS7ctnOUDSIiY++v4xX4Ty40iOFQOns77E9itfAYQwYyVHoLXJVA9SR5aBYDJse0mhRlJ5KHf0cY7CPQlvtcCRu+rwdYu7U2XFXYXCjYS2a6mB+ozUaZMepcPst1XPqQRW2ZMKP8Q9sCa/0r2XIO9yHksaPt3AbbjfHczEvl44f2NkdpfBAtTYYGUfO441EBieO3NhE6XTWbAHaj8Sxo4DUpvibaENbIuMNksme3WCM6ZJRHJ70us+9PJSA9VEiGRHR64YbZn95iBcH7HAVWPJdPAmfSuRQ0i4LbdFdq33LZG33uJWLP0sK6ncFM+0e1G1S6hRN3hXEEdFhHxuOOq90Vq29mQHbgzrZiHgIKqasutXYU/Tbxcqi1oUZdRAMXIySfAVFVT9672DsQpAoFalKGeSu3kbNTfYTYBpvDFVFxJI/cvn/D64AOzg8feo/9KtJgSPG9QijCyD1hbkii75/ssu1Z8X9mj0Y4kRxS41EimihmQzTE47dxYjGy+W3X9s0H8AMyDmlvTU++5x8qyxLht9s6R83L8sXH+J9/4mLebgIccaaKYqJQZ7pWJoqrujuO1InYBWCUGPdRpHPlKmuMHjhc13j8PhGOrc4ylanOfdxUumUI4nLNlluKpijAZ/lwpNnixNbAu/ZpZUXLGcpgOZgqgBljcLOWq+PKteLhH2SIxt9+bIO8HoWzfpkVRWumuTi1xKQmkrOHW140uYez831Mz0ZDwB4u6aiHouSAu+MAGp/VzA0DmfjTGqD8KccxYZg+Cxye2e2CXJe6xw+AgUTg5bSeAIgwEafZU56BlV5tjdYMrXlcchS4ORGUV1ysMGBc0KIxYuvmciV17aD7R6wUbvgntvSGfvPvcbFqTY06sECgcWVVs8QB5avB7v4nYCDYnTay6Zc6ETE6EO9t+94bKljvAto3RefiFQeCfDnkbFWKHY37ofsTn3Crc+iesMmAzGJvOPkzgcxEjhpoFV7XYPiG0ke31dNFOrb9cZpTZJfi80XZjE6Z/ugQYWrfKjXauPYRbJWAts7TAaz28PxpjTjbdCO3wMCzKlYKnk+yCYwZe2c1Hdz4VEmNFNe30Uf7AH3dW2Q5tjKzn/ghj/zVeVI2bQLwfSKaEQI78Sqg5gXETwgkMCuzjp2850AMndNaep5W1JQ4PcWkLEonMPcdZF9CMIX7WaYFHRkbOuJC5ncC3icnyD0qEC/XWsvEQTR6rzY4vTIIZOgDMbKoZDK4C5kOj5pewohNOuYySQwB6A5hcNtW6Z/uJ4V9vGX+EPzwjTaHbe8GDj++NlzG+FQi1GozS+6vqJU5FCTdhTMzelg5blkozihiUGkkABFsMcn8R2uMvjJ/WebjkeQC3pkRkc+qfyAH+Q2uhSASfVAsKkalBFh3Y9uwwuY1Tl4aHMvmAWvBpbIpP/PI90JhW",
                     "encryption_key": "vSdEaKmbQUA4hUfbpx2LAi7rfYK3YwVPMt7w0M0wHWI6sPTlLI863Bgagja7pP3TAq6dTuwXnT0jxbW/I6i2LYshvUbkHJIl/6nddGbJiJzJNboFvVZNFlNYCRDm2T/lOx0PPcuuficHQpVrqZUTT8g9jB3gwkSvCQMVt41g4aKnNGmxze1nVLi3LlmILNfownTxWRkPP4ASbBVZ204qi4c/1EA3AKI0vuSB1I4Sjk2D77/Ui67QTVc5xqdk+AGUON/hkFAa4RSC0DXmNqKBLobPkY3RhK1n1SqmCifjGBsqMdpXPnfAZlibxeB5UssZKK+1Lcj2viKY3FUPZFCNm5GgUhzxyXH5BCHgpgbpS4JQ9+8uyiUxyG5MpRZrdRowz252b1QiZ12u5lnxDO6RKQGcwRvs2mEst6ikkTHIIoZ13q4aZHsW7VWP3+ogZj/o3EnLxcYJO2PNkoHhLcQya6NSvxxgA8x6oRDObOLnzspavNw7tHf2LwORrd3PYJylNgllpoFK1qUIIdYulESkLuE6jqURIgP8WYUZ3nhMEAaHJbB4G66KoDGam0cmxTKiHGG11QU8SUNVdU8w/eb1NmR5ZSQIJdQA7RyREklZdjsW+mmcHgygxynHjzBe7kiXBNYBWz2CVQxGE+TySIi4ZHE2rxLpSCFAKl3KtLIVG4o=",
@@ -13494,13 +13497,13 @@
                   "id": "01J6DJ9F691CF8E9H0V3ET0M0E",
                   "source": "gds",
                   "directory_id": "5154a0aa-502c-4179-a6f2-8b143d59edce",
-                  "registered_directory": "testnet.directory",
+                  "registered_directory": "trisatest.net",
                   "protocol": "trisa",
-                  "common_name": "api.alice.vaspbot.com",
-                  "endpoint": "api.alice.vaspbot.com:443",
+                  "common_name": "api.alice.vaspbot.net",
+                  "endpoint": "api.alice.vaspbot.net:443",
                   "travel_address": "taYgWCfsnPN8hsqUAZWm4TW7WrHU5qZT3GiBPpfSApGSqoPMH1D6kiNRzST5Gz",
                   "name": "AliceCoin",
-                  "website": "https://alice.vaspbot.com",
+                  "website": "https://alice.vaspbot.net",
                   "country": "GB",
                   "business_category": "NON_VASP_ENTITY",
                   "vasp_categories": [
