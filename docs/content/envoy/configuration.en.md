@@ -32,7 +32,7 @@ A list of the primary environment variables and their configuration are as follo
 | TRISA_LOG_LEVEL | string | info | Specify the verbosity of logging (trace, debug, info, warn, error, fatal, panic) |
 | TRISA_CONSOLE_LOG | bool | false | If true, logs colorized human readable output instead of json |
 | TRISA_DATABASE_URL | string | sqlite3:///trisa.db | DSN containing the backend database configuration |
-| TRISA_WEBHOOK_URL | string |  | Specify a callback webhook so that incoming travel rule messages can be handled by a different system |
+| TRISA_SEARCH_THRESHOLD | float | 0.0 | Specify a threshold for fuzzy search from 0.0 (any match) to 1.0 (exact matches only) |
 | TRISA_ENDPOINT | string |  | The endpoint of the TRISA node as defined by the mTLS certificates (to create travel addresses) |
 | TRISA_TRP_ENDPOINT | string |  | If enabled, the endpoint of the TRP node as assigned by the mTLS certificates (to create travel addresses) |
 
@@ -68,6 +68,17 @@ Configuration values for the public facing TRISA node.
 | TRISA_NODE_CERTS | path |  | The path to your TRISA identify certificates and private key for establishing mTLS connections to TRISA peer counterparties |
 | TRISA_NODE_KEY_EXCHANGE_CACHE_TTL | duration | 24h | The duration to cache public keys exchanged with remote TRISA nodes before performing another key exchange |
 
+### Webhook Configuration
+
+If you would like to configure the Envoy node to send incoming travel rule requests to a webhook, you can configure those details below. For more information on the webhook and authentication, please see the ["webhook guide"]({{% relref "envoy/webhook.md" %}})
+
+| EnvVar | Type | Default | Description |
+|---|---|---|---|
+| TRISA_WEBHOOK_URL | string |  | Specify a callback webhook that incoming travel rule messages will be posted to |
+| TRISA_WEBHOOK_AUTH_KEY_ID | string |  | Used to identify the shared secret for HMAC authorization headers (required if secret is set) |
+| TRISA_WEBHOOK_AUTH_KEY_SECRET | string |  | Specify a hexadecimal encoded 32 byte shared secret for HMAC authorization (required if key id is set) |
+| TRISA_WEBHOOK_REQUIRE_SERVER_AUTH | bool | false | If true, the client will expect the webhook server to send a Server-Authorization header with HMAC token |
+
 ### TRISA Directory Configuration
 
 The following configuration influences how the Envoy node connects to the TRISA Global Directory Service.
@@ -82,6 +93,17 @@ If you're running a TestNet node, then ensure the values point to `testnet.direc
 | TRISA_DIRECTORY_SYNC_ENABLED | bool | true | If false, then the background directory sync service will not run |
 | TRISA_DIRECTORY_SYNC_INTERVAL | duration | 6h | The interval that the node will synchronize counterparties with the GDS |
 
+### Sunrise Configuration
+
+To enable the Sunrise protocol use the following configuration and ensure that you also update the email configuration for the node to send outgoing emails.
+
+| EnvVar | Type | Default | Description |
+|---|---|---|---|
+| TRISA_SUNRISE_ENABLED | bool | true | Used to disable sunrise access which will cause external sunrise pages to return a 404; both this and email need to be enabled for Sunrise |
+| TRISA_SUNRISE_TRISA_WEB_ORIGIN | string |  | The URL to send sunrise requests to (by default the same as TRISA_WEB_ORIGIN) |
+| TRISA_SUNRISE_INVITE_ENDPOINT | string | /sunrise/verify | The endpoint to verify an incoming Sunrise request |
+| TRISA_SUNRISE_REQUIRE_OTP | true |  | If true, Sunrise verification will require an additional OTP step to access PII data |
+
 ### TRP Node Configuration
 
 Configuration values for the publically facing TRP server.
@@ -90,9 +112,30 @@ Configuration values for the publically facing TRP server.
 |---|---|---|---|
 | TRISA_TRP_ENABLED | bool | true | If false, the TRP node server will not be run |
 | TRISA_TRP_BIND_ADDR | string | :8200 | The ip address and port to bind the TRISA node server on |
+| TRISA_TRP_IDENTITY_VASP_NAME | string |  | Specify the name of your VASP for TRP identity requests |
+| TRISA_TRP_IDENTITY_LEI | string |  | Specify the LEI of your VASP to respond to a TRP identity request |
 | TRISA_TRP_USE_MTLS | bool | true | If true, the TRP server will require mTLS authentication |
 | TRISA_TRP_POOL | path |  | The path to TRP x509 certificate pool; this allows you to define what certificate authorities you're willing to accept using mTLS (optional) |
 | TRISA_TRP_CERTS | path |  | The path to your TRP identify certificates and private key for establishing mTLS connections to TRISA peer counterparties |
+
+### Email Configuration
+
+Configure either SMTP _or_ SendGrid so that the Envoy node can send emails for Sunrise messages, forgot password resets, etc. If email is not enabled, the Sunrise protocol will be disabled.
+
+| EnvVar | Type | Default | Description |
+|---|---|---|---|
+| TRISA_EMAIL_SENDER | string |  | The email address that messages are sent from by the Envoy node (e.g. compliance@envoy.local) |
+| TRISA_EMAIL_SENDER_NAME | string |  | The name of the sender, usually the name of the VASP or compliance team |
+| TRISA_EMAIL_SUPPORT_EMAIL | string |  | An email address to refer support requests to, will appear on error pages |
+| TRISA_EMAIL_COMPLIANCE_EMAIL | string |  | An email address to refer compliance requests to in case an originator counterparty does not use TRISA |
+| TRISA_EMAIL_TESTING | bool | false | Sets the emailer to testing mode and ensures no live emails are sent |
+| TRISA_EMAIL_SMTP_HOST | string |  | If configuring SMTP, the host without the port (e.g. smtp.example.com) |
+| TRISA_EMAIL_SMTP_PORT | int | 587 | The port to access the SMTP on |
+| TRISA_EMAIL_SMTP_USERNAME | string |  | A username to authenticate to the SMTP server with |
+| TRISA_EMAIL_SMTP_PASSWORD | string |  | A password to authenticate to the SMTP server with |
+| TRISA_EMAIL_SMTP_USE_CRAM_MD5 | bool | false | Enables CRAM-MD5 auth to your SMTP server as defined in RFC 2195 instead of simple authentication |
+| TRISA_EMAIL_SMTP_POOL_SIZE | int | 2 | The SMTP connection pool size for concurrent email sending |
+| TRISA_EMAIL_SENDGRID_API_KEY | string |  | If configuring SendGrid, add the your API key to access the SendGrid API |
 
 ### Region Info
 

@@ -11,16 +11,9 @@
       "name": "MIT Licensed",
       "url": "https://github.com/trisacrypto/envoy/blob/main/LICENSE"
     },
-    "version": "v{{ .Version }}"
+    "version": "v1.0.0-rc.7"
   },
   "openapi": "3.1.0",
-  "servers": [
-    {
-      "url": "{{ .Origin }}",
-      "variables": {},
-      "description": "{{ .Description }}"
-    }
-  ],
   "tags": [
     {
       "name": "Authentication",
@@ -8915,7 +8908,9 @@
               },
               "example": {
                 "routing": {
-                  "travel_address": "taLg4sBFp3cWhB9wN7qsiUF8pxo7JXtVShYkv5ix1wG2kX5y4pRiJ3TRHmeD8H67TLLm5wHyDktVw1onfDeQfESumf91mjRTMbi"
+                  "protocol": "sunrise",
+                  "counterparty": "AliceCoin, LLC",
+                  "email": "Jane Smith <jane@alicecoin.com>"
                 },
                 "originator": {
                   "first_name": "James",
@@ -8970,7 +8965,8 @@
                 },
                 "example": {
                   "routing": {
-                    "travel_address": "taLg4sBFp3cWhB9wN7qsiUF8pxo7JXtVShYkv5ix1wG2kX5y4pRiJ3TRHmeD8H67TLLm5wHyDktVw1onfDeQfESumf91mjRTMbi"
+                    "protocol": "trisa",
+                    "counterparty_id": "01JPMJG3ZFSX753ZAKRWRZPWVC"
                   },
                   "identity": {
                     "originator": {
