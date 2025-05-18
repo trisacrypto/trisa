@@ -207,9 +207,17 @@ Webhook requests can be authenticated in two ways:
 1. mTLS using non-TRISA certificates
 2. HMAC signature verification with a shared secret
 
+Either of these options or both (or neither) can be used!
+
 ### mTLS
 
-Coming Soon!
+To configure mTLS on the webhook client; you'll need to specify the following configuration values:
+
+- `$TRISA_WEBHOOK_USE_MTLS` should be set to `"true"`.
+- `$TRISA_WEBHOOK_CERTS` should point to the path of the mTLS client certificate and private key.
+- `$TRISA_WEBHOOK_POOL` should point to an x509 certificate authority pool for the certs.
+
+Note that if `$TRISA_WEBHOOK_CERTS` and `$TRISA_WEBHOOK_POOL` are unset and `$TRISA_WEBHOOK_USE_MTLS` is `"true"` then by default your TRISA certificates are used as the client certificates for the webhook call. You can obtain TRISA certificates for your webhook server by requesting them using the GDS service.
 
 ### HMAC Shared Secret
 

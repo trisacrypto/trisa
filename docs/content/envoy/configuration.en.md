@@ -75,6 +75,9 @@ If you would like to configure the Envoy node to send incoming travel rule reque
 | EnvVar | Type | Default | Description |
 |---|---|---|---|
 | TRISA_WEBHOOK_URL | string |  | Specify a callback webhook that incoming travel rule messages will be posted to |
+| TRISA_WEBHOOK_USE_MTLS | bool | false | Set to true to require the webhook client to use mTLS to authenticate to the server |
+| TRISA_WEBHOOK_CERTS | string |  | Specify the path to the webhook client certificates and private key (TRISA certs used by default) |
+| TRISA_WEBHOOK_POOL | string |  | Specify the path to the webhook client certificate authority pool (TRISA pool used by default) |
 | TRISA_WEBHOOK_AUTH_KEY_ID | string |  | Used to identify the shared secret for HMAC authorization headers (required if secret is set) |
 | TRISA_WEBHOOK_AUTH_KEY_SECRET | string |  | Specify a hexadecimal encoded 32 byte shared secret for HMAC authorization (required if key id is set) |
 | TRISA_WEBHOOK_REQUIRE_SERVER_AUTH | bool | false | If true, the client will expect the webhook server to send a Server-Authorization header with HMAC token |
