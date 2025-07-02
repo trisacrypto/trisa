@@ -25,7 +25,7 @@ type Cipher interface {
 	EncryptionAlgorithm() string
 }
 
-// Signer creates or verifies HMAC signatures. This interface wraps multiple hmac
+// Signer creates or verifies signatures. This interface wraps multiple
 // algorithms that must be identified in the TRISA protocol.
 type Signer interface {
 	Sign(data []byte) (signature []byte, err error)
