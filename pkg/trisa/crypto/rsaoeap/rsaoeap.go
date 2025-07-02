@@ -1,6 +1,7 @@
 package rsaoeap
 
 import (
+	gocrypto "crypto"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha512"
@@ -10,7 +11,10 @@ import (
 	"github.com/trisacrypto/trisa/pkg/trisa/keys/signature"
 )
 
-const Algorithm = "RSA-OAEP-SHA512"
+const (
+	CipherAlgorithm = "RSA-OAEP-SHA512"
+	SignerAlgorithm = "RSA-PSS-SHA512"
+)
 
 // RSA implements the crypto.Cipher interface using RSA public/private key algorithm
 // as specified in PKCS #1. Messages are encrypted with the public key and can only be
@@ -21,10 +25,10 @@ type RSA struct {
 	priv *rsa.PrivateKey
 }
 
-// New creates an RSA Crypto handler with the specified key pair. If the cipher is only
-// being used for encryption, simply pass the public key: New(pub *rsa.PublicKey); If
-// the cipher is being used for decryption, then pass the private key:
-// New(key *rsa.PrivateKey).
+// New creates an RSA Crypto handler with the specified key pair. If the handler
+// is only being used for encryption or signature verification, simply pass the
+// public key: New(pub *rsa.PublicKey); If the cipher is being used for
+// decryption or signing, then pass the private key: New(key *rsa.PrivateKey).
 func New(key interface{}) (_ *RSA, err error) {
 	switch t := key.(type) {
 	case *rsa.PublicKey:
@@ -35,6 +39,10 @@ func New(key interface{}) (_ *RSA, err error) {
 		return nil, fmt.Errorf("could not create RSA cipher from %T", t)
 	}
 }
+
+// ############################################################################
+// Cipher interface
+// ############################################################################
 
 // Encrypt the message using the public key.
 func (c *RSA) Encrypt(plaintext []byte) (ciphertext []byte, err error) {
@@ -62,8 +70,12 @@ func (c *RSA) Decrypt(ciphertext []byte) (plaintext []byte, err error) {
 
 // EncryptionAlgorithm returns the name of the algorithm for adding to the Transaction.
 func (c *RSA) EncryptionAlgorithm() string {
-	return Algorithm
+	return CipherAlgorithm
 }
+
+// ############################################################################
+// KeyIdentifier interface
+// ############################################################################
 
 // PublicKeySignature implements KeyIdentifier by computing a base64 encoded SHA-256
 // hash of the public key serialized as a PKIX public key without PEM encoding. This is
@@ -71,4 +83,27 @@ func (c *RSA) EncryptionAlgorithm() string {
 // external signature computation methods.
 func (c *RSA) PublicKeySignature() (_ string, err error) {
 	return signature.New(c.pub)
+}
+
+// ############################################################################
+// Signer interface
+// ############################################################################
+
+// Sign the specified data using the private key, returning the signature. This
+// signature is non-deterministic.
+func (c *RSA) Sign(data []byte) (signature []byte, err error) {
+	digest := sha512.Sum512(data)
+	return rsa.SignPSS(rand.Reader, c.priv, gocrypto.SHA512, digest[:], nil)
+}
+
+// Verify the signature on the specified data using the public key. A valid
+// signature is indicated by returning a nil error.
+func (c *RSA) Verify(data, signature []byte) error {
+	digest := sha512.Sum512(data)
+	return rsa.VerifyPSS(c.pub, gocrypto.SHA512, digest[:], signature, nil)
+}
+
+// SignatureAlgorithm returns the name of the signing algorithm.
+func (c *RSA) SignatureAlgorithm() string {
+	return SignerAlgorithm
 }
