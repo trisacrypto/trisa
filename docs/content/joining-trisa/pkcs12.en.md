@@ -68,4 +68,4 @@ $ openssl pkcs12 -info -in <common_name>.p12 -nodes -cacerts
 
 **Further Reading**
 - [OpenSSL documentation](https://www.openssl.org/docs/man1.1.1/man1/openssl-pkcs12.html)
-- [TRISA White Paper](https://trisa.io/trisa-whitepaper/)
+- [TRISA White Paper](https://travelrule.io/trisa-whitepaper/)

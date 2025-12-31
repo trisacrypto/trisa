@@ -6,7 +6,7 @@ description: "Using the TRISA Envoy self-hosted node"
 weight: 12
 ---
 
-Built to help compliance teams handle travel rule exchanges efficiently and economically, Envoy is an open source, secure, peer-to-peer messaging platform. Designed by TRISA engineers and compliance experts, Envoy offers a mechanism for Travel Rule compliance by providing [IVMS101](https://www.intervasp.org/) data exchanges using the [TRISA](https://trisa.io) and [TRP](https://www.openvasp.org/) protocols.
+Built to help compliance teams handle travel rule exchanges efficiently and economically, Envoy is an open source, secure, peer-to-peer messaging platform. Designed by TRISA engineers and compliance experts, Envoy offers a mechanism for Travel Rule compliance by providing [IVMS101](https://www.intervasp.org/) data exchanges using the [TRISA](https://travelrule.io) and [TRP](https://www.openvasp.org/) protocols.
 
 #### Key Benefits
 

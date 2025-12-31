@@ -18,9 +18,9 @@ weight: 50
 
 * Check to see if your data is compatible with the IVMS 101-standard: [IVMS 101 Validator](https://ivmsvalidator.com/)
 
-* General information and more links: [trisa.io](https://trisa.io/)
+* General information and more links: [travelrule.io](https://travelrule.io/)
 
-* Guide of frequently asked questions that regulators have about TRISA: [Regulator's Guide](https://trisa.io/regulators-guide/)
+* Guide of frequently asked questions that regulators have about TRISA: [Regulator's Guide](https://travelrule.io/regulators-guide/)
 
 * Details about IVMS 101 and internationally compatible data formats: [intervasp.org](https://intervasp.org)
 
@@ -30,4 +30,4 @@ weight: 50
 
 * Remote Procedure Call (RPC) framework: [gRPC Docs](https://grpc.io/)
 
-* [The TRISA Whitepaper](https://trisa.io/trisa-whitepaper/)
+* [The TRISA Whitepaper](https://travelrule.io/trisa-whitepaper/)

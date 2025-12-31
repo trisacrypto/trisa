@@ -33,7 +33,7 @@ These are the key portions of the documentation you will need to get started:
 - [TRISA Glossary]({{% ref "/reference/glossary" %}})
 - [External links and resources for TRISA]({{% ref "/reference" %}})
 
-Integrating TRISA will require a team of engineers capable of implementing the TRISA protocol. When considering setting up your own server to host your own TRISA node, you must consider items necessary that may incur significant costs and resources, such as the server itself, long-term data storage solution, and developer time to configure and test. If your organization does not have access to a technical team or resources, you may instead choose to integrate with a 3rd-party TRISA solution. A list of some of the commercial TRISA solutions is available in [this guide](https://trisa.io/regulators-guide/).
+Integrating TRISA will require a team of engineers capable of implementing the TRISA protocol. When considering setting up your own server to host your own TRISA node, you must consider items necessary that may incur significant costs and resources, such as the server itself, long-term data storage solution, and developer time to configure and test. If your organization does not have access to a technical team or resources, you may instead choose to integrate with a 3rd-party TRISA solution. A list of some of the commercial TRISA solutions is available in [this guide](https://travelrule.io/regulators-guide/).
 
 
 ## For Technical Implementers {##dev}

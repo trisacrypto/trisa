@@ -10,7 +10,7 @@ This section of the documentation describes the TRISA Protocol and API.
 
 ###  Navigating the Open Source TRISA Code
 
-The [`trisa`](https://github.com/trisacrypto/trisa) repository contains a gRPC implementation of the TRISA protocol as described by the [white paper](https://trisa.io/trisa-whitepaper/), which leverages [protocol buffers](https://grpc.io/) and Golang.
+The [`trisa`](https://github.com/trisacrypto/trisa) repository contains a gRPC implementation of the TRISA protocol as described by the [white paper](https://travelrule.io/trisa-whitepaper/), which leverages [protocol buffers](https://grpc.io/) and Golang.
 
 The `proto` folder contains the core RPC definitions, including:
  - the interVASP Messaging Standard (IVMS) message definitions, which serve as the basis for how two VASP peers should mutually describe entities involved in cryptographic transfers, including names, locations, and government identifiers. This is the spec that will allow originators to identify themselves to beneficiaries and to request information from those beneficiaries to meet the legal requirements of their regulators.
@@ -26,6 +26,3 @@ The `pkg` folder contains the reference implementation code, including compiled 
 [^1]: Note that these compiled files are compiled for Golang; but this is certainly not the only option. Those interested in building implementation code in a different language should look to the `lib` folder, which currently contains placeholder folders but is intended to showcase such other implementations (including compiled protocol buffer code for these other languages).
 
 Another integral part of the TRISA protocol is the [Global Directory Service]({{% ref "/gds" %}}), which serves as a look-up tool for TRISA members to identify peers with which they wish to exchange information. For RPC definitions and implementation code related to the Global Directory Service, visit the companion [directory repository](https://github.com/trisacrypto/directory).
-
-
-

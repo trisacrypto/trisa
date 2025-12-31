@@ -4,7 +4,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/trisacrypto/trisa/pkg.svg)](https://pkg.go.dev/github.com/trisacrypto/trisa/pkg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/trisacrypto/trisa)](https://goreportcard.com/report/github.com/trisacrypto/trisa)
 
-Please visit the [TRISA website](https://trisa.io) for more information and the [TRISA documentation](https://testnet.directory) for developer docs and integration.
+Please visit the [TRISA website](https://travelrule.io) for more information and the [TRISA documentation](https://testnet.directory) for developer docs and integration.
 
 # Contributing to TRISA
 
@@ -14,7 +14,7 @@ If you're a developer whose organization is using (or planning to adopt) the TRI
 
 ## Navigating the Repository
 
-This repository contains a gRPC implementation of the TRISA protocol as described by the [white paper](https://trisa.io/trisa-whitepaper/), which leverages [protocol buffers](https://grpc.io/) and Golang.
+This repository contains a gRPC implementation of the TRISA protocol as described by the [white paper](https://travelrule.io/trisa-whitepaper/), which leverages [protocol buffers](https://grpc.io/) and Golang.
 
 The `proto` folder contains the core RPC definitions, including:
  - the interVASP Messaging Standard (IVMS) message definitions, which serve as the basis for how two VASP peers should mutually describe entities involved in cryptographic transfers, including names, locations, and government identifiers. This is the spec that will allow originators to identify themselves to beneficiaries and to request information from those beneficiaries to meet the legal requirements of their regulators.

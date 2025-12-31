@@ -129,7 +129,7 @@ It is then up to your TRISA node to determine how to handle the payload. Your op
 
 The rVASP handles each type of response appropriately. If a reject message is returned, the rVASP fails the transaction; if accept it "executes" the transaction.
 
-The pending message initiates an asynchronous transaction as defined in the TRISA [whitepaper](https://trisa.io/trisa-whitepaper/#6.2.3). The transaction is placed into an "await" state until the rVASP receives a follow-up reject or accept response with the same envelope id.
+The pending message initiates an asynchronous transaction as defined in the TRISA [whitepaper](https://travelrule.io/trisa-whitepaper/#6.2.3). The transaction is placed into an "await" state until the rVASP receives a follow-up reject or accept response with the same envelope id.
 
 #### Originator Policies
 
@@ -181,7 +181,7 @@ For the `SyncRepair` policy, the identity payload does not have to include the b
 
 ##### SyncRequire
 
-For the `SyncRequire` policy, the identity payload must contain a complete beneficiary identity as defined in the TRISA [whitepaper](https://trisa.io/trisa-whitepaper/#4.3). The rVASP will respond synchronously by sending an accept response containing a `received_at` timestamp in the payload. If the beneficiary information is incomplete or incorrect, the rVASP will respond with a rejection error.
+For the `SyncRequire` policy, the identity payload must contain a complete beneficiary identity as defined in the TRISA [whitepaper](https://travelrule.io/trisa-whitepaper/#4.3). The rVASP will respond synchronously by sending an accept response containing a `received_at` timestamp in the payload. If the beneficiary information is incomplete or incorrect, the rVASP will respond with a rejection error.
 
 ##### AsyncRepair
 

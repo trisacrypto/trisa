@@ -40,7 +40,7 @@ The Admin API (a REST API that powers the Admin UI) is configured as follows:
 | GDS_ADMIN_COOKIE_DOMAIN                  | string            |                                        | The domain to set secure cookies for (particularly for CSRF and authentication).                       |
 | GDS_ADMIN_AUDIENCE                       | string            |                                        | The audience to set and verify in JWT tokens issued by the Admin API.                                  |
 | GDS_ADMIN_OAUTH_GOOGLE_AUDIENCE          | string            |                                        | The audience from the Google OAuth config to verify Google login tokens.                               |
-| GDS_ADMIN_OAUTH_AUTHORIZED_EMAIL_DOMAINS | []string          |                                        | The list of authorized email domains to allow access to the admin UI (e.g. trisa.io).              |
+| GDS_ADMIN_OAUTH_AUTHORIZED_EMAIL_DOMAINS | []string          |                                        | The list of authorized email domains to allow access to the admin UI (e.g. travelrule.io).              |
 | GDS_ADMIN_TOKEN_KEYS                     | map[string]string |                                        | A mapping of key id (ksuid/ulid) to the path to an RSA signing key in PEM format for JWT token signing. |
 
 Note that the enabled flag is only respected if `GDS_MAINTENANCE` is `false`, otherwise maintenance mode supersedes service enabled flags.
@@ -84,7 +84,7 @@ The GDS uses [SendGrid](https://sendgrid.com/) to send email notifications and t
 | EnvVar                 | Type   | Default                                | Description                                                                                 |
 |------------------------|--------|----------------------------------------|---------------------------------------------------------------------------------------------|
 | GDS_SERVICE_EMAIL      | string | TRISA Directory Service <admin@trisa.directory>               | The email address used as the sender for all emails from the GDS system.                    |
-| GDS_ADMIN_EMAIL        | string | TRISA Admins <admin@trisa.io>                           | The email address to send admin emails to from the server.                                  |
+| GDS_ADMIN_EMAIL        | string | TRISA Admins <admin@travelrule.io>                           | The email address to send admin emails to from the server.                                  |
 | SENDGRID_API_KEY       | string |                                        | API Key to authenticate to SendGrid with.                                                   |
 | GDS_DIRECTORY_ID       | string | trisa.directory                      | (Reused) The network ID the GDS serves, either trisa.directory or testnet.directory (or .dev). |
 | GDS_VERIFY_CONTACT_URL | string | https://trisa.directory/verify       | The base URL to include in emails for contact verification.                                 |

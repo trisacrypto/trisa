@@ -108,7 +108,7 @@ Below is a sample TRIXO form, containing all of the fields required during regis
 
 #### Table View
 
-The JSON format above is adapted from the table-based questionnaire that appears in the [TRISA whitepaper](https://trisa.io/trisa-whitepaper/) shown below, which was derived from the draft "Wolfsberg-style Questionnaire for VASPs".
+The JSON format above is adapted from the table-based questionnaire that appears in the [TRISA whitepaper](https://travelrule.io/trisa-whitepaper/) shown below, which was derived from the draft "Wolfsberg-style Questionnaire for VASPs".
 
 |            | VASP TRAVEL RULE INFORMATION EXCHANGE (TRIXO) QUESTIONNAIRE                                                                                                                                                                                              |
 |------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

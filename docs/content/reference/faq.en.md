@@ -16,7 +16,7 @@ TRISA is a peer-to-peer network that enables compliance with the Financial Actio
 
 TRISA is also a protocol that enables the secure exchange of PII between members.
 
-Read more about TRISA in the [TRISA whitepaper](https://trisa.io/trisa-whitepaper/).
+Read more about TRISA in the [TRISA whitepaper](https://travelrule.io/trisa-whitepaper/).
 
 ## How does TRISA work?
 
