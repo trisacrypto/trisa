@@ -132,6 +132,13 @@ message RegisterRequest {
 
     // TRIXO Questionnaire
     trisa.gds.models.v1beta1.TRIXOQuestionnaire trixo = 9;
+
+    // Certificate Signing Requests
+    // An optional request parameter that will allow you submit a valid CSR to ensure
+    // that no private key material is transmitted over the Internet. If this field is
+    // left empty, then a complete certificate including the private keys will be
+    // generated during the registration process.
+    string csr = 10;
 }
 
 message RegisterReply {
